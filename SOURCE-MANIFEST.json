@@ -50,10 +50,10 @@
       "sha256": "98383df7929d92467dc448b4ed2d4af080edfb9c01ecae56a5dc3abedad1b525"
     },
     {
-      "bytes": 2763,
+      "bytes": 2770,
       "executable": true,
       "path": "INSTALL-IOS.command",
-      "sha256": "06afbb9c8985b39ac24b244565ee489b1e142e9c06ff4dc1a071ae87d1138f25"
+      "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
       "bytes": 15134,
@@ -74,10 +74,10 @@
       "sha256": "0296c096d86b4918f41de530ae42631f8d884c0160a0ca3053a9e25d5512ed95"
     },
     {
-      "bytes": 563,
+      "bytes": 687,
       "executable": true,
       "path": "android/BUILD-ANDROID.sh",
-      "sha256": "163b0b226c6e5295a8b51b730d665f1f5ba081f45f69c058af64e12e342011ae"
+      "sha256": "ea4b4dd877b2e16d09a7754087d51fa1a52d096c09439fe2c98b5c2a42d212ef"
     },
     {
       "bytes": 577,

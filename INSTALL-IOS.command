@@ -20,7 +20,7 @@ xcodebuild -project "$ROOT/ios/KL06Mobile.xcodeproj" \
   -scheme KL06Mobile \
   -configuration Release \
   -sdk iphoneos \
-  -destination "id=$DEVICE_ID" \
+  -destination "generic/platform=iOS" \
   SYMROOT="$ROOT/ios/Local-build/Products" \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
