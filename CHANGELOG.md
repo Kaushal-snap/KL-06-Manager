@@ -40,7 +40,12 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - **Monotonic Version Enforcement:** Strict build number ordering rejects downgrade attacks.
 - **Platform Installation Handoff:**
 
-### 🖥️ Native macOS Display & Performance Optimizations (Build-Ready v2)
+### 📱 iOS Terminal CLI Builder (`BUILD-IOS.command`)
+- **Headless Compilation:** Enables physical iPhone Release (`arm64`) compilation purely via Terminal Command Line Tools (`xcodebuild` / `xcrun`) without opening the Xcode GUI, eliminating crashes caused by IDE background indexing and Metal canvas rendering.
+- **Automated `.ipa` Packaging:** Automatically packages built app into `KL06Mobile.ipa` ready for sideloading via Sideloadly, AltStore, TrollStore, or `ideviceinstaller`.
+- **Direct CLI Installation:** Supports direct installation to connected iPhone via `xcrun devicectl` or `ideviceinstaller`.
+
+### 🖥️ Native macOS Display & Performance Optimizations (Build-Ready v2 & v3)
 - **Native DisplayControl:** Added Swift bridge using macOS `DisplayServices` and `IOGraphicsLib` (`IODisplaySetFloatParameter`) to synchronize UI brightness slider directly with macOS display server and DPCD backlight.
 - **Slider Event Handling & Focus Guard:** Fixed `#brightness` input/change events in WebKit bridge; added `#brightness:active` guard in telemetry refresh loop to eliminate slider tearing and drag reset.
 - **Fn Keys Synchronization:** Synchronized native Fn brightness keys with app display slider via `DisplayServices` notifications (requires `BrightnessKeys.kext` in OpenCore EFI).
