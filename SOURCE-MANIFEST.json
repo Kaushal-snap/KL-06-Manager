@@ -1,0 +1,860 @@
+{
+  "build": 6,
+  "files": [
+    {
+      "bytes": 2666,
+      "executable": false,
+      "path": ".github/workflows/drive-tested-beta.yml",
+      "sha256": "583ee0bcc7893d916643684a9545954c5062cc0527d7388dc10654e2cc468ab2"
+    },
+    {
+      "bytes": 4995,
+      "executable": false,
+      "path": ".github/workflows/native-checks.yml",
+      "sha256": "7e86a5fb265944b381ef3763747330ec72ce7ec861d369f51804d83637f19091"
+    },
+    {
+      "bytes": 573,
+      "executable": false,
+      "path": ".gitignore",
+      "sha256": "3d8a1bd53bb1f89ef5b008b9a3460d953cf856e6f37d5ba541316761e61c23b9"
+    },
+    {
+      "bytes": 8347,
+      "executable": false,
+      "path": "ARCHITECTURE.md",
+      "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
+    },
+    {
+      "bytes": 13755,
+      "executable": false,
+      "path": "CHANGELOG.md",
+      "sha256": "963e05c073cddab1f8df16a968ee5e4b7ade0becce3fece724cd3ea014b2e527"
+    },
+    {
+      "bytes": 6066,
+      "executable": false,
+      "path": "COMPONENT-REPORT.md",
+      "sha256": "bc3ce22f84367fe4ebaa3972320f8e624d26297c3e06c167db10bba0034bd7f1"
+    },
+    {
+      "bytes": 7897,
+      "executable": false,
+      "path": "ECOSYSTEM.md",
+      "sha256": "09ab01328773e263729a7a237feab3b4a8a9e84981037aa06edd054697c79e94"
+    },
+    {
+      "bytes": 6156,
+      "executable": false,
+      "path": "HARDWARE-REPORTS.md",
+      "sha256": "98383df7929d92467dc448b4ed2d4af080edfb9c01ecae56a5dc3abedad1b525"
+    },
+    {
+      "bytes": 2763,
+      "executable": true,
+      "path": "INSTALL-IOS.command",
+      "sha256": "06afbb9c8985b39ac24b244565ee489b1e142e9c06ff4dc1a071ae87d1138f25"
+    },
+    {
+      "bytes": 15134,
+      "executable": false,
+      "path": "README.md",
+      "sha256": "f34128215b87f3f16846195a08b07978779ee7be9e99870420977e2f28253cfa"
+    },
+    {
+      "bytes": 1599,
+      "executable": true,
+      "path": "TEST-PORTABLE.sh",
+      "sha256": "85133d7cdac1984d0f1947f5d8662ed242c02e1d69e9bdc9773c5eb853e0489d"
+    },
+    {
+      "bytes": 272,
+      "executable": false,
+      "path": "VERSION.json",
+      "sha256": "0296c096d86b4918f41de530ae42631f8d884c0160a0ca3053a9e25d5512ed95"
+    },
+    {
+      "bytes": 563,
+      "executable": true,
+      "path": "android/BUILD-ANDROID.sh",
+      "sha256": "163b0b226c6e5295a8b51b730d665f1f5ba081f45f69c058af64e12e342011ae"
+    },
+    {
+      "bytes": 577,
+      "executable": false,
+      "path": "android/app/build.gradle",
+      "sha256": "3d03a6ff22bbb74fb613e908ee9840613f3cb3ee975ed6f18ebc9ebebb8bd73c"
+    },
+    {
+      "bytes": 4624,
+      "executable": false,
+      "path": "android/app/gradle.lockfile",
+      "sha256": "756b86329deae2b30fb58f29c4621fb361e4912b43594bf5013f5fb6038e1996"
+    },
+    {
+      "bytes": 676,
+      "executable": false,
+      "path": "android/app/src/main/AndroidManifest.xml",
+      "sha256": "473b7b21c8d35235e3540e8319d76db15332c9085b71a04e0102da79f5d1a4ee"
+    },
+    {
+      "bytes": 880,
+      "executable": false,
+      "path": "android/app/src/main/java/app/klasus/controlcenter/LANPolicy.java",
+      "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
+    },
+    {
+      "bytes": 13180,
+      "executable": false,
+      "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
+      "sha256": "539e6503ba946ab62531ca78b9c23d19e4ade3ed6f9e9ad0ba297fe142915d62"
+    },
+    {
+      "bytes": 6625,
+      "executable": false,
+      "path": "android/app/src/main/java/app/klasus/controlcenter/PinnedLaptop.java",
+      "sha256": "789170b063f1493b782942d6573a5353150c86a1d938db02397053eb4470331d"
+    },
+    {
+      "bytes": 633,
+      "executable": false,
+      "path": "android/app/src/main/res/drawable/ic_kl06.xml",
+      "sha256": "23d93fa6f23382edbd6b4fdb47dc66e6ad5ba2bae39e42f0728638964a7cb775"
+    },
+    {
+      "bytes": 410,
+      "executable": false,
+      "path": "android/app/src/main/res/values/styles.xml",
+      "sha256": "c4367becce6ecfa51890b7b167623185316c7ed9efc96bbe469fb0aefa95484c"
+    },
+    {
+      "bytes": 70,
+      "executable": false,
+      "path": "android/build.gradle",
+      "sha256": "96a33edb21d173da2c36f5312f50cdfb9f71d9f5078c081c81f2d029547f6cb9"
+    },
+    {
+      "bytes": 165,
+      "executable": false,
+      "path": "android/gradle.properties",
+      "sha256": "2d741c5a9f697feaeddadfda39159d337c575c01930d8f8f34aff41097fa347e"
+    },
+    {
+      "bytes": 87034,
+      "executable": false,
+      "path": "android/gradle/verification-metadata.xml",
+      "sha256": "75fabd5acf00deffde4913b9812c4cee9bbe2cc5893f93f242c8888b0b683086"
+    },
+    {
+      "bytes": 43705,
+      "executable": false,
+      "path": "android/gradle/wrapper/gradle-wrapper.jar",
+      "sha256": "81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f"
+    },
+    {
+      "bytes": 338,
+      "executable": false,
+      "path": "android/gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "c040b6ef2fb893ff5beea5a281614f2848f1c3996a7886f650b713f8240656a2"
+    },
+    {
+      "bytes": 8752,
+      "executable": true,
+      "path": "android/gradlew",
+      "sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933"
+    },
+    {
+      "bytes": 2966,
+      "executable": false,
+      "path": "android/gradlew.bat",
+      "sha256": "57931b17dd228e5c24dac90e815d0bf82477e831a4618dfab4136f5446b42a9f"
+    },
+    {
+      "bytes": 269,
+      "executable": false,
+      "path": "android/settings.gradle",
+      "sha256": "0c83c86d0f82dd0232e0d62a92c1ca2049cbeb5f2b7237a51502e01195ed0838"
+    },
+    {
+      "bytes": 6305,
+      "executable": true,
+      "path": "automation/approve_release.py",
+      "sha256": "68095fff8c548c7b27be5d0292134f291960e755ad46920403eac240d5dd970e"
+    },
+    {
+      "bytes": 27309,
+      "executable": true,
+      "path": "automation/drive_release.py",
+      "sha256": "8c90ab3a3a0ce7f9001f220e1f56bb6e783edf8df7cd4ece0d1feb70b2994bc5"
+    },
+    {
+      "bytes": 414,
+      "executable": false,
+      "path": "automation/owner-release-signers.example",
+      "sha256": "d2c4dd388a1ed81e99d53dc9a0a1b18b4df261c5bc9efad8e1c70d1c9b77c1a4"
+    },
+    {
+      "bytes": 5670,
+      "executable": true,
+      "path": "automation/package_test_app.py",
+      "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
+    },
+    {
+      "bytes": 4085,
+      "executable": true,
+      "path": "automation/source_manifest.py",
+      "sha256": "de7e2881a4b737015b70684a2202ca61b6bb0e067f798da86b5d5d8570150cf8"
+    },
+    {
+      "bytes": 8355,
+      "executable": false,
+      "path": "companion/ota.py",
+      "sha256": "c6fd7a8edc92544112d8ecc1936090e3f766c003b05d0fb58e58041f6c51ec74"
+    },
+    {
+      "bytes": 24714,
+      "executable": false,
+      "path": "companion/server.py",
+      "sha256": "17990b44cac99b56c23f83154e642dbb547061d9934d720e25e4960e08d75206"
+    },
+    {
+      "bytes": 13315,
+      "executable": false,
+      "path": "companion/transfer.py",
+      "sha256": "26db10d2f54de957d1bae97ccc5474dee9f86ed74c74172797c6236ca4209966"
+    },
+    {
+      "bytes": 204015,
+      "executable": false,
+      "path": "docs/screenshots/about.png",
+      "sha256": "96fe369d7a4dfd0a7d50e71ae83ca309d182dad1e48238c87c7c1183d2695170"
+    },
+    {
+      "bytes": 230402,
+      "executable": false,
+      "path": "docs/screenshots/display-and-sound.png",
+      "sha256": "1efc4d942004f131bf102e1b4d1d3d94ae4215912161991639b1906de48cda3b"
+    },
+    {
+      "bytes": 744084,
+      "executable": false,
+      "path": "docs/screenshots/overview.png",
+      "sha256": "b6d3f99a2b9b5ab784e41b356b510e6142c8de0243c55493c1166b28d0f14c21"
+    },
+    {
+      "bytes": 433907,
+      "executable": false,
+      "path": "docs/screenshots/performance.png",
+      "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
+    },
+    {
+      "bytes": 4237,
+      "executable": false,
+      "path": "index.html",
+      "sha256": "ec5a3bdd5711e11a1d98bd64f0803320b7d0cec2d6dd897cf2271657f89fc21c"
+    },
+    {
+      "bytes": 5659,
+      "executable": true,
+      "path": "ios/BUILD-IOS.command",
+      "sha256": "ffa4580b4402528267d84e1c239b1b941b9c96037db598118c0b23f3a5f814f1"
+    },
+    {
+      "bytes": 4575,
+      "executable": false,
+      "path": "ios/KL06Mobile.xcodeproj/project.pbxproj",
+      "sha256": "bdd86676e2109eba03ef029eb866f9e666a614b0411f1c8a410cfc51d0f3e893"
+    },
+    {
+      "bytes": 1312,
+      "executable": false,
+      "path": "ios/KL06Mobile.xcodeproj/xcshareddata/xcschemes/KL06Mobile.xcscheme",
+      "sha256": "1cd39f53e9aa89802563cd26f19370cdccc65ddf6fdb2b4871056ae5eba4cb6d"
+    },
+    {
+      "bytes": 12953,
+      "executable": false,
+      "path": "ios/KL06Mobile/App.swift",
+      "sha256": "32145a9d6b14d38cb72144d4f543d06e3da1822d9fa0f4cc4258a2dfafd4b860"
+    },
+    {
+      "bytes": 2134,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "8d7dc6f60bb2c12485e819a14b207f1c33e6ed8db5f820e16755998ecdf027bc"
+    },
+    {
+      "bytes": 9910,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-1024.png",
+      "sha256": "b7d1d6216a87e291dffac993fa667a09d3afb86284c24ffa6e003afdc314b193"
+    },
+    {
+      "bytes": 5801,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-120.png",
+      "sha256": "f24af193e1edcf433b8d701f21e1217609e8d44de1f2dc1b516f6c0f4f46fab8"
+    },
+    {
+      "bytes": 7433,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-152.png",
+      "sha256": "22bc1395f40a8b7960d68e0b7a12949db4f61843798b75ab15f1fb648ef77e6f"
+    },
+    {
+      "bytes": 8293,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-167.png",
+      "sha256": "ecdcf8fc7b794db388c6ceab25d88e45c485af3e0ce5092eb477955d9ae7856b"
+    },
+    {
+      "bytes": 8828,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-180.png",
+      "sha256": "7e820ceac94fc86b817e7eea3a5518c555ac4d7083643c9fdfae8809c6b52071"
+    },
+    {
+      "bytes": 825,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-20.png",
+      "sha256": "3b84badddce97c84080e141cd4541314c2e22e9116a0ddfebbb048711b198f49"
+    },
+    {
+      "bytes": 1292,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-29.png",
+      "sha256": "2c1caf2af993fdf5cebba62f8f45885e7765df8dd22622f986d112d4ef8a3974"
+    },
+    {
+      "bytes": 1822,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-40.png",
+      "sha256": "3d9336e43530b06caba2a2051c9d788b6a1f2b27fdfff94593830d009b77306c"
+    },
+    {
+      "bytes": 2700,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-58.png",
+      "sha256": "ceb2801f0426e85643fa3a4dc8abf0fb53c39d750085325514be44b4dff96db9"
+    },
+    {
+      "bytes": 2751,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-60.png",
+      "sha256": "9527bc617bf19884e03e714940f374fef7892555e56213cc2eea6303344b38ad"
+    },
+    {
+      "bytes": 3611,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-76.png",
+      "sha256": "80f4c90dc90fa483410f66070fdaf67eb917b16396cf862dcc8a97a7fcced02e"
+    },
+    {
+      "bytes": 3874,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-80.png",
+      "sha256": "9a2fc932c1474ed0dde120bc9a56babc4668e75320961ed18a2a02c97adf58dd"
+    },
+    {
+      "bytes": 4120,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/AppIcon.appiconset/Icon-87.png",
+      "sha256": "76cccdfea67c60a84e3e08daf3eb1b67d60215c6777b29038afde26589c6f03b"
+    },
+    {
+      "bytes": 60,
+      "executable": false,
+      "path": "ios/KL06Mobile/Assets.xcassets/Contents.json",
+      "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+    },
+    {
+      "bytes": 1606,
+      "executable": false,
+      "path": "ios/KL06Mobile/Info.plist",
+      "sha256": "88f20e76b213d3b354d67050fa76ea62dd8166a56d2c73caaafeb21aecba5a55"
+    },
+    {
+      "bytes": 10407,
+      "executable": false,
+      "path": "ios/KL06Mobile/PinnedLaptop.swift",
+      "sha256": "e11c11b8f3174ffab5cc829f222917c533082fec4a8650fc5e9c01cac832c777"
+    },
+    {
+      "bytes": 214,
+      "executable": false,
+      "path": "macos/.gitignore",
+      "sha256": "afc4dda79de873be9950a6d96882e310eaff3f51d5378db12ff844aa8c1a976a"
+    },
+    {
+      "bytes": 3472,
+      "executable": false,
+      "path": "macos/ARCHITECTURE.md",
+      "sha256": "af5c4ca4ec5210d796483cc6f37fa0c5a0319b00d1aa80c8275fad040ccfa5fe"
+    },
+    {
+      "bytes": 2267,
+      "executable": false,
+      "path": "macos/BASE-SOURCE-SHA256.json",
+      "sha256": "e32e3f2029af2bca6386aca9bc8602a683528732d2c9fe3972065adf4843f80d"
+    },
+    {
+      "bytes": 3370,
+      "executable": true,
+      "path": "macos/BUILD-MAC.command",
+      "sha256": "8ed291b51ddab299aa08241f6b021f6f426af595ce33b1eb0b1a49be7e929e2c"
+    },
+    {
+      "bytes": 1412,
+      "executable": false,
+      "path": "macos/BUILD-STATUS.json",
+      "sha256": "21deccb2d0b6588f70141f1ef7df38e8170bc41e36d7bcf4341f179e78082934"
+    },
+    {
+      "bytes": 2749,
+      "executable": false,
+      "path": "macos/CHANGELOG.md",
+      "sha256": "8c0da5989e15255738111f90f3a05f0bb2adc1a818f9b3c8e6498b900cf35c2e"
+    },
+    {
+      "bytes": 2275,
+      "executable": true,
+      "path": "macos/COLLECT-MAC-FANS.command",
+      "sha256": "f90e89de2817e8426d4f2202d698bb83cf15ee08a72be94f6435cdfcb1aeb172"
+    },
+    {
+      "bytes": 401,
+      "executable": false,
+      "path": "macos/COMPONENT-REPORT.md",
+      "sha256": "558e35048cfafae2c6eb1a87af58e1481f1245d1a5e75b8d1c94bcb67c36219f"
+    },
+    {
+      "bytes": 431,
+      "executable": false,
+      "path": "macos/HARDWARE-REPORTS.md",
+      "sha256": "69e5991c2116058a71070754a9fa950b10b064c4af5e872f94c54b5c3f15da2c"
+    },
+    {
+      "bytes": 1031,
+      "executable": false,
+      "path": "macos/Info.plist",
+      "sha256": "39a1dfcd01f318d183e7bf37413188063e8922afce6708fe8c05c93d0f680a2b"
+    },
+    {
+      "bytes": 1069,
+      "executable": false,
+      "path": "macos/LICENSE",
+      "sha256": "55f789eeb8d7e872c4d58ca05ccbb12b58a548e2dcfce05cf61286a00aff8049"
+    },
+    {
+      "bytes": 3650,
+      "executable": false,
+      "path": "macos/OWNER-TEST-CHECKLIST.md",
+      "sha256": "9f43432e377c333c4fe291ffb7e5bf106fd4e30f4d25866215ca0a0e19343f34"
+    },
+    {
+      "bytes": 3547,
+      "executable": false,
+      "path": "macos/PRIVACY-AND-REMOVAL.md",
+      "sha256": "b118bd5c347150c6ff6c91492f9b176ce7eac6bf18f60296d72747b38cd428a4"
+    },
+    {
+      "bytes": 1800,
+      "executable": false,
+      "path": "macos/PROVENANCE.md",
+      "sha256": "bea07ed8710701181a80266ce58d24f15716b99c45c81ee6526c97bc493c2946"
+    },
+    {
+      "bytes": 2613,
+      "executable": false,
+      "path": "macos/PUBLISHING.md",
+      "sha256": "cb8ef679da62dc61cc560de7975727ccc1813b79bf97f765cb926aeaf3d6263a"
+    },
+    {
+      "bytes": 6519,
+      "executable": false,
+      "path": "macos/README.md",
+      "sha256": "c5d3e69d3fbb99d5701512f4903bf83043a8548a9e7a88b1eb05cdbdae556e9b"
+    },
+    {
+      "bytes": 15499,
+      "executable": false,
+      "path": "macos/Resources/AppIcon.icns",
+      "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
+    },
+    {
+      "bytes": 60876,
+      "executable": false,
+      "path": "macos/Resources/app.js",
+      "sha256": "f4654ccd254a82ff2572fbbd60a24c83160298f2f0913b10f4474655c0febc11"
+    },
+    {
+      "bytes": 5483,
+      "executable": false,
+      "path": "macos/Resources/history.js",
+      "sha256": "b464b0b59fc37cfd2b82e80f50fae5bdc4bb2db3ff22fb59b68b9770417a016b"
+    },
+    {
+      "bytes": 448,
+      "executable": false,
+      "path": "macos/Resources/icon.svg",
+      "sha256": "b876c906fa51459ea241cc8786ab39f329dbf66bd7c1e99e7a6337c6f2d4d47f"
+    },
+    {
+      "bytes": 885,
+      "executable": false,
+      "path": "macos/Resources/index.html",
+      "sha256": "791a243c957ae69610386bf9471ff535a8a53102d24655b3b7e84e41bee39ed4"
+    },
+    {
+      "bytes": 8180,
+      "executable": false,
+      "path": "macos/Resources/model.js",
+      "sha256": "5648a4bec25062cae1e47262e0b46b784017c5dadc6f9eb2e884a003ee7516aa"
+    },
+    {
+      "bytes": 27902,
+      "executable": false,
+      "path": "macos/Resources/style.css",
+      "sha256": "2b1646f4656ec20a41475e0355f577d7785b3d3dd3bd7d7d22c3a5ad3165b55f"
+    },
+    {
+      "bytes": 2034,
+      "executable": false,
+      "path": "macos/START-HERE.txt",
+      "sha256": "551297399c46acafaf564af975f0a8a50c781464c7738b481eb4030a8a1418f7"
+    },
+    {
+      "bytes": 2922,
+      "executable": false,
+      "path": "macos/SUPPORT-MATRIX.md",
+      "sha256": "1b7bec01a82587969b4cfc5685080f9b3b94c0b5bbd8c29efb2b23dd583e9a27"
+    },
+    {
+      "bytes": 28804,
+      "executable": false,
+      "path": "macos/Sources/Core.swift",
+      "sha256": "3616feb3ee947fc4a7e890c80ca5f6d75a4aff8f05ef952f5c21c5f4391d84d2"
+    },
+    {
+      "bytes": 11237,
+      "executable": false,
+      "path": "macos/Sources/DesktopCompanion.swift",
+      "sha256": "e54e5bb4204647ffc5d19083a75f34cdee9ff2f3de7ad919b498b6b065f35e35"
+    },
+    {
+      "bytes": 4041,
+      "executable": false,
+      "path": "macos/Sources/FanMonitor.swift",
+      "sha256": "a1bd31ad2cc1644904cddee628cfe1922e7097af261e4e617215e47fc3af2435"
+    },
+    {
+      "bytes": 4524,
+      "executable": false,
+      "path": "macos/Sources/HotKey.swift",
+      "sha256": "9bcdf5a3b39d44749161861bfe59cef85f3d7f34bc3220bc232473807ea1d5d0"
+    },
+    {
+      "bytes": 5398,
+      "executable": false,
+      "path": "macos/Sources/SMCReader.c",
+      "sha256": "4acf75be90d374e0d71814e7965d88bfbda349cb7df79ba1223fcb0602f243e2"
+    },
+    {
+      "bytes": 1413,
+      "executable": false,
+      "path": "macos/Sources/SMCReader.h",
+      "sha256": "ae36a11c760b5b9c751a000cac7d33ea3fab2d0b216eaca7a8c2ff31b2d0830b"
+    },
+    {
+      "bytes": 32496,
+      "executable": false,
+      "path": "macos/Sources/main.swift",
+      "sha256": "3f9b69ef71d68b5fb72e86b0ddef2366a39b4cfc38aee883998fefedd8919331"
+    },
+    {
+      "bytes": 2090,
+      "executable": true,
+      "path": "macos/TEST-MAC.command",
+      "sha256": "3548c5ce2f6306bf72a9c1c36edd1645ab6bddca8f2106210546010a26d8ffc0"
+    },
+    {
+      "bytes": 707,
+      "executable": true,
+      "path": "macos/TEST-PORTABLE.sh",
+      "sha256": "df0ed65293a38f43057b0a789ee7c2d36b2946fd9652d18aa3553d29436e0524"
+    },
+    {
+      "bytes": 494,
+      "executable": true,
+      "path": "macos/UPDATE-KL-06.command",
+      "sha256": "52a7ec8b15bfd627088c70dc264d5498daa46317a159d219cdb8c49f5be24031"
+    },
+    {
+      "bytes": 3593,
+      "executable": false,
+      "path": "macos/VERIFICATION.md",
+      "sha256": "50fc702c13fb92e82a50510e17f726042f817c24869f008663a3552443439723"
+    },
+    {
+      "bytes": 260,
+      "executable": true,
+      "path": "macos/collect-kl06-mac-fans.command",
+      "sha256": "e7bd4716c3883bcf611a625ca0a2076cdf171cfec5aef7abbed23192abb8d737"
+    },
+    {
+      "bytes": 8243,
+      "executable": false,
+      "path": "macos/tests/browser.test.cjs",
+      "sha256": "59293d038e9a3fa4fa77c44279cc2167f8161d84adf85591ccd846bae92c3ecc"
+    },
+    {
+      "bytes": 4741,
+      "executable": false,
+      "path": "macos/tests/history.test.js",
+      "sha256": "2e291def1eabe94f4036ea3c0cd73bc8dc3668ce6a0d45f5cdf63e7e09e98344"
+    },
+    {
+      "bytes": 8499,
+      "executable": false,
+      "path": "macos/tests/mac/main.swift",
+      "sha256": "b0c57bb59813834f7601c7ee08158cc15afe6d568d57bbdfe7b45f4e78f56742"
+    },
+    {
+      "bytes": 10309,
+      "executable": false,
+      "path": "macos/tests/model.test.js",
+      "sha256": "a21d82a38ddbcbb2c1a3450bdaa90d236786bfe30f46e6cf96b02cc8fd54df03"
+    },
+    {
+      "bytes": 3147,
+      "executable": false,
+      "path": "macos/tests/package.test.py",
+      "sha256": "fe5be5b407f43d8d1d968a8bb11b21f0cd7371efdf17bfcacb2997bf72642a97"
+    },
+    {
+      "bytes": 3803,
+      "executable": false,
+      "path": "macos/tests/smc/test_smc.c",
+      "sha256": "7aa56d83046da63d752f3102f1efeb03c64cd565276db70edbb1f4f1f29ee723"
+    },
+    {
+      "bytes": 2047,
+      "executable": false,
+      "path": "macos/tools/fan-reader/main.c",
+      "sha256": "a797484713047ca8515b2608cd13ecb1ed99bbce75a41a0b14af41eeafc34b7f"
+    },
+    {
+      "bytes": 8753,
+      "executable": true,
+      "path": "packaging/package_release.py",
+      "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
+    },
+    {
+      "bytes": 4243,
+      "executable": false,
+      "path": "script.js",
+      "sha256": "c5b3f105788479196433c948d49aedb63aa6adf806ffde5d3facf0b8f558a7d8"
+    },
+    {
+      "bytes": 24475,
+      "executable": false,
+      "path": "shared/web/app.js",
+      "sha256": "ab59321a7391b309907eab8b87fb3fe53cb861883a1e38f72e079e4b3d7ae2e5"
+    },
+    {
+      "bytes": 5483,
+      "executable": false,
+      "path": "shared/web/history.js",
+      "sha256": "b464b0b59fc37cfd2b82e80f50fae5bdc4bb2db3ff22fb59b68b9770417a016b"
+    },
+    {
+      "bytes": 448,
+      "executable": false,
+      "path": "shared/web/icon.svg",
+      "sha256": "b876c906fa51459ea241cc8786ab39f329dbf66bd7c1e99e7a6337c6f2d4d47f"
+    },
+    {
+      "bytes": 712,
+      "executable": false,
+      "path": "shared/web/index.html",
+      "sha256": "6139104830b93ab31cb1eeefb2871fcb2b89511f0957ac597a3e8c2136bd7eb5"
+    },
+    {
+      "bytes": 20215,
+      "executable": false,
+      "path": "shared/web/licenses.js",
+      "sha256": "b8e7b0f0686b853e0cb57156f183d7771e3ca09d7cdbf403a2023f167cc299ca"
+    },
+    {
+      "bytes": 3323,
+      "executable": false,
+      "path": "shared/web/model.js",
+      "sha256": "092f45528ad5167dc346e14f057961281b82cf675ac3da7afe66b3641650b676"
+    },
+    {
+      "bytes": 5963,
+      "executable": false,
+      "path": "shared/web/style.css",
+      "sha256": "dff1e85dea0e2f8b91de8e15dd00c70f9be57b998e9811a6b9cb8960821a09c7"
+    },
+    {
+      "bytes": 7393,
+      "executable": false,
+      "path": "style.css",
+      "sha256": "f47a0954f97a3efd53c4d888724ade2f271e35fccd9cec6c023b37e212ba85a6"
+    },
+    {
+      "bytes": 10515,
+      "executable": false,
+      "path": "tests/browser.test.cjs",
+      "sha256": "e90a46a5584040feb642c0277cfe9de1b7b0ecefd7ccbfc31513cc15540c2b98"
+    },
+    {
+      "bytes": 8342,
+      "executable": false,
+      "path": "tests/common.test.js",
+      "sha256": "4396d93b9a8f10fdc37a36bef5b0e53bb0e0bc81190ef2b1493310e0f7f0623a"
+    },
+    {
+      "bytes": 1273,
+      "executable": false,
+      "path": "tests/java/LANPolicyTest.java",
+      "sha256": "1ad012e02fe227fae6c34daaca50b5081c27181f010ff3a70ced5ac865b974a6"
+    },
+    {
+      "bytes": 2098,
+      "executable": false,
+      "path": "tests/test_clocks.py",
+      "sha256": "df28263f3de33f78de650aea4d1d6bb52440abe46cab6aa7c3ec54282bc5824a"
+    },
+    {
+      "bytes": 12771,
+      "executable": false,
+      "path": "tests/test_companion.py",
+      "sha256": "2310ceae43f59f370db2d0b2ea10eb916e3d371d98dc79f0a71b3d26d1a3780d"
+    },
+    {
+      "bytes": 14461,
+      "executable": false,
+      "path": "tests/test_ecosystem_transfer_ota.py",
+      "sha256": "4561e2993e0ab5c1229b9f7cbc265f8ce9301769497a392deb85c6681c45471c"
+    },
+    {
+      "bytes": 5447,
+      "executable": false,
+      "path": "tests/test_package_release.py",
+      "sha256": "39791653484693a3e3b15911c802a9b823d031ab21c39d8c50af6e3eeefdf853"
+    },
+    {
+      "bytes": 6020,
+      "executable": false,
+      "path": "tests/test_packaging.py",
+      "sha256": "2e350c2d2a6be729a8608b995962394eabbb78b66291eb20b15327e2b0e6859c"
+    },
+    {
+      "bytes": 16892,
+      "executable": false,
+      "path": "tests/test_release.py",
+      "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
+    },
+    {
+      "bytes": 1083,
+      "executable": false,
+      "path": "update-info.json",
+      "sha256": "5927f9cdf5dd645e83434f72f003d292fc2195f6b68739f75ff14929de8a62ed"
+    },
+    {
+      "bytes": 1614,
+      "executable": false,
+      "path": "windows/BUILD-WINDOWS.ps1",
+      "sha256": "64c97d10133621eb8755fea6084afc3b9eab52ad24f40a776c21cc661fe87047"
+    },
+    {
+      "bytes": 25385,
+      "executable": false,
+      "path": "windows/KL06.Windows/Assets/KL06.ico",
+      "sha256": "56654c208efec142beb13b26562e51c2512fcf42f72fd00df02f2c9bd15759b5"
+    },
+    {
+      "bytes": 3002,
+      "executable": false,
+      "path": "windows/KL06.Windows/ControlPolicy.cs",
+      "sha256": "554a32be5566460a361438c1662e89707b2b28ff3c6013f8e5833057dfb2e623"
+    },
+    {
+      "bytes": 7623,
+      "executable": false,
+      "path": "windows/KL06.Windows/DesktopCompanion.cs",
+      "sha256": "ab93b188c28ba36f4e45b54000ed0084e9f532245405067413e3cca683889ceb"
+    },
+    {
+      "bytes": 2317,
+      "executable": false,
+      "path": "windows/KL06.Windows/KL06.Windows.csproj",
+      "sha256": "17da6cf1cc9eb504ccd646007ca8d5e8604fcba1c58cab99080bab86dbb83485"
+    },
+    {
+      "bytes": 11139,
+      "executable": false,
+      "path": "windows/KL06.Windows/MainForm.cs",
+      "sha256": "f60b8434f3620efbe938fb0c5612e691e4161f2e48670f1a4d3770f50cc95c0a"
+    },
+    {
+      "bytes": 6864,
+      "executable": false,
+      "path": "windows/KL06.Windows/NativeDevice.cs",
+      "sha256": "719ff564b7d0fbed288bb0a990cc5ddbe2dfe5a21cddfad16ee10667dbe465ed"
+    },
+    {
+      "bytes": 184,
+      "executable": false,
+      "path": "windows/KL06.Windows/Platform.cs",
+      "sha256": "3400986e57d4215ccbdae88dfe04d625cc1041237dc9cbc49a5bd1ce8c19c325"
+    },
+    {
+      "bytes": 4579,
+      "executable": false,
+      "path": "windows/KL06.Windows/PreferenceJournal.cs",
+      "sha256": "fe0c5bcb3b4a1b7d995e632dd28aa47768211e94bf5006a95cd1114953cdf661"
+    },
+    {
+      "bytes": 1288,
+      "executable": false,
+      "path": "windows/KL06.Windows/Program.cs",
+      "sha256": "f4026c1b52c07a28c7345434bb71084fca35acd91e5ea91ad4fd3eefafe730bf"
+    },
+    {
+      "bytes": 4176,
+      "executable": false,
+      "path": "windows/KL06.Windows/WindowsStorage.cs",
+      "sha256": "7618f7a93204b292691fe52e3d725e70559014a3ad4adbce16cc8404819beb61"
+    },
+    {
+      "bytes": 752,
+      "executable": false,
+      "path": "windows/KL06.Windows/app.manifest",
+      "sha256": "fe460aadb2dc66a31638777af4a5cee12022ea43102be9c212865f8537909732"
+    },
+    {
+      "bytes": 969,
+      "executable": false,
+      "path": "windows/KL06.Windows/packages.lock.json",
+      "sha256": "0b0051081e6a78d90ca1581f7366ff4068967c74e62a6f435226d3dd356b2ae8"
+    },
+    {
+      "bytes": 396,
+      "executable": false,
+      "path": "windows/Tests/PortableTests.csproj",
+      "sha256": "556262db40a2fb9bf39827610bfe0995c9d98fa2f124cb36b57a654ee1c3a7d6"
+    },
+    {
+      "bytes": 4954,
+      "executable": false,
+      "path": "windows/Tests/Program.cs",
+      "sha256": "7e923a90ad8156cc76e61e7c5dbbf0f7e6e476412ac655b47e33ed3737d60086"
+    }
+  ],
+  "schema": "KL06_SOURCE_MANIFEST_V1",
+  "scope": "source-only-not-native-build-or-owner-approval",
+  "version": "0.4.0-beta.1"
+}
