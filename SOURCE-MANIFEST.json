@@ -26,10 +26,10 @@
       "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
     },
     {
-      "bytes": 13755,
+      "bytes": 16021,
       "executable": false,
       "path": "CHANGELOG.md",
-      "sha256": "963e05c073cddab1f8df16a968ee5e4b7ade0becce3fece724cd3ea014b2e527"
+      "sha256": "a6e2959ae6a3ce4b9435e3964dceffbfd5ea4bf7456a59a762ff348bdc05da70"
     },
     {
       "bytes": 6066,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 15134,
+      "bytes": 17329,
       "executable": false,
       "path": "README.md",
-      "sha256": "f34128215b87f3f16846195a08b07978779ee7be9e99870420977e2f28253cfa"
+      "sha256": "e22dfca00b2ddaabcfb31b4ca73124d646b687a9030b4a10f170dda7de29ef4c"
     },
     {
       "bytes": 1599,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 4237,
+      "bytes": 48766,
       "executable": false,
       "path": "index.html",
-      "sha256": "ec5a3bdd5711e11a1d98bd64f0803320b7d0cec2d6dd897cf2271657f89fc21c"
+      "sha256": "a18b306356883333d589b89b126e6fb478b24893036e1a296cc430e32f5422e8"
     },
     {
       "bytes": 5659,
@@ -446,10 +446,10 @@
       "sha256": "39a1dfcd01f318d183e7bf37413188063e8922afce6708fe8c05c93d0f680a2b"
     },
     {
-      "bytes": 1069,
+      "bytes": 1086,
       "executable": false,
       "path": "macos/LICENSE",
-      "sha256": "55f789eeb8d7e872c4d58ca05ccbb12b58a548e2dcfce05cf61286a00aff8049"
+      "sha256": "0a6fa6904a038416017c0c3d58183273715f2ceac1383b6ad931e9956242ec80"
     },
     {
       "bytes": 3650,
@@ -656,10 +656,10 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 4243,
+      "bytes": 10394,
       "executable": false,
       "path": "script.js",
-      "sha256": "c5b3f105788479196433c948d49aedb63aa6adf806ffde5d3facf0b8f558a7d8"
+      "sha256": "5fe10d44941672d77220a8d8de9b7664674efe779c82ace1f0ede63474f05c7c"
     },
     {
       "bytes": 34421,
@@ -686,10 +686,10 @@
       "sha256": "6139104830b93ab31cb1eeefb2871fcb2b89511f0957ac597a3e8c2136bd7eb5"
     },
     {
-      "bytes": 20215,
+      "bytes": 20232,
       "executable": false,
       "path": "shared/web/licenses.js",
-      "sha256": "b8e7b0f0686b853e0cb57156f183d7771e3ca09d7cdbf403a2023f167cc299ca"
+      "sha256": "a7214d4209b5484395944a6c3cfa82ec26d769f0f141c9f0459c33baade2b9d3"
     },
     {
       "bytes": 3323,
@@ -704,10 +704,10 @@
       "sha256": "2be02dae3f267f0d9dda2ea595256c873e41e2098976d7032f76ca9d2d7a822a"
     },
     {
-      "bytes": 7393,
+      "bytes": 40440,
       "executable": false,
       "path": "style.css",
-      "sha256": "f47a0954f97a3efd53c4d888724ade2f271e35fccd9cec6c023b37e212ba85a6"
+      "sha256": "e70a25c1e1a84f8fc52e8f8d8d6dbd5f04d0398430c9c2eb2a634a688e7cf593"
     },
     {
       "bytes": 10515,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 1083,
+      "bytes": 3135,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "5927f9cdf5dd645e83434f72f003d292fc2195f6b68739f75ff14929de8a62ed"
+      "sha256": "7dd8a92248668ffa598467dcc48e0c1875a1520651a2f523c9a95397e2af3f2d"
     },
     {
       "bytes": 1614,

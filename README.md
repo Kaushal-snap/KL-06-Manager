@@ -2,36 +2,57 @@
 
 # ⚡ KL-06 Manager
 
-### *Next-Generation Control Center for Modern Hackintosh Systems*
+### *Next-Generation Universal Control Center & AirDrop Hub by Kaushal Labana*
 
-[![Release](https://img.shields.io/badge/Release-v0.3.0--Beta.1-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1)
-[![Build Status](https://img.shields.io/badge/Status-Verified%20Native%20(Build%204)-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Developer](https://img.shields.io/badge/Developer-Kaushal%20Labana-6366F1?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Kaushal-snap)
+[![Discord](https://img.shields.io/badge/Discord-labanayt5301-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/8nvTeGk9)
+[![YouTube](https://img.shields.io/badge/YouTube-@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
+[![Release](https://img.shields.io/badge/Release-v0.4.0--Beta.1%20(Build%206)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Build Status](https://img.shields.io/badge/Status-Verified%20Native-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![macOS](https://img.shields.io/badge/macOS-Sequoia%2015.8.3%20(24H241)-7C3AED?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![Target Platform](https://img.shields.io/badge/Platform-ASUS%20VivoBook%20K15%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
-[![CPU Arch](https://img.shields.io/badge/Arch-x86__64%20(Tiger%20Lake--U)-0284C7?style=for-the-badge&logo=intel&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
-[![Graphics](https://img.shields.io/badge/GPU-Intel%20Iris%20Xe%20(Metal%202)-0891B2?style=for-the-badge&logo=intel&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![Hotkey](https://img.shields.io/badge/Hotkey-PrtSc%20%E2%86%92%20F13%20Toggle-F59E0B?style=for-the-badge&logo=hotjar&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
-[![Distribution](https://img.shields.io/badge/License-Proprietary%20%2F%20Closed--Source-DC2626?style=for-the-badge&logo=lock&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 
 <br/>
 
 <p align="center">
-  <b>A lightweight, beautiful, and capability-aware macOS control companion.</b><br/>
-  <i>Engineered specifically for Tiger Lake-U (Intel Core i5-1135G7) & Intel Iris Xe Graphics.</i><br/>
-  Zero external telemetry • Read-only sensor verification • Atomic preference rollback
+  <b>A lightweight, beautiful, and capability-aware universal control companion across Mac, Windows, Android, and iPhone.</b><br/>
+  <i>Architected & Developed by <b>Kaushal Labana</b>.</i><br/>
+  Zero external telemetry • 6-digit mutual PIN pairing • Auto-pair incoming alert • Read-only sensor verification
 </p>
 
 <p align="center">
-  <a href="https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Release-KL--06.zip_(Beta)-2563EB?style=for-the-badge" alt="Download Release" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.3.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
+  <a href="#-device-downloads-matrix-v040-beta1-build-6"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Ecosystem-v0.4.0--Beta.1-2563EB?style=for-the-badge" alt="Download Release" /></a>
+  <a href="https://discord.gg/8nvTeGk9"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM"><img src="https://img.shields.io/badge/YouTube-Subscribe%20@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.4.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
   <a href="ECOSYSTEM.md"><img src="https://img.shields.io/badge/%F0%9F%8C%90_Ecosystem_%26_OTA-Specs_%26_Matrix-0284C7?style=for-the-badge" alt="Ecosystem Specs" /></a>
-  <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/%F0%9F%9B%A1%EF%B8%8F_Architecture_%26_Security-Boundary_Specs-7C3AED?style=for-the-badge" alt="Architecture" /></a>
-  <a href="HARDWARE-REPORTS.md"><img src="https://img.shields.io/badge/%F0%9F%93%8A_Hardware_Report-Telemetry_Specs-EA580C?style=for-the-badge" alt="Hardware Report" /></a>
 </p>
 
 ---
 
 </div>
+
+<br/>
+
+## 🌐 Community & Direct Support
+
+Connect directly with the developer **Kaushal Labana**:
+- 💬 **Discord Community**: [https://discord.gg/8nvTeGk9](https://discord.gg/8nvTeGk9) (Username: **`labanayt5301`**)
+- ▶️ **YouTube Channel**: [https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM) (**`@labanayt`**)
+- 🐙 **GitHub Repository**: [https://github.com/Kaushal-snap/KL-06-Manager](https://github.com/Kaushal-snap/KL-06-Manager)
+
+<br/>
+
+## 📱 Device Downloads Matrix (v0.4.0-beta.1 Build 6)
+
+| Platform | Deliverable Package | Size | SHA-256 Checksum | Direct Download Mirror |
+| :--- | :--- | :---: | :---: | :---: |
+| 🤖 **Android** | `KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip` | 1.04 MB | `bb7d99fd800934b7af0c19489e34ee97e79676d2728521c9693d4bc3a070a2b8` | [Direct Download (Drive)](https://drive.google.com/uc?id=1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 4.0 beta.zip` | 195 KB | `88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941` | [Direct Download (Drive)](https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip` | 553 KB | `9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f` | [Direct Download (Drive)](https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download) |
+| 📱 **iOS** | `ios/KL06Mobile` Xcode Project / `INSTALL-IOS.command` | Source | Swift / devicectl | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
+| 📦 **Source Archive** | `KL-06-0.4.0-beta.1-source-BUILD-READY.zip` | 1.88 MB | `d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download) |
 
 <br/>
 
@@ -205,8 +226,13 @@ Candidate package `0.3.0-beta.2` (Build 5) expands KL-06 into a multi-device eco
 
 ---
 
-## 🔒 Proprietary License & Closed-Source Rights
+## 🔒 Author, Copyright & Licensing
 
-**Copyright © 2026 Kaushal-snap. All Rights Reserved.**
+**Created, Architected & Maintained by Kaushal Labana (@Kaushal-snap)**  
+- 💬 **Discord**: [`labanayt5301`](https://discord.gg/8nvTeGk9) (Server: https://discord.gg/8nvTeGk9)  
+- ▶️ **YouTube**: [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)  
+- 🐙 **GitHub**: [`Kaushal-snap`](https://github.com/Kaushal-snap/KL-06-Manager)  
+
+**Copyright © 2026 Kaushal Labana. All Rights Reserved.**
 
 This software is distributed in compiled binary form for testing and validation on verified hardware targets. Unauthorized copying, reverse engineering, redistribution, decompilation, or modification of this application or associated binary assets is strictly prohibited without express written permission.

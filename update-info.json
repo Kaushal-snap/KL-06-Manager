@@ -1,30 +1,55 @@
 {
     "app": "KL-06 Manager",
-    "current_version": "1.0.0",
+    "owner": "Kaushal Labana",
+    "discord": "https://discord.gg/8nvTeGk9",
+    "discord_username": "labanayt5301",
+    "youtube": "https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM",
+    "current_version": "0.4.0-beta.1",
+    "build": 6,
+    "release_date": "2026-11-17",
     "platforms": {
+        "android": {
+            "version": "0.4.0-beta.1",
+            "build": 6,
+            "filename": "KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip",
+            "sha256": "bb7d99fd800934b7af0c19489e34ee97e79676d2728521c9693d4bc3a070a2b8",
+            "drive_download_url": "https://drive.google.com/uc?id=1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC/view?usp=sharing",
+            "notes": "APK Signature Scheme v2 signed with uncompressed 4-byte aligned resources.arsc. Single-page mobile dashboard, 6-digit PIN pairing, and auto-pair incoming consent modal."
+        },
         "mac": {
-            "version": "1.0.0",
-            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-mac.dmg",
-            "release_date": "2026-11-17",
-            "notes": "Initial release"
+            "version": "0.4.0-beta.1",
+            "build": 6,
+            "filename": "KL-06 Manager 4.0 beta.zip",
+            "sha256": "88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941",
+            "drive_download_url": "https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/16SE_Z25itABzXg8p0aUrITkLr-2E-DVB/view?usp=sharing",
+            "notes": "Native macOS 13+ companion with 6-digit PIN display, OLED brightness, volume scalar, and F13 hotkey."
         },
         "windows": {
-            "version": "1.0.0",
-            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-win.exe",
-            "release_date": "2026-11-17",
-            "notes": "Initial release"
-        },
-        "android": {
-            "version": "1.0.0",
-            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-android.apk",
-            "release_date": "2026-11-17",
-            "notes": "Initial release"
+            "version": "0.4.0-beta.1",
+            "build": 6,
+            "filename": "KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip",
+            "sha256": "9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f",
+            "drive_download_url": "https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM/view?usp=sharing",
+            "notes": "Windows 10/11 x64 app with WebView2 integration, single-page dashboard, and PIN authentication."
         },
         "ios": {
-            "version": "1.0.0",
-            "url": "https://apps.apple.com/app/kl-06-manager/id000000000",
-            "release_date": "2026-11-17",
-            "notes": "Initial release"
+            "version": "0.4.0-beta.1",
+            "build": 6,
+            "source_script": "INSTALL-IOS.command",
+            "project_path": "ios/KL06Mobile.xcodeproj",
+            "notes": "Pure Swift / WKWebView companion with pinned TLS and local bridge. Build via Xcode or INSTALL-IOS.command."
+        },
+        "source": {
+            "version": "0.4.0-beta.1",
+            "build": 6,
+            "filename": "KL-06-0.4.0-beta.1-source-BUILD-READY.zip",
+            "sha256": "d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029",
+            "drive_download_url": "https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW/view?usp=sharing",
+            "notes": "Complete clean repository source archive passing 100% portable test assertions."
         }
     }
 }

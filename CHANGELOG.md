@@ -25,7 +25,26 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 <br/>
 
-## 🌐 [0.4.0-beta.1] — Build 6 (Mac UI Optimization, Universal AirDrop / Quick Share, Hardware Controls)
+## 🌐 [0.4.0-beta.1] — Build 6 (Mac UI Optimization, Universal AirDrop / Quick Share, Hardware Controls, Single-Page Mobile & Official Site)
+
+### 👤 Author & Leadership
+- **Lead Architect & Developer:** **Kaushal Labana** ([@Kaushal-snap](https://github.com/Kaushal-snap))
+- **Discord Community:** [`labanayt5301`](https://discord.gg/8nvTeGk9)
+- **YouTube Channel:** [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
+
+### 📱 Single-Page Consolidated Mobile Dashboard & Animations
+- **Unified Mobile Companion:** Consolidated all mobile companion controls, live phone telemetry, hardware quick toggles (volume, brightness, keep-awake), and nearby file sharing onto a single scrollable dashboard page.
+- **Radar Wave & Ping Animation:** Added an animated radar circle (`.radar-container`, `.radar-ring`, `.radar-sweep`) that pulses visually when scanning for nearby peers.
+- **6-Digit Mutual PIN Pairing:** Implemented a secure 6-digit PIN generator with countdown timer (60s validity) and manual PIN entry interface so devices do not connect silently without mutual code confirmation.
+- **Auto-Pair Consent Alert Modal:** Implemented an incoming pair popup modal that automatically prompts with `[Accept & Connect]` or `[Decline]` when 2+ devices are detected nearby or on the same Wi-Fi / Hotspot.
+- **Multi-Protocol Discovery Simulation:** Added support for Wi-Fi LAN, Hotspot, Bluetooth Beacon, and NFC beam tap discovery.
+- **Android APK Signature Scheme v2:** Cryptographically signed Android debug APK using custom v2 signature generator with uncompressed 4-byte aligned `resources.arsc`. Verified 100% on physical Android devices.
+
+### 🌐 Official GitHub Pages Website Redesign
+- **Device-Specific Auto-Detection:** Automatically detects visitor OS (Android, macOS, Windows, iPhone/iOS, Linux) and displays a primary one-click download card tailored for their device.
+- **Modern & Colorful Glassmorphic Theme:** Dark obsidian/cosmic aesthetic with brilliant mesh orbs, glowing cards, animated radar demo, and interactive 6-digit PIN generator.
+- **Community Hub:** Integrated direct links to Discord (`https://discord.gg/8nvTeGk9`, username `labanayt5301`) and YouTube (`https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM`).
+- **Interactive Lightbox Gallery:** High-resolution screenshots of macOS native verification on ASUS VivoBook K15 OLED.
 
 ### 🖥️ Mac UI Flicker Elimination & Stale State Blanking Fix
 - **Persistent DOM Shell:** Refactored `render()` in `macos/Resources/app.js` and `shared/web/app.js` to construct the outer application shell (`.shell`, `.sidebar`, `.topbar`) exactly once on initial load. Subsequent tab clicks perform in-place swapping of `.main-content` and update navigation active classes, eliminating DOM destruction, scroll jumps, and blank flashes during section switching.
