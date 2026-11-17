@@ -1,0 +1,56 @@
+# Build and package output
+/Local-build/
+/*.app/
+*.dSYM/
+build/
+dist/
+
+# macOS metadata
+.DS_Store
+._*
+
+# Private reports, machine identity, diagnostics, and raw system dumps
+REPORT.txt
+*.ioreg
+*.log
+logs/
+diagnostics/
+.inputs/
+.private/
+.tools/
+.artifacts/
+google_drive/
+
+# Secrets and credentials
+secrets/
+.env
+.env.*
+*.token
+*.pem
+*.key
+*.p12
+
+# No raw EFI payloads or kexts in app-only repository
+EFI/
+BOOT/
+OC/
+Kexts/
+*.kext/
+*.kext
+*.efi
+*.aml
+
+# Archives and transfer bundles
+*.zip
+*.tar*
+*.gz
+*.xz
+*.7z
+*.pkg
+*.dmg
+*.bundle/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

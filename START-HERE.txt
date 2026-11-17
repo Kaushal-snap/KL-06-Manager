@@ -1,0 +1,66 @@
+KL-06 0.2.1 — F13 update + hardware report
+=======================================
+
+WHERE IS THE APP / HARDWARE SCRIPT?
+Download the ZIP file card in Arena: KL-06-0.2.1-update-and-report.zip
+It is NOT downloaded to your Mac automatically.
+Unzip it in Downloads. Open the extracted KL-06-0.2.1 folder.
+Both the app source/builders and hardware-report script are in that folder.
+No precompiled .app is supplied; use your installed Xcode to build locally.
+This is the corrected v0.2.1 source revision: the original F13 compile error
+(UInt32 event count where Int was required) is removed. SOURCE-REVISION.txt
+identifies the revision. Your previously downloaded copy does not update itself;
+README.md has a one-line source repair if you prefer not to download again.
+
+UPDATE THE APP
+1. Quit any old KL -Asus / KL-06 app with Command-Q (closing is not quitting).
+2. In a new Terminal window, paste this one command, without sudo:
+
+/bin/bash "$HOME/Downloads/KL-06-0.2.1/UPDATE-KL-06.command"
+
+It runs native logic tests with FAKE preferences, then builds and locally
+ad-hoc signs KL-06.app only if those tests pass. Finder reveals the app.
+3. Open the new KL-06.app in Finder. About should say 0.2.1.
+
+If your extracted folder is elsewhere, type /bin/bash and a space in Terminal,
+drag UPDATE-KL-06.command from your extracted folder into Terminal, then Return.
+Do not run an older copy. Nothing is installed/launched automatically.
+Your original preference-restore journal is intentionally kept under KL-Asus;
+do NOT delete ~/Library/Application Support/KL-Asus while restore entries remain.
+
+F13 / YOUR PHYSICAL PrtSc KEY
+F13 alone: macOS virtual keyCode 105, no modifiers.
+While KL-06 is running: show/raise it, or hide it when already in front.
+Closed/minimized windows reopen. Holding the key must not repeatedly toggle.
+Open native dialogs are focused, not hidden; during OS power authorization or
+sampling the shortcut does nothing. Quit releases the shortcut.
+This is not a launcher while the app is quit and does not remap your keyboard.
+No Accessibility/Input Monitoring permission, EFI change or login item needed.
+If registration fails, a warning and About/menu status show it. Use the KL
+menu bar/Dock; review conflicting shortcuts, then quit/reopen KL-06 to retry.
+
+HARDWARE REPORT — NO APP BUILD / XCODE / PYTHON NEEDED
+From the same extracted folder, run:
+
+/bin/bash "$HOME/Downloads/KL-06-0.2.1/KL-06-Hardware-Report.command"
+
+REPORT.txt is written inside a new KL-06-Report.XXXXXX folder on the Desktop
+(home fallback). No sudo, installs, settings/EFI/Windows changes or upload.
+Review REPORT.txt before sharing with Arena. Add the physical laptop/motherboard
+model, actually tested functions and requested feature. Do not share an EFI,
+serials, tokens, passwords or recovery keys. Intake is not universal support.
+
+TO SHARE WITH OTHER OWNERS
+Share KL-06-Hardware-Report.command plus the command documented in
+HARDWARE-REPORTS.md, OR share the ENTIRE KL-06-SHARE-COMMAND.txt paste block.
+The paste block needs no separate file/download/app/GitHub. Include its first
+and last lines; do not paste only the middle into zsh.
+
+TEST STATUS
+98 project tests and 28 portable Node tests passed after the source correction.
+Browser status checks passed for the unchanged UI before this correction.
+The original native v0.2.1 compile FAILED on the event-count type. Grammar and
+source regressions do not prove SDK compilation. A successful corrected native
+build, real F13/PrtSc behavior and actual Mac report still need your test.
+No clock/fan/HDR/DTS/mic-DSP/disk-cleaning driver or firmware control was added.
+See README.md and VERIFICATION.md for details and safe target test steps.
