@@ -1,78 +1,100 @@
-# KL-06 Manager
+<div align="center">
 
-**KL-06 Manager** is an independent local macOS control center companion utility designed specifically for modern Hackintosh systems, tested and verified on the **ASUS VivoBook K15 OLED (K513EA)** running **macOS Sequoia 15.8.3** (Intel Core i5-1135G7 Tiger Lake-U, Intel Iris Xe Graphics).
+# ⚡ KL-06 Manager
 
-> **Notice:** This is a private and proprietary companion project. It is **not open source** and is not affiliated with, sponsored by, or endorsed by ASUSTeK Computer Inc. or Apple Inc. All rights reserved.
+### *Next-Generation Control Center for Modern Hackintosh Systems*
 
----
+[![Version](https://img.shields.io/badge/Release-v0.2.1--Beta-blue?style=for-the-badge&logo=apple)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Status](https://img.shields.io/badge/Status-Verified%20Native-success?style=for-the-badge&logo=checkmarx)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Target](https://img.shields.io/badge/macOS-Sequoia%2015.8.3-darkviolet?style=for-the-badge&logo=apple)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![Hardware](https://img.shields.io/badge/Hardware-ASUS%20K15%20OLED%20(K513EA)-orange?style=for-the-badge&logo=asus)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![License](https://img.shields.io/badge/License-Proprietary%20%2F%20Closed--Source-red?style=for-the-badge&logo=lock)](https://github.com/Kaushal-snap/KL-06-Manager)
 
-## Current Status: Beta
+<br/>
 
-- **App Version:** `0.2.1` (Build `3`) — Beta Phase
-- **Execution Mode:** `LOCAL • NATIVE` (AppKit, WebKit, IOKit, Core Audio, Metal)
-- **Target OS:** macOS Sequoia 15.8.3 (Build 24H241 / Darwin 24.6.0 / x86_64)
-- **Bundle Identifier:** `app.klasus.controlcenter`
-- **Restore Journal:** `~/Library/Application Support/KL-Asus/Restore-v1.plist`
-
----
-
-## Verified Target Hardware & Capabilities
-
-| Subsystem | Target Observation | Safe Policy & Enforced Boundary |
-| :--- | :--- | :--- |
-| **Graphics & Display** | Intel Iris Xe (0x9a49), Metal 2, 1536 MB dynamic VRAM, 1920×1080 @ 60 Hz, 30-bit color depth. | Custom WhateverXe 0.8.2 binary preserved (`9e18e609...`). OLED/DPCD brightness and paired DSDT + SSDT-ASUS-FN preserved. **HDR OFF baseline preserved** (30-bit framebuffer is not HDR workload certification). |
-| **CPU & Telemetry** | 11th Gen Intel Core i5-1135G7 @ 2.40 GHz (4 physical / 8 logical cores). System avg: ~1530 MHz, CPU avg: ~1350 MHz, pkg power: ~6.14 W, die temp: ~46.0 °C. | Honest read-only sampling. No fake clock boost, overclocking, undervolting, or arbitrary ACPI writes. |
-| **Thermals & Fans** | `SMCSuperIO` count: 0, `AsusSMC` count: 0. **No fan RPM reported.** | **Strict non-negotiable rule:** Absolutely no fan controls, no simulated curves, no EC/SMC writes. Fan panel is honestly marked as unavailable. |
-| **Battery Health** | State of charge: ~80%, Condition: "Service Recommended", 314 cycles, 2236 mAh / 3549 mAh design (~63.0% reported ratio). | OS condition surfaced honestly; no fake battery "re-calibration" or charge-limit writes without verified hardware interfaces. |
-| **Audio & USB** | Built-in 44.1 kHz input / 96 kHz output; layout-id 7 vs alc-layout-id 48 confirmed working (speakers, internal mic, headphone jack). 15 USB host ports. | Audio and USB port mappings preserved without modification. Supported output volume scalar managed via Core Audio. |
-| **Global Shortcut** | Physical `PrtSc` mapped to virtual **F13** (keyCode 105, no modifiers). | Toggles window show/hide while app runs. Carbon `buffer.count` (`Int`) fix and native dialog focus protection preserved. |
+<p align="center">
+  <b>A lightweight, beautiful, and capability-aware macOS control companion.</b><br/>
+  <i>Engineered specifically for Tiger Lake-U (Intel Core i5-1135G7) & Intel Iris Xe Graphics.</i>
+</p>
 
 ---
 
-## On-Device Target Verification Screenshots
+[📥 Download KL-06.zip (Beta)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3) • [📖 Hardware Architecture](ARCHITECTURE.md) • [📋 Changelog](CHANGELOG.md) • [📊 Hardware Report](HARDWARE-REPORTS.md)
 
-The screenshots below demonstrate native on-device execution of **KL-06 Manager** on the ASUS VivoBook K15 OLED running macOS Sequoia:
+---
 
-| Overview Dashboard | Performance & Sampling |
+</div>
+
+<br/>
+
+## 🎯 Target Hardware & Verified Baseline
+
+Tested and verified on physical hardware running **macOS Sequoia 15.8.3** (Build `24H241`, Darwin `24.6.0`, x86_64):
+
+| Subsystem | Target Observation | Status | Enforced Policy |
+| :--- | :--- | :---: | :--- |
+| **Graphics** | Intel Iris Xe (`0x9a49`), Metal 2, 1536 MB Dynamic VRAM | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=nvidia&logoColor=white" /> | Custom WhateverXe 0.8.2 binary preserved (`9e18e609...`). |
+| **Display** | 1920×1080 @ 60 Hz, 30-Bit Color Depth (ARGB2101010) | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=airplay&logoColor=white" /> | OLED / DPCD brightness & DSDT + SSDT-ASUS-FN intact. **HDR OFF** baseline preserved. |
+| **Global Hotkey** | Physical `PrtSc` mapped to virtual **F13** (`keyCode 105`) | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=hotjar&logoColor=white" /> | Show/Hide window toggle while running. Carbon `buffer.count` (`Int`) fix verified. |
+| **Core Audio** | Built-in 44.1 kHz in / 96 kHz out (layout-id 7 / alc-layout-id 48) | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=apple-music&logoColor=white" /> | Master output volume slider supported. Speakers, mic, & jack switching preserved. |
+| **Desktop Tweaks**| 9 Reversible Dock, Finder, and Appearance settings | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=macos&logoColor=white" /> | Atomic restore journal (`~/Library/Application Support/KL-Asus/Restore-v1.plist`). |
+| **CPU Telemetry** | 11th Gen Intel Core i5-1135G7 @ 2.40 GHz (8 logical cores) | <img src="https://img.shields.io/badge/Read--Only-60A5FA?style=flat-square&logo=intel&logoColor=white" /> | Real dynamic load & memory counters. No fake overclocking or CPUFriend tampering. |
+| **Thermals & Fans**| `SMCSuperIO`: 0, `AsusSMC`: 0 (No WMI / EC fan RPM sensor) | <img src="https://img.shields.io/badge/Disabled-9CA3AF?style=flat-square&logo=fanarttv&logoColor=white" /> | **Strict Rule:** Fan controls honestly unavailable. No fake sliders or simulated curves. |
+| **Battery Health** | Service Recommended, 314 cycles, 2236 / 3549 mAh (~63% ratio)| <img src="https://img.shields.io/badge/Honest-FBBF24?style=flat-square&logo=battery&logoColor=white" /> | Real ACPI reporting surfaced honestly; no fake software calibration or charge limits. |
+
+<br/>
+
+---
+
+## 📸 Verified On-Device Screenshots
+
+Native execution captured live on target hardware (`LOCAL • NATIVE` state):
+
+<div align="center">
+
+| 1. Overview Dashboard | 2. Performance & Sampling |
 | :---: | :---: |
-| ![Overview](docs/screenshots/overview.png) | ![Performance](docs/screenshots/performance.png) |
+| <img src="docs/screenshots/overview.png" width="480" /> | <img src="docs/screenshots/performance.png" width="480" /> |
 
-| Display & Sound Controls | About & Privilege Boundary |
+| 3. Display & Sound Controls | 4. About KL-06 & Hotkey Status |
 | :---: | :---: |
-| ![Display & Sound](docs/screenshots/display-and-sound.png) | ![About KL-06](docs/screenshots/about.png) |
+| <img src="docs/screenshots/display-and-sound.png" width="480" /> | <img src="docs/screenshots/about.png" width="480" /> |
+
+</div>
+
+<br/>
 
 ---
 
-## Features & Reversible Desktop Controls
+## 🚀 Key Highlights & Capabilities
 
-1. **Dashboard & Telemetry:**
-   - Real-time CPU utilization aggregate load.
-   - Memory breakdown (active, wired, compressed, swap).
-   - Local storage usage and available space.
-   - Battery charge percentage and reported health ratio.
-   - Core Audio master output volume slider.
+- 🎨 **MyASUS-Inspired Modern Interface:** Sleek dark-mode aesthetic with real-time telemetry cards, color-coded status badges, and smooth gradient metrics.
+- ⚡ **Zero Telemetry & Local-First:** No background daemons, no analytics tracking, no network calls (`connect-src 'none'`).
+- 🛡️ **Preservation Invariants:**
+  - Never touches your working EFI, OpenCore config, or boot arguments.
+  - Retains bundle identity `app.klasus.controlcenter` and atomic restore journal.
+  - Zero arbitrary kernel writes, MSR edits, or simulated fan controls.
 
-2. **Reversible Preferences (Atomic Restore Journal):**
-   - Nine reversible Dock, Finder, and appearance settings.
-   - Every change persists original state to `~/Library/Application Support/KL-Asus/Restore-v1.plist` before applying.
-   - Restores original values accurately; skips external conflicting modifications.
-
-3. **Privacy & Sandboxing:**
-   - Zero cloud connectivity, no telemetry, no tracking daemons.
-   - WebKit UI operates under strict Content Security Policy (`connect-src 'none'; default-src 'none'`).
-   - Private reports (`REPORT.txt`), machine identifiers (SMBIOS serials, UUIDs), and raw EFI backups are never published.
+<br/>
 
 ---
 
-## Releases & Downloads
+## 📦 How to Test & Install (Beta)
 
-Tested app builds are packaged and published as **Beta Prereleases**:
-- **Latest Beta Release:** [KL-06 Manager v0.2.1 Beta (Build 3)](https://github.com/Kaushal-snap/new/releases/tag/v0.2.1-beta.3)
-- **Artifact:** `KL-06.zip` (Tested `.app` bundle, SHA-256: `ee499aafcd36663e06cfe6c19f04f7d422c1f6b5c98fa8663c4eca9128c33317`)
+1. Go to the [Releases Page](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3) and download **`KL-06.zip`**.
+2. Unzip `KL-06.zip` on your Mac.
+3. Move `KL-06.app` to your `/Applications` folder or run it directly from `Downloads`.
+4. Press **`PrtSc` (F13)** anytime to toggle the control center window.
+
+> **Integrity Verification:**
+> - **SHA-256:** `ee499aafcd36663e06cfe6c19f04f7d422c1f6b5c98fa8663c4eca9128c33317`
+> - **Architecture:** `x86_64` (Mach-O 64-bit)
+
+<br/>
 
 ---
 
-## Legal & Privacy Notice
+## 🔒 License & Copyright
 
-Copyright © 2026 Kaushal-snap. All Rights Reserved.  
-Private & proprietary utility. Unauthorized reproduction, distribution, or reverse engineering is prohibited.
+**Copyright © 2026 Kaushal-snap. All Rights Reserved.**  
+This is a proprietary companion utility. Unauthorized reproduction, decompilation, redistribution, or modification without explicit written consent is prohibited.
