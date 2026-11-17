@@ -2,7 +2,17 @@
 
 Independent local macOS window/menu-bar companion. Formerly **KL -Asus**. Capability-aware intake for different Hackintosh hardware—not a universal hardware driver or a promise that every control works everywhere.
 
-**Status:** source-built preview. The owner reports v0.1 working on the ASUS K513EA. Their first v0.2.1 native compile failed at the F13 handler's event-count argument; this corrected source passes `buffer.count` as Swift `Int` instead of converting it to `UInt32`. A successful native rebuild and real F13 behavior are still pending. Browser/software tests do not certify macOS SDK compilation, controls or a global shortcut. No precompiled `.app` is included.
+**Status:** Tested & verified native build on target (ASUS VivoBook K15 OLED, macOS Sequoia 15.8.3, i5-1135G7). Verified working on-device with active `LOCAL • NATIVE` status, global F13 (keyCode 105) hotkey registered, Core Audio volume control, and telemetry counters operational.
+
+## Screenshots (Native macOS Sequoia Verification)
+
+| Overview | Performance |
+| :---: | :---: |
+| ![Overview](docs/screenshots/overview.png) | ![Performance](docs/screenshots/performance.png) |
+
+| Display & Sound | About KL-06 |
+| :---: | :---: |
+| ![Display & Sound](docs/screenshots/display-and-sound.png) | ![About KL-06](docs/screenshots/about.png) |
 
 ## Build / update on your Mac
 
