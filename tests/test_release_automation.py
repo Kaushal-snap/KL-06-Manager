@@ -56,21 +56,21 @@ class TestReleaseAutomation(unittest.TestCase):
 
     def test_valid_app_zip(self):
         zip_path = os.path.join(self.tmp_dir.name, "KL-06-valid.zip")
-        create_mock_app_zip(zip_path)
+        create_mock_app_zip(zip_path, version="0.9.9", build="99")
 
         expected_hash = compute_sha256(zip_path)
         info = inspect_and_validate_zip(zip_path, expected_sha256=expected_hash)
 
         self.assertEqual(info["bundle_id"], EXPECTED_BUNDLE_ID)
-        self.assertEqual(info["version"], "0.2.1")
-        self.assertEqual(info["build"], "3")
+        self.assertEqual(info["version"], "0.9.9")
+        self.assertEqual(info["build"], "99")
         self.assertEqual(info["executable"], "KL-06")
         self.assertEqual(info["sha256"], expected_hash)
 
         # Stage dry run
         stage_res = stage_draft_release(info, dry_run=True)
         self.assertEqual(stage_res["status"], "dry_run_success")
-        self.assertEqual(stage_res["tag"], "v0.2.1-beta.3")
+        self.assertEqual(stage_res["tag"], "v0.9.9-beta.99")
 
     def test_wrong_bundle_id_rejected(self):
         zip_path = os.path.join(self.tmp_dir.name, "wrong-id.zip")
