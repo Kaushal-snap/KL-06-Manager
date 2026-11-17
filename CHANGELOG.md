@@ -25,6 +25,31 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 <br/>
 
+## 🌐 [0.4.0-beta.1] — Build 6 (Mac UI Optimization, Universal AirDrop / Quick Share, Hardware Controls)
+
+### 🖥️ Mac UI Flicker Elimination & Stale State Blanking Fix
+- **Persistent DOM Shell:** Refactored `render()` in `macos/Resources/app.js` and `shared/web/app.js` to construct the outer application shell (`.shell`, `.sidebar`, `.topbar`) exactly once on initial load. Subsequent tab clicks perform in-place swapping of `.main-content` and update navigation active classes, eliminating DOM destruction, scroll jumps, and blank flashes during section switching.
+- **Layer Thrashing Removal:** Removed individual `will-change: transform, opacity; transform: translateZ(0)` declarations from cards, metrics, and panels in `macos/Resources/style.css`, isolating hardware acceleration to the scrolling `.workspace` container and applying CSS `contain: content` to `.main-content`.
+- **Stale State Preservation:** Eliminated the empty-state wipeout during transient polling delays; last-known valid telemetry remains displayed with a non-intrusive warning banner instead of replacing the entire screen with an empty state.
+
+### ⚡ System Performance Governor & ASUS Fan Profiles
+- **macOS Energy Performance Governor:** Added interactive profile selector in Performance view:
+  - *High Performance:* Requests maximum turbo boost ceilings and keeps active power assertions.
+  - *Balanced:* Standard dynamic frequency scaling.
+  - *Battery Saver:* Enables macOS Low Power Mode (`pmset -a lowpowermode 1`) to preserve battery charge and lower operating temperatures.
+- **ASUS Fan Cooling Profiles:** Added hardware cooling mode selector:
+  - *Whisper (Mode 0):* Low acoustic footprint for light browsing and office work.
+  - *Standard (Mode 1):* Balanced thermal response curve.
+  - *Turbo (Mode 2):* Maximum airflow for sustained multi-threaded compilation and GPU workloads.
+- **Battery Health Charging Threshold:** Integrated battery protection limiter allowing users to select 60%, 80%, or 100% charging limits to prevent high-voltage cell degradation during prolonged AC adapter usage.
+
+### 📲 Universal Cross-Device AirDrop & Quick Share
+- **Multi-Device Companion Integration:** Added Nearby Discovered Devices grid in the Companion view featuring discovered iPhone, Android, Mac, and Windows peers with IP endpoints, device models, and connection status.
+- **Cross-Platform Drop Action:** Initiates direct chunked TLS transfer with local file selection dialog, SHA-256 stream integrity verification, and explicit receiver consent dialog on the target peer.
+- **Allowlist Expansion:** Added `setPowerProfile`, `setBatteryLimit`, `setFanMode`, `scanPeers`, and `sendPeerFile` to `NativeBridgePolicy` and `macos/Resources/model.js` with strict type and parameter validation.
+
+<br/>
+
 ## 🌐 [0.3.0-beta.2] — Staged Candidate (Build 5 / Multi-Device Ecosystem & OTA)
 
 ### 📡 Multi-Device Two-Way File Transfer (`TransferEngine`)

@@ -40,8 +40,8 @@ SUPPORTED_ROUTES = {
     ("android", "windows"): {"type": "saf_stream", "relay": False, "notes": "Android SAF content URI to Windows filesystem."},
     ("windows", "ios"): {"type": "security_scoped", "relay": False, "notes": "Windows filesystem to iOS security-scoped document container."},
     ("ios", "windows"): {"type": "security_scoped", "relay": False, "notes": "iOS security-scoped document container to Windows filesystem."},
-    ("android", "ios"): {"type": "desktop_hub_forward", "relay": True, "notes": "Disclosed desktop-hub forwarding with explicit endpoint consent."},
-    ("ios", "android"): {"type": "desktop_hub_forward", "relay": True, "notes": "Disclosed desktop-hub forwarding with explicit endpoint consent."}
+    ("android", "ios"): {"type": "direct_lan", "relay": False, "notes": "Direct authenticated TLS LAN Quick Share / AirDrop streaming."},
+    ("ios", "android"): {"type": "direct_lan", "relay": False, "notes": "Direct authenticated TLS LAN AirDrop / Quick Share streaming."}
 }
 
 

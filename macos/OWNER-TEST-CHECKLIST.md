@@ -1,0 +1,18 @@
+# Mac owner checks — beta.2 / build 5
+
+**All native/physical checks remain untested.** The detailed exact-artifact four-platform checklist and release fields are in **`../docs/OWNER-TEST-CHECKLIST.md`**. No generic inventory/OS upgrade/stress test is requested.
+
+1. Preserve the old working app, legacy restore journal and known-good graphics/OLED/Fn/audio/USB/Windows boot/data; **HDR OFF**. Download/extract the **whole parent source**, not this folder alone. Quit old KL with Command-Q.
+2. Normal Intel Mac user, installed Xcode; `/bin/bash macos/UPDATE-KL-06.command` from the parent source root. No sudo/download/security bypass. Native tests use fake preferences/synthetic transport; then a new app is compiled/ad-hoc-signed/verified/revealed, not auto-installed/launched. Stop at first error; redact local account paths before sharing.
+3. Open manually; About **0.3.0-beta.2/build 5**. Check all **13 pages / 12 tweaks**, native dialogs and actual source-labelled counters. Charge/health and Metal 2/API flags remain distinct; do not invent missing values.
+4. Fan: fixed existing-SMC result/age/plausible RPM only if available, ≥5-second cadence, unavailable/stale never zero/history, ordinary hide/sleep/resume. Optional **targeted** `COLLECT-MAC-FANS.command` once if needed; review small JSON/TXT, no random driver/sudo. RPM is not calibrated or permission for firmware writes.
+5. History: native bounded CSV import/clear, numeric source-separated **historical Windows** graph, no path/identity/footer/formula upload/export. Native picker errors/cancel remain safe.
+6. F13 alone/PrtSc/105/no modifiers: show/front/hide while running, held-key suppression, dialog focus, no launch/interception after Command-Q; no remap/Accessibility/Input Monitoring/login item.
+7. Deliberately test one reversible user preference, journal-before-write/readback/visible effect and exact original/absence restore. Use supported OS choices for a newer external-change test, never invalid values. Test low safe output volume/temporary assertion start-stop-quit if desired. Desktop volume is not in restore journal.
+8. Optional fixed power read: native local administrator authorization only, cancel safely; no password box/helper/task sampler/firmware change.
+9. Optional LAN companion (required before declaring companion tested): installed Python 3.9+, explicit private bind, full TLS pin + random code + laptop pair approval; wrong pin/code fails; phone-local and laptop roles tested separately. Exact-action per-write confirmation, reject first, then readback/restore, stale-after-12sec, request expiry/disconnect **while dialog open**, stop/quit token revocation. No shell/phone admin authorization/cloud/firewall bypass.
+10. Verify normal working graphics/Metal 2, OLED/Fn, speakers/mic/jack and USB unchanged; keep HDR off/Windows intact. Restore eligible changes, inspect conflicts, stop companion and Command-Q before removal. No service/helper/driver/login item should exist.
+
+Record only exact app ZIP SHA-256/source commit/version/build/OS major/real UTC time and specifically passed/failed/untested functions—no serial/private IP/path/raw report. Physical tests must use the **exact extracted packaged app**, not a different rebuild. General “works” or portable/mock success does not approve this candidate.
+
+Automatic private beta transfer remains **inactive** pending real owner setup and a completed offline-signed checksum-bound approval (`../docs/RELEASE-AUTOMATION.md`). Source-only/UNTESTED/false-template artifacts cannot pass. macOS 26 remains untested; 27+ blocked. No stable/public release or arbitrary repository permission.
