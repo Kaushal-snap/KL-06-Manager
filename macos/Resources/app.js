@@ -239,7 +239,14 @@
       `<div class="two-col"><section class="panel panel-padding"><h2>${state.companion?.running?'Session active · at most 30 minutes':'Companion is off'}</h2><p class="body-copy">Connect your Android or iPhone over local Wi-Fi. View real-time telemetry, send files via AirDrop/Quick Share, and safely control volume or keep-awake with local laptop confirmation.</p><div class="inline-actions">${button('Enable temporary session','companion-start','','secondary',state.companion?.running)}${button('Show pairing details','companion-details','','ghost',!state.companion?.running)}${button('Stop and revoke devices','companion-stop','','ghost',!state.companion?.running)}</div><div class="notice blue"><strong>Security Invariant:</strong> Private TLS pinning, 32-character random pair code, and explicit desktop confirmation for all changes. No cloud relays, root helpers, firewall changes, or silent background daemons.</div></section>
       <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">High-speed, chunked local file transfer across Mac, iPhone, Android, and Windows. Direct TLS streaming with SHA-256 integrity and explicit receiver consent.</p><div class="chip-row" style="margin:12px 0"><span class="chip">iPhone ↔ Android</span><span class="chip">Mac ↔ iPhone</span><span class="chip">Mac ↔ Android</span><span class="chip">Windows ↔ Mobile</span></div><div class="notice">Incoming transfers require explicit laptop approval dialog with file name and size verification.</div></section></div>
       <section class="panel panel-padding" style="margin-top:20px">
-        <div class="panel-head"><div><h2>Nearby Discovered Devices</h2><p>Devices running KL-06 on your trusted Wi-Fi automatically announce and connect.</p></div>${button('Scan Wi-Fi Devices','scan-peers','','secondary')}</div>
+        <div class="panel-head"><div><h2>Nearby Discovered Devices & PIN Pairing</h2><p>Devices running KL-06 on your trusted Wi-Fi automatically announce and connect.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
+        <div class="pin-card">
+          <div class="pin-code-wrap">
+            <div><small style="display:block;color:var(--muted);margin-bottom:4px">MY 6-DIGIT PAIRING PIN</small><div class="pin-digits">742-910</div></div>
+            <div>${button('Copy PIN','copy-pin','','secondary')}</div>
+          </div>
+          <div class="pin-meta">Expires in <b>4:45</b><br>Give this PIN to an iPhone or Android phone to auto-authenticate pairing.</div>
+        </div>
         <div class="detail-grid" style="margin-top:16px">
           ${peers.map(p => `
             <section class="detail-card ${p.status.includes('Current') ? 'gpu-accent' : ''}">

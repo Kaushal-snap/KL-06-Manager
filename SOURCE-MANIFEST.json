@@ -482,10 +482,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 60876,
+      "bytes": 61440,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "f4654ccd254a82ff2572fbbd60a24c83160298f2f0913b10f4474655c0febc11"
+      "sha256": "d34afa2a2c889fc62c067cf3283a3234a5a7b4a5d73ddfd2740d243cd9d110d9"
     },
     {
       "bytes": 5483,
@@ -512,10 +512,10 @@
       "sha256": "5648a4bec25062cae1e47262e0b46b784017c5dadc6f9eb2e884a003ee7516aa"
     },
     {
-      "bytes": 27902,
+      "bytes": 29636,
       "executable": false,
       "path": "macos/Resources/style.css",
-      "sha256": "2b1646f4656ec20a41475e0355f577d7785b3d3dd3bd7d7d22c3a5ad3165b55f"
+      "sha256": "8d818c1bb8321d5c0207380038a0298ef22d93aaf3c37c17bdf94797d682f83d"
     },
     {
       "bytes": 2034,
@@ -656,10 +656,10 @@
       "sha256": "c5b3f105788479196433c948d49aedb63aa6adf806ffde5d3facf0b8f558a7d8"
     },
     {
-      "bytes": 24475,
+      "bytes": 34421,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "ab59321a7391b309907eab8b87fb3fe53cb861883a1e38f72e079e4b3d7ae2e5"
+      "sha256": "96d764398739cd85a0ac32b10cb2dd94b461e8914920d31900f1f9ff44122169"
     },
     {
       "bytes": 5483,
@@ -692,10 +692,10 @@
       "sha256": "092f45528ad5167dc346e14f057961281b82cf675ac3da7afe66b3641650b676"
     },
     {
-      "bytes": 5963,
+      "bytes": 10883,
       "executable": false,
       "path": "shared/web/style.css",
-      "sha256": "dff1e85dea0e2f8b91de8e15dd00c70f9be57b998e9811a6b9cb8960821a09c7"
+      "sha256": "2be02dae3f267f0d9dda2ea595256c873e41e2098976d7032f76ca9d2d7a822a"
     },
     {
       "bytes": 7393,
