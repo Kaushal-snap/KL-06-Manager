@@ -4,11 +4,12 @@
 
 ### *Next-Generation Control Center for Modern Hackintosh Systems*
 
-[![Version](https://img.shields.io/badge/Release-v0.2.1--Beta-blue?style=for-the-badge&logo=apple)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
-[![Status](https://img.shields.io/badge/Status-Verified%20Native-success?style=for-the-badge&logo=checkmarx)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
-[![Target](https://img.shields.io/badge/macOS-Sequoia%2015.8.3-darkviolet?style=for-the-badge&logo=apple)](https://github.com/Kaushal-snap/KL-06-Manager)
-[![Hardware](https://img.shields.io/badge/Hardware-ASUS%20K15%20OLED%20(K513EA)-orange?style=for-the-badge&logo=asus)](https://github.com/Kaushal-snap/KL-06-Manager)
-[![License](https://img.shields.io/badge/License-Proprietary%20%2F%20Closed--Source-red?style=for-the-badge&logo=lock)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![Version](https://img.shields.io/badge/Release-v0.2.1--Beta-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Status](https://img.shields.io/badge/Status-Verified%20Native-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Target](https://img.shields.io/badge/macOS-Sequoia%2015.8.3-7C3AED?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![Hardware](https://img.shields.io/badge/Hardware-ASUS%20K15%20OLED%20(K513EA)-EA580C?style=for-the-badge&logo=asus&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![Architecture](https://img.shields.io/badge/Arch-x86__64%20(Intel)-0284C7?style=for-the-badge&logo=intel&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
+[![License](https://img.shields.io/badge/License-Proprietary%20%2F%20Closed--Source-DC2626?style=for-the-badge&logo=lock&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 
 <br/>
 
@@ -19,7 +20,7 @@
 
 ---
 
-[📥 Download KL-06.zip (Beta)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3) • [📖 Hardware Architecture](ARCHITECTURE.md) • [📋 Changelog](CHANGELOG.md) • [📊 Hardware Report](HARDWARE-REPORTS.md)
+[📥 Download KL-06.zip (Beta)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3) • [📖 Architecture](ARCHITECTURE.md) • [📋 Changelog](CHANGELOG.md) • [📊 Hardware Report](HARDWARE-REPORTS.md) • [🧪 Intake Specs](COMPONENT-REPORT.md)
 
 ---
 
@@ -31,7 +32,7 @@
 
 Tested and verified on physical hardware running **macOS Sequoia 15.8.3** (Build `24H241`, Darwin `24.6.0`, x86_64):
 
-| Subsystem | Target Observation | Status | Enforced Policy |
+| Subsystem | Target Observation | Status Badge | Enforced Policy |
 | :--- | :--- | :---: | :--- |
 | **Graphics** | Intel Iris Xe (`0x9a49`), Metal 2, 1536 MB Dynamic VRAM | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=nvidia&logoColor=white" /> | Custom WhateverXe 0.8.2 binary preserved (`9e18e609...`). |
 | **Display** | 1920×1080 @ 60 Hz, 30-Bit Color Depth (ARGB2101010) | <img src="https://img.shields.io/badge/Active-34D399?style=flat-square&logo=airplay&logoColor=white" /> | OLED / DPCD brightness & DSDT + SSDT-ASUS-FN intact. **HDR OFF** baseline preserved. |
@@ -89,6 +90,19 @@ Native execution captured live on target hardware (`LOCAL • NATIVE` state):
 > **Integrity Verification:**
 > - **SHA-256:** `ee499aafcd36663e06cfe6c19f04f7d422c1f6b5c98fa8663c4eca9128c33317`
 > - **Architecture:** `x86_64` (Mach-O 64-bit)
+
+<br/>
+
+---
+
+## 🔮 Roadmap Candidate: v0.3.0-beta.1 (Cirrus Theme)
+
+Preparation and portable verification completed for the next candidate:
+- 🌌 **Cirrus OLED-Dark Theme:** Refined independent dark & light aesthetics.
+- 💨 **Read-Only AppleSMC Fan Reader:** Auditable C reader checking standard `FNum` and `F0Ac`/`F1Ac` keys (no fan writes or privileged helpers).
+- 📈 **HWiNFO History Import:** Local Windows CSV history parser with unpadded-seconds timestamp handling for historical telemetry graphs.
+- 🧪 **Portable Test Coverage:** 58 Node tests, 68 synthetic C assertions, and 12 package verification checks passed.
+- *Status:* Awaiting native compilation & physical hardware test on owner's Mac (`UPDATE-KL-06.command`).
 
 <br/>
 
