@@ -1,8 +1,28 @@
+<div align="center">
+
 # 📋 Changelog — KL-06 Manager
 
-All notable changes and milestones for **KL-06 Manager** are documented in this file.
+[![Changelog](https://img.shields.io/badge/Changelog-v0.2.1--Beta.3-059669?style=for-the-badge&logo=gitbook&logoColor=white)](CHANGELOG.md)
+[![Phase](https://img.shields.io/badge/Phase-Active%20Beta-2563EB?style=for-the-badge&logo=apple&logoColor=white)](CHANGELOG.md)
+[![Integrity](https://img.shields.io/badge/Binary%20Integrity-SHA--256%20Verified-7C3AED?style=for-the-badge&logo=checkmarx&logoColor=white)](CHANGELOG.md)
+[![Hardware](https://img.shields.io/badge/Target-ASUS%20VivoBook%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](CHANGELOG.md)
+
+<p align="center">
+  <a href="README.md">🏠 Home</a> •
+  <a href="ARCHITECTURE.md">🛡️ Architecture</a> •
+  <a href="HARDWARE-REPORTS.md">📊 Hardware Reports</a> •
+  <a href="COMPONENT-REPORT.md">🧪 Component Audit</a>
+</p>
 
 ---
+
+</div>
+
+<br/>
+
+All notable changes, verified runs, and milestone releases for **KL-06 Manager** are documented in this file.
+
+<br/>
 
 ## ⚡ [0.2.1-beta] — 2026-11-17 (Current Beta Phase)
 
@@ -29,16 +49,20 @@ All notable changes and milestones for **KL-06 Manager** are documented in this 
 - **HDR-OFF baseline strictly maintained** (30-bit color depth does not certify HDR workload support).
 - **Fan Controls:** Honestly marked unavailable due to zero detected WMI/EC fan sensors (`SMCSuperIO`: 0, `AsusSMC`: 0); no simulated curves or fake sliders.
 
+<br/>
+
 ---
 
-## [0.2.1-build2] — 2026-11-16
+## 🛠️ [0.2.1-build2] — 2026-11-16
 
 - Corrected `InstallEventHandler` event count parameter type mismatch (`UInt32` to `Int`) in Carbon hotkey handler.
 - Preserved legacy bundle identifier `app.klasus.controlcenter` and atomic restore journal `~/Library/Application Support/KL-Asus/Restore-v1.plist`.
 
+<br/>
+
 ---
 
-## [0.1.0] — Initial Prototype
+## 🚀 [0.1.0] — Initial Prototype
 
 - Renamed visible application to KL-06 with MyASUS-inspired design.
 - Implemented 9 reversible desktop preferences with atomic restore journaling.
