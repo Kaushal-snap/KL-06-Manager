@@ -24,6 +24,7 @@
 <p align="center">
   <a href="https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Release-KL--06.zip_(Beta)-2563EB?style=for-the-badge" alt="Download Release" /></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.3.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
+  <a href="ECOSYSTEM.md"><img src="https://img.shields.io/badge/%F0%9F%8C%90_Ecosystem_%26_OTA-Specs_%26_Matrix-0284C7?style=for-the-badge" alt="Ecosystem Specs" /></a>
   <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/%F0%9F%9B%A1%EF%B8%8F_Architecture_%26_Security-Boundary_Specs-7C3AED?style=for-the-badge" alt="Architecture" /></a>
   <a href="HARDWARE-REPORTS.md"><img src="https://img.shields.io/badge/%F0%9F%93%8A_Hardware_Report-Telemetry_Specs-EA580C?style=for-the-badge" alt="Hardware Report" /></a>
 </p>
@@ -183,6 +184,22 @@ Native physical hardware compilation and verification completed on target ASUS V
 | **Honest Fan Reporting** | <img src="https://img.shields.io/badge/Honest%20Unavailable-F59E0B?style=flat-square" alt="Honest Unavailable" /> | Sensor unavailable state reported honestly on target Hackintosh hardware. |
 | **HWiNFO Telemetry Parser** | <img src="https://img.shields.io/badge/Verified-10B981?style=flat-square" alt="Verified" /> | Local Windows CSV importer supporting unpadded-second timestamps. |
 | **Native Target Compile** | <img src="https://img.shields.io/badge/Native%20Sequoia%20Verified-10B981?style=flat-square" alt="Verified" /> | Compiled natively via `UPDATE-KL-06.command` on macOS Sequoia 15.8.3. |
+
+<br/>
+
+---
+
+## 🔮 Next Candidate: v0.3.0-beta.2 (Build 5 / Multi-Device Ecosystem)
+
+Candidate package `0.3.0-beta.2` (Build 5) expands KL-06 into a multi-device ecosystem:
+
+| Milestone Feature | Status | Specification & Implementation |
+| :--- | :---: | :--- |
+| **Two-Way Streamed File Transfer** | <img src="https://img.shields.io/badge/Implemented%20%26%20Tested-10B981?style=flat-square" alt="Tested" /> | Streamed chunk IO, explicit receiver consent, collision safety, and SHA-256 verification. |
+| **Secure OTA App Updates** | <img src="https://img.shields.io/badge/Implemented%20%26%20Tested-10B981?style=flat-square" alt="Tested" /> | Signed catalog validation, monotonic version enforcement (downgrade defense), and platform handoffs. |
+| **Display Brightness Slider** | <img src="https://img.shields.io/badge/Integrated-10B981?style=flat-square" alt="Integrated" /> | Direct brightness slider integrated in Display panel with 1–100% range scaling. |
+| **Light Mode Visual Polish** | <img src="https://img.shields.io/badge/Refined-10B981?style=flat-square" alt="Refined" /> | CSS contrast, card backgrounds, and button styles tuned for light appearance. |
+| **Multi-Platform Route Matrix** | <img src="https://img.shields.io/badge/6%20Routes%20Documented-2563EB?style=flat-square" alt="Documented" /> | Full matrix across macOS, Windows, Android, and iOS (details in [`ECOSYSTEM.md`](ECOSYSTEM.md)). |
 
 <br/>
 
