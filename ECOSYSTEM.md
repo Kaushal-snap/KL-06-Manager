@@ -33,7 +33,8 @@ KL-06 supports authenticated peer-to-peer communication across macOS, Windows, A
 | **macOS ⟷ iOS** | Two-way | Direct LAN | Security-scoped document container + URLSession | Public document picker. Foreground lifecycle enforced. |
 | **Windows ⟷ Android** | Two-way | Direct LAN | Windows filesystem ⟷ Android SAF content stream | Standard user privileges. No elevated ACL modification. |
 | **Windows ⟷ iOS** | Two-way | Direct LAN | Windows filesystem ⟷ iOS Security-scoped container | User selects save destination on both endpoints. |
-| **Android ⟷ iOS** | Two-way | Desktop-Hub Relay | Authenticated desktop forwarder via local paired PC/Mac | **Disclosed Relay**: Explicitly routes through desktop hub; end-to-end verified via SHA-256. |
+| **Android ⟷ iOS** | Two-way | Direct LAN & Hotspot (AirDrop / Quick Share / Xender) | Authenticated TLS 1.2+ streaming socket & desktop forwarder | Direct Wi-Fi, Personal Hotspot (e.g. 172.20.10.x / 192.168.43.x), or desktop hub; end-to-end verified via SHA-256. |
+| **Over-the-Internet / Remote** | Two-way | Encrypted Private Mesh / VPN | WireGuard, Tailscale (10.x, 100.64.0.0/10), or Port-forwarded TLS | Pinned TLS certificate SHA-256 + 32-char pair code. Zero unauthenticated cloud relays. |
 
 <br/>
 

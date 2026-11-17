@@ -43,8 +43,10 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
   - *Turbo (Mode 2):* Maximum airflow for sustained multi-threaded compilation and GPU workloads.
 - **Battery Health Charging Threshold:** Integrated battery protection limiter allowing users to select 60%, 80%, or 100% charging limits to prevent high-voltage cell degradation during prolonged AC adapter usage.
 
-### 📲 Universal Cross-Device AirDrop & Quick Share
+### 📲 Universal Cross-Device AirDrop & Quick Share (Wi-Fi, Hotspot, and Encrypted WAN)
 - **Multi-Device Companion Integration:** Added Nearby Discovered Devices grid in the Companion view featuring discovered iPhone, Android, Mac, and Windows peers with IP endpoints, device models, and connection status.
+- **Android ↔ iPhone Direct Connectivity:** Extended `companion/transfer.py` route matrix to support direct authenticated TLS LAN streaming between Android and iPhone over local Wi-Fi or phone Personal Hotspots (Xender-style direct connection), with desktop forwarder fallback.
+- **Over-the-Internet & VPN Mesh Support:** Supported remote companionship over encrypted private mesh / VPN tunnels (WireGuard, Tailscale, IPsec) or port-forwarded TLS using strict full SHA-256 certificate pinning and single-use 32-character authentication codes with zero unauthenticated cloud relays.
 - **Cross-Platform Drop Action:** Initiates direct chunked TLS transfer with local file selection dialog, SHA-256 stream integrity verification, and explicit receiver consent dialog on the target peer.
 - **Allowlist Expansion:** Added `setPowerProfile`, `setBatteryLimit`, `setFanMode`, `scanPeers`, and `sendPeerFile` to `NativeBridgePolicy` and `macos/Resources/model.js` with strict type and parameter validation.
 
