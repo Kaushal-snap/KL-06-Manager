@@ -226,8 +226,6 @@ def stage_draft_release(
         "release",
         "create",
         tag_name,
-        info["zip_path"],
-        checksum_file,
         "--title",
         release_title,
         "--notes-file",
@@ -242,11 +240,24 @@ def stage_draft_release(
     if res.returncode != 0:
         raise RuntimeError(f"gh release create failed: {res.stderr}")
 
+    # Attempt asset upload if network allows uploads.github.com
+    upload_success = False
+    try:
+        upload_cmd = ["gh", "release", "upload", tag_name, info["zip_path"], checksum_file, "--clobber"]
+        if repo:
+            upload_cmd.extend(["--repo", repo])
+        up_res = subprocess.run(upload_cmd, capture_output=True, text=True, check=False, timeout=10)
+        if up_res.returncode == 0:
+            upload_success = True
+    except Exception:
+        pass
+
     return {
         "status": "staged_draft",
         "tag": tag_name,
         "title": release_title,
         "stdout": res.stdout.strip(),
+        "assets_uploaded": upload_success,
     }
 
 
