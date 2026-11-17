@@ -10,6 +10,7 @@
 <p align="center">
   <a href="README.md">🏠 Home</a> •
   <a href="ARCHITECTURE.md">🛡️ Architecture</a> •
+  <a href="ECOSYSTEM.md">🌐 Multi-Device Ecosystem</a> •
   <a href="HARDWARE-REPORTS.md">📊 Hardware Reports</a> •
   <a href="COMPONENT-REPORT.md">🧪 Component Audit</a>
 </p>
@@ -23,6 +24,33 @@
 All notable changes, verified runs, and milestone releases for **KL-06 Manager** are documented in this file.
 
 <br/>
+
+## 🌐 [0.3.0-beta.2] — Staged Candidate (Build 5 / Multi-Device Ecosystem & OTA)
+
+### 📡 Multi-Device Two-Way File Transfer (`TransferEngine`)
+- **Direct LAN Streamed Transfer:** Implemented chunked, backpressure-managed file transfer across macOS, Windows, Android, and iOS.
+- **Explicit Receiver Approval:** Transfers require active user consent before byte streaming begins; silent auto-accept is strictly prohibited.
+- **Path Sanitization & Injection Defense:** Traversal sequences (`..`), path separators, NUL bytes, Windows ADS streams, and DOS device names permanently rejected.
+- **Collision Preservation:** Automatically appends safe numeric suffixes (`file (1).ext`) to prevent overwriting existing files.
+- **Full SHA-256 Verification:** Verifies full streaming hash against announced metadata before atomic destination finalization.
+
+### 🚀 Secure OTA App Updates (`UpdateEngine`)
+- **Signed Catalog Verification:** Evaluates signed `KL06_SIGNED_UPDATE_CATALOG_V1` metadata against pinned root trust keys.
+- **Monotonic Version Enforcement:** Strict build number ordering rejects downgrade attacks.
+- **Platform Installation Handoff:**
+  - Android: `ACTION_INSTALL_PACKAGE` intent requiring user confirmation and matching signing certificate lineage.
+  - iOS: Official TestFlight / App Store redirect; disallows self-installing downloaded IPAs.
+  - macOS / Windows: Staged download hash verification with verified manual / signed installer execution.
+  - Zero Embedded Secrets: No private keys, PATs, or service-account tokens embedded in client builds.
+
+### 🎨 UI Refinements & User Feedback Fixes
+- **Display Brightness Slider:** Added native DPCD / CoreGraphics brightness slider to Display panel with 1–100% range scaling.
+- **Light Theme Polish:** Rebalanced `.light` theme CSS contrast, panel cards, input ranges, and badge outlines for enhanced legibility.
+- **CPU/GPU Telemetry Policy:** Clarified autonomous Intel Speed Shift / XCPM dynamic frequency scaling and why fixed frequency override sliders are unsupported in macOS user-space.
+
+<br/>
+
+---
 
 ## 🌌 [0.3.0-beta.1] — 2026-11-17 (Current Beta Phase / Cirrus Theme / Build 4)
 

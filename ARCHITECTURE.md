@@ -10,6 +10,7 @@
 <p align="center">
   <a href="README.md">🏠 Overview & Downloads</a> •
   <a href="CHANGELOG.md">📋 Release Changelog</a> •
+  <a href="ECOSYSTEM.md">🌐 Multi-Device Ecosystem</a> •
   <a href="HARDWARE-REPORTS.md">📊 Hardware Telemetry</a> •
   <a href="COMPONENT-REPORT.md">🧪 Component Intake</a>
 </p>
@@ -73,6 +74,22 @@ These guardrails do not claim immunity to a malicious process already running as
 - `supportsFamily(.metal3)` is one capability query, not Metal API-version marketing or passed GPU workloads.
 - Settings shortcuts are labelled as such. Windows ASUS firmware controls stay unavailable until a separately audited, exact-device implementation exists.
 - Existing USB function is owner-reported; this app neither maps it nor changes its validation status.
+
+<br/>
+
+## 🌐 Multi-Device Ecosystem & Transfer Boundary
+
+KL-06 supports authenticated multi-device companion roles (macOS, Windows, Android, iOS):
+- **Local Private LAN Only (RFC 1918):** No public tunnels, third-party cloud relays, or open ports.
+- **Explicit Pairing & Out-of-Band Verification:** Requires 32-character random pair code and TLS certificate SHA-256 fingerprint verification from the host dialog.
+- **Two-Way Streamed File Transfer:**
+  - Receiver explicitly accepts or declines before byte streaming begins.
+  - Slashes, traversal (`..`), NUL bytes, ADS streams, and DOS reserved names are permanently rejected.
+  - Streaming SHA-256 calculation verifies integrity before finalization; partial files automatically cleaned on abort.
+- **Secure Signed OTA Catalog:**
+  - Pinned Ed25519 root trust key verifies update metadata before trusting URLs.
+  - Monotonic versioning strictly blocks downgrade attacks.
+  - Platform installation handoff respects operating system security (Android `PackageInstaller` intent, iOS TestFlight/Store redirect, macOS/Windows verified manual handoff).
 
 <br/>
 
