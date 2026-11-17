@@ -4,8 +4,8 @@
 
 ### *Next-Generation Control Center for Modern Hackintosh Systems*
 
-[![Release](https://img.shields.io/badge/Release-v0.2.1--Beta.3-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3)
-[![Build Status](https://img.shields.io/badge/Status-Verified%20Native%20(Build%203)-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Release](https://img.shields.io/badge/Release-v0.3.0--Beta.1-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1)
+[![Build Status](https://img.shields.io/badge/Status-Verified%20Native%20(Build%204)-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![macOS](https://img.shields.io/badge/macOS-Sequoia%2015.8.3%20(24H241)-7C3AED?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![Target Platform](https://img.shields.io/badge/Platform-ASUS%20VivoBook%20K15%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![CPU Arch](https://img.shields.io/badge/Arch-x86__64%20(Tiger%20Lake--U)-0284C7?style=for-the-badge&logo=intel&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
@@ -22,8 +22,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Release-KL--06.zip_(Beta)-2563EB?style=for-the-badge" alt="Download Release" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.2.1--Beta-059669?style=for-the-badge" alt="Changelog" /></a>
+  <a href="https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Release-KL--06.zip_(Beta)-2563EB?style=for-the-badge" alt="Download Release" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.3.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
   <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/%F0%9F%9B%A1%EF%B8%8F_Architecture_%26_Security-Boundary_Specs-7C3AED?style=for-the-badge" alt="Architecture" /></a>
   <a href="HARDWARE-REPORTS.md"><img src="https://img.shields.io/badge/%F0%9F%93%8A_Hardware_Report-Telemetry_Specs-EA580C?style=for-the-badge" alt="Hardware Report" /></a>
 </p>
@@ -147,48 +147,42 @@ Safely tweak system-level cosmetic preferences with automatic atomic rollback jo
 > [!TIP]
 > Download the pre-built, tested release binary directly from GitHub Releases:
 
-1. **Download:** Grab [**`KL-06.zip`**](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.2.1-beta.3) from the v0.2.1-beta.3 release.
-2. **Extract:** Double-click `KL-06.zip` to extract `KL-06.app`.
-3. **Deploy:** Drag `KL-06.app` into `/Applications` (or test directly from `Downloads`).
-4. **Launch & Toggle:** Open `KL-06.app` and press **`PrtSc` (F13)** anytime to summon or dismiss the control center.
+1. **Download:** Grab [**`KL-06.zip`**](https://github.com/Kaushal-snap/KL-06-Manager/releases/tag/v0.3.0-beta.1) from the v0.3.0-beta.1 release (or use the [Google Drive Direct Download Mirror](https://drive.google.com/uc?id=1sewP7SFL_52wkvWgeu9pueWXp_wWmp0f&export=download)).
+2. **Extract:** Double-click `KL-06.zip` to extract `KL-06 Manager.app`.
+3. **Deploy:** Drag `KL-06 Manager.app` into `/Applications` (or test directly from `Downloads`).
+4. **Launch & Toggle:** Open `KL-06 Manager.app` and press **`PrtSc` (F13)** anytime to summon or dismiss the control center.
 
 ### 🔐 Cryptographic Checksums & Binary Verification
 
 ```bash
-# Verify release archive integrity
+# Verify release archive integrity (Clean Release ZIP)
 shasum -a 256 KL-06.zip
-# Expected: ee499aafcd36663e06cfe6c19f04f7d422c1f6b5c98fa8663c4eca9128c33317
+# Expected: acf8991e078e676509ddcfdc3ddc1ec5503e6802a2749078eef82f19925bec8e
 
-# Verify Mach-O binary architecture
-file /Applications/KL-06.app/Contents/MacOS/KL-06
-# Expected: Mach-O 64-bit executable x86_64
+# Verify original intake archive integrity (Owner Build ZIP)
+# SHA-256: df8582014df1e405c66125d8c0c7811b88cd6edfedc1bdda3c2c41cc89d6ec7d
+
+# Verify Mach-O binary architecture and checksum
+shasum -a 256 /Applications/KL-06\ Manager.app/Contents/MacOS/KL-06
+# Expected: 4cb9aecf1cc460ed872d2260a1e9cd833d447585ffde77b4ab5cf152c748c3ba
+# Architecture: Mach-O 64-bit executable x86_64
 ```
 
 <br/>
 
 ---
 
-## 🔮 Candidate Milestone: v0.3.0-beta.1 (Cirrus Theme)
+## 🌌 Active Milestone: v0.3.0-beta.1 (Cirrus Theme / Build 4)
 
-Candidate source and test suites for **v0.3.0-beta.1 / Build 4** have been staged on GitHub Releases as a draft pre-release:
+Native physical hardware compilation and verification completed on target ASUS VivoBook K15 OLED (K513EA):
 
 | Feature Milestone | Status | Description |
 | :--- | :---: | :--- |
-| **Cirrus OLED-Dark Theme** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | New high-contrast dark theme with bespoke gradients for OLED panels. |
-| **AppleSMC Fan Reader** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | Auditable read-only C reader querying standard `FNum` and `F0Ac`/`F1Ac` keys. |
-| **HWiNFO Telemetry Parser** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | Local Windows CSV importer supporting unpadded-second timestamps. |
-| **Draft Release Staging** | <img src="https://img.shields.io/badge/Staged-2563EB?style=flat-square" alt="Staged" /> | Staged draft prerelease on GitHub awaiting verified native binary. |
-| **Native Target Compile** | <img src="https://img.shields.io/badge/Pending%20Hardware%20Run-F59E0B?style=flat-square" alt="Pending" /> | Awaiting execution of `UPDATE-KL-06.command` by owner on Intel Mac. |
-
-### 🛠️ How to Compile & Verify v0.3.0-beta.1 on Your Intel Mac:
-1. Extract `KL-06-0.3.0-beta.1-source.zip` from your private Google Drive handoff folder (`1IGNP-YD6CGuVZY-bM5Qt3b7tSAXJ-M4p`).
-2. Quit the running KL-06 app with `Cmd + Q` (preserve your existing `Restore-v1.plist` journal).
-3. Open Terminal and run the updater script:
-   ```bash
-   /bin/bash "$HOME/Downloads/KL-06-0.3.0-beta.1/UPDATE-KL-06.command"
-   ```
-4. The script executes local native tests, compiles `KL-06.app` under `Local-build`, ad-hoc signs the binary, and reveals it in Finder.
-5. Compress the verified `KL-06.app` to `KL-06.zip` and place it in the private `App` folder to approve GitHub release publishing.
+| **Cirrus OLED-Dark Theme** | <img src="https://img.shields.io/badge/Verified-10B981?style=flat-square" alt="Verified" /> | High-contrast dark theme with bespoke gradients optimized for OLED panels. |
+| **AppleSMC Fan Reader** | <img src="https://img.shields.io/badge/Verified%20Read--Only-10B981?style=flat-square" alt="Verified Read-Only" /> | Auditable read-only C reader querying standard `FNum` and `F0Ac`/`F1Ac` keys. |
+| **Honest Fan Reporting** | <img src="https://img.shields.io/badge/Honest%20Unavailable-F59E0B?style=flat-square" alt="Honest Unavailable" /> | Sensor unavailable state reported honestly on target Hackintosh hardware. |
+| **HWiNFO Telemetry Parser** | <img src="https://img.shields.io/badge/Verified-10B981?style=flat-square" alt="Verified" /> | Local Windows CSV importer supporting unpadded-second timestamps. |
+| **Native Target Compile** | <img src="https://img.shields.io/badge/Native%20Sequoia%20Verified-10B981?style=flat-square" alt="Verified" /> | Compiled natively via `UPDATE-KL-06.command` on macOS Sequoia 15.8.3. |
 
 <br/>
 
