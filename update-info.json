@@ -1,0 +1,30 @@
+{
+    "app": "KL-06 Manager",
+    "current_version": "1.0.0",
+    "platforms": {
+        "mac": {
+            "version": "1.0.0",
+            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-mac.dmg",
+            "release_date": "2026-11-17",
+            "notes": "Initial release"
+        },
+        "windows": {
+            "version": "1.0.0",
+            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-win.exe",
+            "release_date": "2026-11-17",
+            "notes": "Initial release"
+        },
+        "android": {
+            "version": "1.0.0",
+            "url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v1.0.0/KL-06-Manager-android.apk",
+            "release_date": "2026-11-17",
+            "notes": "Initial release"
+        },
+        "ios": {
+            "version": "1.0.0",
+            "url": "https://apps.apple.com/app/kl-06-manager/id000000000",
+            "release_date": "2026-11-17",
+            "notes": "Initial release"
+        }
+    }
+}
