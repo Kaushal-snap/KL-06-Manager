@@ -168,16 +168,27 @@ file /Applications/KL-06.app/Contents/MacOS/KL-06
 
 ---
 
-## 🔮 Roadmap Candidate: v0.3.0-beta.1 (Cirrus Theme)
+## 🔮 Candidate Milestone: v0.3.0-beta.1 (Cirrus Theme)
 
-Candidate source and test suites for **v0.3.0-beta.1 / Build 4** have been staged and verified:
+Candidate source and test suites for **v0.3.0-beta.1 / Build 4** have been staged on GitHub Releases as a draft pre-release:
 
 | Feature Milestone | Status | Description |
 | :--- | :---: | :--- |
-| **Cirrus OLED-Dark Theme** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" /> | New high-contrast dark theme with bespoke gradients for OLED panels. |
-| **AppleSMC Fan Reader** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" /> | Auditable read-only C reader querying standard `FNum` and `F0Ac`/`F1Ac` keys. |
-| **HWiNFO Telemetry Parser** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" /> | Local Windows CSV importer supporting unpadded-second timestamps. |
-| **Native Target Compile** | <img src="https://img.shields.io/badge/Pending%20Hardware%20Run-F59E0B?style=flat-square" /> | Awaiting execution of `UPDATE-KL-06.command` by owner on Intel Mac. |
+| **Cirrus OLED-Dark Theme** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | New high-contrast dark theme with bespoke gradients for OLED panels. |
+| **AppleSMC Fan Reader** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | Auditable read-only C reader querying standard `FNum` and `F0Ac`/`F1Ac` keys. |
+| **HWiNFO Telemetry Parser** | <img src="https://img.shields.io/badge/Ready-10B981?style=flat-square" alt="Ready" /> | Local Windows CSV importer supporting unpadded-second timestamps. |
+| **Draft Release Staging** | <img src="https://img.shields.io/badge/Staged-2563EB?style=flat-square" alt="Staged" /> | Staged draft prerelease on GitHub awaiting verified native binary. |
+| **Native Target Compile** | <img src="https://img.shields.io/badge/Pending%20Hardware%20Run-F59E0B?style=flat-square" alt="Pending" /> | Awaiting execution of `UPDATE-KL-06.command` by owner on Intel Mac. |
+
+### 🛠️ How to Compile & Verify v0.3.0-beta.1 on Your Intel Mac:
+1. Extract `KL-06-0.3.0-beta.1-source.zip` from your private Google Drive handoff folder (`1IGNP-YD6CGuVZY-bM5Qt3b7tSAXJ-M4p`).
+2. Quit the running KL-06 app with `Cmd + Q` (preserve your existing `Restore-v1.plist` journal).
+3. Open Terminal and run the updater script:
+   ```bash
+   /bin/bash "$HOME/Downloads/KL-06-0.3.0-beta.1/UPDATE-KL-06.command"
+   ```
+4. The script executes local native tests, compiles `KL-06.app` under `Local-build`, ad-hoc signs the binary, and reveals it in Finder.
+5. Compress the verified `KL-06.app` to `KL-06.zip` and place it in the private `App` folder to approve GitHub release publishing.
 
 <br/>
 

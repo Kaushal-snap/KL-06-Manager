@@ -3,7 +3,7 @@
 # 📋 Changelog — KL-06 Manager
 
 [![Changelog](https://img.shields.io/badge/Changelog-v0.2.1--Beta.3-059669?style=for-the-badge&logo=gitbook&logoColor=white)](CHANGELOG.md)
-[![Phase](https://img.shields.io/badge/Phase-Active%20Beta-2563EB?style=for-the-badge&logo=apple&logoColor=white)](CHANGELOG.md)
+[![Candidate](https://img.shields.io/badge/Candidate-v0.3.0--beta.1%20(Staged)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](CHANGELOG.md)
 [![Integrity](https://img.shields.io/badge/Binary%20Integrity-SHA--256%20Verified-7C3AED?style=for-the-badge&logo=checkmarx&logoColor=white)](CHANGELOG.md)
 [![Hardware](https://img.shields.io/badge/Target-ASUS%20VivoBook%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](CHANGELOG.md)
 
@@ -23,6 +23,35 @@
 All notable changes, verified runs, and milestone releases for **KL-06 Manager** are documented in this file.
 
 <br/>
+
+## 🌌 [0.3.0-beta.1] — 2026-11-17 (Staged Candidate / Cirrus Theme)
+
+### 🎨 Modular UI & Cirrus Theme
+- **Independent Cirrus Theme:** Introduces dedicated high-contrast OLED dark palette with subtle linear gradients and high-readability typography.
+- **Dedicated Subsystem Views:** Separated navigation panels into distinct modules:
+  - **Audio:** Master volume slider, default audio device identification, and route switching.
+  - **Display:** Dynamic resolution, DPCD backlight scaling, and 30-bit color profile status.
+  - **Storage:** Data volume mount metrics, free space, and APFS container statistics.
+  - **Fan Telemetry:** Read-only AppleSMC fan speed monitoring (`F0Ac`/`F1Ac`).
+  - **Historical Telemetry:** Graphical view for imported metrics and system trends.
+
+### 💨 Read-Only AppleSMC Fan Telemetry
+- **Auditable C SMC Reader (`SMCReader.c`):** Queries standard AppleSMC keys (`FNum`, `F0Ac`, `F1Ac`) strictly via user-space IOKit interfaces.
+- **Zero Fan Writes:** No privileged helper tools, no custom kernel extensions, and zero simulated fan speed curves.
+
+### 📈 Historical Telemetry & HWiNFO Import
+- **Windows HWiNFO CSV Importer:** Local JavaScript parser capable of parsing historical sensor dumps with unpadded-second timestamps.
+- **Zero-Network Policy:** All CSV processing happens completely client-side in the WebKit sandbox with zero outbound transmissions.
+
+### 🧪 Pre-Execution Verification
+- 58 portable Node.js tests passed.
+- 68 synthetic C assertions passed (clean under Clang UndefinedBehaviorSanitizer).
+- 12 source package invariants verified.
+- *Status:* Staged on GitHub Releases as a draft prerelease; awaiting native compilation and physical validation on target Intel Mac via `UPDATE-KL-06.command`.
+
+<br/>
+
+---
 
 ## ⚡ [0.2.1-beta] — 2026-11-17 (Current Beta Phase)
 
