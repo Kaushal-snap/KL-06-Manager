@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Unit tests for packaging/package_release.py.
+Enforces non-negotiable safety and privacy invariants.
 """
 
 import json
@@ -12,6 +13,7 @@ import zipfile
 
 from packaging.package_release import (
     EXPECTED_BUNDLE_ID,
+    PrivacyViolationHoldError,
     compute_sha256,
     package_app,
 )
@@ -24,6 +26,7 @@ def create_mock_app(
     build="3",
     exec_name="KL-06",
     leak_secret=False,
+    binary_payload=b"mock_signed_macho_binary_bytes_12345",
 ):
     app_dir = os.path.join(base_dir, "KL-06.app")
     contents = os.path.join(app_dir, "Contents")
@@ -42,10 +45,11 @@ def create_mock_app(
     with open(os.path.join(contents, "Info.plist"), "wb") as f:
         plistlib.dump(plist, f)
 
-    with open(os.path.join(macos, exec_name), "wb") as f:
-        f.write(b"mock_macho_binary_bytes")
+    exec_file = os.path.join(macos, exec_name)
+    with open(exec_file, "wb") as f:
+        f.write(binary_payload)
 
-    # Add dummy resource
+    # Add resource
     with open(os.path.join(resources, "test.txt"), "w") as f:
         if leak_secret:
             f.write("ghp_fakeTokenSecret1234567890abcdef")
@@ -56,7 +60,7 @@ def create_mock_app(
     with open(os.path.join(contents, ".DS_Store"), "w") as f:
         f.write("junk")
 
-    return app_dir
+    return app_dir, exec_file, binary_payload
 
 
 class TestPackageRelease(unittest.TestCase):
@@ -67,7 +71,7 @@ class TestPackageRelease(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_automatic_packaging_and_metadata(self):
-        app_dir = create_mock_app(self.tmp.name)
+        app_dir, _, _ = create_mock_app(self.tmp.name)
         out_dir = os.path.join(self.tmp.name, "output")
 
         res = package_app(app_dir, output_dir=out_dir)
@@ -93,16 +97,51 @@ class TestPackageRelease(unittest.TestCase):
             self.assertFalse(any(".DS_Store" in n for n in names))
             self.assertTrue(any("Contents/Info.plist" in n for n in names))
 
-    def test_privacy_leak_rejected(self):
-        app_dir = create_mock_app(self.tmp.name, leak_secret=True)
+    def test_hold_publication_and_require_clean_rebuild_without_modifying_binary(self):
+        """
+        INVARIANT: Do not blindly modify a signed app binary to redact strings;
+        hold publication and require a clean rebuild if private data is embedded in a build.
+        """
+        app_dir, exec_path, original_bytes = create_mock_app(self.tmp.name, leak_secret=True)
         out_dir = os.path.join(self.tmp.name, "output")
 
-        with self.assertRaises(ValueError) as ctx:
+        with self.assertRaises(PrivacyViolationHoldError) as ctx:
             package_app(app_dir, output_dir=out_dir)
-        self.assertIn("Privacy scan failed", str(ctx.exception))
+
+        err_msg = str(ctx.exception)
+        self.assertIn("Publication held", err_msg)
+        self.assertIn("Do not blindly patch or redact a signed binary", err_msg)
+        self.assertIn("A clean rebuild without private strings is required", err_msg)
+
+        # Verify the binary was NOT modified or redacted in-place
+        with open(exec_path, "rb") as f:
+            current_bytes = f.read()
+        self.assertEqual(current_bytes, original_bytes, "Signed binary must never be modified in-place")
+
+    def test_record_owner_reported_testing_honestly_without_inventing_granular_results(self):
+        """
+        INVARIANT: Record owner-reported testing honestly without inventing granular test results.
+        """
+        app_dir, _, _ = create_mock_app(self.tmp.name)
+        out_dir = os.path.join(self.tmp.name, "output")
+
+        res = package_app(app_dir, output_dir=out_dir)
+        with open(res["notes_path"], "r") as f:
+            notes = f.read()
+
+        # Must record verified target facts honestly
+        self.assertIn("ASUS VivoBook K15 OLED K513EA", notes)
+        self.assertIn("macOS Sequoia 15.8.3", notes)
+        self.assertIn("No fake fan controls, no EC/SMC writes", notes)
+
+        # Must NOT claim invented granular benchmarks or controls
+        self.assertNotIn("Geekbench", notes)
+        self.assertNotIn("Cinebench", notes)
+        self.assertNotIn("100% fan speed verified", notes)
+        self.assertNotIn("undervolting confirmed", notes)
 
     def test_wrong_bundle_id_rejected(self):
-        app_dir = create_mock_app(self.tmp.name, bundle_id="com.unauthorized.id")
+        app_dir, _, _ = create_mock_app(self.tmp.name, bundle_id="com.unauthorized.id")
         out_dir = os.path.join(self.tmp.name, "output")
 
         with self.assertRaises(ValueError) as ctx:
