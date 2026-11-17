@@ -43,6 +43,15 @@ def get_git_revision(cwd=None):
         return "unknown"
 
 
+class PrivacyViolationHoldError(ValueError):
+    """
+    Raised when private data is detected in a build bundle.
+    MANDATORY SAFETY INVARIANT: Do not blindly modify a signed app binary to redact strings.
+    Hold publication and require a clean rebuild instead.
+    """
+    pass
+
+
 def run_privacy_scan(app_dir):
     sensitive_patterns = [
         (re.compile(r"ghp_[a-zA-Z0-9]+"), "GitHub Token"),
@@ -114,7 +123,11 @@ def package_app(app_path, output_dir=None, git_dir=None):
     # Run privacy check
     findings = run_privacy_scan(app_path)
     if findings:
-        raise ValueError(f"Privacy scan failed with findings: {findings}")
+        details = "; ".join(f"{desc} in {f}: '{m}'" for f, desc, m in findings)
+        raise PrivacyViolationHoldError(
+            f"Publication held: private data detected in build ({details}). "
+            "Do not blindly patch or redact a signed binary. A clean rebuild without private strings is required."
+        )
 
     if not output_dir:
         output_dir = os.path.dirname(os.path.abspath(app_path))
