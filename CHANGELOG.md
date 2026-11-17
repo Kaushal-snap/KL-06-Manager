@@ -36,8 +36,18 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 ### 🚀 Secure OTA App Updates (`UpdateEngine`)
 - **Signed Catalog Verification:** Evaluates signed `KL06_SIGNED_UPDATE_CATALOG_V1` metadata against pinned root trust keys.
+- **In-App OTA UI:** Added live update checker in Settings and Companion tabs with signed SHA-256 catalog verification and release notes preview.
 - **Monotonic Version Enforcement:** Strict build number ordering rejects downgrade attacks.
 - **Platform Installation Handoff:**
+
+### 🖥️ Native macOS Display & Performance Optimizations (Build-Ready v2)
+- **Native DisplayControl:** Added Swift bridge using macOS `DisplayServices` and `IOGraphicsLib` (`IODisplaySetFloatParameter`) to synchronize UI brightness slider directly with macOS display server and DPCD backlight.
+- **Slider Event Handling & Focus Guard:** Fixed `#brightness` input/change events in WebKit bridge; added `#brightness:active` guard in telemetry refresh loop to eliminate slider tearing and drag reset.
+- **Fn Keys Synchronization:** Synchronized native Fn brightness keys with app display slider via `DisplayServices` notifications (requires `BrightnessKeys.kext` in OpenCore EFI).
+- **HDR Invariant Reinforced:** Added permanent `HDR: Locked OFF` status card explaining why macOS HDR causes framebuffer corruption on Intel Iris Xe OLED Hackintosh.
+- **CPU Chart & 120Hz Animation Smoothness:** GPU hardware-accelerated CSS rendering (`translateZ(0)`, `will-change`), smooth 120Hz ProMotion curve transitions, and responsive touch swipe navigation.
+- **Safe Maintenance Tooling:** Added user-approved RAM purge (`/usr/sbin/purge`) and app WebKit cache cleaning without touching user files or system partitions.
+- **Fan RPM Sensor Architecture:** Clarified that ASUS Embedded Controller tachometers require `AsusSMC.kext` in OpenCore EFI, explaining why running the app with `sudo` cannot bypass missing ACPI EC drivers.
   - Android: `ACTION_INSTALL_PACKAGE` intent requiring user confirmation and matching signing certificate lineage.
   - iOS: Official TestFlight / App Store redirect; disallows self-installing downloaded IPAs.
   - macOS / Windows: Staged download hash verification with verified manual / signed installer execution.
