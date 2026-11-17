@@ -200,6 +200,12 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
+      "bytes": 14380,
+      "executable": true,
+      "path": "automation/rebuild_and_sign_apk.py",
+      "sha256": "16c3553695fe4d546fa2c25fe4e728bb0964da57b1961b54f54942ca5368f5cd"
+    },
+    {
       "bytes": 4085,
       "executable": true,
       "path": "automation/source_manifest.py",
