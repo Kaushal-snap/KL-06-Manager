@@ -41,7 +41,7 @@
       "bytes": 10402,
       "executable": false,
       "path": "ECOSYSTEM.md",
-      "sha256": "5a08bf9ec7f9235bc3b6f178b220fd63268832ae641b436385ad1aaad5bca93f"
+      "sha256": "370e15fc521debab86974d08708a1af3f688c9fb2948b300af92a19622093181"
     },
     {
       "bytes": 6156,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 55512,
+      "bytes": 55642,
       "executable": false,
       "path": "index.html",
-      "sha256": "74cafe60f06dfbca6c0309daffdedb6454c6dca5ca68c5435fff3bcac444b750"
+      "sha256": "bee72bb7f1549bd3ab8d9ae9c01dc2cc55fc1615ac7f02420fa1d0409ae7f936"
     },
     {
       "bytes": 5659,
@@ -659,7 +659,7 @@
       "bytes": 18101,
       "executable": false,
       "path": "script.js",
-      "sha256": "041e28a7a767fde53ce402c85ae58d8cc27381967034fb2f873c1563e10eda75"
+      "sha256": "a1e2df6f818517b2e6929b10de2816ce5c68dea4197bdf552fce814fa0568985"
     },
     {
       "bytes": 34421,
