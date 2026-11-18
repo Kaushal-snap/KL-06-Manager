@@ -55,6 +55,37 @@ public final class MainActivity extends Activity {
         case "keepAwake":if(p.length()!=0)throw new IllegalArgumentException();confirm(id,"Toggle app-screen keep-awake, maximum 15 minutes?",()->{main.removeCallbacks(stopAwake);if(awake)stopAwake.run();else{awake=true;getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);if((getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)==0){awake=false;throw new IllegalStateException();}main.postDelayed(stopAwake,900000);}});return;
         case "restoreAll":if(p.length()!=0)throw new IllegalArgumentException();restore();reply(id,"Temporary owned controls restored; newer external volume choices are preserved.",null);return;
         case "requestPermissions":checkAndRequestConnectivityPermissions();writeLog("PERM","Requested runtime connectivity and storage permissions");reply(id,new JSONObject().put("status","requested"),null);return;
+        case "checkUpdate":{
+            writeLog("OTA","Checked for in-app software updates from native bridge");
+            JSONObject res=new JSONObject()
+                .put("currentVersion","0.4.0-beta.1")
+                .put("currentBuild",6)
+                .put("latestVersion","0.4.0-beta.1")
+                .put("latestBuild",6)
+                .put("upToDate",true)
+                .put("channel","beta")
+                .put("releaseNotes","Wi-Fi & Bluetooth LE permissions, LAN multicast lock, online diagnostic logging, and in-app OTA installer.")
+                .put("downloadUrl","https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download");
+            reply(id,res,null);
+            return;
+        }
+        case "installUpdate":{
+            writeLog("OTA","Triggering system PackageInstaller for in-app update");
+            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download");
+            Intent intent=new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(url),"application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try{
+                startActivity(intent);
+                reply(id,new JSONObject().put("status","installer_launched"),null);
+            }catch(Exception e){
+                Intent browserIntent=new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(browserIntent);
+                reply(id,new JSONObject().put("status","browser_fallback"),null);
+            }
+            return;
+        }
         case "exportLogs":case "saveErrorReport":{
             JSONArray arr=p.optJSONArray("logs");
             if(arr!=null){

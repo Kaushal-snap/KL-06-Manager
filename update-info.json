@@ -16,10 +16,10 @@
             "target_os": "Android 14 (API 34)",
             "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
             "filename": "KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip",
-            "sha256": "fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7",
-            "drive_download_url": "https://drive.google.com/uc?id=1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd/view?usp=sharing",
-            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with uncompressed 4-byte aligned resources.arsc and 4KB aligned APK Signing Block. Android 8.0 Oreo minimum (API 26), Android 14 target (API 34), REL release codename compliance. Fixes 'App not installed as package appears to be invalid' error. Note: If upgrading from an older debug build (such as v3 beta 4), uninstall the older build first due to Android debug key changes."
+            "sha256": "cecd860e928bc874eb047176d88412aef8695ef063faee5732d3debc647b8b00",
+            "drive_download_url": "https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj/view?usp=sharing",
+            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes in-app OTA Update Engine, PackageInstaller handoff, LAN Wi-Fi & Bluetooth LE permissions, Multicast lock, and live online diagnostics export."
         },
         "mac": {
             "version": "0.4.0-beta.1",

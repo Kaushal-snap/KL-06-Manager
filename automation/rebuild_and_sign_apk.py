@@ -20,6 +20,7 @@ Rebuilds KL-06 Android APK:
 """
 
 import os
+import re
 import sys
 import struct
 import hashlib
@@ -661,6 +662,30 @@ def main():
     zip_sha256 = hashlib.sha256(OUTPUT_ZIP.read_bytes()).hexdigest()
     print(f"KL-06-Manager.apk SHA-256: {apk_sha256}")
     print(f"{OUTPUT_ZIP.name} SHA-256: {zip_sha256}")
+
+    # Synchronize website download links and checksums
+    index_file = ROOT / "index.html"
+    if index_file.exists():
+        html = index_file.read_text()
+        # Update Android card hash and copy button
+        html = re.sub(
+            r'id="hash-android">[a-f0-9]{64}</code>\s*<button class="btn-copy" onclick="copyText\(\'[a-f0-9]{64}\', this\)',
+            f'id="hash-android">{zip_sha256}</code>\n                        <button class="btn-copy" onclick="copyText(\'{zip_sha256}\', this)',
+            html
+        )
+        index_file.write_text(html)
+        print(f"Synchronized website index.html with latest build SHA-256 {zip_sha256}")
+
+    # Synchronize update-info.json
+    info_file = ROOT / "update-info.json"
+    if info_file.exists():
+        import json
+        info_data = json.loads(info_file.read_text())
+        if "platforms" in info_data and "android" in info_data["platforms"]:
+            info_data["platforms"]["android"]["sha256"] = zip_sha256
+            info_file.write_text(json.dumps(info_data, indent=4) + "\n")
+            print(f"Synchronized update-info.json with latest build SHA-256 {zip_sha256}")
+
     print(f"SUCCESS: {OUTPUT_ZIP.name} rebuilt and ready for deployment.")
     return apk_sha256, zip_sha256
 
