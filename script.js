@@ -11,7 +11,7 @@ const PLATFORM_DATA = {
         fileMeta: 'v0.4.0-beta.1 Build 6 • 1.02 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
         directUrl: 'https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download',
         viewUrl: 'https://drive.google.com/file/d/13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b/view?usp=sharing',
-        sha256: '85ddfd48850921035c25d21d9f84a8a271ce644ace591dfc0e314e652a31803e',
+        sha256: 'fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7',
         btnText: '⬇️ Download for Android (1.02 MB)'
     },
     mac: {
