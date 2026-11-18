@@ -5,21 +5,21 @@
     "discord": "https://discord.gg/Z4my8c2ZH",
     "discord_username": "labanayt5301",
     "youtube": "https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM",
-    "current_version": "0.4.0-beta.1",
-    "build": 6,
-    "release_date": "2026-11-17",
+    "current_version": "0.4.0-beta.2",
+    "build": 7,
+    "release_date": "2026-11-18",
     "platforms": {
         "android": {
-            "version": "0.4.0-beta.1",
-            "build": 6,
+            "version": "0.4.0-beta.2",
+            "build": 7,
             "min_os": "Android 8.0 (API 26)",
             "target_os": "Android 14 (API 34)",
             "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
-            "filename": "KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip",
-            "sha256": "cecd860e928bc874eb047176d88412aef8695ef063faee5732d3debc647b8b00",
-            "drive_download_url": "https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj/view?usp=sharing",
-            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes in-app OTA Update Engine, PackageInstaller handoff, LAN Wi-Fi & Bluetooth LE permissions, Multicast lock, and live online diagnostics export."
+            "filename": "KL-06-0.4.0-beta.2-android-debug-UNTESTED.zip",
+            "sha256": "faab57b05e94897244dc66eb86dbadd15b1c2ec0d85974fca3fcee8da404f499",
+            "drive_download_url": "https://drive.google.com/uc?id=1tTCNq1YmEEMG3ZNUgUzt1nFztJoUTYm8&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1tTCNq1YmEEMG3ZNUgUzt1nFztJoUTYm8/view?usp=sharing",
+            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes real-time UDP & TLS companion peer discovery on port 8766, public Download/KL-06 log auto-save, Google Drive share sheet integration, in-app OTA Update Engine, PackageInstaller handoff, and multi-device radar scanning."
         },
         "mac": {
             "version": "0.4.0-beta.1",

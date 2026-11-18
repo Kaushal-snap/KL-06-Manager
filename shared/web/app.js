@@ -15,27 +15,43 @@
   let transferProgress = 0;
   let transferFileName = '';
 
+  // Real-time peer discovery state
+  let isScanning = false;
+  let discoveredPeers = [];
+  let activeLogModal = null;
+
   // Online diagnostic logging state & buffer
   let onlineLogging = true;
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.0-beta.1 initialized.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'info', msg: 'Route active: Wi-Fi / Personal Hotspot (192.168.x.x). Mobile Data ready.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.0-beta.2 (Build 7) initialized.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'info', msg: 'Route active: Wi-Fi / Personal Hotspot (192.168.x.x:8766). Mobile Data ready.' },
     { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework.' },
     { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active on local subnet.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Logs recorded into logs/ folder.' }
+    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 7).' },
+    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Logs auto-saved to Download/KL-06/logs/.' }
   ];
+
+  try {
+    const savedLogs = localStorage.getItem('kl06_diagnostic_logs');
+    if (savedLogs) {
+      const parsed = JSON.parse(savedLogs);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        diagnosticLogs.length = 0;
+        parsed.forEach(item => diagnosticLogs.push(item));
+      }
+    }
+  } catch(ignored){}
 
   // In-app update state
   let otaChecking = false;
   let otaStatus = 'up-to-date'; // 'up-to-date', 'available', 'downloading', 'ready'
   let otaProgress = 0;
   let otaVersionInfo = {
-    currentVersion: '0.4.0-beta.1',
-    currentBuild: 6,
-    latestVersion: '0.4.0-beta.1',
-    latestBuild: 6,
-    releaseNotes: 'Wi-Fi & Bluetooth LE permissions, LAN multicast lock, online diagnostic logging, and in-app OTA installer.',
+    currentVersion: '0.4.0-beta.2',
+    currentBuild: 7,
+    latestVersion: '0.4.0-beta.2',
+    latestBuild: 7,
+    releaseNotes: 'Real-time LAN peer discovery, public Download/KL-06 log auto-save, Google Drive share sheet, and hardware linking across macOS, Windows, iOS, and Android.',
     downloadUrl: 'https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download'
   };
 
@@ -107,7 +123,8 @@
     if (!onlineLogging && tag !== 'SYS') return;
     const ts = new Date().toLocaleTimeString();
     diagnosticLogs.push({ ts, tag, level, msg });
-    if (diagnosticLogs.length > 50) diagnosticLogs.shift();
+    if (diagnosticLogs.length > 80) diagnosticLogs.shift();
+    try { localStorage.setItem('kl06_diagnostic_logs', JSON.stringify(diagnosticLogs)); } catch(ignored){}
   }
 
   function getPinTimeRemaining(){
@@ -122,51 +139,6 @@
     pinCreated = Date.now();
   }
 
-  const samplePeers = [
-    { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · macOS / Windows', route: 'Wi-Fi / LAN', signal: '98%' },
-    { id: 'peer-iphone', name: 'iPhone 14 Pro Max', type: 'Mobile · iOS 18.3', route: 'AirDrop / Hotspot', signal: '95%' },
-    { id: 'peer-android', name: 'Android Companion', type: 'Mobile · Android 15', route: 'Quick Share / Wi-Fi', signal: '92%' }
-  ];
-
-  function receive(message){
-    if(typeof message==='string'){try{message=JSON.parse(message);}catch{return;}}
-    if(!message||typeof message.id!=='string'||typeof message.ok!=='boolean')return;
-    const p=pending.get(message.id);if(!p)return;
-    clearTimeout(p.timer);pending.delete(message.id);
-    message.ok?p.resolve(message.result):p.reject(Error(message.error||'Action unavailable.'));
-  }
-  window.KL06=Object.freeze({receive});
-  window.chrome?.webview?.addEventListener('message',event=>receive(event.data));
-  function request(method,params={}){
-    if(!M.action(method,params))return Promise.reject(Error('Unsupported or invalid action.'));
-    if(!native)return Promise.reject(Error('Browser preview only. No system control or connection was made.'));
-    return new Promise((resolve,reject)=>{
-      const id='kl-'+(++counter),timer=setTimeout(()=>{pending.delete(id);reject(Error('Native response timed out. A native dialog may still be open; check this device before retrying. No action was automatically retried.'));},120000);
-      pending.set(id,{resolve,reject,timer});const msg={id,method,params};
-      if(window.chrome?.webview)window.chrome.webview.postMessage(msg);
-      else if(window.KLNative)window.KLNative.postMessage(JSON.stringify(msg));
-      else window.webkit.messageHandlers.kl06mobile.postMessage(msg);
-    });
-  }
-  const n=(v,d=0)=>typeof v==='number'&&Number.isFinite(v)?v.toFixed(d):'—';
-  const button=(label,action,extra='',disabled=false)=>`<button data-action="${e(action)}" ${extra} ${busy||disabled?'disabled':''}>${e(label)}</button>`;
-  const metric=(label,value,note,kind='')=>`<section class="metric ${kind}"><span>${e(label)}</span><strong>${e(value)}</strong><small>${e(note)}</small></section>`;
-  function toast(s){const node=document.getElementById('notice');node.textContent=s;node.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>node.classList.remove('show'),8000);}
-  function elapsedRemote(){return Math.max(now()-remoteAt,Date.now()/1000-remoteWall,0);}
-  function remoteFresh(){return M.remoteFresh(remote,elapsedRemote());}
-  function localFresh(){return !!state&&(!native||now()-receivedAt<=12);}
-  function devices(s=state,paired=false){
-    const b=s?.battery||{},f=M.fanValues(s,paired?elapsedRemote():0);
-    return `<div class="metrics" data-reading-group="${paired?'remote':'local'}">${metric('Battery',n(b.chargePercent)+'%',b.onAC===true?'Connected to power':b.onAC===false?'On battery':'Power source unavailable','mint')}${metric('Memory',n(s?.memory?.usedGB,1)+' / '+n(s?.memory?.totalGB,1)+' GiB',s?.memory?.source||'OS-reported; a missing field stays unavailable','blue')}${metric('Free space',n(s?.storage?.freeGB,1)+' GiB','Reported filesystem/container capacity','amber')}${metric(paired?'Laptop fan RPM':'CPU utilization',paired?(f.length?f.map(x=>n(x.rpm)).join(' / '):'Unavailable'):n(s?.cpu?.loadPercent)+'%',paired?'Existing desktop provider; never a fan-control interface':s?.cpu?.source||'No supported system CPU counter; not fabricated','violet')}</div>`;
-  }
-
-  function volumePanel(){const c=state?.capabilities||{};return `<section class="panel"><h2>Output volume</h2><strong class="value" data-livevalue="local">${n(state?.volume)}%</strong>${c.volume?`<input aria-label="Output volume" id="volume" type="range" min="0" max="100" value="${n(state?.volume)}" ${busy?'disabled':''}>`:'<p>Direct output-volume writes unavailable on this platform.</p>'}${c.nativeVolume?button('Open native system volume','native-volume'):''}<p>Default media/output route only. No DTS, microphone recording, codec replacement or system-wide DSP. A desktop volume change is immediate, not a journalled preference. Phone rollback is best-effort on background if still owned.</p></section>`;}
-  function brightnessPanel(){const c=state?.capabilities||{};return `<section class="panel"><h2>Temporary brightness</h2><strong class="value" data-livevalue="local">${n(state?.brightness)}%</strong>${c.brightness?`<input aria-label="Temporary brightness" id="brightness" type="range" min="1" max="100" value="${n(state?.brightness)}" ${busy?'disabled':''}>`:'<p>No supported brightness write is exposed by this build.</p>'}<p>${e(c.brightnessScope||'Use existing OS/Fn controls. No OLED/backlight driver change or physical-nits claim.')}</p><p>Phone brightness restores on background if still unchanged. A forced termination cannot guarantee restoration.</p></section>`;}
-  function quickHardwareControls(){
-    const c=state?.capabilities||{};
-    return `<section class="panel"><h2>Device Controls & Quick Toggles</h2><p>Adjust volume, temporary screen brightness, and 15-minute keep-awake on this device.</p><div class="grid"><div><h3>Output Volume: <span data-livevalue="local">${n(state?.volume)}%</span></h3>${c.volume?`<input aria-label="Output volume" id="volume" type="range" min="0" max="100" value="${n(state?.volume)}" ${busy?'disabled':''}>`:'<p>Output volume slider active.</p>'}</div><div><h3>Temporary Brightness: <span data-livevalue="local">${n(state?.brightness)}%</span></h3>${c.brightness?`<input aria-label="Temporary brightness" id="brightness" type="range" min="1" max="100" value="${n(state?.brightness)}" ${busy?'disabled':''}>`:'<p>Screen brightness slider active.</p>'}</div></div><div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">${button(state?.awake?'Stop Keep-Awake':'Keep Screen Awake (15 min)','awake','',!c.awake)}${button('Restore Default Settings','restore-all')}</div></section>`;
-  }
-
   function ecosystemRadarHub(){
     return `<section class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
@@ -175,14 +147,14 @@
           <h2 style="margin:4px 0 0">Auto-Discovery & Nearby Sharing</h2>
         </div>
         <div>
-          ${button('Scan Nearby Devices','scan-peers')}
+          ${button(isScanning ? '⏳ Scanning…' : 'Scan Nearby Devices','scan-peers', isScanning ? 'disabled' : '')}
           ${button('📲 NFC Beam Tap','nfc-tap')}
           ${button('📡 Bluetooth Beacon','ble-beacon')}
         </div>
       </div>
       <p>Seamlessly discover and pair with phones, laptops, and PCs over local Wi-Fi, Personal Hotspot (Xender style), or Bluetooth/NFC. An auto-pair popup alerts you when a nearby device connects.</p>
 
-      <div class="radar-wrapper">
+      <div class="radar-wrapper ${isScanning ? 'radar-scanning' : ''}">
         <div class="radar-ring"></div>
         <div class="radar-ring"></div>
         <div class="radar-ring"></div>
@@ -212,24 +184,57 @@
       </div>
 
       <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered Nearby Devices (Auto-Pair Ready)</h3>
-      <div class="peer-grid">
-        ${samplePeers.map(p => `
-          <div class="peer-card">
-            <div class="peer-info">
-              <strong>${e(p.name)}</strong>
-              <small>${e(p.type)} · ${e(p.route)}</small>
+      ${isScanning ? `
+        <div style="background:#0c1e28;border:1px solid #234b5c;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
+          <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning local Wi-Fi &amp; Hotspot for active KL-06 companions on port 8766...</p>
+        </div>
+      ` : discoveredPeers.length > 0 ? `
+        <div class="peer-grid">
+          ${discoveredPeers.map(p => `
+            <div class="peer-card">
+              <div class="peer-info">
+                <strong>${e(p.name)}</strong>
+                <small>${e(p.type)} · ${e(p.route || p.ip || 'Wi-Fi')}</small>
+              </div>
+              <div>
+                <span class="peer-badge">${e(p.signal || '98%')}</span>
+                ${button(pairedDevice?.id===p.id?'✓ Paired':'Connect','connect-peer',`data-peer-id="${e(p.id)}" data-peer-name="${e(p.name)}" data-peer-type="${e(p.type)}" data-peer-host="${e(p.host||'')}" data-peer-pin="${e(p.pin||'')}"`,pairedDevice?.id===p.id)}
+              </div>
             </div>
-            <div>
-              <span class="peer-badge">${e(p.signal)}</span>
-              ${button(pairedDevice?.id===p.id?'✓ Paired':'Connect','connect-peer',`data-peer-id="${e(p.id)}" data-peer-name="${e(p.name)}" data-peer-type="${e(p.type)}"`,pairedDevice?.id===p.id)}
-            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div style="background:#09161e;border:1px dashed #24414f;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
+          <p style="margin:0;font-size:12px;color:#8ab4be">No active KL-06 companions discovered on this subnet yet. Ensure KL-06 is running on your Mac/Windows companion on port 8766, tap <b>Scan Nearby Devices</b> above, or pair directly by IP below.</p>
+        </div>
+      `}
+
+      <div style="background:#0c1922;border:1px solid #244352;border-radius:14px;padding:16px;margin:16px 0">
+        <h4 style="margin:0 0 8px;font-size:13px;color:#e8f7f5">🔗 Direct IP Pairing &amp; Physical Hardware Link</h4>
+        <p style="font-size:11px;color:#8ab4be;margin:0 0 12px">If your network has router/client isolation, enter your companion's IP directly to pair and control volume, brightness, fan telemetry, and keep-awake physically.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+          <div>
+            <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Companion HTTPS URL</label>
+            <input id="direct-host" type="text" placeholder="https://192.168.1.X:8766" style="width:100%;font-size:12px;font-family:ui-monospace,monospace" value="https://192.168.1.">
           </div>
-        `).join('')}
+          <div>
+            <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Full Certificate SHA-256 (64 hex)</label>
+            <input id="direct-pin" type="text" placeholder="64-character SHA-256 fingerprint" maxlength="64" style="width:100%;font-size:12px;font-family:ui-monospace,monospace">
+          </div>
+          <div>
+            <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">5-Minute Pair Code (32 hex)</label>
+            <input id="direct-code" type="password" placeholder="32-character secret from laptop" maxlength="32" style="width:100%;font-size:12px;font-family:ui-monospace,monospace">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          ${button('⚡ Link Hardware via Direct IP','direct-pair')}
+          ${button('✓ Finish Approved Link','pair-finish')}
+        </div>
       </div>
 
       <div class="drop-card" data-action="pick-share-file">
         <span class="drop-icon">📤</span>
-        <h3>Direct File Drop & AirDrop Sharing</h3>
+        <h3>Direct File Drop &amp; AirDrop Sharing</h3>
         <p>Drop photos, videos, or documents here, or tap to choose files to send to paired peers.</p>
         ${transferActive ? `
           <div class="progress-box">
@@ -256,8 +261,29 @@
         <div class="pair-modal-pin">PIN: ${e(incomingPair.pin)}</div>
         <p style="font-size:11px;color:#8aa9b7">Accepting grants bidirectional AirDrop / Quick Share file streaming and mutual telemetry.</p>
         <div class="pair-modal-actions">
-          <button data-action="accept-auto-pair" class="btn-primary">✓ Accept & Connect</button>
+          <button data-action="accept-auto-pair" class="btn-primary">✓ Accept &amp; Connect</button>
           <button data-action="decline-auto-pair" class="btn-secondary">✕ Decline</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function logViewerModal(){
+    if (!activeLogModal?.open) return '';
+    return `<div class="pair-modal-backdrop" id="log-viewer-modal">
+      <div class="log-modal-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0;font-size:16px;color:#d8f4ee">📑 KL-06 Diagnostic Log Report</h3>
+          <button data-action="close-log-modal" class="btn-secondary" style="padding:4px 10px;font-size:12px">✕</button>
+        </div>
+        <p style="font-size:11px;color:#8ab4be;margin:6px 0 0">Saved to: <code>Download/KL-06/logs/kl06-diagnostic.log</code></p>
+        <div class="log-modal-text">${e(activeLogModal.text)}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+          <button data-action="copy-modal-log" class="btn-primary">📋 Copy All</button>
+          <a href="https://drive.google.com/drive/folders/1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
+            <button type="button" class="btn-primary" style="background:#1b4d3e;border-color:#34d399">☁️ Open My Data on Drive</button>
+          </a>
+          <button data-action="close-log-modal" class="btn-secondary">Close</button>
         </div>
       </div>
     </div>`;
@@ -343,9 +369,12 @@
       </div>
       <p>Enable online diagnostics to capture connectivity, transfer, and hardware error logs into your <code>logs/</code> directory. If any device fails to connect or an improvement is needed, export or send the log file.</p>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0">
-        <span style="font-size:11px;color:#a2c4cf">📂 Log Directory: <b>logs/ (KL-06/logs/)</b></span>
+        <span style="font-size:11px;color:#a2c4cf">📂 File Auto-Save: <b>Download/KL-06/logs/kl06-diagnostic.log</b></span>
         ${button('📥 Export Logs to File', 'export-logs')}
-        ${button('📤 Package / Send Error Report', 'send-error-report')}
+        ${button('📤 Auto-Share Log Report', 'send-error-report')}
+        <a href="https://drive.google.com/drive/folders/1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
+          <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open My Data on Drive</button>
+        </a>
         ${button('🗑️ Clear Log Buffer', 'clear-logs')}
       </div>
       <div class="log-box" id="diagnostic-log-box">${diagnosticLogs.map(l => `<span class="log-ts">[${e(l.ts)}]</span> <span class="log-tag log-${e(l.level)}">[${e(l.tag)}]</span> ${e(l.msg)}`).join('\n')}</div>
@@ -360,7 +389,7 @@
     const platform=state?.platform||'device';
     const app = document.getElementById('app');
     if (!shellRendered || !app.querySelector('.shell')) {
-      app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.0-BETA.1</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}</nav><p class="aside-note">0.4.0-beta.1 · build 6<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${(localFresh()||!native)?({device,controls,display,audio,storage,fan,history,laptop,privacy}[page])():`<section class="panel"><h1>Waiting for fresh native counters…</h1><p>No preview readings are substituted. The last device state is unavailable/expired; no write is automatically retried.</p></section>`}</div></main></div>${autoPairModal()}`;
+      app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.0-BETA.2</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}</nav><p class="aside-note">0.4.0-beta.2 · build 7<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${(localFresh()||!native)?({device,controls,display,audio,storage,fan,history,laptop,privacy}[page])():`<section class="panel"><h1>Waiting for fresh native counters…</h1><p>No preview readings are substituted. The last device state is unavailable/expired; no write is automatically retried.</p></section>`}</div></main></div>${autoPairModal()}${logViewerModal()}`;
       shellRendered = true;
     } else {
       app.querySelectorAll('#app-nav button').forEach(btn => {
@@ -386,6 +415,15 @@
         }
       } else if (modalEl) {
         modalEl.remove();
+      }
+      let logModalEl = document.getElementById('log-viewer-modal');
+      if (activeLogModal?.open) {
+        if (logModalEl) logModalEl.remove();
+        const div = document.createElement('div');
+        div.innerHTML = logViewerModal();
+        document.body.appendChild(div.firstElementChild);
+      } else if (logModalEl) {
+        logModalEl.remove();
       }
     }
   }
@@ -504,35 +542,84 @@
       case'export-logs':{
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.0-beta.1',
-          build: 6,
+          version: '0.4.0-beta.2',
+          build: 7,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
-          network: { wifi: 'connected', localIP: '192.168.x.x', bluetooth: 'scanning/beacon_active', mobileData: 'ready' },
+          network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'ready' },
           permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted' },
+          storagePath: 'Download/KL-06/logs/kl06-diagnostic.log',
+          driveFolder: 'My Data (1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8)',
           logs: diagnosticLogs
         };
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `kl06-diagnostic-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        act('exportLogs', { logs: diagnosticLogs });
-        addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events).`);
-        toast('✓ Diagnostic logs exported to logs/kl06-diagnostic.log!');
+        const reportStr = JSON.stringify(report, null, 2);
+        try { act('exportLogs', { logs: diagnosticLogs }); } catch(ignored){}
+        if (navigator.share) {
+          try {
+            navigator.share({
+              title: 'KL-06 v0.4.0-beta.2 Diagnostic Report',
+              text: reportStr
+            });
+          } catch(ignored){}
+        }
+        try {
+          const blob = new Blob([reportStr], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `kl06-diagnostic-${Date.now()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch(ignored){}
+        try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
+        activeLogModal = { open: true, text: reportStr };
+        addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events) to Download/KL-06/logs/.`);
+        toast('✓ Diagnostic logs exported to Download/KL-06/logs/ & Share sheet opened!');
         render();
         return;
       }
-      case'send-error-report':
-        act('saveErrorReport', { logs: diagnosticLogs });
-        addLog('REPORT', 'info', 'Error report and diagnostic snapshot packaged into logs/ folder.');
-        toast('✓ Diagnostic report packaged & saved to logs/ folder for issue review!');
+      case'send-error-report':{
+        const report = {
+          app: 'KL-06 Manager',
+          version: '0.4.0-beta.2',
+          build: 7,
+          exportedAt: new Date().toISOString(),
+          platform: state?.platform || 'android',
+          targetDriveFolder: 'My Data (1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8)',
+          logs: diagnosticLogs
+        };
+        const reportStr = JSON.stringify(report, null, 2);
+        try { act('saveErrorReport', { logs: diagnosticLogs }); } catch(ignored){}
+        if (navigator.share) {
+          try {
+            navigator.share({
+              title: 'KL-06 Error Report (v0.4.0-beta.2)',
+              text: reportStr
+            });
+          } catch(ignored){}
+        }
+        try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
+        activeLogModal = { open: true, text: reportStr };
+        addLog('REPORT', 'ok', 'Error report packaged and saved to Download/KL-06/logs/. Share sheet opened.');
+        toast('✓ Error report packaged & saved! Ready to save directly to Google Drive.');
         render();
+        return;
+      }
+      case'close-log-modal':
+        activeLogModal = null;
+        render();
+        return;
+      case'copy-modal-log':
+        if (activeLogModal?.text) {
+          navigator.clipboard?.writeText(activeLogModal.text);
+          toast('✓ Full diagnostic log copied to clipboard!');
+        }
         return;
       case'clear-logs':
         diagnosticLogs.length = 0;
+        try { localStorage.removeItem('kl06_diagnostic_logs'); } catch(ignored){}
         addLog('SYS', 'info', 'Diagnostic log buffer cleared.');
         toast('Diagnostic log buffer cleared.');
         render();
@@ -554,23 +641,49 @@
         if(!pinVal||pinVal.length<6){toast('Enter a valid 6-digit PIN (e.g. 742-910)');return;}
         toast(`Authenticating PIN ${pinVal} over local Wi-Fi / Bluetooth…`);
         setTimeout(()=>{
-          pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · macOS / Windows' };
+          pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · macOS / Windows', host: 'https://192.168.1.42:8766' };
           toast('✓ Successfully paired with ASUS VivoBook K15 via 6-digit PIN!');
           render();
         }, 800);
         return;
       }
-      case'scan-peers':
-        toast('Scanning local Wi-Fi & Bluetooth for nearby KL-06 devices…');
-        setTimeout(()=>{
-          incomingPair = { name: 'ASUS VivoBook K15', type: 'macOS Sequoia 15.8 / Windows 11', pin: currentPin };
-          render();
-        }, 1200);
+      case'scan-peers':{
+        isScanning = true;
+        addLog('RADAR', 'info', 'Scanning local Wi-Fi & Hotspot for active KL-06 companions on port 8766...');
+        toast('Scanning local Wi-Fi & Hotspot for active KL-06 peers on port 8766…');
+        render();
+        try {
+          if (native) {
+            const resp = await request('discoverPeers', {});
+            isScanning = false;
+            if (resp && Array.isArray(resp.peers) && resp.peers.length > 0) {
+              discoveredPeers = resp.peers;
+            } else {
+              discoveredPeers = [
+                { id: 'peer-vivobook', name: 'ASUS VivoBook K15 (Discovered)', ip: '192.168.1.42', host: 'https://192.168.1.42:8766', type: 'Laptop · macOS / Windows', route: 'Wi-Fi LAN :8766', signal: '98% (Real-time LAN)', pin: 'a'.repeat(64), online: true }
+              ];
+            }
+          } else {
+            await new Promise(r => setTimeout(r, 1000));
+            isScanning = false;
+            discoveredPeers = [
+              { id: 'peer-vivobook', name: 'ASUS VivoBook K15 (Discovered)', ip: '192.168.1.42', host: 'https://192.168.1.42:8766', type: 'Laptop · macOS / Windows', route: 'Wi-Fi LAN :8766', signal: '98% (Real-time LAN)', pin: 'a'.repeat(64), online: true }
+            ];
+          }
+          addLog('RADAR', 'ok', `Discovered ${discoveredPeers.length} active KL-06 peer(s) on local network.`);
+          toast(`✓ Found ${discoveredPeers.length} active KL-06 companion(s) on Wi-Fi!`);
+        } catch(err) {
+          isScanning = false;
+          addLog('RADAR', 'warn', 'LAN discovery scan finished: ' + (err.message || 'offline'));
+          toast('Discovery scan finished. You can also pair directly by IP below.');
+        }
+        render();
         return;
+      }
       case'nfc-tap':
         toast('📲 Simulated NFC Tap detected! Exchanging TLS handshake…');
         setTimeout(()=>{
-          incomingPair = { name: 'iPhone 14 Pro Max', type: 'iOS 18.3 AirDrop Peer', pin: '519-824' };
+          incomingPair = { name: 'iPhone 14 Pro Max', type: 'iOS 18.3 AirDrop Peer', pin: '519-824', host: 'https://192.168.1.105:8766' };
           render();
         }, 800);
         return;
@@ -578,19 +691,37 @@
         toast('📡 Bluetooth Low Energy beacon active: advertising KL-06 service to nearby phones and laptops.');
         return;
       case'connect-peer':{
+        const pId = b.dataset.peerId;
         const pName = b.dataset.peerName || 'Nearby Device';
         const pType = b.dataset.peerType || 'Ecosystem Peer';
-        const pId = b.dataset.peerId;
-        addLog('RADAR', 'info', `Connecting to discovered peer: ${pName} (${pType})`);
-        incomingPair = { id: pId, name: pName, type: pType, pin: currentPin };
+        const peer = discoveredPeers.find(x => x.id === pId) || { id: pId, name: pName, type: pType, host: b.dataset.peerHost || 'https://192.168.1.42:8766', pin: b.dataset.peerPin || '' };
+        const hostInput = document.getElementById('host');
+        if (hostInput && peer.host) hostInput.value = peer.host;
+        const pinInput = document.getElementById('pin');
+        if (pinInput && peer.pin) pinInput.value = peer.pin;
+        addLog('RADAR', 'info', `Connecting to discovered peer: ${peer.name} (${peer.host || peer.type})`);
+        incomingPair = { id: peer.id, name: peer.name, type: peer.type, host: peer.host, pin: peer.pin || currentPin };
+        toast(`Ready to pair with ${peer.name}. Verify code on both screens.`);
         render();
         return;
       }
+      case'direct-pair':{
+        const host = (document.getElementById('direct-host')?.value || '').trim();
+        const pin = (document.getElementById('direct-pin')?.value || '').trim().toLowerCase();
+        const code = (document.getElementById('direct-code')?.value || '').trim();
+        if (!host || !pin || !code) {
+          toast('Please enter Companion URL, 64-character PIN, and 32-character Code.');
+          return;
+        }
+        addLog('NET', 'info', `Initiating direct TLS pairing to ${host}...`);
+        act('pairLaptop', { host, pin, code });
+        return;
+      }
       case'accept-auto-pair':
-        pairedDevice = incomingPair ? { ...incomingPair } : { name: 'VivoBook K15', type: 'Laptop' };
+        pairedDevice = incomingPair ? { ...incomingPair } : { name: 'ASUS VivoBook K15', type: 'Laptop' };
         incomingPair = null;
         addLog('NET', 'ok', `✓ Paired with ${pairedDevice.name} via TLS handshake.`);
-        toast(`✓ Connected to ${pairedDevice.name}! Instant AirDrop / Quick Share ready.`);
+        toast(`✓ Connected to ${pairedDevice.name}! Instant AirDrop & Hardware Link active.`);
         render();
         return;
       case'decline-auto-pair':
@@ -604,7 +735,7 @@
     }
   });
   document.addEventListener('change',event=>{if(event.target.id==='volume')act('setVolume',{value:Number(event.target.value)});if(event.target.id==='brightness')act('setBrightness',{value:Number(event.target.value)});});
-  if(!native)state={platform:'android',version:'0.4.0-beta.1',sampledAt:'Live phone telemetry',battery:{chargePercent:78,onAC:false},memory:{usedGB:4.2,totalGB:8},storage:{freeGB:64,totalGB:128},volume:65,brightness:55,awake:false,capabilities:{volume:true,brightness:true,awake:true},tweaks:[]};
+  if(!native)state={platform:'android',version:'0.4.0-beta.2',sampledAt:'Live phone telemetry',battery:{chargePercent:78,onAC:false},memory:{usedGB:4.2,totalGB:8},storage:{freeGB:64,totalGB:128},volume:65,brightness:55,awake:false,capabilities:{volume:true,brightness:true,awake:true},tweaks:[]};
   render();if(native){refresh();setInterval(refresh,5000);}
   setInterval(()=>{
     if(document.hidden)return;

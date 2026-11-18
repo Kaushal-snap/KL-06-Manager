@@ -13,7 +13,9 @@
   }
   function action(method,p={}){
     if(!object(p))return false;
-    if(['state','pickHistoryCSV','restoreAll','keepAwake','showNativeVolume','finishPairing','remoteState','remoteResult','disconnectLaptop','startCompanion','stopCompanion','companionDetails'].includes(method))return exact(p);
+    if(['state','pickHistoryCSV','restoreAll','keepAwake','showNativeVolume','finishPairing','remoteState','remoteResult','disconnectLaptop','startCompanion','stopCompanion','companionDetails','discoverPeers','requestPermissions','checkUpdate'].includes(method))return exact(p);
+    if(['exportLogs','saveErrorReport','shareLogs'].includes(method))return exact(p)||(exact(p,['logs'])&&Array.isArray(p.logs));
+    if(method==='installUpdate')return exact(p)||(exact(p,['downloadUrl'])&&typeof p.downloadUrl==='string');
     if(['setVolume','setBrightness'].includes(method))return exact(p,['value'])&&numeric(p.value,method==='setBrightness'?1:0,100);
     if(['applyTweak','restoreTweak'].includes(method))return exact(p,['id'])&&typeof p.id==='string'&&Object.prototype.hasOwnProperty.call(tweaks,p.id);
     if(method==='pairLaptop')return exact(p,['code','host','pin'])&&privateHost(p.host)&&typeof p.pin==='string'&&p.pin.length===64&&/^[a-fA-F0-9]+$/.test(p.pin)&&typeof p.code==='string'&&p.code.length===32&&/^[a-f0-9]+$/.test(p.code);

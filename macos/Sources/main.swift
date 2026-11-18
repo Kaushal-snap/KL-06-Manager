@@ -135,8 +135,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["powerSampleInfo"] = ["source": "Fixed five-sample powermetrics read", "sampledAt": latestPowerAt.map { $0 as Any } ?? NSNull(), "mode": "point-in-time-not-live"] as [String: Any]
         value["hotkey"] = ["keyCode": F13HotKey.keyCode, "modifiers": F13HotKey.modifiers, "registered": globalHotKey?.isRegistered == true] as [String: Any]
         value["companion"] = ["running": companion.isRunning, "requiresLocalConfirmation": true]
-        value["version"] = "0.4.0-beta.1"
-        value["build"] = 6
+        value["version"] = "0.4.0-beta.2"
+        value["build"] = 7
         value["powerProfile"] = powerProfile
         value["batteryLimit"] = batteryLimit
         value["fanMode"] = fanMode
@@ -240,15 +240,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 reply(id, "Local app caches cleaned safely.")
             case "checkUpdates":
                 reply(id, [
-                    "currentVersion": "0.4.0-beta.1",
-                    "currentBuild": 6,
+                    "currentVersion": "0.4.0-beta.2",
+                    "currentBuild": 7,
                     "channel": "beta",
                     "status": "up_to_date",
-                    "latestVersion": "0.4.0-beta.1",
-                    "latestBuild": 6,
-                    "releaseDate": "2026-11-17",
+                    "latestVersion": "0.4.0-beta.2",
+                    "latestBuild": 7,
+                    "releaseDate": "2026-11-18",
                     "catalogVerified": true,
-                    "notice": "You are running the latest v0.4.0-beta.1 candidate. Signed OTA updates are verified against SHA-256 catalogs."
+                    "notice": "You are running the latest v0.4.0-beta.2 candidate. Signed OTA updates are verified against SHA-256 catalogs."
                 ])
             case "setPowerProfile":
                 guard let profile = params["profile"] as? String else { throw ControlError(message: "Invalid power profile.") }

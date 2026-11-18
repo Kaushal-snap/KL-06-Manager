@@ -369,6 +369,18 @@ class Broker:
                         self._unlink(identifier)
                         del self.pending[identifier]
                 return 200, {"status": "disconnected-and-revoked"}
+            if path == "/v1/discover":
+                if body:
+                    raise Rejected("discover-schema")
+                import socket
+                return 200, {
+                    "protocol": PROTOCOL,
+                    "service": "KL-06 Companion",
+                    "version": "0.4.0-beta.2",
+                    "build": 7,
+                    "hostname": socket.gethostname(),
+                    "platform": sys.platform
+                }
             if path == "/v1/state":
                 if body:
                     raise Rejected("state-schema")
@@ -519,6 +531,47 @@ def main():
     fingerprint = hashlib.sha256(ssl.PEM_cert_to_DER_cert(cert.read_text())).hexdigest()
     stopping = threading.Event()
     signal.signal(signal.SIGTERM, lambda *_: stopping.set())
+
+    import socket
+
+    def udp_responder():
+        try:
+            udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            try:
+                udp_sock.bind(("", 8766))
+            except Exception:
+                try:
+                    udp_sock.bind((args.bind, 8766))
+                except Exception:
+                    return
+            udp_sock.settimeout(0.5)
+            while not stopping.is_set():
+                try:
+                    data, addr = udp_sock.recvfrom(2048)
+                    if b"KL06_DISCOVER" in data:
+                        reply = json.dumps({
+                            "service": "KL-06 Companion",
+                            "protocol": PROTOCOL,
+                            "version": "0.4.0-beta.2",
+                            "build": 7,
+                            "platform": sys.platform,
+                            "hostname": socket.gethostname(),
+                            "port": 8766,
+                            "pin": fingerprint
+                        }).encode("utf-8")
+                        udp_sock.sendto(reply, addr)
+                except socket.timeout:
+                    continue
+                except Exception:
+                    break
+            udp_sock.close()
+        except Exception:
+            pass
+
+    udp_thread = threading.Thread(target=udp_responder, daemon=True)
+    udp_thread.start()
+
     try:
         with Server((args.bind, 8766), broker, context) as server:
             server.timeout = 0.5
