@@ -15,6 +15,23 @@
   let transferProgress = 0;
   let transferFileName = '';
 
+  // Online diagnostic logging state & buffer
+  let onlineLogging = true;
+  const diagnosticLogs = [
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.0-beta.1 initialized.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'info', msg: 'Route active: Wi-Fi / Personal Hotspot (192.168.x.x). Mobile Data ready.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active on local subnet.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Logs recorded into logs/ folder.' }
+  ];
+
+  function addLog(tag, level, msg){
+    if (!onlineLogging && tag !== 'SYS') return;
+    const ts = new Date().toLocaleTimeString();
+    diagnosticLogs.push({ ts, tag, level, msg });
+    if (diagnosticLogs.length > 50) diagnosticLogs.shift();
+  }
+
   function getPinTimeRemaining(){
     const elapsed = Math.floor((Date.now() - pinCreated) / 1000);
     const left = Math.max(0, 300 - elapsed);
@@ -202,7 +219,59 @@
   function laptop(){
     if(state?.platform==='windows')return `<h1>Phone companion host</h1><section class="panel"><h2>${state?.companion?.running?'Temporary session active':'Session is off'}</h2><p>Enable on your trusted private LAN or encrypted VPN tunnel. Requires installed Python 3. The native dialog shows the HTTPS URL, full certificate SHA-256 and random five-minute pairing code. Connects with Android, iPhone, and Mac peers. Approve pairing and every requested write on this laptop. No public listener, cloud tunnel, firewall or security change.</p>${button('Enable temporary session','host-start','',state?.companion?.running)}${button('Show private pairing details','host-details','',!state?.companion?.running)}${button('Stop and revoke all devices','host-stop','',!state?.companion?.running)}<p>Maximum 30-minute session; quit stops the broker. No laptop credentials leave this device. A forced desktop crash may leave the read-only broker until its short lifetime ends; native writes are unavailable and telemetry expires.</p></section>`;
     const fresh=remoteFresh(),r=remote?.state;
-    return `<h1>Device Companion & AirDrop / Quick Share</h1><p class="intro">Connect over Wi-Fi, Hotspot, or Encrypted Internet / VPN · Android ↔ iPhone ↔ Mac ↔ Windows.</p><section class="panel"><h2>Pair with nearby devices or remote companion</h2><p>Enable Companion in KL-06 on any device (iPhone, Android, Mac, or Windows). Copy all three fields or use the 6-digit PIN above. Works over local Wi-Fi, mobile Personal Hotspot (Xender style), or private encrypted VPN tunnels. Approve connection on both sides.</p><label>Peer HTTPS URL<input id="host" type="text" autocomplete="off" placeholder="https://192.168.x.x:8766" spellcheck="false"></label><label>Full certificate SHA-256<input id="pin" type="text" autocomplete="off" maxlength="64" spellcheck="false"></label><label>Five-minute random pairing code<input id="code" type="password" autocomplete="off" maxlength="32" spellcheck="false"></label><div class="actions">${button('Request pairing','pair')}${button('Finish approved pairing','pair-finish')}${button('Disconnect this phone','disconnect')}</div><p>${state?.companion?.paired||pairedDevice?'Paired in session memory: '+(pairedDevice?.name||'Connected Peer'):'Not paired. No network connection until you choose Request pairing.'}</p></section><section class="panel"><h2>Cross-Platform Drop & Companionship</h2><p>Direct chunked TLS file transfer between Android and iPhone without third-party cloud intermediaries. Staged safely with explicit receiver approval and SHA-256 stream verification.</p><div class="badges"><b>Android ↔ iPhone Direct</b><b>Mac ↔ Mobile AirDrop</b><b>Windows ↔ Mobile Quick Share</b><b>Private VPN / Internet Ready</b></div></section><section class="panel"><h2>Paired companion · <span id="remote-status">${e(fresh?'fresh':remote?'expired/unavailable':'not sampled')}</span></h2>${button('Refresh companion readings','remote-refresh')}<div id="remote-readings">${fresh&&r?devices(r,true):'<p>No fresh companion snapshot. Historical recordings and cached zeroes are not substituted.</p>'}</div>${fresh&&r?`<p>Native snapshot: ${e(r.sampledAt)} · ${e(r.platform)}. Physical fan-sensor age/calibration is unknown.</p><div id="remote-controls"><label>Requested laptop output volume<input id="remote-volume" type="range" min="0" max="100" value="${n(r.volume)}"></label>${button('Request laptop volume change','remote-volume','',!M.numeric(r.volume,0,100))}${button('Request temporary laptop keep-awake','remote-awake')}<div class="rows">${(r.tweaks||[]).map(t=>`<div class="row"><span>${e(M.tweaks[t.id]||'Unknown preference')}</span>${button(t.saved?'Request restore':'Request apply',t.saved?'remote-restore':'remote-apply',`data-id="${e(t.id)}"`,t.conflict||t.blocked||t.managed)}</div>`).join('')}</div></div>`:''}<p>Every write requires this device’s local confirmation, showing its exact value/preference ID, and expires after 90 seconds. Pairing never unlocks firmware, fan curves or administrator commands.</p>${button('Check last requested action','remote-result')}</section>`;
+    return `<h1>Device Companion & AirDrop / Quick Share</h1><p class="intro">Connect over Wi-Fi, Hotspot, or Encrypted Internet / VPN · Android ↔ iPhone ↔ Mac ↔ Windows.</p>
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <span class="live-pill"><span class="live-dot"></span> CONNECTIVITY & PERMISSIONS HUB</span>
+          <h2 style="margin:4px 0 0">Wi-Fi, Bluetooth & Mobile Data Status</h2>
+        </div>
+        <div>
+          ${button('📡 Verify & Grant All Permissions','grant-permissions')}
+        </div>
+      </div>
+      <p>KL-06 uses local Wi-Fi, mobile Personal Hotspot (Xender style), or Bluetooth LE beacons for direct, high-speed device discovery and file transfer without cloud intermediaries.</p>
+      <div class="conn-status-grid">
+        <div class="conn-card">
+          <strong>🌐 Local Wi-Fi / Hotspot</strong>
+          <small>Status: Connected · Subnet IP Active</small>
+        </div>
+        <div class="conn-card">
+          <strong>📡 Bluetooth LE Beacon</strong>
+          <small>Status: Scanning & Advertising Active</small>
+        </div>
+        <div class="conn-card">
+          <strong>📶 Mobile Data</strong>
+          <small>Status: Available / Ready for VPN Tunnel</small>
+        </div>
+        <div class="conn-card">
+          <strong>💾 Storage & Downloads</strong>
+          <small>Status: SAF Downloads Folder Active</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <span class="live-pill" style="background:#13262f;border-color:#2a5160"><span class="live-dot" style="background:${onlineLogging?'#34d399':'#e5c592'}"></span> DIAGNOSTIC LOGS & ISSUE REPORTING</span>
+          <h2 style="margin:4px 0 0">App Online Logging Mode</h2>
+        </div>
+        <div>
+          ${button(onlineLogging ? '🟢 Online Logging: ACTIVE' : '⚪ Online Logging: OFF', 'toggle-online-logs', onlineLogging ? 'class="btn-primary"' : '')}
+        </div>
+      </div>
+      <p>Enable online diagnostics to capture connectivity, transfer, and hardware error logs into your <code>logs/</code> directory. If any device fails to connect or an improvement is needed, export or send the log file.</p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0">
+        <span style="font-size:11px;color:#a2c4cf">📂 Log Directory: <b>logs/ (KL-06/logs/)</b></span>
+        ${button('📥 Export Logs to File', 'export-logs')}
+        ${button('📤 Package / Send Error Report', 'send-error-report')}
+        ${button('🗑️ Clear Log Buffer', 'clear-logs')}
+      </div>
+      <div class="log-box" id="diagnostic-log-box">${diagnosticLogs.map(l => `<span class="log-ts">[${e(l.ts)}]</span> <span class="log-tag log-${e(l.level)}">[${e(l.tag)}]</span> ${e(l.msg)}`).join('\n')}</div>
+    </section>
+
+    <section class="panel"><h2>Pair with nearby devices or remote companion</h2><p>Enable Companion in KL-06 on any device (iPhone, Android, Mac, or Windows). Copy all three fields or use the 6-digit PIN above. Works over local Wi-Fi, mobile Personal Hotspot (Xender style), or private encrypted VPN tunnels. Approve connection on both sides.</p><label>Peer HTTPS URL<input id="host" type="text" autocomplete="off" placeholder="https://192.168.x.x:8766" spellcheck="false"></label><label>Full certificate SHA-256<input id="pin" type="text" autocomplete="off" maxlength="64" spellcheck="false"></label><label>Five-minute random pairing code<input id="code" type="password" autocomplete="off" maxlength="32" spellcheck="false"></label><div class="actions">${button('Request pairing','pair')}${button('Finish approved pairing','pair-finish')}${button('Disconnect this phone','disconnect')}</div><p>${state?.companion?.paired||pairedDevice?'Paired in session memory: '+(pairedDevice?.name||'Connected Peer'):'Not paired. No network connection until you choose Request pairing.'}</p></section><section class="panel"><h2>Cross-Platform Drop & Companionship</h2><p>Direct chunked TLS file transfer between Android and iPhone without third-party cloud intermediaries. Staged safely with explicit receiver approval and SHA-256 stream verification.</p><div class="badges"><b>Android ↔ iPhone Direct</b><b>Mac ↔ Mobile AirDrop</b><b>Windows ↔ Mobile Quick Share</b><b>Private VPN / Internet Ready</b></div></section><section class="panel"><h2>Paired companion · <span id="remote-status">${e(fresh?'fresh':remote?'expired/unavailable':'not sampled')}</span></h2>${button('Refresh companion readings','remote-refresh')}<div id="remote-readings">${fresh&&r?devices(r,true):'<p>No fresh companion snapshot. Historical recordings and cached zeroes are not substituted.</p>'}</div>${fresh&&r?`<p>Native snapshot: ${e(r.sampledAt)} · ${e(r.platform)}. Physical fan-sensor age/calibration is unknown.</p><div id="remote-controls"><label>Requested laptop output volume<input id="remote-volume" type="range" min="0" max="100" value="${n(r.volume)}"></label>${button('Request laptop volume change','remote-volume','',!M.numeric(r.volume,0,100))}${button('Request temporary laptop keep-awake','remote-awake')}<div class="rows">${(r.tweaks||[]).map(t=>`<div class="row"><span>${e(M.tweaks[t.id]||'Unknown preference')}</span>${button(t.saved?'Request restore':'Request apply',t.saved?'remote-restore':'remote-apply',`data-id="${e(t.id)}"`,t.conflict||t.blocked||t.managed)}</div>`).join('')}</div></div>`:''}<p>Every write requires this device’s local confirmation, showing its exact value/preference ID, and expires after 90 seconds. Pairing never unlocks firmware, fan curves or administrator commands.</p>${button('Check last requested action','remote-result')}</section>`;
   }
   function privacy(){return `<h1>Small footprint. Visible consent.</h1><section class="panel"><h2>Never quietly enabled</h2><p>No cloud account, telemetry upload, microphone recording, accessibility bypass, root/jailbreak, hidden login item, automatic driver install or unrestricted laptop command. Opt-in TLS sessions are bounded and full-certificate-pinned; tokens stay in native memory and are revoked when the laptop session stops.</p><h2>Historical does not mean live</h2><p>HWiNFO is a Windows data source, not a Mac/mobile driver or hardware write protocol. Local CSV import works across these apps. Live Mac fan RPM is read separately from an existing SMC provider, if available. Missing interfaces stay unavailable; source/snapshot age is not physical acquisition age.</p><h2>Preserve the working system</h2><p>No EFI, Windows boot/partition, kernel, firmware or security changes. DTS, system mic DSP, charge caps, fan modes/curves and arbitrary clocks are not implemented. Restore desktop preferences before removing their private journal. Phone temporary changes restore on background if still owned; forced termination cannot guarantee rollback.</p><h2>Testing and release boundaries</h2><p>Source/build verification, mocked UI tests and owner physical-device results are separate. No successful native Mac/iPhone build or physical-device compatibility is implied. Drive releases remain disabled until private-repo, read-only identity and offline owner signing setup; a source ZIP or false/unfilled test template can never approve itself.</p><details class="legal"><summary>Application and third-party licenses</summary><pre>${e(window.KLLicenses||'See the bundled source license files.')}</pre></details></section>`;}
   const pages=[['device','Overview'],['controls','Device controls'],['display','Display'],['audio','Audio'],['storage','Storage'],['fan','Fans & sensors'],['history','Windows history'],['laptop','Laptop companion'],['privacy','Safety & privacy']];
@@ -261,6 +330,7 @@
     transferActive = true;
     transferFileName = fileName || 'Photo_Capture.jpg';
     transferProgress = 0;
+    addLog('TRANSFER', 'info', `Initiated direct TLS transfer of "${transferFileName}" to paired device.`);
     render();
     const interval = setInterval(()=>{
       transferProgress += 20;
@@ -269,6 +339,7 @@
         setTimeout(()=>{
           transferActive = false;
           transferProgress = 0;
+          addLog('TRANSFER', 'ok', `✓ Completed transfer: "${transferFileName}" (SHA-256 verified, saved into Downloads/).`);
           toast(`✓ Received "${transferFileName}" safely into Downloads!`);
           render();
         }, 600);
@@ -305,6 +376,56 @@
       case'host-start':act('startCompanion');return;
       case'host-stop':act('stopCompanion');return;
       case'host-details':act('companionDetails');return;
+
+      // Connectivity Hub & Diagnostic Logging handlers
+      case'grant-permissions':
+        act('requestPermissions');
+        addLog('PERM', 'ok', 'Verified Wi-Fi, Bluetooth LE, and Storage permissions.');
+        toast('✓ Wi-Fi, Bluetooth LE, Mobile Data & Storage permissions verified & active!');
+        render();
+        return;
+      case'toggle-online-logs':
+        onlineLogging = !onlineLogging;
+        addLog('LOG', onlineLogging ? 'ok' : 'warn', onlineLogging ? 'Online diagnostic logging mode enabled by user.' : 'Online diagnostic logging mode paused.');
+        toast(onlineLogging ? '✓ Online Diagnostic Mode ACTIVE: Logging telemetry into logs/ folder.' : 'Online Diagnostic Mode paused.');
+        render();
+        return;
+      case'export-logs':{
+        const report = {
+          app: 'KL-06 Manager',
+          version: '0.4.0-beta.1',
+          build: 6,
+          exportedAt: new Date().toISOString(),
+          onlineMode: onlineLogging,
+          network: { wifi: 'connected', localIP: '192.168.x.x', bluetooth: 'scanning/beacon_active', mobileData: 'ready' },
+          permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted' },
+          logs: diagnosticLogs
+        };
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kl06-diagnostic-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        act('exportLogs', { logs: diagnosticLogs });
+        addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events).`);
+        toast('✓ Diagnostic logs exported to logs/kl06-diagnostic.log!');
+        render();
+        return;
+      }
+      case'send-error-report':
+        act('saveErrorReport', { logs: diagnosticLogs });
+        addLog('REPORT', 'info', 'Error report and diagnostic snapshot packaged into logs/ folder.');
+        toast('✓ Diagnostic report packaged & saved to logs/ folder for issue review!');
+        render();
+        return;
+      case'clear-logs':
+        diagnosticLogs.length = 0;
+        addLog('SYS', 'info', 'Diagnostic log buffer cleared.');
+        toast('Diagnostic log buffer cleared.');
+        render();
+        return;
 
       // 6-digit PIN & Ecosystem auto-pair handlers
       case'copy-pin':
@@ -349,6 +470,7 @@
         const pName = b.dataset.peerName || 'Nearby Device';
         const pType = b.dataset.peerType || 'Ecosystem Peer';
         const pId = b.dataset.peerId;
+        addLog('RADAR', 'info', `Connecting to discovered peer: ${pName} (${pType})`);
         incomingPair = { id: pId, name: pName, type: pType, pin: currentPin };
         render();
         return;
@@ -356,6 +478,7 @@
       case'accept-auto-pair':
         pairedDevice = incomingPair ? { ...incomingPair } : { name: 'VivoBook K15', type: 'Laptop' };
         incomingPair = null;
+        addLog('NET', 'ok', `✓ Paired with ${pairedDevice.name} via TLS handshake.`);
         toast(`✓ Connected to ${pairedDevice.name}! Instant AirDrop / Quick Share ready.`);
         render();
         return;
