@@ -11,36 +11,45 @@
         "android": {
             "version": "0.4.0-beta.1",
             "build": 6,
+            "min_os": "Android 8.0 (API 26)",
+            "target_os": "Android 14 (API 34)",
+            "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
             "filename": "KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip",
-            "sha256": "bb7d99fd800934b7af0c19489e34ee97e79676d2728521c9693d4bc3a070a2b8",
-            "drive_download_url": "https://drive.google.com/uc?id=1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC/view?usp=sharing",
-            "notes": "APK Signature Scheme v2 signed with uncompressed 4-byte aligned resources.arsc. Single-page mobile dashboard, 6-digit PIN pairing, and auto-pair incoming consent modal."
+            "sha256": "85ddfd48850921035c25d21d9f84a8a271ce644ace591dfc0e314e652a31803e",
+            "drive_download_url": "https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b/view?usp=sharing",
+            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with uncompressed 4-byte aligned resources.arsc. Android 8.0 Oreo minimum (API 26), Android 14 target (API 34), REL release codename compliance. Fixes Android 13 PackageParser installation crash. Single-page mobile dashboard, 6-digit PIN pairing, and auto-pair incoming consent modal."
         },
         "mac": {
             "version": "0.4.0-beta.1",
             "build": 6,
+            "min_os": "macOS 13.0 Ventura",
+            "supported_os": "macOS 13, 14, 15+",
             "filename": "KL-06 Manager 4.0 beta.zip",
             "sha256": "88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941",
             "drive_download_url": "https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download",
             "drive_view_url": "https://drive.google.com/file/d/16SE_Z25itABzXg8p0aUrITkLr-2E-DVB/view?usp=sharing",
-            "notes": "Native macOS 13+ companion with 6-digit PIN display, OLED brightness, volume scalar, and F13 hotkey."
+            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) companion with 6-digit PIN display, OLED brightness, volume scalar, and F13 hotkey."
         },
         "windows": {
             "version": "0.4.0-beta.1",
             "build": 6,
+            "min_os": "Windows 7 SP1",
+            "supported_os": "Windows 7, 8, 8.1, 10, 11",
             "filename": "KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip",
             "sha256": "9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f",
             "drive_download_url": "https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download",
             "drive_view_url": "https://drive.google.com/file/d/1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM/view?usp=sharing",
-            "notes": "Windows 10/11 x64 app with WebView2 integration, single-page dashboard, and PIN authentication."
+            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, single-page dashboard, and PIN authentication."
         },
         "ios": {
             "version": "0.4.0-beta.1",
             "build": 6,
+            "min_os": "iOS 16.0",
+            "supported_os": "iOS 16, 17, 18+",
             "source_script": "INSTALL-IOS.command",
             "project_path": "ios/KL06Mobile.xcodeproj",
-            "notes": "Pure Swift / WKWebView companion with pinned TLS and local bridge. Build via Xcode or INSTALL-IOS.command."
+            "notes": "iOS 16.0+ pure Swift / WKWebView companion with pinned TLS and local bridge. Build via Xcode or INSTALL-IOS.command."
         },
         "source": {
             "version": "0.4.0-beta.1",

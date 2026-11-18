@@ -46,13 +46,26 @@ Connect directly with the developer **Kaushal Labana**:
 
 ## 📱 Device Downloads Matrix (v0.4.0-beta.1 Build 6)
 
-| Platform | Deliverable Package | Size | SHA-256 Checksum | Direct Download Mirror |
-| :--- | :--- | :---: | :---: | :---: |
-| 🤖 **Android** | `KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip` | 1.04 MB | `bb7d99fd800934b7af0c19489e34ee97e79676d2728521c9693d4bc3a070a2b8` | [Direct Download (Drive)](https://drive.google.com/uc?id=1oXqdUSsI6cE-ZTB0RxvjzmHJvXhlPbQC&export=download) |
-| 🍎 **macOS** | `KL-06 Manager 4.0 beta.zip` | 195 KB | `88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941` | [Direct Download (Drive)](https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download) |
-| 🪟 **Windows** | `KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip` | 553 KB | `9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f` | [Direct Download (Drive)](https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download) |
-| 📱 **iOS** | `ios/KL06Mobile` Xcode Project / `INSTALL-IOS.command` | Source | Swift / devicectl | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.0-beta.1-source-BUILD-READY.zip` | 1.88 MB | `d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download) |
+| Platform | Deliverable Package | Compatibility / Min OS | Size | SHA-256 Checksum | Direct Download Mirror |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| 🤖 **Android** | `KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.02 MB | `85ddfd48850921035c25d21d9f84a8a271ce644ace591dfc0e314e652a31803e` | [Direct Download (Drive)](https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 4.0 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 195 KB | `88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941` | [Direct Download (Drive)](https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 553 KB | `9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f` | [Direct Download (Drive)](https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download) |
+| 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
+| 📦 **Source Archive** | `KL-06-0.4.0-beta.1-source-BUILD-READY.zip` | Cross-Platform Build | 1.88 MB | `d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download) |
+
+<br/>
+
+## 📶 Progressive Feature Matrix Across OS Generations
+
+KL-06 Manager features progressive enhancement across all platforms: as your device OS version increases, newer hardware and system features automatically unlock while maintaining full backward compatibility down to the baseline minimum:
+
+| OS Family | Baseline Minimum | Feature Unlocks on Newer Versions |
+| :--- | :--- | :--- |
+| **Android** | **Android 8.0 (API 26)** | • **Android 8 & 9 (Oreo / Pie):** Base LAN peer transfer, local media volume & screen brightness bridge, live hardware telemetry.<br/>• **Android 10 & 11 (Q / R):** System Dark Mode auto-sync, Wi-Fi LocalOnlyHotspot discovery, Scoped Storage.<br/>• **Android 12 & 12L (S):** Dynamic Color (Material You) styling, Bluetooth LE radar peer scanner.<br/>• **Android 13 (Tiramisu):** Auto-Pair incoming prompt dialog, granular media permissions, 6-digit mutual PIN confirmation, runtime notification alerts.<br/>• **Android 14 & 15 (Upside Down Cake / Vanilla Ice Cream):** Predictive back gesture animations, foreground `dataSync` transfer service, multi-gigabit LAN streaming.<br/>• **Android 16, 17+ (Baklava & Beyond):** 16KB memory page size optimization, Wi-Fi 7 multi-link mesh transfer. |
+| **iOS / iPadOS** | **iOS 16.0** | • **iOS 16:** Isolated WKWebView bridge, pinned TLS authentication, Lock Screen telemetry widgets.<br/>• **iOS 17 & 18+:** Dynamic Island transfer progress, StandBy mode dashboard, AirDrop mesh handoff. |
+| **macOS** | **macOS 13.0 (Ventura)** | • **macOS 13:** Stage Manager window management, native Menu Bar companion, OLED brightness scalar, F13 hotkey.<br/>• **macOS 14 & 15+:** Desktop Interactive Widgets, Sonoma Game Mode governor, Sequoia Window Tiling integration. |
+| **Windows** | **Windows 7 SP1** | • **Windows 7, 8, 8.1:** Aero / Classic desktop companion, .NET Desktop Runtime host, LAN peer discovery.<br/>• **Windows 10 & 11:** Edge WebView2 integration, Per-Monitor v2 high-DPI scaling, Mica / Acrylic glass material, Action Center notifications. |
 
 <br/>
 

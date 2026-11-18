@@ -32,6 +32,16 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - **Discord Community:** [`labanayt5301`](https://discord.gg/8nvTeGk9)
 - **YouTube Channel:** [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
 
+### 📱 Android 13+ PackageParser Installation Fix & Minimum OS Baselines
+- **Android 13+ Installation Resolved:** Fixed package parser rejection on Android 13 (API 33) by replacing preview development codename (`compileSdkVersionCodename="16"`) with standard release platform compliance (`"REL"`), setting `targetSdkVersion = 34` (Android 14), and preserving `minSdkVersion = 26` (Android 8.0 Oreo).
+- **Dual APK Signature Scheme (v1 JAR + v2 APK Block):** Implemented dual cryptographic signing: generated `META-INF/MANIFEST.MF`, `META-INF/CERT.SF` (with `X-Android-APK-Signed: 2`), and `META-INF/CERT.RSA` (detached PKCS#7 signed-data) alongside the v2 APK Signing Block (ID `0x7109871a`) with 4-byte aligned uncompressed `resources.arsc`. Resolves `INSTALL_PARSE_FAILED_NO_CERTIFICATES` across all Android OEM package installers.
+- **Minimum OS Support Matrix:**
+  - **Android:** Android 8.0 Oreo (API 26)+ up to Android 17+
+  - **iOS:** iOS 16.0+ (iOS 16, 17, 18+)
+  - **macOS:** macOS 13.0 Ventura+ (macOS 13, 14, 15+)
+  - **Windows:** Windows 7 SP1+ (Windows 7, 8, 8.1, 10, 11 with full `<supportedOS>` GUIDs)
+- **Progressive Feature Hierarchy:** Unlocks dynamic capabilities as host OS version increases (Dark Theme on Android 10, Material You & BLE Radar on Android 12, Auto-Pair on Android 13, Predictive Back on Android 14, 16KB Page Size on Android 16/17+, Dynamic Island on iOS 17+, Desktop Widgets on macOS 14+, Mica Glass on Windows 11).
+
 ### 📱 Single-Page Consolidated Mobile Dashboard & Animations
 - **Unified Mobile Companion:** Consolidated all mobile companion controls, live phone telemetry, hardware quick toggles (volume, brightness, keep-awake), and nearby file sharing onto a single scrollable dashboard page.
 - **Radar Wave & Ping Animation:** Added an animated radar circle (`.radar-container`, `.radar-ring`, `.radar-sweep`) that pulses visually when scanning for nearby peers.

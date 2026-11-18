@@ -26,10 +26,10 @@
       "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
     },
     {
-      "bytes": 16021,
+      "bytes": 17476,
       "executable": false,
       "path": "CHANGELOG.md",
-      "sha256": "a6e2959ae6a3ce4b9435e3964dceffbfd5ea4bf7456a59a762ff348bdc05da70"
+      "sha256": "04bd7adaa4755ac14980651d6519503d186b3f7dc5a4cd89f776c21fe198d66b"
     },
     {
       "bytes": 6066,
@@ -38,10 +38,10 @@
       "sha256": "bc3ce22f84367fe4ebaa3972320f8e624d26297c3e06c167db10bba0034bd7f1"
     },
     {
-      "bytes": 7897,
+      "bytes": 10402,
       "executable": false,
       "path": "ECOSYSTEM.md",
-      "sha256": "09ab01328773e263729a7a237feab3b4a8a9e84981037aa06edd054697c79e94"
+      "sha256": "e73fcc769c1335f5255ce8138e1a0948fc5215462d307290dae91a3b6b7b3817"
     },
     {
       "bytes": 6156,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 17329,
+      "bytes": 19619,
       "executable": false,
       "path": "README.md",
-      "sha256": "e22dfca00b2ddaabcfb31b4ca73124d646b687a9030b4a10f170dda7de29ef4c"
+      "sha256": "3b191b20e8119d3baf66fb7451ea1cbc41d258d00fd3a427e5b069b340e5e378"
     },
     {
       "bytes": 1599,
@@ -83,7 +83,7 @@
       "bytes": 577,
       "executable": false,
       "path": "android/app/build.gradle",
-      "sha256": "3d03a6ff22bbb74fb613e908ee9840613f3cb3ee975ed6f18ebc9ebebb8bd73c"
+      "sha256": "e3189f8e37e907fec20634307c9fdcb4ba5b56f8f711199f8b92fb1033f0fe44"
     },
     {
       "bytes": 4624,
@@ -200,10 +200,10 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 14380,
+      "bytes": 19623,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "16c3553695fe4d546fa2c25fe4e728bb0964da57b1961b54f54942ca5368f5cd"
+      "sha256": "2a0279d286ee5f49c94d4f03495a34cddf4ad1dd19188bec54260127d674c7fc"
     },
     {
       "bytes": 4085,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 48766,
+      "bytes": 53334,
       "executable": false,
       "path": "index.html",
-      "sha256": "a18b306356883333d589b89b126e6fb478b24893036e1a296cc430e32f5422e8"
+      "sha256": "391a9ed6f72b5616d0e1b386e1ccbded79cfeff7a4964a98de89676803dde90a"
     },
     {
       "bytes": 5659,
@@ -443,7 +443,7 @@
       "bytes": 1031,
       "executable": false,
       "path": "macos/Info.plist",
-      "sha256": "39a1dfcd01f318d183e7bf37413188063e8922afce6708fe8c05c93d0f680a2b"
+      "sha256": "4208f127165c71e481c669e701b9c2ef2dafe69a96bccc3b5ffefa76480d83f0"
     },
     {
       "bytes": 1086,
@@ -656,10 +656,10 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 10394,
+      "bytes": 18101,
       "executable": false,
       "path": "script.js",
-      "sha256": "5fe10d44941672d77220a8d8de9b7664674efe779c82ace1f0ede63474f05c7c"
+      "sha256": "e9b18809fcd79ef97ee6aa5f2b3097e14105b6408048079736fc223cb4f84ded"
     },
     {
       "bytes": 34421,
@@ -704,10 +704,10 @@
       "sha256": "2be02dae3f267f0d9dda2ea595256c873e41e2098976d7032f76ca9d2d7a822a"
     },
     {
-      "bytes": 40440,
+      "bytes": 43574,
       "executable": false,
       "path": "style.css",
-      "sha256": "e70a25c1e1a84f8fc52e8f8d8d6dbd5f04d0398430c9c2eb2a634a688e7cf593"
+      "sha256": "7f4ce9af405a2fcff77bccfb62e48eb377c62ff560c9e1690dc80cdc356dea35"
     },
     {
       "bytes": 10515,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 3135,
+      "bytes": 3792,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "7dd8a92248668ffa598467dcc48e0c1875a1520651a2f523c9a95397e2af3f2d"
+      "sha256": "333d5d5b7de6755b329df53ed0c3d72e44d855e171b78de8e4424f532685deff"
     },
     {
       "bytes": 1614,
@@ -836,10 +836,10 @@
       "sha256": "7618f7a93204b292691fe52e3d725e70559014a3ad4adbce16cc8404819beb61"
     },
     {
-      "bytes": 752,
+      "bytes": 1091,
       "executable": false,
       "path": "windows/KL06.Windows/app.manifest",
-      "sha256": "fe460aadb2dc66a31638777af4a5cee12022ea43102be9c212865f8537909732"
+      "sha256": "478aefc18d8bc172243c5ce0aa7cf83b0e2d1165ab05aa3286e1ef51be5e8ba8"
     },
     {
       "bytes": 969,
