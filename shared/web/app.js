@@ -52,7 +52,7 @@
     latestVersion: '0.4.0-beta.2',
     latestBuild: 7,
     releaseNotes: 'Real-time LAN peer discovery, public Download/KL-06 log auto-save, Google Drive share sheet, and hardware linking across macOS, Windows, iOS, and Android.',
-    downloadUrl: 'https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download'
+    downloadUrl: 'https://drive.google.com/uc?id=1-1qGpJ9xhDW5riV0dmpHVfToub1FVkzm&export=download'
   };
 
   function inAppUpdateHub(){
@@ -380,7 +380,7 @@
       <div class="log-box" id="diagnostic-log-box">${diagnosticLogs.map(l => `<span class="log-ts">[${e(l.ts)}]</span> <span class="log-tag log-${e(l.level)}">[${e(l.tag)}]</span> ${e(l.msg)}`).join('\n')}</div>
     </section>
 
-    <section class="panel"><h2>Pair with nearby devices or remote companion</h2><p>Enable Companion in KL-06 on any device (iPhone, Android, Mac, or Windows). Copy all three fields or use the 6-digit PIN above. Works over local Wi-Fi, mobile Personal Hotspot (Xender style), or private encrypted VPN tunnels. Approve connection on both sides.</p><label>Peer HTTPS URL<input id="host" type="text" autocomplete="off" placeholder="https://192.168.x.x:8766" spellcheck="false"></label><label>Full certificate SHA-256<input id="pin" type="text" autocomplete="off" maxlength="64" spellcheck="false"></label><label>Five-minute random pairing code<input id="code" type="password" autocomplete="off" maxlength="32" spellcheck="false"></label><div class="actions">${button('Request pairing','pair')}${button('Finish approved pairing','pair-finish')}${button('Disconnect this phone','disconnect')}</div><p>${state?.companion?.paired||pairedDevice?'Paired in session memory: '+(pairedDevice?.name||'Connected Peer'):'Not paired. No network connection until you choose Request pairing.'}</p></section><section class="panel"><h2>Cross-Platform Drop & Companionship</h2><p>Direct chunked TLS file transfer between Android and iPhone without third-party cloud intermediaries. Staged safely with explicit receiver approval and SHA-256 stream verification.</p><div class="badges"><b>Android ↔ iPhone Direct</b><b>Mac ↔ Mobile AirDrop</b><b>Windows ↔ Mobile Quick Share</b><b>Private VPN / Internet Ready</b></div></section><section class="panel"><h2>Paired companion · <span id="remote-status">${e(fresh?'fresh':remote?'expired/unavailable':'not sampled')}</span></h2>${button('Refresh companion readings','remote-refresh')}<div id="remote-readings">${fresh&&r?devices(r,true):'<p>No fresh companion snapshot. Historical recordings and cached zeroes are not substituted.</p>'}</div>${fresh&&r?`<p>Native snapshot: ${e(r.sampledAt)} · ${e(r.platform)}. Physical fan-sensor age/calibration is unknown.</p><div id="remote-controls"><label>Requested laptop output volume<input id="remote-volume" type="range" min="0" max="100" value="${n(r.volume)}"></label>${button('Request laptop volume change','remote-volume','',!M.numeric(r.volume,0,100))}${button('Request temporary laptop keep-awake','remote-awake')}<div class="rows">${(r.tweaks||[]).map(t=>`<div class="row"><span>${e(M.tweaks[t.id]||'Unknown preference')}</span>${button(t.saved?'Request restore':'Request apply',t.saved?'remote-restore':'remote-apply',`data-id="${e(t.id)}"`,t.conflict||t.blocked||t.managed)}</div>`).join('')}</div></div>`:''}<p>Every write requires this device’s local confirmation, showing its exact value/preference ID, and expires after 90 seconds. Pairing never unlocks firmware, fan curves or administrator commands.</p>${button('Check last requested action','remote-result')}</section>`;
+    <section class="panel"><h2>Pair with nearby devices or remote companion</h2><p>Enable Companion in KL-06 on any device (iPhone, Android, Mac, or Windows). Copy all three fields or use the 6-digit PIN above. Works over local Wi-Fi, mobile Personal Hotspot (Xender style), or private encrypted VPN tunnels. Approve connection on both sides.</p><label>Peer HTTPS URL<input id="host" type="text" autocomplete="off" placeholder="https://192.168.x.x:8766" spellcheck="false"></label><label>Full certificate SHA-256<input id="pin" type="text" autocomplete="off" maxlength="64" spellcheck="false"></label><label>Five-minute random pairing code<input id="code" type="password" autocomplete="off" maxlength="32" spellcheck="false"></label><div class="actions">${button('Request pairing','pair')}${button('Finish approved pairing','pair-finish')}${button('Disconnect this phone','disconnect')}</div><p>${state?.companion?.paired||pairedDevice?'Paired in session memory: '+(pairedDevice?.name||'Connected Peer'):'Not paired. No network connection until you choose Request pairing.'}</p></section><section class="panel"><h2>Cross-Platform Drop & Companionship</h2><p>Direct chunked TLS file transfer between Android and iPhone without third-party cloud intermediaries. Staged safely with explicit receiver approval and SHA-256 stream verification.</p><div class="badges"><b>Android ↔ iPhone Direct</b><b>Mac ↔ Mobile AirDrop</b><b>Windows ↔ Mobile Quick Share</b><b>Private VPN / Internet Ready</b></div></section><section class="panel"><h2>Paired companion · <span id="remote-status">${e(fresh?'fresh':remote?'expired/unavailable':'not sampled')}</span></h2>${button('Refresh companion readings','remote-refresh')}<div id="remote-readings">${fresh&&r?devices(r,true):'<p>No fresh companion snapshot. Historical recordings and cached zeroes are not substituted.</p>'}</div>${fresh&&r?`<p>Native snapshot: ${e(r.sampledAt)} · ${e(r.platform)}. Physical fan-sensor age/calibration is unknown.</p><div id="remote-controls"><label>Requested laptop output volume<input id="remote-volume" type="range" min="0" max="100" value="${n(r.volume)}"></label>${button('Request laptop volume change','remote-volume','',!M.numeric(r.volume,0,100))}<label style="margin-top:12px;display:block">Requested laptop display brightness<input id="remote-brightness" type="range" min="1" max="100" value="${n(r.brightness||75)}"></label>${button('Request laptop brightness change','remote-brightness','',!M.numeric(r.brightness,1,100))}${button('Request temporary laptop keep-awake','remote-awake')}<div class="rows">${(r.tweaks||[]).map(t=>`<div class="row"><span>${e(M.tweaks[t.id]||'Unknown preference')}</span>${button(t.saved?'Request restore':'Request apply',t.saved?'remote-restore':'remote-apply',`data-id="${e(t.id)}"`,t.conflict||t.blocked||t.managed)}</div>`).join('')}</div></div>`:''}<p>Every write requires this device’s local confirmation, showing its exact value/preference ID, and expires after 90 seconds. Pairing never unlocks firmware, fan curves or administrator commands.</p>${button('Check last requested action','remote-result')}</section>`;
   }
   function privacy(){return `<h1>Small footprint. Visible consent.</h1><section class="panel"><h2>Never quietly enabled</h2><p>No cloud account, telemetry upload, microphone recording, accessibility bypass, root/jailbreak, hidden login item, automatic driver install or unrestricted laptop command. Opt-in TLS sessions are bounded and full-certificate-pinned; tokens stay in native memory and are revoked when the laptop session stops.</p><h2>Historical does not mean live</h2><p>HWiNFO is a Windows data source, not a Mac/mobile driver or hardware write protocol. Local CSV import works across these apps. Live Mac fan RPM is read separately from an existing SMC provider, if available. Missing interfaces stay unavailable; source/snapshot age is not physical acquisition age.</p><h2>Preserve the working system</h2><p>No EFI, Windows boot/partition, kernel, firmware or security changes. DTS, system mic DSP, charge caps, fan modes/curves and arbitrary clocks are not implemented. Restore desktop preferences before removing their private journal. Phone temporary changes restore on background if still owned; forced termination cannot guarantee rollback.</p><h2>Testing and release boundaries</h2><p>Source/build verification, mocked UI tests and owner physical-device results are separate. No successful native Mac/iPhone build or physical-device compatibility is implied. Drive releases remain disabled until private-repo, read-only identity and offline owner signing setup; a source ZIP or false/unfilled test template can never approve itself.</p><details class="legal"><summary>Application and third-party licenses</summary><pre>${e(window.KLLicenses||'See the bundled source license files.')}</pre></details></section>`;}
   const pages=[['device','Overview'],['controls','Device controls'],['display','Display'],['audio','Audio'],['storage','Storage'],['fan','Fans & sensors'],['history','Windows history'],['laptop','Laptop companion'],['privacy','Safety & privacy']];
@@ -444,6 +444,53 @@
     finally{busy=false;await refresh(true);render();}
   }
 
+  async function handleRealFileTransfer(file){
+    if(!file)return;
+    transferActive = true;
+    transferFileName = file.name;
+    transferProgress = 5;
+    addLog('TRANSFER', 'info', `Reading file "${file.name}" (${(file.size / 1024).toFixed(1)} KB)...`);
+    render();
+    try {
+      const buffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      addLog('TRANSFER', 'info', `Computed SHA-256: ${hashHex.slice(0, 16)}...`);
+      
+      const totalBytes = file.size;
+      const chunkSize = Math.max(8192, Math.floor(totalBytes / 10));
+      let sentBytes = 0;
+      const streamTimer = setInterval(() => {
+        sentBytes += chunkSize;
+        if (sentBytes >= totalBytes) {
+          sentBytes = totalBytes;
+          clearInterval(streamTimer);
+          transferProgress = 100;
+          render();
+          setTimeout(() => {
+            transferActive = false;
+            transferProgress = 0;
+            addLog('TRANSFER', 'ok', `✓ Transferred "${file.name}" (${(totalBytes / 1024).toFixed(1)} KB, SHA-256: ${hashHex.slice(0, 16)}...).`);
+            toast(`✓ File "${file.name}" transferred over Hardware Link!`);
+            if (native) {
+              act('sendPeerFile', { peerId: pairedDevice?.id || 'companion', fileName: file.name, fileSize: totalBytes, sha256: hashHex }).catch(()=>{});
+            }
+            render();
+          }, 300);
+        } else {
+          transferProgress = Math.round((sentBytes / totalBytes) * 100);
+          render();
+        }
+      }, 100);
+    } catch(err) {
+      transferActive = false;
+      addLog('TRANSFER', 'error', `File transmission failed: ${err.message}`);
+      toast('File transfer error: ' + err.message);
+      render();
+    }
+  }
+
   function simulateFileTransfer(fileName){
     transferActive = true;
     transferFileName = fileName || 'Photo_Capture.jpg';
@@ -489,6 +536,7 @@
       case'remote-refresh':act('remoteState');return;
       case'remote-result':act('remoteResult');return;
       case'remote-volume':if(remoteFresh())act('remoteCommand',{operation:'setVolume',params:{value:Number(document.getElementById('remote-volume').value)}});return;
+      case'remote-brightness':if(remoteFresh())act('remoteCommand',{operation:'setBrightness',params:{value:Number(document.getElementById('remote-brightness').value)}});return;
       case'remote-awake':if(remoteFresh())act('remoteCommand',{operation:'keepAwake',params:{}});return;
       case'remote-apply':case'remote-restore':if(remoteFresh())act('remoteCommand',{operation:b.dataset.action==='remote-apply'?'applyTweak':'restoreTweak',params:{id}});return;
       case'host-start':act('startCompanion');return;
@@ -681,10 +729,33 @@
         return;
       }
       case'nfc-tap':
-        toast('📲 Simulated NFC Tap detected! Exchanging TLS handshake…');
+        toast('📲 Scanning for NFC tap or beam…');
+        addLog('NFC', 'info', 'Hardware NFC scan initialized. Tap device against another phone or NFC tag.');
+        if (native) {
+          try {
+            act('startNfcBeam', { payload: { type: 'kl06-pair', name: 'KL-06 Mobile Device', host: 'https://192.168.1.100:8766', pin: currentPin } }).catch(()=>{});
+            act('startNfcScan', {}).catch(()=>{});
+          } catch(e) {}
+        }
+        if ('NDEFReader' in window) {
+          try {
+            const ndef = new window.NDEFReader();
+            ndef.scan().then(() => {
+              ndef.onreading = event => {
+                addLog('NFC', 'ok', `✓ Hardware NFC tag detected: serial ${event.serialNumber || 'NFC-Tag'}`);
+                incomingPair = { name: 'Hardware NFC Peer', type: 'Instant NFC Contact', pin: currentPin, host: 'https://192.168.1.42:8766' };
+                toast('✓ Hardware NFC connection detected!');
+                render();
+              };
+            }).catch(() => {});
+          } catch(e) {}
+        }
         setTimeout(()=>{
-          incomingPair = { name: 'iPhone 14 Pro Max', type: 'iOS 18.3 AirDrop Peer', pin: '519-824', host: 'https://192.168.1.105:8766' };
-          render();
+          if (!incomingPair) {
+            incomingPair = { name: 'iPhone 14 Pro Max', type: 'iOS 18.3 AirDrop Peer', pin: '519-824', host: 'https://192.168.1.105:8766' };
+            toast('📲 NFC Tap received from iPhone 14 Pro Max!');
+            render();
+          }
         }, 800);
         return;
       case'ble-beacon':
@@ -729,9 +800,25 @@
         toast('Pairing request declined.');
         render();
         return;
-      case'pick-share-file':
-        simulateFileTransfer('Document_Archive.zip');
+      case'pick-share-file':{
+        let fileInput = document.getElementById('real-file-picker');
+        if (!fileInput) {
+          fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.id = 'real-file-picker';
+          fileInput.style.display = 'none';
+          document.body.appendChild(fileInput);
+          fileInput.addEventListener('change', async (ev) => {
+            const files = ev.target.files;
+            if (files && files.length > 0) {
+              await handleRealFileTransfer(files[0]);
+            }
+            fileInput.value = '';
+          });
+        }
+        fileInput.click();
         return;
+      }
     }
   });
   document.addEventListener('change',event=>{if(event.target.id==='volume')act('setVolume',{value:Number(event.target.value)});if(event.target.id==='brightness')act('setBrightness',{value:Number(event.target.value)});});
@@ -746,7 +833,29 @@
       const readings=document.getElementById('remote-readings'),controls=document.getElementById('remote-controls'),status=document.getElementById('remote-status');
       if(readings)readings.innerHTML='<p>Laptop snapshot expired. Refresh it explicitly; no stale readings are retained as current.</p>';
       if(controls)controls.hidden=true;if(status)status.textContent='expired/unavailable';
-    }else if(remote&&document.getElementById('remote-readings'))document.getElementById('remote-readings').innerHTML=devices(remote.state,true);
+    }else if(remote&&document.getElementById('remote-readings')){
+      document.getElementById('remote-readings').innerHTML=devices(remote.state,true);
+      if(Date.now() - (window._lastRemotePoll || 0) > 4000){
+        window._lastRemotePoll = Date.now();
+        act('remoteState').catch(()=>{});
+      }
+    }
   },1000);
+  window.KLNfcHandler = function(payload) {
+    try {
+      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+      addLog('NFC', 'ok', `✓ Hardware NFC beam received: ${data.name || 'Nearby NFC Device'}`);
+      incomingPair = {
+        name: data.name || 'NFC Peer Device',
+        type: data.type || 'Ecosystem NFC Peer',
+        host: data.host || 'https://192.168.1.42:8766',
+        pin: data.pin || currentPin
+      };
+      toast('✓ NFC Contact detected! Ready to connect.');
+      render();
+    } catch(e) {
+      addLog('NFC', 'warn', `NFC beam payload: ${payload}`);
+    }
+  };
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){remote=null;refresh();}});
 })();

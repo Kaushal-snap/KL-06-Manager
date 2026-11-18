@@ -72,4 +72,29 @@ aside{overflow-y:auto}.history-graph svg{display:block;width:100%;height:150px}.
 .conn-card strong{display:block;font-size:12px;color:#d8f4ee;margin-bottom:3px}
 .conn-card small{font-size:10px;color:#88a9b7}
 
+/* Phone Motion System & Fluid Mobile Animations */
+@keyframes phone-slide-up{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes phone-fade-in{0%{opacity:0}100%{opacity:1}}
+@keyframes phone-scale-in{0%{opacity:0;transform:scale(.94)}100%{opacity:1;transform:scale(1)}}
+@keyframes phone-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes phone-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes nfc-pulse{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(145,234,213,.7)}70%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(145,234,213,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(145,234,213,0)}}
+@keyframes nfc-ring-wave{0%{width:44px;height:44px;opacity:1;transform:scale(.8)}100%{width:150px;height:150px;opacity:0;transform:scale(1.7)}}
+
+.content{animation:phone-slide-up .28s cubic-bezier(.16,1,.3,1)}
+.panel{animation:phone-slide-up .32s cubic-bezier(.16,1,.3,1);transition:transform .2s,box-shadow .2s,border-color .2s}
+.panel:hover{border-color:#3b6b7a}
+.metric{animation:phone-scale-in .35s cubic-bezier(.2,.9,.3,1);transition:transform .15s,border-color .15s}
+.metric:hover{transform:translateY(-2px);border-color:var(--mint)}
+button{transition:background .18s,border-color .18s,transform .08s cubic-bezier(.2,.8,.2,1)}
+button:active{transform:scale(.95)}
+.peer-card{animation:phone-slide-up .3s cubic-bezier(.16,1,.3,1);transition:transform .18s,border-color .18s}
+.peer-card:hover{transform:translateY(-2px)}
+
+.nfc-touchpoint{width:92px;height:92px;border-radius:50%;background:radial-gradient(circle,#1a444d 0%,#0d2229 100%);border:2px solid var(--mint);margin:16px auto;display:flex;align-items:center;justify-content:center;font-size:38px;cursor:pointer;position:relative;animation:nfc-pulse 2.2s infinite ease-in-out;transition:transform .15s}
+.nfc-touchpoint:active{transform:scale(.9)}
+.nfc-wave{position:absolute;border-radius:50%;border:2px solid rgba(145,234,213,.6);pointer-events:none;animation:nfc-ring-wave 2s infinite cubic-bezier(.1,.8,.2,1)}
+.nfc-wave:nth-child(2){animation-delay:.6s}
+.nfc-wave:nth-child(3){animation-delay:1.2s}
+
 

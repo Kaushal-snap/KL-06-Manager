@@ -19,10 +19,14 @@ internal static class ControlPolicy {
     internal static double Volume(JsonElement p) {
         if(!Exact(p,"value")||p.GetProperty("value").ValueKind!=JsonValueKind.Number||!p.GetProperty("value").TryGetDouble(out var n)||!double.IsFinite(n)||n<0||n>100)throw new InvalidOperationException("Invalid volume.");return n;
     }
+    internal static double Brightness(JsonElement p) {
+        if(!Exact(p,"value")||p.GetProperty("value").ValueKind!=JsonValueKind.Number||!p.GetProperty("value").TryGetDouble(out var n)||!double.IsFinite(n)||n<1||n>100)throw new InvalidOperationException("Invalid brightness.");return n;
+    }
     internal static string Tweak(JsonElement p) {if(!Exact(p,"id")||p.GetProperty("id").ValueKind!=JsonValueKind.String)throw new InvalidOperationException("Invalid preference.");var id=p.GetProperty("id").GetString()!;PreferenceSpec.Find(id);return id;}
-    internal static bool Allowed(string method,JsonElement p) {try{switch(method){case "setVolume":Volume(p);return true;case "applyTweak":case "restoreTweak":Tweak(p);return true;case "restoreAll":case "keepAwake":return Exact(p);default:return false;}}catch{return false;}}
+    internal static bool Allowed(string method,JsonElement p) {try{switch(method){case "setVolume":Volume(p);return true;case "setBrightness":Brightness(p);return true;case "applyTweak":case "restoreTweak":Tweak(p);return true;case "restoreAll":case "keepAwake":return Exact(p);default:return false;}}catch{return false;}}
     internal static string Describe(string method, JsonElement p) => method switch {
         "setVolume" => $"Set default output volume to {Volume(p):0.##}% (immediate; no desktop volume journal)",
+        "setBrightness" => $"Set laptop display brightness to {Brightness(p):0.##}%",
         "applyTweak" => $"Apply {PreferenceSpec.Find(Tweak(p)).Title} [{Tweak(p)}]",
         "restoreTweak" => $"Restore the exact saved original for {PreferenceSpec.Find(Tweak(p)).Title} [{Tweak(p)}] if still owned",
         "restoreAll" => "Restore all three eligible saved preferences; skip newer external choices",

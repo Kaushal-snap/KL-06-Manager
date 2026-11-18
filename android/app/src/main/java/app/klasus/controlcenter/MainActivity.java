@@ -3,6 +3,7 @@ import android.app.*;
 import android.content.*;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.nfc.*;
 import android.os.*;
 import android.provider.Settings;
 import android.view.*;
@@ -24,10 +25,12 @@ public final class MainActivity extends Activity {
     private WebView web; private AudioManager audio; private final Handler main=new Handler(Looper.getMainLooper());private volatile boolean destroyed=false;private final ExecutorService io=new ThreadPoolExecutor(1,1,0L,TimeUnit.MILLISECONDS,new ArrayBlockingQueue<Runnable>(4),new ThreadPoolExecutor.AbortPolicy());private final PinnedLaptop laptop=new PinnedLaptop();
     private Integer originalVolume,appliedVolume;private Float originalBrightness,appliedBrightness;private boolean awake=false;private String pickerID;
     private android.net.wifi.WifiManager.MulticastLock multicastLock;
+    private NfcAdapter nfcAdapter;
     private final Runnable stopAwake=()->{awake=false;getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);};
     @Override public void onCreate(Bundle saved){super.onCreate(saved);audio=(AudioManager)getSystemService(AUDIO_SERVICE);web=new WebView(this);setContentView(web);
+        try{nfcAdapter=NfcAdapter.getDefaultAdapter(this);}catch(Exception ignored){}
         try{android.net.wifi.WifiManager wm=(android.net.wifi.WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);if(wm!=null){multicastLock=wm.createMulticastLock("KL06_LAN_LOCK");multicastLock.setReferenceCounted(true);multicastLock.acquire();}}catch(Exception ignored){}
-        writeLog("INIT","KL-06 Android Activity created. Multicast lock acquired.");
+        writeLog("INIT","KL-06 Android Activity created. Multicast lock acquired. NFC "+(nfcAdapter!=null?"present":"absent")+".");
         if(!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)){TextView message=new TextView(this);message.setText("This Android System WebView does not support the restricted native bridge. Use your OS update settings; KL-06 installed nothing.");setContentView(message);return;}
         WebSettings s=web.getSettings();s.setJavaScriptEnabled(true);s.setDomStorageEnabled(false);s.setAllowFileAccess(false);s.setAllowContentAccess(false);s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);s.setMediaPlaybackRequiresUserGesture(true);
         WebViewAssetLoader assets=new WebViewAssetLoader.Builder().addPathHandler("/assets/",new WebViewAssetLoader.AssetsPathHandler(this)).build();
@@ -51,6 +54,38 @@ public final class MainActivity extends Activity {
     private void handle(String id,String method,JSONObject p){try{
         switch(method){
         case "state":if(p.length()!=0)throw new IllegalArgumentException();reply(id,snapshot(),null);return;
+        case "nfcStatus":{
+            boolean sup=nfcAdapter!=null;
+            boolean en=sup&&nfcAdapter.isEnabled();
+            reply(id,new JSONObject().put("supported",sup).put("enabled",en),null);
+            return;
+        }
+        case "startNfcBeam":{
+            if(nfcAdapter!=null&&nfcAdapter.isEnabled()){
+                JSONObject payload=p.optJSONObject("payload");
+                if(payload==null)payload=new JSONObject();
+                payload.put("type","kl06-pair");
+                payload.put("ts",Instant.now().toString());
+                byte[] bytes=payload.toString().getBytes(StandardCharsets.UTF_8);
+                NdefRecord record=NdefRecord.createMime("application/vnd.app.klasus.controlcenter.pair",bytes);
+                nfcAdapter.setNdefPushMessage(new NdefMessage(new NdefRecord[]{record}),this);
+                writeLog("NFC","NFC Beam configured. Ready to tap phones together to pair.");
+                reply(id,new JSONObject().put("status","beaming").put("message","NFC Beam active! Hold devices back-to-back to pair."),null);
+            }else{
+                reply(id,null,"NFC not supported or disabled on this device.");
+            }
+            return;
+        }
+        case "startNfcScan":{
+            if(nfcAdapter!=null&&nfcAdapter.isEnabled()){
+                setupNfcForegroundDispatch();
+                writeLog("NFC","NFC foreground scanning active.");
+                reply(id,new JSONObject().put("status","scanning").put("message","NFC Scanner active. Tap near another NFC device or tag."),null);
+            }else{
+                reply(id,null,"NFC unavailable or disabled.");
+            }
+            return;
+        }
         case "setVolume":{double v=number(p);confirm(id,"Set this phone’s media volume to "+v+"%?",()->{if(audio==null||audio.isVolumeFixed())throw new IllegalStateException();if(originalVolume==null)originalVolume=audio.getStreamVolume(AudioManager.STREAM_MUSIC);int target=(int)Math.round(v*audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC)/100);audio.setStreamVolume(AudioManager.STREAM_MUSIC,target,0);appliedVolume=target;if(audio.getStreamVolume(AudioManager.STREAM_MUSIC)!=target)throw new IllegalStateException();});return;}
         case "setBrightness":{float v=(float)Math.max(.01,number(p)/100);confirm(id,"Set temporary app brightness to "+(v*100)+"%?",()->{WindowManager.LayoutParams a=getWindow().getAttributes();if(originalBrightness==null)originalBrightness=a.screenBrightness;a.screenBrightness=v;getWindow().setAttributes(a);appliedBrightness=v;if(!Float.isFinite(getWindow().getAttributes().screenBrightness)||Math.abs(getWindow().getAttributes().screenBrightness-v)>.005f)throw new IllegalStateException();});return;}
         case "keepAwake":if(p.length()!=0)throw new IllegalArgumentException();confirm(id,"Toggle app-screen keep-awake, maximum 15 minutes?",()->{main.removeCallbacks(stopAwake);if(awake)stopAwake.run();else{awake=true;getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);if((getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)==0){awake=false;throw new IllegalStateException();}main.postDelayed(stopAwake,900000);}});return;
@@ -66,7 +101,7 @@ public final class MainActivity extends Activity {
                 .put("upToDate",true)
                 .put("channel","beta")
                 .put("releaseNotes","Real-time LAN peer discovery, public Download/KL-06 log auto-save, Google Drive share sheet, and hardware linking across macOS, Windows, iOS, and Android.")
-                .put("downloadUrl","https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download");
+                .put("downloadUrl","https://drive.google.com/uc?id=1tTCNq1YmEEMG3ZNUgUzt1nFztJoUTYm8&export=download");
             reply(id,res,null);
             return;
         }
@@ -236,6 +271,35 @@ public final class MainActivity extends Activity {
             }
         }catch(Exception ignored){}
     }
+    private void setupNfcForegroundDispatch(){
+        if(nfcAdapter!=null&&nfcAdapter.isEnabled()){
+            try{
+                Intent intent=new Intent(this,getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pi=PendingIntent.getActivity(this,0,intent,Build.VERSION.SDK_INT>=Build.VERSION_CODES.S?PendingIntent.FLAG_MUTABLE:0);
+                IntentFilter[] filters=new IntentFilter[]{new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED),new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)};
+                nfcAdapter.enableForegroundDispatch(this,pi,filters,null);
+            }catch(Exception ignored){}
+        }
+    }
+    @Override protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        if(intent!=null&&(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())||NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction()))){
+            Parcelable[] raw=intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if(raw!=null&&raw.length>0){
+                NdefMessage msg=(NdefMessage)raw[0];
+                if(msg.getRecords().length>0){
+                    byte[] bytes=msg.getRecords()[0].getPayload();
+                    String content=new String(bytes,StandardCharsets.UTF_8);
+                    writeLog("NFC","NFC payload detected via hardware beam: "+content);
+                    main.post(()->{
+                        if(web!=null){
+                            web.evaluateJavascript("if(window.KLNfcHandler)window.KLNfcHandler("+JSONObject.quote(content)+");",null);
+                        }
+                    });
+                }
+            }
+        }
+    }
     private void checkAndRequestConnectivityPermissions(){
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
             List<String> needed=new ArrayList<>();
@@ -266,7 +330,7 @@ public final class MainActivity extends Activity {
     }
     private void restore(){main.removeCallbacks(stopAwake);stopAwake.run();if(originalBrightness!=null){WindowManager.LayoutParams a=getWindow().getAttributes();if(appliedBrightness!=null&&Math.abs(a.screenBrightness-appliedBrightness)<.005f){a.screenBrightness=originalBrightness;getWindow().setAttributes(a);}originalBrightness=null;appliedBrightness=null;}if(originalVolume!=null&&appliedVolume!=null&&audio!=null){if(audio.getStreamVolume(AudioManager.STREAM_MUSIC)==appliedVolume)audio.setStreamVolume(AudioManager.STREAM_MUSIC,originalVolume,0);originalVolume=null;appliedVolume=null;}}
     @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);if(request!=37)return;String id=pickerID;pickerID=null;if(id==null)return;if(result!=RESULT_OK||data==null||data.getData()==null){reply(id,null,"Import cancelled.");return;}Uri uri=data.getData();if(!"content".equals(uri.getScheme())){reply(id,null,"Choose a regular document-provider CSV.");return;}try{io.execute(()->{try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException();ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[8192];for(int n;(n=in.read(b))!=-1;){if(out.size()+n>5*1024*1024)throw new IOException();out.write(b,0,n);}byte[] raw=out.toByteArray();String text;try{text=StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(raw)).toString();}catch(CharacterCodingException e){text=Charset.forName("windows-1252").decode(ByteBuffer.wrap(raw)).toString();}if(text.indexOf(0)>=0)throw new IOException();reply(id,new JSONObject().put("csvText",text),null);}catch(Exception e){reply(id,null,"CSV unavailable, over 5 MiB or unsupported encoding. No input path was exported.");}});}catch(RejectedExecutionException e){reply(id,null,"Local document/LAN worker is busy. No import or automatic retry was made.");}}
-    @Override protected void onPause(){try{restore();}catch(Exception ignored){}if(web!=null)web.onPause();super.onPause();}
-    @Override protected void onResume(){super.onResume();if(web!=null)web.onResume();}
+    @Override protected void onPause(){try{restore();}catch(Exception ignored){}if(nfcAdapter!=null){try{nfcAdapter.disableForegroundDispatch(this);}catch(Exception ignored){}}if(web!=null)web.onPause();super.onPause();}
+    @Override protected void onResume(){super.onResume();setupNfcForegroundDispatch();if(web!=null)web.onResume();}
     @Override protected void onDestroy(){try{restore();}catch(Exception ignored){}try{if(multicastLock!=null&&multicastLock.isHeld())multicastLock.release();}catch(Exception ignored){}destroyed=true;laptop.invalidate();io.shutdownNow();if(web!=null){web.destroy();web=null;}super.onDestroy();}
 }
