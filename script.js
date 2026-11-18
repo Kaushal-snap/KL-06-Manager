@@ -9,8 +9,8 @@ const PLATFORM_DATA = {
         name: 'Android Package (Dual v1 + v2 Signed)',
         fileName: 'KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip',
         fileMeta: 'v0.4.0-beta.1 Build 6 • 1.02 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download',
-        viewUrl: 'https://drive.google.com/file/d/13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b/view?usp=sharing',
+        directUrl: 'https://drive.google.com/uc?id=1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd/view?usp=sharing',
         sha256: 'fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7',
         btnText: '⬇️ Download for Android (1.02 MB)'
     },
