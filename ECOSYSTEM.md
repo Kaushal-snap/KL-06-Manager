@@ -105,7 +105,7 @@ The OTA engine queries signed update metadata (`KL06_SIGNED_UPDATE_CATALOG_V1`) 
       "targetOS": "34",
       "supportedOS": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
       "downloadUrl": "https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download",
-      "sha256": "85ddfd48850921035c25d21d9f84a8a271ce644ace591dfc0e314e652a31803e",
+      "sha256": "fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7",
       "sizeBytes": 1069760,
       "installerType": "package-installer-intent"
     },

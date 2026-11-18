@@ -26,10 +26,10 @@
       "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
     },
     {
-      "bytes": 17638,
+      "bytes": 19055,
       "executable": false,
       "path": "CHANGELOG.md",
-      "sha256": "b42a507da4f166c1be5ab17c05b52980efbb52ebfee9cb3708bca228815b1f8f"
+      "sha256": "fd9ebc0a517b079f171c6341c52746a4f79d926974d976092a0168a95ee77c44"
     },
     {
       "bytes": 6066,
@@ -41,7 +41,7 @@
       "bytes": 10402,
       "executable": false,
       "path": "ECOSYSTEM.md",
-      "sha256": "e73fcc769c1335f5255ce8138e1a0948fc5215462d307290dae91a3b6b7b3817"
+      "sha256": "5a08bf9ec7f9235bc3b6f178b220fd63268832ae641b436385ad1aaad5bca93f"
     },
     {
       "bytes": 6156,
@@ -59,7 +59,7 @@
       "bytes": 20135,
       "executable": false,
       "path": "README.md",
-      "sha256": "b8d9352756549daa82bbc67d4fe8bf6d0f04f671c1e7ffe2fab23bcb9d39dbb6"
+      "sha256": "2351fcff9b580c5c6137e19cbeb0767669b1e86b520a26ae111f3c7658040abb"
     },
     {
       "bytes": 1599,
@@ -200,10 +200,10 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 19623,
+      "bytes": 23834,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "2a0279d286ee5f49c94d4f03495a34cddf4ad1dd19188bec54260127d674c7fc"
+      "sha256": "059e5269fca409749e00daa72a5a13ae2bccc1161423685a7c7590e3cd7b03af"
     },
     {
       "bytes": 4085,
@@ -257,7 +257,7 @@
       "bytes": 55512,
       "executable": false,
       "path": "index.html",
-      "sha256": "abaa8ca96f37d91b269aef0afc431b7ddd6570eee3ab0b424d70594f3162c6aa"
+      "sha256": "74cafe60f06dfbca6c0309daffdedb6454c6dca5ca68c5435fff3bcac444b750"
     },
     {
       "bytes": 5659,
@@ -659,7 +659,7 @@
       "bytes": 18101,
       "executable": false,
       "path": "script.js",
-      "sha256": "e9b18809fcd79ef97ee6aa5f2b3097e14105b6408048079736fc223cb4f84ded"
+      "sha256": "041e28a7a767fde53ce402c85ae58d8cc27381967034fb2f873c1563e10eda75"
     },
     {
       "bytes": 34421,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 3836,
+      "bytes": 3928,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "3e04afcb2d547ba262c86020fc0f8898b3083a555f012305b3f12cf94883b17f"
+      "sha256": "9fa651d55ad00a47705ca514937d3e57a6e940300db1cebf737e7d92cdb8d13d"
     },
     {
       "bytes": 1614,

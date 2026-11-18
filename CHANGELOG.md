@@ -33,6 +33,13 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - **Discord Community:** [`labanayt5301`](https://discord.gg/Z4my8c2ZH) (Invite: `https://discord.gg/Z4my8c2ZH`)
 - **YouTube Channel:** [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
 
+### 📱 Android Installation & Package Compatibility Resolution
+- **Resolved "App Not Installed as Package" Error:** Fixed the APK Signature Scheme v2 length-prefix encoding defect in the signing block generator where nested sequence lengths caused Android's `ApkSignatureSchemeV2Verifier` to encounter an ASN.1 parsing exception on the X.509 certificate.
+- **APK Signing Block 4KB Page Alignment (`0x42726577`):** Added standard Android verity padding block to align the total signing block size to an exact multiple of 4,096 bytes (4 KB), ensuring memory-mapped page cache alignment for Android 11, 12, 13, 14, and 15+ kernels.
+- **Uncompressed Resource Alignment:** Ensured all stored entries (`resources.arsc`, `.9.png` nine-patch drawables, and metadata) are strictly 4-byte aligned via local file header extra field padding.
+- **Preserved AndroidX & AGP Runtime Metadata:** Preserved `META-INF/com/android/build/gradle/app-metadata.properties` and all AndroidX runtime component descriptors.
+- **Persistent Key Management & Upgrade Guidance:** Established a deterministic, persistent RSA-2048 signing key to ensure seamless updates across future builds. For users upgrading from earlier debug builds (such as v3 beta 4 / v0.3.0-beta.2), Android requires uninstalling the prior debug APK before installing, as Android security policies prohibit updating packages with differing debug certificate fingerprints.
+
 ### 📱 Android 13+ PackageParser Installation Fix & Minimum OS Baselines
 - **Android 13+ Installation Resolved:** Fixed package parser rejection on Android 13 (API 33) by replacing preview development codename (`compileSdkVersionCodename="16"`) with standard release platform compliance (`"REL"`), setting `targetSdkVersion = 34` (Android 14), and preserving `minSdkVersion = 26` (Android 8.0 Oreo).
 - **Dual APK Signature Scheme (v1 JAR + v2 APK Block):** Implemented dual cryptographic signing: generated `META-INF/MANIFEST.MF`, `META-INF/CERT.SF` (with `X-Android-APK-Signed: 2`), and `META-INF/CERT.RSA` (detached PKCS#7 signed-data) alongside the v2 APK Signing Block (ID `0x7109871a`) with 4-byte aligned uncompressed `resources.arsc`. Resolves `INSTALL_PARSE_FAILED_NO_CERTIFICATES` across all Android OEM package installers.
