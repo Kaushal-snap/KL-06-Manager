@@ -33,7 +33,8 @@ KL-06 supports authenticated peer-to-peer communication across macOS, Windows, A
 | **macOS ⟷ iOS** | Two-way | Direct LAN | Security-scoped document container + URLSession | Public document picker. Foreground lifecycle enforced. |
 | **Windows ⟷ Android** | Two-way | Direct LAN | Windows filesystem ⟷ Android SAF content stream | Standard user privileges. No elevated ACL modification. |
 | **Windows ⟷ iOS** | Two-way | Direct LAN | Windows filesystem ⟷ iOS Security-scoped container | User selects save destination on both endpoints. |
-| **Android ⟷ iOS** | Two-way | Desktop-Hub Relay | Authenticated desktop forwarder via local paired PC/Mac | **Disclosed Relay**: Explicitly routes through desktop hub; end-to-end verified via SHA-256. |
+| **Android ⟷ iOS** | Two-way | Direct LAN & Hotspot (AirDrop / Quick Share / Xender) | Authenticated TLS 1.2+ streaming socket & desktop forwarder | Direct Wi-Fi, Personal Hotspot (e.g. 172.20.10.x / 192.168.43.x), or desktop hub; end-to-end verified via SHA-256. |
+| **Over-the-Internet / Remote** | Two-way | Encrypted Private Mesh / VPN | WireGuard, Tailscale (10.x, 100.64.0.0/10), or Port-forwarded TLS | Pinned TLS certificate SHA-256 + 32-char pair code. Zero unauthenticated cloud relays. |
 
 <br/>
 
@@ -88,27 +89,41 @@ The OTA engine queries signed update metadata (`KL06_SIGNED_UPDATE_CATALOG_V1`) 
   "signature": "...",
   "packages": {
     "macos": {
-      "version": "0.3.0",
-      "build": 5,
+      "version": "0.4.0-beta.1",
+      "build": 6,
       "minOS": "13.0",
-      "downloadUrl": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.3.0-beta.2/KL-06.zip",
-      "sha256": "acf8991e078e676509ddcfdc3ddc1ec5503e6802a2749078eef82f19925bec8e",
-      "sizeBytes": 145733,
+      "supportedOS": "macOS 13, 14, 15+",
+      "downloadUrl": "https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download",
+      "sha256": "88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941",
+      "sizeBytes": 199675,
       "installerType": "verified-manual-archive"
     },
     "android": {
-      "version": "0.3.0",
-      "build": 5,
+      "version": "0.4.0-beta.1",
+      "build": 6,
       "minOS": "26",
-      "downloadUrl": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.3.0-beta.2/KL-06-Manager.apk",
-      "sha256": "c5efb20ba7bd802eeb8a7b9eb94f7dbd0d407fdaa3ad72819291c3b9d96f192b",
-      "sizeBytes": 1223723,
+      "targetOS": "34",
+      "supportedOS": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
+      "downloadUrl": "https://drive.google.com/uc?id=13ex_K-TosA7WOWNfErkIYQEEQkI_kM0b&export=download",
+      "sha256": "85ddfd48850921035c25d21d9f84a8a271ce644ace591dfc0e314e652a31803e",
+      "sizeBytes": 1069760,
       "installerType": "package-installer-intent"
     },
+    "windows": {
+      "version": "0.4.0-beta.1",
+      "build": 6,
+      "minOS": "6.1",
+      "supportedOS": "Windows 7 SP1, 8, 8.1, 10, 11",
+      "downloadUrl": "https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download",
+      "sha256": "9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f",
+      "sizeBytes": 565574,
+      "installerType": "verified-manual-archive"
+    },
     "ios": {
-      "version": "0.3.0",
-      "build": 5,
+      "version": "0.4.0-beta.1",
+      "build": 6,
       "minOS": "16.0",
+      "supportedOS": "iOS 16, 17, 18+",
       "downloadUrl": "https://testflight.apple.com/join/kl06-beta",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
       "sizeBytes": 0,
@@ -116,6 +131,17 @@ The OTA engine queries signed update metadata (`KL06_SIGNED_UPDATE_CATALOG_V1`) 
     }
   }
 }
+```
+
+### 📶 Progressive Feature Matrix by OS Generation
+KL-06 Manager dynamically adapts its capability pipeline as the host OS version increases, guaranteeing seamless backward compatibility down to the baseline minimum while unlocking next-generation features on modern hardware:
+
+| Platform | Minimum Baseline | Unlocked Features by Generation |
+| :--- | :--- | :--- |
+| **Android** | **Android 8.0 Oreo (API 26)** | • **Android 8 & 9:** Base LAN peer relay, volume/brightness bridge, hardware telemetry.<br/>• **Android 10 & 11:** Auto dark mode (`prefers-color-scheme`), Wi-Fi LocalOnlyHotspot discovery, Scoped Storage.<br/>• **Android 12 & 12L:** Dynamic Color (Material You) styling, Bluetooth LE peer radar sweep.<br/>• **Android 13:** Auto-Pair incoming prompt dialog, granular media permissions, 6-digit mutual PIN confirmation, notification progress.<br/>• **Android 14 & 15:** Predictive back navigation, foreground `dataSync` transfer service, multi-gigabit chunked LAN streaming.<br/>• **Android 16, 17+:** 16KB memory page size optimization, Wi-Fi 7 multi-link mesh transfer. |
+| **iOS** | **iOS 16.0** | • **iOS 16:** WKWebView isolated local bridge, pinned TLS authentication, Lock Screen widgets.<br/>• **iOS 17 & 18+:** Dynamic Island transfer progress, StandBy mode companion dashboard, AirDrop mesh handoff. |
+| **macOS** | **macOS 13.0 Ventura** | • **macOS 13:** Stage Manager window management, native Menu Bar item, OLED brightness scalar, F13 hotkey.<br/>• **macOS 14 & 15+:** Desktop Interactive Widgets, Sonoma Game Mode governor, Sequoia Window Tiling integration. |
+| **Windows** | **Windows 7 SP1** | • **Windows 7, 8, 8.1:** Aero / Classic desktop companion, .NET Desktop Runtime host, LAN peer discovery.<br/>• **Windows 10 & 11:** Edge WebView2 integration, Per-Monitor v2 high-DPI scaling, Mica / Acrylic glass material, Action Center notifications. |
 ```
 
 ### 🛑 Platform Installation Rules

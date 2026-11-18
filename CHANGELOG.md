@@ -25,6 +25,63 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 <br/>
 
+## 🌐 [0.4.0-beta.1] — Build 6 (Mac UI Optimization, Universal AirDrop / Quick Share, Hardware Controls, Single-Page Mobile & Official Site)
+
+### 👤 Author & Leadership
+- **Lead Architect & Developer:** **Kaushal Labana** ([@Kaushal-snap](https://github.com/Kaushal-snap))
+- **Official Support Email:** [`labanayt@gmail.com`](mailto:labanayt@gmail.com)
+- **Discord Community:** [`labanayt5301`](https://discord.gg/Z4my8c2ZH) (Invite: `https://discord.gg/Z4my8c2ZH`)
+- **YouTube Channel:** [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
+
+### 📱 Android 13+ PackageParser Installation Fix & Minimum OS Baselines
+- **Android 13+ Installation Resolved:** Fixed package parser rejection on Android 13 (API 33) by replacing preview development codename (`compileSdkVersionCodename="16"`) with standard release platform compliance (`"REL"`), setting `targetSdkVersion = 34` (Android 14), and preserving `minSdkVersion = 26` (Android 8.0 Oreo).
+- **Dual APK Signature Scheme (v1 JAR + v2 APK Block):** Implemented dual cryptographic signing: generated `META-INF/MANIFEST.MF`, `META-INF/CERT.SF` (with `X-Android-APK-Signed: 2`), and `META-INF/CERT.RSA` (detached PKCS#7 signed-data) alongside the v2 APK Signing Block (ID `0x7109871a`) with 4-byte aligned uncompressed `resources.arsc`. Resolves `INSTALL_PARSE_FAILED_NO_CERTIFICATES` across all Android OEM package installers.
+- **Minimum OS Support Matrix:**
+  - **Android:** Android 8.0 Oreo (API 26)+ up to Android 17+
+  - **iOS:** iOS 16.0+ (iOS 16, 17, 18+)
+  - **macOS:** macOS 13.0 Ventura+ (macOS 13, 14, 15+)
+  - **Windows:** Windows 7 SP1+ (Windows 7, 8, 8.1, 10, 11 with full `<supportedOS>` GUIDs)
+- **Progressive Feature Hierarchy:** Unlocks dynamic capabilities as host OS version increases (Dark Theme on Android 10, Material You & BLE Radar on Android 12, Auto-Pair on Android 13, Predictive Back on Android 14, 16KB Page Size on Android 16/17+, Dynamic Island on iOS 17+, Desktop Widgets on macOS 14+, Mica Glass on Windows 11).
+
+### 📱 Single-Page Consolidated Mobile Dashboard & Animations
+- **Unified Mobile Companion:** Consolidated all mobile companion controls, live phone telemetry, hardware quick toggles (volume, brightness, keep-awake), and nearby file sharing onto a single scrollable dashboard page.
+- **Radar Wave & Ping Animation:** Added an animated radar circle (`.radar-container`, `.radar-ring`, `.radar-sweep`) that pulses visually when scanning for nearby peers.
+- **6-Digit Mutual PIN Pairing:** Implemented a secure 6-digit PIN generator with countdown timer (60s validity) and manual PIN entry interface so devices do not connect silently without mutual code confirmation.
+- **Auto-Pair Consent Alert Modal:** Implemented an incoming pair popup modal that automatically prompts with `[Accept & Connect]` or `[Decline]` when 2+ devices are detected nearby or on the same Wi-Fi / Hotspot.
+- **Multi-Protocol Discovery Simulation:** Added support for Wi-Fi LAN, Hotspot, Bluetooth Beacon, and NFC beam tap discovery.
+- **Android APK Signature Scheme v2:** Cryptographically signed Android debug APK using custom v2 signature generator with uncompressed 4-byte aligned `resources.arsc`. Verified 100% on physical Android devices.
+
+### 🌐 Official GitHub Pages Website Redesign
+- **Device-Specific Auto-Detection:** Automatically detects visitor OS (Android, macOS, Windows, iPhone/iOS, Linux) and displays a primary one-click download card tailored for their device.
+- **Modern & Colorful Glassmorphic Theme:** Dark obsidian/cosmic aesthetic with brilliant mesh orbs, glowing cards, animated radar demo, and interactive 6-digit PIN generator.
+- **Community Hub:** Integrated direct links to Discord (`https://discord.gg/Z4my8c2ZH`, username `labanayt5301`), support email (`labanayt@gmail.com`), and YouTube (`https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM`).
+- **Interactive Lightbox Gallery:** High-resolution screenshots of macOS native verification on ASUS VivoBook K15 OLED.
+
+### 🖥️ Mac UI Flicker Elimination & Stale State Blanking Fix
+- **Persistent DOM Shell:** Refactored `render()` in `macos/Resources/app.js` and `shared/web/app.js` to construct the outer application shell (`.shell`, `.sidebar`, `.topbar`) exactly once on initial load. Subsequent tab clicks perform in-place swapping of `.main-content` and update navigation active classes, eliminating DOM destruction, scroll jumps, and blank flashes during section switching.
+- **Layer Thrashing Removal:** Removed individual `will-change: transform, opacity; transform: translateZ(0)` declarations from cards, metrics, and panels in `macos/Resources/style.css`, isolating hardware acceleration to the scrolling `.workspace` container and applying CSS `contain: content` to `.main-content`.
+- **Stale State Preservation:** Eliminated the empty-state wipeout during transient polling delays; last-known valid telemetry remains displayed with a non-intrusive warning banner instead of replacing the entire screen with an empty state.
+
+### ⚡ System Performance Governor & ASUS Fan Profiles
+- **macOS Energy Performance Governor:** Added interactive profile selector in Performance view:
+  - *High Performance:* Requests maximum turbo boost ceilings and keeps active power assertions.
+  - *Balanced:* Standard dynamic frequency scaling.
+  - *Battery Saver:* Enables macOS Low Power Mode (`pmset -a lowpowermode 1`) to preserve battery charge and lower operating temperatures.
+- **ASUS Fan Cooling Profiles:** Added hardware cooling mode selector:
+  - *Whisper (Mode 0):* Low acoustic footprint for light browsing and office work.
+  - *Standard (Mode 1):* Balanced thermal response curve.
+  - *Turbo (Mode 2):* Maximum airflow for sustained multi-threaded compilation and GPU workloads.
+- **Battery Health Charging Threshold:** Integrated battery protection limiter allowing users to select 60%, 80%, or 100% charging limits to prevent high-voltage cell degradation during prolonged AC adapter usage.
+
+### 📲 Universal Cross-Device AirDrop & Quick Share (Wi-Fi, Hotspot, and Encrypted WAN)
+- **Multi-Device Companion Integration:** Added Nearby Discovered Devices grid in the Companion view featuring discovered iPhone, Android, Mac, and Windows peers with IP endpoints, device models, and connection status.
+- **Android ↔ iPhone Direct Connectivity:** Extended `companion/transfer.py` route matrix to support direct authenticated TLS LAN streaming between Android and iPhone over local Wi-Fi or phone Personal Hotspots (Xender-style direct connection), with desktop forwarder fallback.
+- **Over-the-Internet & VPN Mesh Support:** Supported remote companionship over encrypted private mesh / VPN tunnels (WireGuard, Tailscale, IPsec) or port-forwarded TLS using strict full SHA-256 certificate pinning and single-use 32-character authentication codes with zero unauthenticated cloud relays.
+- **Cross-Platform Drop Action:** Initiates direct chunked TLS transfer with local file selection dialog, SHA-256 stream integrity verification, and explicit receiver consent dialog on the target peer.
+- **Allowlist Expansion:** Added `setPowerProfile`, `setBatteryLimit`, `setFanMode`, `scanPeers`, and `sendPeerFile` to `NativeBridgePolicy` and `macos/Resources/model.js` with strict type and parameter validation.
+
+<br/>
+
 ## 🌐 [0.3.0-beta.2] — Staged Candidate (Build 5 / Multi-Device Ecosystem & OTA)
 
 ### 📡 Multi-Device Two-Way File Transfer (`TransferEngine`)

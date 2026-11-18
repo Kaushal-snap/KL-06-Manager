@@ -1,0 +1,13 @@
+# Publication boundary — exact owner-tested private beta only
+
+The latest owner request permits **automatic transfer of the exact owner-tested/approved app ZIP in private Drive/App to GitHub beta Releases**, not arbitrary auto-releases. The implementation and full one-time setup are in **`../docs/RELEASE-AUTOMATION.md`**. This supersedes the earlier Mac-only "no automatic release" instruction **only** for this signed, checksum-bound beta gate.
+
+Use a **NEW PRIVATE `KL-06-Manager`, default branch `main`**. Import the whole reviewed app-only parent source (Mac, Windows, Android, iOS, shared, companion, automation, tests/docs/configs). Do not import EFI/project history/private handoffs/raw reports/SDKs/build outputs/restore journals/credentials. Never reset/force-push/delete an unrelated selected repository or overwrite a newer version.
+
+No authenticated GitHub repository, push, Actions run, release, WIF principal or owner signing trust was configured here. Workflow stays disabled until owner setup. Public read access and Arena's private Drive authorization are not GitHub Actions credentials. No password/PAT/private signing key in chat/source/Drive.
+
+After successful native builds and **physical-device testing of the exact packaged app ZIP**, use `../automation/approve_release.py` to bind test results/source commit/recent expiry/repository/size/SHA-256 and sign with the owner's offline Ed25519 key. Raw results/private key remain local; only the exact app ZIP + signed approval/signature go directly in the dedicated private intake App folder. Source-only/unreviewed/UNTESTED ZIPs, false templates and old generic “works” feedback cannot approve this candidate. Never rebuild/replace an approved archive behind its checksum.
+
+The inactive transfer refuses public/wrong-name/fork/non-main repositories, verifies signature/expiry/actual archive/Drive metadata and exact GitHub asset digests, creates a draft first and publishes only a verified **private prerelease**. No stable/public release, auto-merge, force replacement/deletion or artifact execution. Dry-run first with real owner-managed service configuration. A failed/partial draft needs deliberate owner review; it is not silently repaired.
+
+Optional `../.github/workflows/native-checks.yml` is separate: manual, disabled unless owner-enabled, compile-only, read-only repository token, no release/artifact/log upload. It has not run. Apple SDK compile/ad-hoc signature, native UI/F13/SMC/restore checks and macOS 26 testing remain pending; 27+ blocked. Do not invent a download URL, notarization or hardware compatibility result.

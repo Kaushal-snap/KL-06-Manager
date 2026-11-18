@@ -1,0 +1,30 @@
+{
+  "authoritative_status": "../BUILD-STATUS.json",
+  "base_project_revision": "95b2e9ea439d77a76f5982262c9400549c291378",
+  "build_number": 5,
+  "bundle_identifier": "app.klasus.controlcenter",
+  "bundle_version": "0.3.0",
+  "candidate_revision": "isolated-uncommitted-whole-root-source-export",
+  "companion": "implemented-opt-in-private-LAN-Python-native-integration-pending",
+  "compiled_app_included": false,
+  "hardware_fan_read_verified": false,
+  "manual_fan_control": false,
+  "native_compile_executed": false,
+  "native_signature_verified": false,
+  "os_policy": "x86_64/macOS13-26 APIs; 26 untested; 27+ blocked",
+  "owner_next_step": "Quit old app; preserve whole extracted parent folder; run macos/UPDATE-KL-06.command without sudo on Intel Mac with installed Xcode, then manually open the new app and follow ../docs/OWNER-TEST-CHECKLIST.md",
+  "privileged_helper_installed_or_included": false,
+  "publication": "exact-tested-private-beta-automation-implemented-but-unconfigured/inactive",
+  "release_approval": false,
+  "schema": "KL06_BUILD_READY_SOURCE_V1",
+  "tests": {
+    "browser_ui_and_mocked_bridge": "pass-13-pages-12-tweaks",
+    "c_synthetic_assertions": 68,
+    "c_undefined_behaviour_sanitizer": "pass",
+    "native_mac": "pending-not-run",
+    "node": 58,
+    "python_source_contracts": 12
+  },
+  "version_label": "0.3.0-beta.2",
+  "whole_root_required_for_sibling_companion": true
+}

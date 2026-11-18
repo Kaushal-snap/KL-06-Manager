@@ -1,0 +1,109 @@
+name: Manual native compile checks (not device approval)
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Compile selected source with the runner's installed developer tools
+        type: choice
+        options: [all, macos, windows, android, ios]
+        default: all
+permissions:
+  contents: read
+concurrency:
+  group: kl06-manual-native-checks
+  cancel-in-progress: false
+jobs:
+  gate:
+    if: vars.KL06_ENABLE_NATIVE_CHECKS == 'true' && github.ref == 'refs/heads/main' && github.event.repository.private == true && github.event.repository.name == 'KL-06-Manager' && github.event.repository.fork == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - run: echo 'Owner-enabled private-main compile checks only. No physical-device or release approval.'
+  portable:
+    needs: gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: /bin/bash TEST-PORTABLE.sh
+  macos:
+    needs: gate
+    if: inputs.platform == 'all' || inputs.platform == 'macos'
+    runs-on: macos-15-intel
+    timeout-minutes: 30
+    env:
+      KL06_REVEAL_BUILD: '0'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: /bin/bash macos/TEST-MAC.command
+      - run: /bin/bash macos/BUILD-MAC.command
+  windows:
+    needs: gate
+    if: inputs.platform == 'all' || inputs.platform == 'windows'
+    runs-on: windows-2025
+    timeout-minutes: 30
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Compile only; never launch the Windows app or call its native controls
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          dotnet --version
+          if ($LASTEXITCODE -ne 0) { throw 'The SDK selected by global.json must already be installed on the chosen runner.' }
+          dotnet restore windows/KL06.Windows/KL06.Windows.csproj --locked-mode -p:SelfContained=false
+          if ($LASTEXITCODE -ne 0) { throw 'Locked restore failed.' }
+          $output = Join-Path $env:RUNNER_TEMP ('KL06-Windows-' + [Guid]::NewGuid().ToString('N'))
+          dotnet publish windows/KL06.Windows/KL06.Windows.csproj -c Release -r win-x64 --self-contained false --no-restore -p:PublishSingleFile=false -o $output
+          if ($LASTEXITCODE -ne 0) { throw 'Windows compile failed.' }
+          dotnet run --project windows/Tests/PortableTests.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Fake-backend policy tests failed.' }
+  android:
+    needs: gate
+    if: inputs.platform == 'all' || inputs.platform == 'android'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify wrapper and use installed JDK/SDK; explicit pinned Gradle developer download if missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          export JAVA_HOME="${JAVA_HOME_17_X64:?Choose a trusted runner with JDK 17 already installed}"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          export ANDROID_HOME="${ANDROID_HOME:?Choose a trusted runner with Android SDK installed}"
+          test -f "$ANDROID_HOME/platforms/android-36/android.jar" || { echo 'SDK platform 36 missing; no SDK license was auto-accepted or SDK installed.'; exit 78; }
+          test -f "$ANDROID_HOME/build-tools/35.0.0/apksigner" || { echo 'Build Tools 35.0.0 missing; configure the runner through trusted tools.'; exit 78; }
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('android/gradle/wrapper/gradle-wrapper.jar')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f', 'Unexpected wrapper JAR; do not execute it.'
+          PY
+          cd android
+          /bin/bash ./gradlew --no-daemon --max-workers=2 :app:assembleDebug
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+  ios:
+    needs: gate
+    if: inputs.platform == 'all' || inputs.platform == 'ios'
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: /bin/bash ios/BUILD-IOS.command
+# OFF unless the owner sets KL06_ENABLE_NATIVE_CHECKS=true in the NEW PRIVATE app
+# repository. No push/PR/schedule trigger, signing key, Drive/OIDC access, release
+# write permission or artifact/log upload. Runner availability/installed SDKs must
+# be reviewed by the owner; missing tools fail, never trigger security bypasses.

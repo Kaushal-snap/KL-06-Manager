@@ -1,0 +1,12 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'app.klasus.controlcenter'
+    compileSdk 34
+    defaultConfig { applicationId 'app.klasus.controlcenter'; minSdk 26; targetSdk 34; versionCode 6; versionName '0.4.0-beta.1' }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets { main { assets.srcDirs = ['../../shared'] } }
+    buildTypes { release { minifyEnabled false } }
+}
+dependencies { implementation 'androidx.webkit:webkit:1.14.0' }
+
+dependencyLocking { lockAllConfigurations() }

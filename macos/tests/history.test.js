@@ -1,0 +1,27 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const H=require('../Resources/history.js');
+const head='Date,Time,CPU [RPM],CPU Package [°C],CPU Package [°C],Average Effective Clock [MHz],Wear Level [%],Private identity';
+const group='System,System,ASUS NB EC: synthetic,CPU DTS,CPU Enhanced,CPU, Battery,USER-PRIVATE';
+const input=[head,'1.1.2026,12:00:00.000,1000,40,42,200,10,SECRET-DO-NOT-IMPORT','1.1.2026,12:00:02.000,2000,50,52,600,10,SECRET-DO-NOT-IMPORT',head,group].join('\r\n');
+test('CSV repeated headers/source footer excluded from statistics',()=>{const r=H.parse(input);assert.equal(r.samples,2);assert.equal(r.series[0].min,1000);assert.equal(r.series[0].median,1500);assert.equal(r.series[0].max,2000);assert.match(r.mode,/not-live-mac/);});
+test('unknown columns, source names and identities not projected',()=>{const r=JSON.stringify(H.parse(input));assert.doesNotMatch(r,/USER-PRIVATE|SECRET-DO-NOT-IMPORT|synthetic/);});
+test('duplicate temperature names retain generic source class',()=>{const r=H.parse(input).series.filter(c=>c.unit==='°C');assert.equal(r.length,2);assert.notEqual(r[0].source,r[1].source);});
+test('quoted decimal comma supported without executing cells',()=>{const r=H.parse('Date,Time,CPU [RPM]\n1.1.2026,12:00:00.000,"1500,5"\n');assert.equal(r.series[0].median,1500.5);});
+test('invalid numbers not clamped into plausible values',()=>{const r=H.parse('Date,Time,CPU [RPM]\n1.1.2026,12:00:00.000,-20\n1.1.2026,12:00:02.000,1500');assert.equal(r.series[0].count,1);assert.equal(r.samples,2);});
+test('zero is retained only as a valid numeric historical value',()=>{const r=H.parse('Date,Time,CPU [RPM]\n1.1.2026,12:00:00,0');assert.equal(r.series[0].min,0);});
+test('formula/text cells never become numbers',()=>{assert.throws(()=>H.parse('Date,Time,CPU [RPM]\n1.1.2026,12:00:00,=1+2'),/No valid/);});
+test('unterminated/invalid quotes rejected',()=>{assert.throws(()=>H.csv('a,"b'),/Unterminated/);assert.throws(()=>H.csv('a,"b"x'),/Unexpected/);assert.throws(()=>H.csv('a,b"c'),/Malformed/);});
+test('quoted comma/newline and escaped quote parse',()=>{assert.deepEqual(H.csv('"a,b","c\nq","say ""x"""'),[['a,b','c\nq','say "x"']]);});
+test('input byte/string work and column limits enforced',()=>{assert.throws(()=>H.csv('x'.repeat(5*1024*1024+1)),/limit/);assert.throws(()=>H.csv(Array(514).fill('x').join(',')),/columns/);assert.throws(()=>H.csv('a\0b'),/encoding/);});
+test('non-sensor inventory CSV rejected',()=>{assert.throws(()=>H.parse('Computer,Model\nprivate,device'),/Expected/);});
+test('header BOM and no source footer supported',()=>{const r=H.parse('\uFEFFDate,Time,CPU [RPM]\n1.1.2026,12:00:00.000,1500');assert.equal(r.samples,1);});
+test('malformed row dimensions skipped explicitly',()=>{const r=H.parse('Date,Time,CPU [RPM]\n1.1.2026,12:00:00,1000,extra\n1.1.2026,12:00:02,1500');assert.equal(r.skippedMalformedRows,1);assert.equal(r.samples,1);});
+test('unknown-only sensors and empty samples rejected',()=>{assert.throws(()=>H.parse('Date,Time,Secret\n1.1.2026,12:00:00,7'),/No supported/);assert.throws(()=>H.parse('Date,Time,CPU [RPM]\nDate,Time,CPU [RPM]'),/No valid/);});
+
+test('unpadded hours, minutes and seconds retain every HWiNFO sample',()=>{const r=H.parse('Date,Time,CPU [RPM]\n5.1.2026,5:8:1.413,1200\n5.1.2026,5:8:3.412,2400');assert.equal(r.samples,2);assert.equal(r.series[0].max,2400);assert.ok(Math.abs(r.series[0].recent[1].time-r.series[0].recent[0].time-1.999)<.001);});
+test('invalid calendar dates and out-of-range clock fields are rejected',()=>{for(const [d,t] of [['31.2.2026','5:0:0'],['0.1.2026','5:0:0'],['1.13.2026','5:0:0'],['1.1.2026','25:0:0'],['1.1.2026','5:60:0'],['1.1.2026','5:0:61']])assert.equal(H.timestamp(d,t),null);assert.ok(H.timestamp('29.2.2024','0:0:0'));});
+test('trailing blank rows do not lose generic footer source classification',()=>{const r=H.parse(input+'\n\n');assert.match(r.series[0].source,/ASUS NB EC/);assert.doesNotMatch(JSON.stringify(r),/USER-PRIVATE/);});
+test('history keeps bounded timestamped recent samples instead of synthetic spacing',()=>{const rows=Array.from({length:125},(_,i)=>`1.1.2026,0:${Math.floor(i/60)}:${i%60},${i}`);const r=H.parse('Date,Time,CPU [RPM]\n'+rows.join('\n'));assert.equal(r.series[0].count,125);assert.equal(r.series[0].recent.length,120);assert.equal(r.series[0].recent[0].value,5);});
+test('10,001 real samples are refused even within byte budget',()=>{const rows=Array(10001).fill('1.1.2026,0:0:0,1000');assert.throws(()=>H.parse('Date,Time,CPU [RPM]\n'+rows.join('\n')),/samples/);});
+test('non-ASCII decoded input obeys the byte budget, not just character count',()=>{assert.throws(()=>H.csv('é'.repeat(3*1024*1024)),/limit/);});
