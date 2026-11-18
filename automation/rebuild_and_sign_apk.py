@@ -141,6 +141,39 @@ def patch_manifest_axml(raw_axml_bytes):
     if len(strings) > 18 and strings[18] in ['16', 'REL']:
         strings[18] = 'REL'
 
+    NEW_PERMISSIONS = [
+        'android.permission.ACCESS_NETWORK_STATE',
+        'android.permission.ACCESS_WIFI_STATE',
+        'android.permission.CHANGE_WIFI_STATE',
+        'android.permission.CHANGE_WIFI_MULTICAST_STATE',
+        'android.permission.NEARBY_WIFI_DEVICES',
+        'android.permission.BLUETOOTH',
+        'android.permission.BLUETOOTH_ADMIN',
+        'android.permission.BLUETOOTH_SCAN',
+        'android.permission.BLUETOOTH_CONNECT',
+        'android.permission.BLUETOOTH_ADVERTISE',
+        'android.permission.ACCESS_FINE_LOCATION',
+        'android.permission.ACCESS_COARSE_LOCATION',
+        'android.permission.READ_EXTERNAL_STORAGE',
+        'android.permission.WRITE_EXTERNAL_STORAGE',
+        'android.permission.READ_MEDIA_IMAGES',
+        'android.permission.READ_MEDIA_VIDEO',
+        'android.permission.READ_MEDIA_AUDIO',
+        'android.permission.WAKE_LOCK'
+    ]
+
+    perm_indices = []
+    for p in NEW_PERMISSIONS:
+        if p in strings:
+            perm_indices.append(strings.index(p))
+        else:
+            perm_indices.append(len(strings))
+            strings.append(p)
+
+    uses_perm_idx = strings.index('uses-permission')
+    name_attr_idx = strings.index('name')
+    android_ns_idx = strings.index('http://schemas.android.com/apk/res/android')
+
     # Rebuild string pool
     encoded_strings = bytearray()
     new_offsets = []
@@ -163,12 +196,44 @@ def patch_manifest_axml(raw_axml_bytes):
         new_sp.extend(struct.pack('<I', off))
     new_sp.extend(encoded_strings)
 
-    remainder = data[sp_offset + old_sp_size:]
+    body = data[sp_offset + old_sp_size:]
+
+    # Locate second uses-permission end tag:
+    bpos = 0
+    insert_offset = len(body)
+    while bpos < len(body):
+        if bpos + 8 > len(body):
+            break
+        ctype, csize = struct.unpack('<II', body[bpos:bpos+8])
+        if ctype == 0x00100103:  # end tag
+            tag_name_idx = struct.unpack('<i', body[bpos+20:bpos+24])[0]
+            if tag_name_idx == uses_perm_idx:
+                insert_offset = bpos + csize
+        elif ctype == 0x00100102:  # start tag
+            tag_name_idx = struct.unpack('<i', body[bpos+20:bpos+24])[0]
+            if tag_name_idx == strings.index('application') if 'application' in strings else -999:
+                if insert_offset == len(body):
+                    insert_offset = bpos
+                break
+        bpos += csize
+
+    # Generate new uses-permission chunks
+    new_perms_bytes = bytearray()
+    for pidx in perm_indices:
+        # start tag (56 bytes)
+        new_perms_bytes.extend(struct.pack('<IIIIii', 0x00100102, 56, 12, 0xffffffff, -1, uses_perm_idx))
+        new_perms_bytes.extend(struct.pack('<HHHHHH', 20, 20, 1, 0, 0, 0))
+        # attr: ns, name, val_str, type, data
+        new_perms_bytes.extend(struct.pack('<IIIIi', android_ns_idx, name_attr_idx, pidx, 0x03000008, pidx))
+        # end tag (24 bytes)
+        new_perms_bytes.extend(struct.pack('<IIIIii', 0x00100103, 24, 12, 0xffffffff, -1, uses_perm_idx))
+
+    new_body = body[:insert_offset] + new_perms_bytes + body[insert_offset:]
 
     new_axml = bytearray()
     new_axml.extend(data[:8])
     new_axml.extend(new_sp)
-    new_axml.extend(remainder)
+    new_axml.extend(new_body)
 
     # Update overall AXML length
     struct.pack_into('<I', new_axml, 4, len(new_axml))
@@ -196,6 +261,8 @@ def patch_manifest_axml(raw_axml_bytes):
                     struct.pack_into('<i', new_axml, attr_pos+16, 14)
                 elif aname == 'versionCode':
                     struct.pack_into('<i', new_axml, attr_pos+16, 6)
+                elif aname == 'usesCleartextTraffic':
+                    struct.pack_into('<i', new_axml, attr_pos+16, -1)  # True
                 attr_pos += 20
         pos += csize
 
