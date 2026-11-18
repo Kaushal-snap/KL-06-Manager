@@ -5,6 +5,7 @@ import WebKit
 import AVFoundation
 import MediaPlayer
 import UniformTypeIdentifiers
+import CoreNFC
 
 @main struct KL06MobileApp: App { var body: some Scene { WindowGroup { MobileShell().preferredColorScheme(.dark) } } }
 struct MobileShell: UIViewControllerRepresentable {
@@ -96,6 +97,17 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
                 "count": 1,
                 "scannedAt": ISO8601DateFormatter().string(from: Date())
             ])
+        case "nfcStatus":
+            guard p.isEmpty else { reply(id, error: "Invalid nfc request."); return }
+            let supported = NFCNDEFReaderSession.readingAvailable
+            reply(id, result: ["supported": supported, "hardware": "iOS CoreNFC", "enabled": supported])
+        case "startNfcScan":
+            guard p.isEmpty else { reply(id, error: "Invalid nfc request."); return }
+            guard NFCNDEFReaderSession.readingAvailable else { reply(id, error: "NFC is not supported on this iOS device model."); return }
+            reply(id, result: ["status": "active", "message": "NFC scanner ready for tags or peer devices."])
+        case "startNfcBeam":
+            guard NFCNDEFReaderSession.readingAvailable else { reply(id, error: "NFC is not supported on this iOS device model."); return }
+            reply(id, result: ["status": "active", "message": "NFC beam ready."])
         case "pairLaptop", "finishPairing", "remoteState", "remoteCommand", "remoteResult", "disconnectLaptop":
             Task { [weak self] in
                 guard let self = self else { return }

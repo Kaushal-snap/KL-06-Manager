@@ -34,7 +34,7 @@ final class PinnedLaptop {
     static boolean validCommand(JSONObject body){try{
         if(body.length()!=2||!(body.opt("operation") instanceof String)||!(body.opt("params") instanceof JSONObject))return false;
         String op=body.getString("operation");JSONObject p=body.getJSONObject("params");
-        if(op.equals("setVolume")){Object v=p.opt("value");if(p.length()!=1||!(v instanceof Number))return false;double n=((Number)v).doubleValue();return Double.isFinite(n)&&n>=0&&n<=100;}
+        if(op.equals("setVolume")||op.equals("setBrightness")){Object v=p.opt("value");if(p.length()!=1||!(v instanceof Number))return false;double n=((Number)v).doubleValue();double minVal=op.equals("setBrightness")?1.0:0.0;return Double.isFinite(n)&&n>=minVal&&n<=100;}
         if(op.equals("applyTweak")||op.equals("restoreTweak"))return p.length()==1&&p.opt("id") instanceof String&&java.util.Arrays.asList("dock-autohide","dock-reveal","dock-scale","dock-launch","finder-path","finder-status","finder-hidden","file-extensions","scrollbars","dock-recents","finder-folders-first","natural-scroll","win-extensions","win-hidden","win-theme-dark").contains(p.getString("id"));
         return (op.equals("restoreAll")||op.equals("keepAwake"))&&p.length()==0;
     }catch(Exception e){return false;}}

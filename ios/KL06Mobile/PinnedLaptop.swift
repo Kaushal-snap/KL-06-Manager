@@ -108,9 +108,10 @@ actor PinnedLaptop {
     func state() async throws -> [String: Any] { try await send("/v1/state", [:], auth: true) }
     private func allowed(_ operation: String, _ p: [String: Any]) -> Bool {
         switch operation {
-        case "setVolume":
+        case "setVolume", "setBrightness":
             guard Set(p.keys) == ["value"], let value = p["value"] as? NSNumber, CFGetTypeID(value) != CFBooleanGetTypeID() else { return false }
-            return value.doubleValue.isFinite && (0...100).contains(value.doubleValue)
+            let minVal: Double = operation == "setBrightness" ? 1.0 : 0.0
+            return value.doubleValue.isFinite && (minVal...100).contains(value.doubleValue)
         case "applyTweak", "restoreTweak":
             let ids = Set(["dock-autohide", "dock-reveal", "dock-scale", "dock-launch", "finder-path", "finder-status", "finder-hidden", "file-extensions", "scrollbars", "dock-recents", "finder-folders-first", "natural-scroll", "win-extensions", "win-hidden", "win-theme-dark"])
             return Set(p.keys) == ["id"] && ids.contains(p["id"] as? String ?? "")
@@ -119,7 +120,7 @@ actor PinnedLaptop {
         }
     }
     func command(_ body: [String: Any]) async throws -> [String: Any] {
-        guard Set(body.keys) == ["operation", "params"], let operation = body["operation"] as? String, ["setVolume", "applyTweak", "restoreTweak", "restoreAll", "keepAwake"].contains(operation), let p = body["params"] as? [String: Any], allowed(operation, p) else { throw LANError.invalid }
+        guard Set(body.keys) == ["operation", "params"], let operation = body["operation"] as? String, ["setVolume", "setBrightness", "applyTweak", "restoreTweak", "restoreAll", "keepAwake"].contains(operation), let p = body["params"] as? [String: Any], allowed(operation, p) else { throw LANError.invalid }
         let result = try await send("/v1/command", body, auth: true); last = result["id"] as? String
         return ["status": "Queued; confirm the requested action on the laptop within 90 seconds."]
     }

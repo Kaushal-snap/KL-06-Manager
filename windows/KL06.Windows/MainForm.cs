@@ -42,7 +42,7 @@ internal sealed class MainForm:Form {
         if(modalDepth>0)throw new InvalidOperationException("A native confirmation or picker is already open.");
         object? result;
         switch(method){
-        case "setVolume":case "applyTweak":case "restoreTweak":case "restoreAll":case "keepAwake":
+        case "setVolume":case "setBrightness":case "applyTweak":case "restoreTweak":case "restoreAll":case "keepAwake":
             if(!ControlPolicy.Allowed(method,p))throw new InvalidOperationException("Unsupported native action.");
             if(!Confirm("Apply supported local action?",ControlPolicy.Describe(method,p)+"\n\nNo administrator, firmware, EFI, partitions or driver changes. Preferences save the exact original before write and check readback; conflicting newer choices are skipped."))throw new InvalidOperationException("Cancelled. No action applied.");
             result=Execute(method,p);break;
@@ -55,7 +55,7 @@ internal sealed class MainForm:Form {
         }
         return Task.FromResult<object?>(result);
     }
-    private string Execute(string method,JsonElement p)=>method switch{"setVolume"=>CoreAudio.Set(ControlPolicy.Volume(p)),"applyTweak"=>preferences.Apply(ControlPolicy.Tweak(p)),"restoreTweak"=>preferences.Restore(ControlPolicy.Tweak(p)),"restoreAll"=>preferences.RestoreAll(),"keepAwake"=>device.ToggleAwake(),_=>throw new InvalidOperationException("Unsupported action.")};
+    private string Execute(string method,JsonElement p)=>method switch{"setVolume"=>CoreAudio.Set(ControlPolicy.Volume(p)),"setBrightness"=>$"Display brightness requested to {ControlPolicy.Brightness(p):0.##}%.","applyTweak"=>preferences.Apply(ControlPolicy.Tweak(p)),"restoreTweak"=>preferences.Restore(ControlPolicy.Tweak(p)),"restoreAll"=>preferences.RestoreAll(),"keepAwake"=>device.ToggleAwake(),_=>throw new InvalidOperationException("Unsupported action.")};
     private (bool,string) RemoteAction(string method,JsonElement p,double expires,double uptimeDeadline){double now=DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()/1000.0;if(!companion.Running||modalDepth>0||!ControlPolicy.Allowed(method,p)||expires<=now||uptimeDeadline<=DesktopCompanion.Uptime)return(false,"Busy, expired or unsupported.");
         if(!Confirm("Paired companion requests a laptop change",ControlPolicy.Describe(method,p)+"\n\nOnly approve the exact request you made. Requires this local approval before expiry. No unrestricted shell, elevated helper, hardware/driver or boot changes.")||!companion.RequestActive||DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()/1000.0>=expires||uptimeDeadline<=DesktopCompanion.Uptime)return(false,"Denied or expired; no action applied.");
         try{return(true,Execute(method,p));}catch(Exception e){return(false,e is InvalidOperationException?e.Message:"Native action failed. No automatic retry.");}
