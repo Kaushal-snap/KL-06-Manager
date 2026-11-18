@@ -5,7 +5,8 @@
 ### *Next-Generation Universal Control Center & AirDrop Hub by Kaushal Labana*
 
 [![Developer](https://img.shields.io/badge/Developer-Kaushal%20Labana-6366F1?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Kaushal-snap)
-[![Discord](https://img.shields.io/badge/Discord-labanayt5301-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/8nvTeGk9)
+[![Email](https://img.shields.io/badge/Support%20Email-labanayt%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:labanayt@gmail.com)
+[![Discord](https://img.shields.io/badge/Discord-labanayt5301-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Z4my8c2ZH)
 [![YouTube](https://img.shields.io/badge/YouTube-@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
 [![Release](https://img.shields.io/badge/Release-v0.4.0--Beta.1%20(Build%206)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![Build Status](https://img.shields.io/badge/Status-Verified%20Native-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
@@ -23,7 +24,8 @@
 
 <p align="center">
   <a href="#-device-downloads-matrix-v040-beta1-build-6"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Ecosystem-v0.4.0--Beta.1-2563EB?style=for-the-badge" alt="Download Release" /></a>
-  <a href="https://discord.gg/8nvTeGk9"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  <a href="mailto:labanayt@gmail.com"><img src="https://img.shields.io/badge/Email-labanayt%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email Support" /></a>
+  <a href="https://discord.gg/Z4my8c2ZH"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
   <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM"><img src="https://img.shields.io/badge/YouTube-Subscribe%20@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" /></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.4.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
   <a href="ECOSYSTEM.md"><img src="https://img.shields.io/badge/%F0%9F%8C%90_Ecosystem_%26_OTA-Specs_%26_Matrix-0284C7?style=for-the-badge" alt="Ecosystem Specs" /></a>
@@ -38,7 +40,8 @@
 ## 🌐 Community & Direct Support
 
 Connect directly with the developer **Kaushal Labana**:
-- 💬 **Discord Community**: [https://discord.gg/8nvTeGk9](https://discord.gg/8nvTeGk9) (Username: **`labanayt5301`**)
+- ✉️ **Official Support Email**: [labanayt@gmail.com](mailto:labanayt@gmail.com)
+- 💬 **Discord Community**: [https://discord.gg/Z4my8c2ZH](https://discord.gg/Z4my8c2ZH) (Username: **`labanayt5301`**)
 - ▶️ **YouTube Channel**: [https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM) (**`@labanayt`**)
 - 🐙 **GitHub Repository**: [https://github.com/Kaushal-snap/KL-06-Manager](https://github.com/Kaushal-snap/KL-06-Manager)
 
@@ -242,7 +245,8 @@ Candidate package `0.3.0-beta.2` (Build 5) expands KL-06 into a multi-device eco
 ## 🔒 Author, Copyright & Licensing
 
 **Created, Architected & Maintained by Kaushal Labana (@Kaushal-snap)**  
-- 💬 **Discord**: [`labanayt5301`](https://discord.gg/8nvTeGk9) (Server: https://discord.gg/8nvTeGk9)  
+- ✉️ **Support Email**: [`labanayt@gmail.com`](mailto:labanayt@gmail.com)  
+- 💬 **Discord**: [`labanayt5301`](https://discord.gg/Z4my8c2ZH) (Server: https://discord.gg/Z4my8c2ZH)  
 - ▶️ **YouTube**: [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)  
 - 🐙 **GitHub**: [`Kaushal-snap`](https://github.com/Kaushal-snap/KL-06-Manager)  
 

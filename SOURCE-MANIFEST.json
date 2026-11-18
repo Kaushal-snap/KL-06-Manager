@@ -26,10 +26,10 @@
       "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
     },
     {
-      "bytes": 17476,
+      "bytes": 17638,
       "executable": false,
       "path": "CHANGELOG.md",
-      "sha256": "04bd7adaa4755ac14980651d6519503d186b3f7dc5a4cd89f776c21fe198d66b"
+      "sha256": "b42a507da4f166c1be5ab17c05b52980efbb52ebfee9cb3708bca228815b1f8f"
     },
     {
       "bytes": 6066,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 19619,
+      "bytes": 20135,
       "executable": false,
       "path": "README.md",
-      "sha256": "3b191b20e8119d3baf66fb7451ea1cbc41d258d00fd3a427e5b069b340e5e378"
+      "sha256": "b8d9352756549daa82bbc67d4fe8bf6d0f04f671c1e7ffe2fab23bcb9d39dbb6"
     },
     {
       "bytes": 1599,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 53334,
+      "bytes": 55512,
       "executable": false,
       "path": "index.html",
-      "sha256": "391a9ed6f72b5616d0e1b386e1ccbded79cfeff7a4964a98de89676803dde90a"
+      "sha256": "abaa8ca96f37d91b269aef0afc431b7ddd6570eee3ab0b424d70594f3162c6aa"
     },
     {
       "bytes": 5659,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 3792,
+      "bytes": 3836,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "333d5d5b7de6755b329df53ed0c3d72e44d855e171b78de8e4424f532685deff"
+      "sha256": "3e04afcb2d547ba262c86020fc0f8898b3083a555f012305b3f12cf94883b17f"
     },
     {
       "bytes": 1614,

@@ -29,7 +29,8 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 ### 👤 Author & Leadership
 - **Lead Architect & Developer:** **Kaushal Labana** ([@Kaushal-snap](https://github.com/Kaushal-snap))
-- **Discord Community:** [`labanayt5301`](https://discord.gg/8nvTeGk9)
+- **Official Support Email:** [`labanayt@gmail.com`](mailto:labanayt@gmail.com)
+- **Discord Community:** [`labanayt5301`](https://discord.gg/Z4my8c2ZH) (Invite: `https://discord.gg/Z4my8c2ZH`)
 - **YouTube Channel:** [`@labanayt`](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
 
 ### 📱 Android 13+ PackageParser Installation Fix & Minimum OS Baselines
@@ -53,7 +54,7 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 ### 🌐 Official GitHub Pages Website Redesign
 - **Device-Specific Auto-Detection:** Automatically detects visitor OS (Android, macOS, Windows, iPhone/iOS, Linux) and displays a primary one-click download card tailored for their device.
 - **Modern & Colorful Glassmorphic Theme:** Dark obsidian/cosmic aesthetic with brilliant mesh orbs, glowing cards, animated radar demo, and interactive 6-digit PIN generator.
-- **Community Hub:** Integrated direct links to Discord (`https://discord.gg/8nvTeGk9`, username `labanayt5301`) and YouTube (`https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM`).
+- **Community Hub:** Integrated direct links to Discord (`https://discord.gg/Z4my8c2ZH`, username `labanayt5301`), support email (`labanayt@gmail.com`), and YouTube (`https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM`).
 - **Interactive Lightbox Gallery:** High-resolution screenshots of macOS native verification on ASUS VivoBook K15 OLED.
 
 ### 🖥️ Mac UI Flicker Elimination & Stale State Blanking Fix
