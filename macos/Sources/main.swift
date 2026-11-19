@@ -288,6 +288,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                         else { self.reply(id, "Sample complete. Latest supported field values are available in Performance; no raw process data was saved.") }
                     }
                 }
+            case "connectGoogleDrive":
+                beginGoogleDriveConnection(id: id)
             case "diagnoseAndExport":
                 beginAuthenticatedDiagnostics(id: id)
             case "exportReport":
@@ -302,27 +304,72 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             }
         } catch { reply(id, error: (error as? ControlError)?.message ?? "The action could not be completed. No automatic retry or repair was attempted.") }
     }
+    private func beginGoogleDriveConnection(id: String) {
+        let alert = NSAlert()
+        alert.messageText = "Connect your private Google Drive"
+        alert.informativeText = "Create a Google OAuth client with application type Desktop app in Google Cloud Console. Enable the Google Drive API and add your Google account as a test user if the consent screen is in Testing. Paste only the Client ID below; never paste a client secret or Google password. KL-06 requests the narrow drive.file scope and creates its own private KL-06 Diagnostics folder."
+        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 420, height: 26))
+        field.placeholderString = "1234567890-xxxx.apps.googleusercontent.com"
+        field.stringValue = GoogleDriveUploader.shared.configuredClientID ?? ""
+        alert.accessoryView = field
+        alert.addButton(withTitle: "Continue to Google")
+        alert.addButton(withTitle: "Cancel")
+        guard alert.runModal() == .alertFirstButtonReturn else { reply(id, error: "Google Drive connection cancelled."); return }
+        let clientID = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        GoogleDriveUploader.shared.connect(clientID: clientID) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success: self?.reply(id, "Google Drive connected. KL-06 stores the refresh token in macOS Keychain; diagnostic reports will upload to your private My Drive / KL-06 Diagnostics folder.")
+                case .failure(let error): self?.reply(id, error: error.localizedDescription)
+                }
+            }
+        }
+    }
+
     private func beginAuthenticatedDiagnostics(id: String) {
         let context = LAContext()
         context.localizedCancelTitle = "Cancel"
         var authError: NSError?
-        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else { reply(id, error: "macOS local authentication is unavailable: \\(authError?.localizedDescription ?? "not supported"). No report was created."); return }
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else {
+            reply(id, error: "macOS local authentication is unavailable: \\(authError?.localizedDescription ?? "not supported"). No report was created.")
+            return
+        }
         context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authorize a private KL-06 hardware and connectivity diagnostic report.") { [weak self] success, _ in
             DispatchQueue.main.async {
-                guard let self = self else { return }
+                guard let self else { return }
                 guard success else { self.reply(id, error: "Authentication cancelled or failed. No report was created."); return }
+                guard GoogleDriveUploader.shared.isConnected else {
+                    self.reply(id, error: "Google Drive is not connected. Choose Connect Google Drive once, then run Secure Diagnostics again.")
+                    return
+                }
                 do {
                     let snapshot = self.state()
                     let fan = snapshot["fan"] as? [String: Any] ?? [:]
-                    let diagnostics: [String: Any] = ["fanRPM": ["status": fan["status"] ?? "unknown", "readings": fan["fans"] ?? [], "note": "Provider-reported SMC tachometer values only; no ASUS EC/WMI driver is installed."], "wifiBluetooth": ["status": "not-probed", "note": "No interface names, SSIDs, MAC addresses, Bluetooth identifiers or network addresses are collected."], "deviceTransfer": ["status": "not-end-to-end-verified", "note": "Physical device transfer success is not asserted."], "limitations": ["No firmware/EFI changes", "No fan-control writes", "No raw IORegistry dump", "No account identifiers or secrets"]]
-                    let report: [String: Any] = ["schema": "KL06_DIAGNOSTICS_V1", "createdAt": ISO8601DateFormatter().string(from: Date()), "platform": "macOS", "system": snapshot, "diagnostics": diagnostics]
-                    let panel = NSSavePanel(); panel.allowedContentTypes = [.json]; panel.nameFieldStringValue = "KL-06-diagnostics.json"
-                    panel.message = "Save this minimized private diagnostic report. Review it before sharing; cloud upload is not configured in this build."
-                    guard panel.runModal() == .OK, let url = panel.url else { self.reply(id, error: "Save cancelled. No report was written."); return }
+                    let diagnostics: [String: Any] = [
+                        "fanRPM": ["status": fan["status"] ?? "unknown", "readings": fan["fans"] ?? [], "note": "Provider-reported SMC tachometer values only; no ASUS EC/WMI driver is installed."],
+                        "wifiBluetooth": ["status": "not-probed", "note": "Network and Bluetooth interface probing is not yet implemented in this build."],
+                        "deviceTransfer": ["status": "not-end-to-end-verified", "note": "Physical device transfer success is not asserted."],
+                        "limitations": ["No firmware/EFI changes", "No fan-control writes", "No raw IORegistry dump", "No account identifiers, Wi-Fi names, MAC/IP addresses or secrets"]
+                    ]
+                    let report: [String: Any] = [
+                        "schema": "KL06_DIAGNOSTICS_V1",
+                        "createdAt": ISO8601DateFormatter().string(from: Date()),
+                        "platform": "macOS",
+                        "system": snapshot,
+                        "diagnostics": diagnostics
+                    ]
                     let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
-                    try data.write(to: url, options: [.atomic]); try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
-                    self.reply(id, "Authenticated diagnostic report saved locally with private file permissions. Cloud upload is not configured yet.")
-                } catch { self.reply(id, error: error.localizedDescription) }
+                    GoogleDriveUploader.shared.upload(data) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let message): self.reply(id, "Diagnostic scan complete. " + message)
+                            case .failure(let error): self.reply(id, error: "Diagnostic report was generated but Drive upload failed: \\(error.localizedDescription)")
+                            }
+                        }
+                    }
+                } catch {
+                    self.reply(id, error: "Could not create diagnostic JSON: \\(error.localizedDescription)")
+                }
             }
         }
     }
