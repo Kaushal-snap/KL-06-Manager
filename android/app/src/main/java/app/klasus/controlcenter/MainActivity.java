@@ -131,7 +131,7 @@ public final class MainActivity extends Activity {
     }
     private void maintainHardwareLink(){
         acquireMulticastLock();
-        writeLog("LINK","Hardware link maintained continuously across Wi-Fi, Bluetooth, and Mobile Data.");
+        writeLog("LINK","Wi-Fi multicast discovery lock acquired. No peer connection, Bluetooth transport or cellular relay is implied.");
         main.post(()->{
             if(web!=null){
                 web.evaluateJavascript("if(window.KLPermissionGranted)window.KLPermissionGranted();",null);
@@ -440,7 +440,7 @@ public final class MainActivity extends Activity {
                     writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
                 }
             });
-            reply(id,new JSONObject().put("status","saved").put("logPath",savedPath).put("message","Fan diagnostic saved to "+savedPath+" and auto-synced to private Drive folder"),null);
+            reply(id,new JSONObject().put("status","saved-locally").put("logPath",savedPath).put("message","Fan diagnostic saved locally. Google Drive upload is not configured; use the share sheet to export it."),null);
             return;
         }
         case "discoverPeers":{
