@@ -493,7 +493,7 @@
           ${button(onlineLogging ? '🟢 Online Logging: ACTIVE' : '⚪ Online Logging: OFF', 'toggle-online-logs', onlineLogging ? 'class="btn-primary"' : '')}
         </div>
       </div>
-      <p>Manage file storage permissions, verify Android/iOS system settings, enable online log collection for troubleshooting and improvements, and automatically share diagnostic telemetry into your private Google Drive folder.</p>
+      <p>Manage platform permissions and local diagnostic exports. Runtime Google Drive authentication and automatic private-folder upload are not configured.</p>
       
       <div class="conn-status-grid">
         <div class="conn-card">
@@ -755,7 +755,7 @@
         </div>
       </div>
       <p>Windows: explicitly import a HWiNFO sensor CSV on History; no HWiNFO driver/shared-memory reader is silently installed. Android/iOS: no public fan sensor/control exposed. Live Mac RPM is queried by the native Mac build from an already-present standard SMC provider, then may be shared via an authenticated laptop session.</p>
-      <p>Click <b>Run Fan Diagnostics &amp; Auto-Sync</b> to authenticate with your security password, inspect hardware EC/SMC/WMI fan sensors, and automatically upload diagnostic telemetry into your private Drive folder <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>).</p>
+      <p>Run read-only fan diagnostics using sensor values actually returned by the native provider. The report can be exported locally; private Google Drive upload is not configured.</p>
       <p>No fan curves, manual target RPM, EC writes, ASUS firmware mode, charge cap or invented zero-RPM fallback.</p>
     </section>`;
   }
@@ -862,7 +862,7 @@
           <button data-action="close-fan-diag-modal" class="btn-secondary" style="padding:4px 10px;font-size:12px">✕</button>
         </div>
         <p style="font-size:12px;color:#8ab4be;margin:10px 0 14px;line-height:1.5">
-          Enter security password to execute fan hardware diagnostics and auto-send telemetry to private Drive folder <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>).
+          Enter the local diagnostic password to prepare a read-only fan report. The report is not uploaded to Google Drive.
         </p>
         <div style="margin-bottom:14px">
           <label style="font-size:11px;color:#67e8f9;display:block;margin-bottom:6px;font-weight:600">SECURITY PASSWORD</label>
@@ -1314,7 +1314,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         onlineLogging = !onlineLogging;
         try { safeStorage.setItem('kl06_online_logging', onlineLogging ? '1' : '0'); } catch(ignored){}
         if (onlineLogging) {
-          addLog('ONLINE', 'ok', 'Online log collection ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
+          addLog('ONLINE', 'ok', 'Local diagnostic buffer ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
           toast('✓ Local Diagnostic Buffer ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
           try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         } else {
