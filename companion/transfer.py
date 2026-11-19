@@ -277,7 +277,8 @@ class TransferEngine:
     ) -> TransferSession:
         with self.lock:
             self._prune_expired()
-            if len(self.transfers) >= MAX_ACTIVE_TRANSFERS:
+            active_count = sum(1 for item in self.transfers.values() if item.state in ("awaiting_approval", "transferring"))
+            if active_count >= MAX_ACTIVE_TRANSFERS:
                 raise TransferError("max_active_transfers_reached")
 
             transfer_id = uuid.uuid4().hex
