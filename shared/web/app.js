@@ -228,8 +228,9 @@
     if (savedLogs) {
       const parsed = JSON.parse(savedLogs);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        const truthful = parsed.filter(item => !/private drive sync.*connected|auto.?sent to private drive|auto.?synced to private drive|mobile data.*active|bluetooth.*active|hardware link connected continuously/i.test(String(item?.msg || '')));
         diagnosticLogs.length = 0;
-        parsed.forEach(item => diagnosticLogs.push(item));
+        truthful.forEach(item => diagnosticLogs.push(item));
       }
     }
   } catch(ignored){}
@@ -1135,23 +1136,22 @@ Device Host: ${hostInfo} (${plat})
 Platform Architecture: ${plat} / ${navigator.userAgent || 'Native WebView'}
 
 [FAN & THERMAL HARDWARE TELEMETRY]
-- Fan Sensor Provider: ${state?.fan?.source || 'AppleSMC / VirtualSMC / SMCSuperIO / AsusSMC & ACPI EC'}
-- Sensor State: ${state?.fan?.status || 'Active / Verified'}
-- Detected Fan Tachometers: ${rows.length ? rows.length : '0 (Direct WMI EC Tachometer in EFI)'}
+- Fan Sensor Provider: ${state?.fan?.source || 'Not reported by native bridge'}
+- Sensor State: ${state?.fan?.status || 'not-sampled'}
+- Detected Fan Tachometers: ${rows.length ? rows.length : '0 (no valid tachometer reading)'}
 ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).join('\n') : '- Fan 0 RPM Key (F0Ac): Unavailable-or-stale (Preserving firmware safety baseline)\n- Fan 1 RPM Key (F1Ac): Unavailable-or-stale (Preserving firmware safety baseline)'}
 - Fan RPM Safety Invariant: Strict Honest Reporting (Zero fake sliders, no fabricated curves)
-- Thermal Governor Mode: Standard Cooling Profile (Firmware Auto-Cooling Active)
-- Power Profile Governor: ${state?.powerProfile || 'Balanced'} (macOS XCPM / Windows ACPI Governor Active)
+- Thermal Governor Mode: Not measured by this diagnostic
+- Power Profile Governor: ${state?.powerProfile || 'Not reported by native bridge'}
 - Embedded Controller (EC) I/O State: Protected (Zero unsafe port 0x62/0x66 writes)
-- Diagnostic Status: Passed 100% integrity validation
+- Diagnostic Status: Report generated; hardware values depend on current native sensor responses
 
 [ECOSYSTEM & PRIVATE DRIVE SYNC]
 - Auto-Sync Destination: Google Drive Private Folder KL-06-Private-Logs
 - Target Folder ID: 1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n
-- Local Android Backup: Download/KL-06/logs/kl06-fan-diagnostic.log (MediaStore Scoped Storage)
-- Local Mac/PC Backup: ~/Library/Application Support/KL-06/logs/fan-diagnostic.log
-- Sync Channel: Direct Inbuilt Upload & Background TLS Handshake
-- Transfer Protocol: KL06_COMPANION_V1 (Port 8766 UDP/TLS Discovery & Pinned Cert)
+- Local Export: Platform-selected local save/share destination
+- Sync Channel: Not configured; no Google Drive OAuth token is available
+- Transfer Protocol: Private-LAN TLS pairing (port 8766); not a Drive upload channel
 - Status: Not uploaded. Google Drive OAuth and folder authorization are not configured in this build.
 ================================================================================`;
 
@@ -1468,11 +1468,11 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           network: {
             wifi: state?.network?.wifi ? 'connected' : 'standby',
             mobileData: state?.network?.cellular ? 'active' : 'standby',
-            internet: state?.network?.internet !== false ? 'active (dual Mobile Data & Wi-Fi)' : 'restricted',
+            internet: state?.network?.internet === true ? 'connected' : 'not-confirmed',
             port: 8766
           },
           userLogFolder: 'Download/KL-06/logs/',
-          targetDriveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
+          driveSync: 'not-configured',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
@@ -1565,26 +1565,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'nfc-tap':
-        toast('📲 Scanning for NFC tap or beam…');
-        addLog('NFC', 'info', 'Hardware NFC scan initialized. Tap device against another phone or NFC tag.');
-        if (native) {
-          try {
-            act('startNfcBeam', { payload: { type: 'kl06-pair', name: 'KL-06 Mobile Device', host: 'https://192.168.1.100:8766', pin: currentPin } }).catch(()=>{});
-            act('startNfcScan', {}).catch(()=>{});
-          } catch(e) {}
-        }
-        if ('NDEFReader' in window) {
-          try {
-            const ndef = new window.NDEFReader();
-            ndef.scan().then(() => {
-              ndef.onreading = event => {
-                addLog('NFC', 'ok', `✓ Hardware NFC tag detected: serial ${event.serialNumber || 'NFC-Tag'}`);
-                toast('NFC tag detected. KL-06 NFC pairing is not implemented; no device was connected.');
-              };
-            }).catch(() => {});
-          } catch(e) {}
-        }
-        render();
+        toast('KL-06 NFC pairing is not implemented in this build. Use Direct TLS Pairing.');
         return;
 
       case'connect-peer': {
@@ -1730,20 +1711,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   }, 1000);
 
   window.KLNfcHandler = function(payload) {
-    try {
-      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
-      addLog('NFC', 'ok', `✓ Hardware NFC beam received: ${data.name || 'Nearby NFC Device'}`);
-      incomingPair = {
-        name: data.name || 'NFC Peer Device',
-        type: data.type || 'Ecosystem NFC Peer',
-        host: data.host || 'https://192.168.1.42:8766',
-        pin: data.pin || currentPin
-      };
-      toast('✓ NFC Contact detected! Ready to connect.');
-      render();
-    } catch(e) {
-      addLog('NFC', 'warn', `NFC beam payload: ${payload}`);
-    }
+    addLog('NFC', 'info', 'An NFC payload was received. KL-06 NFC pairing is not implemented; no connection was created.');
+    toast('NFC payload detected; use Direct TLS Pairing to connect.');
   };
 
   window.KLTransferProgress = value => {
