@@ -19,7 +19,7 @@ struct LANHTTP {
     }
     static func post(base: URL, pin: String, path: String, body: [String: Any], token: String?) async throws -> [String: Any] {
         guard let host = base.host, privateURL(base.absoluteString) != nil, pin.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil,
-              ["/v1/pair", "/v1/pair/finish", "/v1/state", "/v1/command", "/v1/result", "/v1/disconnect"].contains(path) else { throw LANError.invalid }
+              ["/v1/pair", "/v1/pair/finish", "/v1/state", "/v1/command", "/v1/result", "/v1/disconnect", "/v1/transfer/init", "/v1/transfer/chunk", "/v1/transfer/status", "/v1/transfer/cancel"].contains(path) else { throw LANError.invalid }
         let raw = try JSONSerialization.data(withJSONObject: body, options: [.sortedKeys])
         guard raw.count <= 16384 else { throw LANError.invalid }
         return try await withCheckedThrowingContinuation { continuation in
@@ -82,14 +82,15 @@ actor PinnedLaptop {
     private var base: URL?, pin: String?, code: String?, ticket: String?, token: String?, last: String?
     private var expiry: Double = 0
     private var busy = false
+    private var transferActive = false
     func paired() -> Bool { token != nil && Date().timeIntervalSince1970 < expiry }
     private func send(_ path: String, _ body: [String: Any], auth: Bool) async throws -> [String: Any] {
-        guard !busy, let base = base, let pin = pin, !auth || paired() else { throw LANError.invalid }
+        guard !busy, (!transferActive || path.hasPrefix("/v1/transfer/")), let base = base, let pin = pin, !auth || paired() else { throw LANError.invalid }
         busy = true; defer { busy = false }
         return try await LANHTTP.post(base: base, pin: pin, path: path, body: body, token: auth ? token : nil)
     }
     func pair(_ p: [String: Any]) async throws -> [String: Any] {
-        guard !busy, Set(p.keys) == ["host", "pin", "code"], let host = p["host"] as? String, let url = LANHTTP.privateURL(host), let fingerprint = (p["pin"] as? String)?.lowercased(), fingerprint.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil,
+        guard !busy, !transferActive, Set(p.keys) == ["host", "pin", "code"], let host = p["host"] as? String, let url = LANHTTP.privateURL(host), let fingerprint = (p["pin"] as? String)?.lowercased(), fingerprint.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil,
               let secret = (p["code"] as? String)?.lowercased(), secret.range(of: "^[a-f0-9]{32}\\z", options: .regularExpression) != nil else { throw LANError.invalid }
         base = url; pin = fingerprint; code = secret; token = nil; expiry = 0; ticket = nil; last = nil
         let result = try await send("/v1/pair", ["code": secret, "platform": "ios"], auth: false)
@@ -97,7 +98,7 @@ actor PinnedLaptop {
         return ["status": "Approve this iOS device on the laptop, then finish pairing."]
     }
     func finish() async throws -> [String: Any] {
-        guard !busy, let ticket = ticket, let code = code else { throw LANError.invalid }
+        guard !busy, !transferActive, let ticket = ticket, let code = code else { throw LANError.invalid }
         let result = try await send("/v1/pair/finish", ["ticket": ticket, "code": code], auth: false)
         if result["status"] as? String == "paired" {
             guard let token = result["token"] as? String, token.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil, let expires = result["expiresAt"] as? Double else { throw LANError.refused }
@@ -124,9 +125,49 @@ actor PinnedLaptop {
         let result = try await send("/v1/command", body, auth: true); last = result["id"] as? String
         return ["status": "Queued; confirm the requested action on the laptop within 90 seconds."]
     }
+    func transferFile(url: URL, fileName: String, expectedSize: Int64, progress: @escaping (Double) -> Void) async throws -> [String: Any] {
+        guard !busy, !transferActive, paired(), url.isFileURL, expectedSize > 0, expectedSize <= 2 * 1024 * 1024 * 1024 else { throw LANError.invalid }
+        transferActive = true
+        defer { transferActive = false }
+        let scoped = url.startAccessingSecurityScopedResource()
+        defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+
+        let first = try FileHandle(forReadingFrom: url)
+        defer { try? first.close() }
+        var hasher = SHA256()
+        var measured: Int64 = 0
+        while let data = try first.read(upToCount: 8192), !data.isEmpty {
+            measured += Int64(data.count)
+            guard measured <= expectedSize else { throw LANError.invalid }
+            hasher.update(data: data)
+        }
+        guard measured == expectedSize else { throw LANError.invalid }
+        let digest = hasher.finalize().map { String(format: "%02x", $0) }.joined()
+
+        let initResult = try await send("/v1/transfer/init", ["fileName": fileName, "fileSize": measured, "expectedSha256": digest, "senderPlatform": "ios"], auth: true)
+        guard initResult["status"] as? String == "approved", let transferID = initResult["transferId"] as? String else { throw LANError.refused }
+
+        do {
+            let second = try FileHandle(forReadingFrom: url)
+            defer { try? second.close() }
+            var offset: Int64 = 0
+            while let data = try second.read(upToCount: 8192), !data.isEmpty {
+                let chunk = ["transferId": transferID, "chunkOffset": offset, "chunkBase64": data.base64EncodedString()] as [String: Any]
+                _ = try await send("/v1/transfer/chunk", chunk, auth: true)
+                offset += Int64(data.count)
+                progress(Double(offset) * 100.0 / Double(measured))
+            }
+            let status = try await send("/v1/transfer/status", ["transferId": transferID], auth: true)
+            guard status["state"] as? String == "complete" else { throw LANError.refused }
+            return ["status": "complete", "fileName": fileName, "bytesTransferred": measured, "sha256": digest, "receiver": status["receiverPlatform"] ?? "desktop"]
+        } catch {
+            _ = try? await send("/v1/transfer/cancel", ["transferId": transferID], auth: true)
+            throw error
+        }
+    }
     func result() async throws -> [String: Any] { guard let last = last else { throw LANError.invalid }; return try await send("/v1/result", ["id": last], auth: true) }
     func disconnect() async -> [String: Any] {
-        guard !busy else { return ["status": "A LAN request is still running. Retry disconnect shortly."] }
+        guard !busy, !transferActive else { return ["status": "A LAN request or file transfer is still running. Retry disconnect shortly."] }
         _ = try? await send("/v1/disconnect", [:], auth: true)
         base = nil; pin = nil; code = nil; token = nil; ticket = nil; last = nil; expiry = 0
         return ["status": "Disconnected locally. Stop the laptop session to revoke all devices if unreachable."]
