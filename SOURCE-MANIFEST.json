@@ -242,10 +242,10 @@
       "sha256": "b9fafd36ccc72f662a55b2cba835126d527d7cc1c07c3a4985711d085023f8aa"
     },
     {
-      "bytes": 13755,
+      "bytes": 13761,
       "executable": false,
       "path": "companion/transfer.py",
-      "sha256": "cc1ae70c2e9a463eff0456764e61e40fcdc30667ab5524668f494d2955e3c656"
+      "sha256": "b713fa17fcdafe7b370e6e82d8a707d0fa85476df0dbf71034a847970ce66cbe"
     },
     {
       "bytes": 20278,
@@ -428,10 +428,10 @@
       "sha256": "88f20e76b213d3b354d67050fa76ea62dd8166a56d2c73caaafeb21aecba5a55"
     },
     {
-      "bytes": 13235,
+      "bytes": 13278,
       "executable": false,
       "path": "ios/KL06Mobile/PinnedLaptop.swift",
-      "sha256": "f31096c1d0c417556653c2109b1a523449dcf9b6e482498455e7fec2e3f6e026"
+      "sha256": "7a5f9e19c29dec4f391e874d72ef92a50e970e3527652d78dd82dcb1af7d058c"
     },
     {
       "bytes": 214,
@@ -818,10 +818,10 @@
       "sha256": "df28263f3de33f78de650aea4d1d6bb52440abe46cab6aa7c3ec54282bc5824a"
     },
     {
-      "bytes": 14109,
+      "bytes": 14295,
       "executable": false,
       "path": "tests/test_companion.py",
-      "sha256": "ff416a0274c144ea435938594b7eb100512ec85b035483c827d255cccf196322"
+      "sha256": "ec799a3f350f3370fed83ed1eb872f1ee01334116ec5ce0d163ccd3a4f59280d"
     },
     {
       "bytes": 14461,
