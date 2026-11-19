@@ -16,13 +16,13 @@
             "target_os": "Android 14 (API 34)",
             "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
             "filename": "KL-06-0.4.2-beta-android-debug-UNTESTED.zip",
-            "sha256": "57cc4de6a9c952edb0fb435cb8c45a6cd2d9cf1cb848ecc55045a57b16b94dd7",
-            "drive_download_url": "https://drive.google.com/uc?id=1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5/view?usp=sharing",
-            "apk_download_url": "https://drive.google.com/uc?id=1bBHqq441G3nivGngBDhov3PbspLDPBDr&export=download",
-            "apk_view_url": "https://drive.google.com/file/d/1bBHqq441G3nivGngBDhov3PbspLDPBDr/view?usp=sharing",
-            "apk_sha256": "db080eaa636b7ca728c2b13238d3a1fef10206bfc600ae12c516544eec75f388",
-            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes in-app OTA Updates tab, hardware permission setup dialog, dual Mobile Data & Wi-Fi internet access, zero-blink log saving, auto-send diagnostic reports to private Drive folder KL-06-Private-Logs, real-time UDP & TLS companion peer discovery on port 8766, PackageInstaller handoff, and multi-device radar scanning."
+            "sha256": "fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da",
+            "drive_download_url": "https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj/view?usp=sharing",
+            "apk_download_url": "https://drive.google.com/uc?id=1rdyT6UrMW5asQ0IckIJGMFkzrIGsE5j1&export=download",
+            "apk_view_url": "https://drive.google.com/file/d/1rdyT6UrMW5asQ0IckIJGMFkzrIGsE5j1/view?usp=sharing",
+            "apk_sha256": "496e9a549eda285046a21fc010396a110414908c5d7a875aa26c70d134c1ccc1",
+            "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes in-app OTA Updates tab, hardware permission setup dialog, dual Mobile Data & Wi-Fi internet access, Bluetooth device connectivity, continuous hardware keep-alive, auto-send diagnostic reports to private Drive folder KL-06-Private-Logs, real-time UDP & TLS companion peer discovery on port 8766, PackageInstaller handoff, and multi-device radar scanning."
         },
         "mac": {
             "version": "0.4.2-beta",
@@ -33,7 +33,7 @@
             "sha256": "b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240",
             "drive_download_url": "https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download",
             "drive_view_url": "https://drive.google.com/file/d/1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT/view?usp=sharing",
-            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) companion with 6-digit PIN display, OLED brightness, volume scalar, F13 hotkey, dual network compatibility, and UDP LAN discovery responder."
+            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) companion with 6-digit PIN display, OLED brightness, volume scalar, F13 hotkey, dual network compatibility, signed OTA update engine, and UDP LAN discovery responder."
         },
         "windows": {
             "version": "0.4.2-beta",
@@ -41,10 +41,10 @@
             "min_os": "Windows 7 SP1",
             "supported_os": "Windows 7, 8, 8.1, 10, 11",
             "filename": "KL-06-0.4.2-beta-windows-x64-UNTESTED.zip",
-            "sha256": "a52ffda2caf54a23081b4ba8f58aab1a0dd19fd90b7f1f67ffb1be106927a11c",
-            "drive_download_url": "https://drive.google.com/uc?id=133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB/view?usp=sharing",
-            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, single-page dashboard, PIN authentication, and UDP companion discovery."
+            "sha256": "6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b",
+            "drive_download_url": "https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50/view?usp=sharing",
+            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, single-page dashboard, PIN authentication, OTA updates, and UDP companion discovery."
         },
         "ios": {
             "version": "0.4.2-beta",
@@ -53,16 +53,49 @@
             "supported_os": "iOS 16, 17, 18+",
             "source_script": "INSTALL-IOS.command",
             "project_path": "ios/KL06Mobile.xcodeproj",
-            "notes": "iOS 16.0+ pure Swift / WKWebView companion with pinned TLS and local bridge. Build via Xcode or INSTALL-IOS.command."
+            "notes": "iOS 16.0+ pure Swift / WKWebView companion with pinned TLS, OTA checkUpdate support, and local bridge. Build via Xcode or INSTALL-IOS.command."
         },
         "source": {
             "version": "0.4.2-beta",
             "build": 9,
             "filename": "KL-06-0.4.2-beta-source-BUILD-READY.zip",
-            "sha256": "db3e38a01aa8f9a099b52470fade08c13bbb900f992fa8156644813664993cb4",
-            "drive_download_url": "https://drive.google.com/uc?id=10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l/view?usp=sharing",
+            "sha256": "f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369",
+            "drive_download_url": "https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD/view?usp=sharing",
             "notes": "Complete clean repository source archive passing 100% portable test assertions."
+        }
+    },
+    "previous_releases": {
+        "0.4.1-beta": {
+            "version": "0.4.1-beta",
+            "build": 8,
+            "release_date": "2026-11-18",
+            "platforms": {
+                "android": {
+                    "filename": "KL-06-0.4.1-beta-android-debug-UNTESTED.zip",
+                    "sha256": "9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c",
+                    "drive_download_url": "https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download",
+                    "drive_view_url": "https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing"
+                },
+                "mac": {
+                    "filename": "KL-06 Manager 4.1 beta.zip",
+                    "sha256": "8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0",
+                    "drive_download_url": "https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download",
+                    "drive_view_url": "https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing"
+                },
+                "windows": {
+                    "filename": "KL-06-0.4.1-beta-windows-x64-UNTESTED.zip",
+                    "sha256": "3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c",
+                    "drive_download_url": "https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download",
+                    "drive_view_url": "https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing"
+                },
+                "source": {
+                    "filename": "KL-06-0.4.1-beta-source-BUILD-READY.zip",
+                    "sha256": "328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073",
+                    "drive_download_url": "https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download",
+                    "drive_view_url": "https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing"
+                }
+            }
         }
     }
 }

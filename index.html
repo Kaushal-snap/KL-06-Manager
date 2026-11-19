@@ -372,6 +372,17 @@
                     Select your operating system below for instant direct downloads, cryptographic checksums, and verified installation bundles created by <strong>Kaushal Labana</strong>.
                 </p>
 
+                <!-- Release Version Selector Bar -->
+                <div class="version-selector-wrap" style="display:flex;justify-content:center;align-items:center;gap:12px;margin:20px 0 14px;flex-wrap:wrap">
+                    <span style="font-size:0.9rem;font-weight:600;color:var(--text-muted)">Release Channel:</span>
+                    <button class="tab-btn active" id="btn-ver-042" onclick="switchVersionDisplay('0.4.2')" style="font-size:0.88rem;padding:8px 18px;border-radius:9999px">
+                        ⚡ v0.4.2-beta (Latest Release)
+                    </button>
+                    <button class="tab-btn" id="btn-ver-041" onclick="switchVersionDisplay('0.4.1')" style="font-size:0.88rem;padding:8px 18px;border-radius:9999px">
+                        📦 v0.4.1-beta (Previous Stable Release)
+                    </button>
+                </div>
+
                 <!-- Platform Filter Tabs -->
                 <div class="platform-tabs" id="platform-tabs">
                     <button class="tab-btn active" data-filter="all">All Platforms</button>
@@ -383,8 +394,8 @@
                 </div>
             </div>
 
-            <!-- Platform Cards Grid -->
-            <div class="platform-grid">
+            <!-- Platform Cards Grid: v0.4.2-beta (Latest) -->
+            <div class="platform-grid" id="latest-042-grid">
 
                 <!-- 1. Android Card -->
                 <div class="card platform-card android-card" data-platform="android">
@@ -415,18 +426,18 @@
                     </ul>
 
                     <div class="card-actions">
-                        <a href="https://drive.google.com/uc?id=1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5&export=download" class="btn btn-primary btn-block">
+                        <a href="https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download" class="btn btn-primary btn-block">
                             ⬇️ Direct Download APK Package (1.07 MB)
                         </a>
-                        <a href="https://drive.google.com/file/d/1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                        <a href="https://drive.google.com/file/d/1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
                             Google Drive Mirror
                         </a>
                     </div>
 
                     <div class="hash-box">
                         <span class="hash-label">SHA-256 Checksum:</span>
-                        <code class="hash-code" id="hash-android">57cc4de6a9c952edb0fb435cb8c45a6cd2d9cf1cb848ecc55045a57b16b94dd7</code>
-                        <button class="btn-copy" onclick="copyText('57cc4de6a9c952edb0fb435cb8c45a6cd2d9cf1cb848ecc55045a57b16b94dd7', this)">Copy</button>
+                        <code class="hash-code" id="hash-android">fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da</code>
+                        <button class="btn-copy" onclick="copyText('fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da', this)">Copy</button>
                     </div>
                 </div>
 
@@ -495,18 +506,18 @@
                     </ul>
 
                     <div class="card-actions">
-                        <a href="https://drive.google.com/uc?id=133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB&export=download" class="btn btn-primary btn-block">
+                        <a href="https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download" class="btn btn-primary btn-block">
                             ⬇️ Direct Download Windows x64
                         </a>
-                        <a href="https://drive.google.com/file/d/133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                        <a href="https://drive.google.com/file/d/1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
                             Google Drive Mirror
                         </a>
                     </div>
 
                     <div class="hash-box">
                         <span class="hash-label">SHA-256 Checksum:</span>
-                        <code class="hash-code" id="hash-win">a52ffda2caf54a23081b4ba8f58aab1a0dd19fd90b7f1f67ffb1be106927a11c</code>
-                        <button class="btn-copy" onclick="copyText('a52ffda2caf54a23081b4ba8f58aab1a0dd19fd90b7f1f67ffb1be106927a11c', this)">Copy</button>
+                        <code class="hash-code" id="hash-win">6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b</code>
+                        <button class="btn-copy" onclick="copyText('6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b', this)">Copy</button>
                     </div>
                 </div>
 
@@ -575,18 +586,174 @@
                     </ul>
 
                     <div class="card-actions">
-                        <a href="https://drive.google.com/uc?id=10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l&export=download" class="btn btn-primary btn-block">
+                        <a href="https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download" class="btn btn-primary btn-block">
                             ⬇️ Direct Download Source ZIP
                         </a>
-                        <a href="https://drive.google.com/file/d/10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                        <a href="https://drive.google.com/file/d/1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
                             Google Drive Mirror
                         </a>
                     </div>
 
                     <div class="hash-box">
                         <span class="hash-label">SHA-256 Checksum:</span>
-                        <code class="hash-code" id="hash-source">db3e38a01aa8f9a099b52470fade08c13bbb900f992fa8156644813664993cb4</code>
-                        <button class="btn-copy" onclick="copyText('db3e38a01aa8f9a099b52470fade08c13bbb900f992fa8156644813664993cb4', this)">Copy</button>
+                        <code class="hash-code" id="hash-source">f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369</code>
+                        <button class="btn-copy" onclick="copyText('f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369', this)">Copy</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Platform Cards Grid: v0.4.1-beta (Previous Stable Release Archive) -->
+            <div class="platform-grid" id="archive-041-section" style="display:none;margin-top:20px">
+
+                <!-- 1. Android Card v0.4.1 -->
+                <div class="card platform-card android-card" data-platform="android">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap android-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 0 0-.1521-.5676.416.416 0 0 0-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.1218 12 8.1218s-3.5902.2898-5.1368.8279L4.8409 5.4467a.4161.4161 0 0 0-.5677-.1521.4157.4157 0 0 0-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Android Package (v0.4.1)</h3>
+                    <p class="platform-target">Android 8.0 Oreo to Android 17+ (API 26–34+)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">1.07 MB</span>
+                        <span class="spec-tag">4-byte Aligned</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>📡 Real-time UDP &amp; TLS companion peer discovery on port 8766</li>
+                        <li>📥 Scoped MediaStore storage writing to Download/KL-06/logs/</li>
+                        <li>🔒 6-digit PIN pairing consent with dual APK v1+v2 signing</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 APK Package (1.07 MB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-android-v041">9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c</code>
+                        <button class="btn-copy" onclick="copyText('9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 2. macOS Card v0.4.1 -->
+                <div class="card platform-card mac-card" data-platform="mac">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap mac-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.64-.78 1.08-1.86.96-2.94-.93.04-2.06.62-2.73 1.4-.58.68-1.1 1.77-.96 2.83 1.04.08 2.09-.51 2.73-1.29z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">macOS Bundle (v0.4.1)</h3>
+                    <p class="platform-target">macOS 13.0+ Ventura, Sonoma, Sequoia (x86_64)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">196 KB</span>
+                        <span class="spec-tag">Intel &amp; Apple Silicon</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Native menu bar companion with 6-digit PIN display</li>
+                        <li>🔊 CoreAudio volume scalar &amp; OLED brightness control</li>
+                        <li>🛡️ Signed catalog integrity validation</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 macOS Bundle
+                        </a>
+                        <a href="https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-mac-v041">8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0</code>
+                        <button class="btn-copy" onclick="copyText('8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 3. Windows Card v0.4.1 -->
+                <div class="card platform-card win-card" data-platform="windows">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap win-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.401H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Windows x64 (v0.4.1)</h3>
+                    <p class="platform-target">Windows 7 SP1, Windows 8, 8.1, 10, 11 (64-bit)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">553 KB</span>
+                        <span class="spec-tag">WebView2 Engine</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ System tray companion and floating dashboard</li>
+                        <li>🔒 6-digit mutual PIN pairing with phone</li>
+                        <li>🛡️ Zero telemetry, sandboxed local execution</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 Windows x64
+                        </a>
+                        <a href="https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-win-v041">3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c</code>
+                        <button class="btn-copy" onclick="copyText('3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 4. Source Archive Card v0.4.1 -->
+                <div class="card platform-card source-card" data-platform="source">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap source-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Complete Source Code (v0.4.1)</h3>
+                    <p class="platform-target">All Platforms (Mac, Win, Android, iOS)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">1.88 MB</span>
+                        <span class="spec-tag">143 Files</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Complete clean repository snapshot for v0.4.1-beta</li>
+                        <li>📋 Includes SOURCE-MANIFEST.json &amp; SHA256SUMS</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 Source ZIP
+                        </a>
+                        <a href="https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-source-v041">328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073</code>
+                        <button class="btn-copy" onclick="copyText('328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073', this)">Copy</button>
                     </div>
                 </div>
 
@@ -995,12 +1162,21 @@
                     </p>
                 </div>
                 <div class="footer-links-group">
-                    <h4>Ecosystem Downloads</h4>
+                    <h4>Ecosystem Downloads (v0.4.2)</h4>
                     <ul>
-                        <li><a href="https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download">Android APK Package</a></li>
-                        <li><a href="https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download">macOS App Bundle</a></li>
-                        <li><a href="https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download">Windows x64 Package</a></li>
-                        <li><a href="https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download">Full Source Code ZIP</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download">Android Package (v0.4.2)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download">macOS App Bundle (v0.4.2)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download">Windows x64 Package (v0.4.2)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download">Full Source Code (v0.4.2)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Archive Downloads (v0.4.1)</h4>
+                    <ul>
+                        <li><a href="https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download">Android Package (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download">macOS App Bundle (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download">Windows x64 (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download">Source ZIP (v0.4.1)</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
