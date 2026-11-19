@@ -107,7 +107,10 @@ class BrokerTests(unittest.TestCase):
         self.assertEqual(status,200)
         self.assertEqual(final['state'],'complete')
         self.assertEqual(final['bytesTransferred'],len(payload))
-        self.assertEqual(hashlib.sha256(Path(final['finalPath']).read_bytes()).hexdigest(),expected)
+        self.assertEqual(final['destinationName'],'ios-fixture.bin')
+        destination=self.b.transfer_engine.get_transfer(transfer_id).destination_path
+        self.assertEqual(hashlib.sha256(destination.read_bytes()).hexdigest(),expected)
+        self.assertNotIn('finalPath',final)
 
     def test_no_snapshot_does_not_invent_readings(self):
         _,r=self.b.handle('/v1/state',{},self.pair());self.assertEqual(r['status'],'not-sampled');self.assertIsNone(r['state'])
