@@ -1064,11 +1064,12 @@
     transferActive = true;
     transferFileName = fileName;
     transferProgress = 5;
-    transferSpeed = '45.2 MB/s';
+    transferSpeed = '—';
     addLog('TRANSFER', 'info', `Initiating transfer for "${fileName}" (${(fileSize / 1024).toFixed(1)} KB)...`);
     render();
 
     if (native) {
+      if (!uri) { transferActive = false; toast('Native file URI missing. No file was sent.'); addLog('TRANSFER','error','Native file URI missing; transfer stopped.'); render(); return; }
       if (pairedDevice?.host && pairedDevice.host.includes(':8766')) {
         try {
           addLog('TRANSFER', 'info', `Streaming "${fileName}" over TLS directly to ${pairedDevice.name}...`);
@@ -1173,7 +1174,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 - Local Mac/PC Backup: ~/Library/Application Support/KL-06/logs/fan-diagnostic.log
 - Sync Channel: Direct Inbuilt Upload & Background TLS Handshake
 - Transfer Protocol: KL06_COMPANION_V1 (Port 8766 UDP/TLS Discovery & Pinned Cert)
-- Status: Auto-sent to private Drive folder successfully.
+- Status: Not uploaded. Google Drive OAuth and folder authorization are not configured in this build.
 ================================================================================`;
 
     try {
@@ -1554,7 +1555,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'scan-peers': {
         isScanning = true;
         addLog('RADAR', 'info', 'Scanning local Wi-Fi & Hotspot for active KL-06 companions on port 8766...');
-        toast('Scanning local Wi-Fi, Bluetooth & Hotspot for active companions…');
+        toast('Scanning for KL-06 LAN companions. Bluetooth and cellular discovery are not implemented.');
         render();
         try {
           if (native) {
@@ -1665,12 +1666,17 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (native) {
           try {
             const res = await request('pickShareFile');
-            if (res && res.fileName) {
-              await executeFileTransfer(res.fileName, res.fileSize || 1024 * 350, res.mimeType, res.uri || '');
+            if (res && res.fileName && res.uri) {
+              await executeFileTransfer(res.fileName, res.fileSize, res.mimeType, res.uri);
               return;
             }
+            toast('Native file picker returned no usable URI. No transfer was started.');
+            return;
+            }
           } catch(err) {
-            addLog('TRANSFER', 'warn', 'Native picker: ' + (err?.message || 'fallback to input'));
+            addLog('TRANSFER', 'error', 'Native picker failed: ' + (err?.message || 'unknown error'));
+            toast('Native file picker failed. No browser fallback was used.');
+            return;
           }
         }
         let fileInput = document.getElementById('real-file-picker');
