@@ -1556,7 +1556,6 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
             }
             toast('Native file picker returned no usable URI. No transfer was started.');
             return;
-            }
           } catch(err) {
             addLog('TRANSFER', 'error', 'Native picker failed: ' + (err?.message || 'unknown error'));
             toast('Native file picker failed. No browser fallback was used.');
