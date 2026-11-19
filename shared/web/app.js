@@ -509,15 +509,15 @@
           <small>KL-06 peer transport: private Wi-Fi LAN only. Bluetooth and cellular relay are not implemented.</small>
         </div>
         <div class="conn-card">
-          <strong>☁️ Private Drive Auto-Sync</strong>
-          <small>KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)</small>
+          <strong>☁️ Private Drive Status</strong>
+          <small>Not configured · Google OAuth authorization required</small>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
-        ${button('☁️ Auto-Share Logs to Private Drive', 'send-error-report', 'class="btn-primary"')}
-        ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
-        ${button('📥 Export Logs to User Log Folder', 'export-logs')}
+        ${button('Prepare Report for Sharing', 'send-error-report', 'class="btn-primary"')}
+        ${button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"')}
+        ${button('📥 Export Local Logs', 'export-logs')}
         <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
           <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
         </a>
@@ -1115,7 +1115,7 @@
     const nowIso = new Date().toISOString();
     
     const reportText = `================================================================================
-KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (INBUILT AUTO-SYNC)
+KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (LOCAL EXPORT)
 ================================================================================
 Timestamp: ${nowIso}
 Application: KL-06 Control Center & Ecosystem Manager
@@ -1137,7 +1137,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 - Diagnostic Status: Report generated; hardware values depend on current native sensor responses
 
 [ECOSYSTEM & PRIVATE DRIVE SYNC]
-- Auto-Sync Destination: Google Drive Private Folder KL-06-Private-Logs
+- Google Drive Destination: Not configured; no authenticated upload was attempted
 - Target Folder ID: 1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n
 - Local Export: Platform-selected local save/share destination
 - Sync Channel: Not configured; no Google Drive OAuth token is available
@@ -1319,7 +1319,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         } else {
           addLog('ONLINE', 'info', 'Local diagnostic buffer disabled by user.');
-          toast('Online Log Collection paused.');
+          toast('Local diagnostic buffer paused.');
         }
         render();
         return;
