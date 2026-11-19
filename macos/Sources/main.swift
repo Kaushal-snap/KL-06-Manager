@@ -114,7 +114,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         }
     }
     @objc private func showAbout() {
-        let alert = NSAlert(); alert.messageText = "KL-06 Manager 0.3.0-beta.2 · build 5"
+        let alert = NSAlert(); alert.messageText = "KL-06 Manager 0.4.7-beta · build 12"
         alert.informativeText = "\(shortcutStatus)\n\nAn independent capability-aware macOS companion. Not an ASUS product. Reported hardware and missing counters are not a compatibility certificate. No firmware fan/charge-limit driver is included."
         alert.runModal()
     }
