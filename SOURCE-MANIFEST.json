@@ -452,10 +452,10 @@
       "sha256": "e32e3f2029af2bca6386aca9bc8602a683528732d2c9fe3972065adf4843f80d"
     },
     {
-      "bytes": 3522,
+      "bytes": 3553,
       "executable": true,
       "path": "macos/BUILD-MAC.command",
-      "sha256": "b96ccee7f742da38bf28b486af6e5ba73eb9638e7dbd598f8769427b42d29ee5"
+      "sha256": "837e44ed37f8b1d8f74bd673fea1bef44b018ffb36d8bf4429c979d906cda260"
     },
     {
       "bytes": 1556,
@@ -554,10 +554,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 64149,
+      "bytes": 64284,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "44ee787d4b65325680c679f9b00d989432d66376f9e3aa076bae3a9d016aafe3"
+      "sha256": "6d8a083c6d02a5c59812c01eba12ca7334d543e9983d441217e33d6c927c96d5"
     },
     {
       "bytes": 5483,
@@ -608,10 +608,10 @@
       "sha256": "2ad2dc8925a6e88ba62f678994631e8d435404a892ac9dabf4777d255eb11971"
     },
     {
-      "bytes": 11237,
+      "bytes": 11258,
       "executable": false,
       "path": "macos/Sources/DesktopCompanion.swift",
-      "sha256": "e54e5bb4204647ffc5d19083a75f34cdee9ff2f3de7ad919b498b6b065f35e35"
+      "sha256": "4e7cf66f2be119f88d8338091307fb00b52b670aaea1f6751bae98516779ece3"
     },
     {
       "bytes": 4041,
@@ -656,10 +656,10 @@
       "sha256": "ce6e0cf45494cda34f09cd7148b2b6befcbef4da01e035a64632652494868a13"
     },
     {
-      "bytes": 31234,
+      "bytes": 34141,
       "executable": false,
       "path": "macos/Sources/main.swift",
-      "sha256": "4b25aefa1249226d0fb3ea360977126d2d496b2d1de85790ba6e80a696f17247"
+      "sha256": "37d60df680c97b1d7165f29e56f66c95b04c734affa38ece663309e7176441e8"
     },
     {
       "bytes": 2090,
