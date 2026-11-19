@@ -17,12 +17,12 @@ const PLATFORM_DATA = {
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
-        fileName: 'KL-06 Manager 4.3 beta.zip',
-        fileMeta: 'v0.4.3-beta Build 10 • 196 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
-        directUrl: 'https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT/view?usp=sharing',
-        sha256: 'b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240',
-        btnText: '⬇️ Download for macOS (196 KB)'
+        fileName: 'KL-06 Manager 0.4.3.zip',
+        fileMeta: 'v0.4.3-beta Build 10 • 207 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        directUrl: 'https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1jfB-a7WobMvncb4RW9dNt1ipINB3khe9/view?usp=sharing',
+        sha256: '7ad49ff2d7ec76124642597a4d5e7170daa718999b9190c290c556a6b4773577',
+        btnText: '⬇️ Download for macOS (207 KB)'
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
@@ -46,9 +46,9 @@ const PLATFORM_DATA = {
         name: 'Complete Source Code Archive',
         fileName: 'KL-06-0.4.3-beta-source-BUILD-READY.zip',
         fileMeta: 'v0.4.3-beta Build 10 • 2.02 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv/view',
-        sha256: 'a5cb4f3b0124db1106b01c146ce1782fd2cfec19d19faffc47ffb0e02bf1ddf4',
+        directUrl: 'https://drive.google.com/uc?id=1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5/view',
+        sha256: 'f1070b6e2823fe4e971be1ad3731f4176a2d1fff980d082371926ee4dc03bc93',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };

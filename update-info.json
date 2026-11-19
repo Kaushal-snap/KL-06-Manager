@@ -29,11 +29,11 @@
             "build": 10,
             "min_os": "macOS 13.0 Ventura",
             "supported_os": "macOS 13, 14, 15+",
-            "filename": "KL-06 Manager 4.3 beta.zip",
-            "sha256": "b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240",
-            "drive_download_url": "https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT/view?usp=sharing",
-            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) companion with 6-digit PIN display, OLED brightness, volume scalar, F13 hotkey, dual network compatibility, signed OTA update engine, and UDP LAN discovery responder."
+            "filename": "KL-06 Manager 0.4.3.zip",
+            "sha256": "7ad49ff2d7ec76124642597a4d5e7170daa718999b9190c290c556a6b4773577",
+            "drive_download_url": "https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1jfB-a7WobMvncb4RW9dNt1ipINB3khe9/view?usp=sharing",
+            "notes": "Verified working macOS 13+ (Ventura, Sonoma, Sequoia) native app bundle with 6-digit PIN display, AppleSMC fan sensor integration, OLED brightness, volume scalar, F13 hotkey, dual network compatibility, and UDP LAN discovery responder."
         },
         "windows": {
             "version": "0.4.3-beta",
@@ -59,9 +59,9 @@
             "version": "0.4.3-beta",
             "build": 10,
             "filename": "KL-06-0.4.3-beta-source-BUILD-READY.zip",
-            "sha256": "a5cb4f3b0124db1106b01c146ce1782fd2cfec19d19faffc47ffb0e02bf1ddf4",
-            "drive_download_url": "https://drive.google.com/uc?id=1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv/view?usp=sharing",
+            "sha256": "f1070b6e2823fe4e971be1ad3731f4176a2d1fff980d082371926ee4dc03bc93",
+            "drive_download_url": "https://drive.google.com/uc?id=1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5/view?usp=sharing",
             "notes": "Complete clean repository source archive passing 100% portable test assertions."
         }
     },
