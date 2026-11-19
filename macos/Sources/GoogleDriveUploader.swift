@@ -15,6 +15,7 @@ final class GoogleDriveUploader {
     private init() {}
 
     var isConnected: Bool { keychainRead("refreshToken") != nil && keychainRead("clientID") != nil }
+    var configuredClientID: String? { keychainRead("clientID") }
 
     func connect(clientID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard clientID.range(of: #"^[0-9]+-[A-Za-z0-9_-]+\.apps\.googleusercontent\.com$"#, options: .regularExpression) != nil else {
@@ -47,6 +48,7 @@ final class GoogleDriveUploader {
         let listener: NWListener
         do { listener = try NWListener(using: parameters, on: .any) }
         catch { completion(.failure(error)); return }
+        var redirectURI = ""
         listener.newConnectionHandler = { [weak listener] connection in
             connection.start(queue: self.queue)
             connection.receive(minimumIncompleteLength: 1, maximumLength: 8192) { data, _, _, receiveError in
@@ -68,7 +70,7 @@ final class GoogleDriveUploader {
                 let response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\nConnection: close\r\n\r\n\(body)"
                 connection.send(content: response.data(using: .utf8), completion: .contentProcessed { _ in connection.cancel() })
                 listener?.cancel()
-                self.exchangeCode(code, verifier: verifier, redirectURI: "http://127.0.0.1:\(listener?.port?.rawValue ?? 0)", clientID: clientID, completion: completion)
+                self.exchangeCode(code, verifier: verifier, redirectURI: redirectURI, clientID: clientID, completion: completion)
             }
         }
         listener.stateUpdateHandler = { stateValue in
@@ -76,10 +78,11 @@ final class GoogleDriveUploader {
                 if case .failed(let e) = stateValue { listener.cancel(); completion(.failure(e)) }
                 return
             }
+            redirectURI = "http://127.0.0.1:\(port)"
             var components = URLComponents(string: "https://accounts.google.com/o/oauth2/v2/auth")!
             components.queryItems = [
                 URLQueryItem(name: "client_id", value: clientID),
-                URLQueryItem(name: "redirect_uri", value: "http://127.0.0.1:\(port)"),
+                URLQueryItem(name: "redirect_uri", value: redirectURI),
                 URLQueryItem(name: "response_type", value: "code"),
                 URLQueryItem(name: "scope", value: self.scope),
                 URLQueryItem(name: "access_type", value: "offline"),
