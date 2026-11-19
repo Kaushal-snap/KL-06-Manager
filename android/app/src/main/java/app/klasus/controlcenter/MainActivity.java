@@ -313,6 +313,17 @@ public final class MainActivity extends Activity {
                             if(sizeIdx!=-1)fileSize=cursor.getLong(sizeIdx);
                         }
                     }
+                    if(fileSize<=0){
+                        long measured=0;
+                        try(InputStream sizeStream=getContentResolver().openInputStream(u)){
+                            if(sizeStream==null)throw new IOException("Cannot read selected file.");
+                            byte[] sizeBuffer=new byte[65536];int sizeRead;
+                            while((sizeRead=sizeStream.read(sizeBuffer))!=-1){measured+=sizeRead;if(measured>2L*1024L*1024L*1024L)throw new IOException("File exceeds the 2 GiB transfer limit.");}
+                        }
+                        fileSize=measured;
+                    }
+                    if(fileSize<=0)throw new IOException("Zero-byte or unreadable file; choose a non-empty regular file.");
+                    if(fileSize>2L*1024L*1024L*1024L)throw new IOException("File exceeds the 2 GiB transfer limit.");
                     MessageDigest digest=MessageDigest.getInstance("SHA-256");
                     try(InputStream in=getContentResolver().openInputStream(u)){
                         byte[] b=new byte[65536];int n;
