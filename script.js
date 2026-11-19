@@ -7,49 +7,49 @@
 const PLATFORM_DATA = {
     android: {
         name: 'Android Package (Dual v1 + v2 Signed)',
-        fileName: 'KL-06-0.4.5-beta-android-debug-UNTESTED.zip',
-        fileMeta: 'v0.4.5-beta Build 11 • 1.04 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1oeOX-cZoFTQgtq4c8wWBC_kyiQzxOJpW&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1oeOX-cZoFTQgtq4c8wWBC_kyiQzxOJpW/view?usp=sharing',
-        apkDirectUrl: 'https://drive.google.com/uc?id=1gQMBk9j5hwAU81AtwPbCoVtaF33YQc8K&export=download',
-        sha256: '5a7e3fe7f9b9595f29d037c71f9d65e57727f5689ee413bc83c6e28d290ae06e',
-        btnText: '⬇️ Download for Android (1.04 MB)'
+        fileName: 'KL-06-0.4.7-beta-android-debug-UNTESTED.zip',
+        fileMeta: 'v0.4.7-beta Build 12 • 1.08 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
+        directUrl: 'https://drive.google.com/uc?id=1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe/view?usp=sharing',
+        apkDirectUrl: 'https://drive.google.com/uc?id=1IqEQJneefBF9iXS8Zy8HI2DeTe6kAzMP&export=download',
+        sha256: 'ea33a75776d954a7707f909b6e896720dfef3fb273a23b2bde3cc269fb81d060',
+        btnText: '⬇️ Download for Android (1.08 MB)'
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
-        fileName: 'KL-06 Manager 0.4.5.zip',
-        fileMeta: 'v0.4.5-beta Build 11 • 207 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
-        directUrl: 'https://drive.google.com/uc?id=1sD8VbyAc5W-10i_0v49-yywJPavtznXI&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1sD8VbyAc5W-10i_0v49-yywJPavtznXI/view?usp=sharing',
-        sha256: '7eb162cd1b49a1f71343724bf03ecee7aa4c942432e356ee0cd56fd2ccf9edec',
-        btnText: '⬇️ Download for macOS (207 KB)'
+        fileName: 'KL-06 Manager 0.4.7.zip',
+        fileMeta: 'v0.4.7-beta Build 12 • 215 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        directUrl: 'https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E/view?usp=sharing',
+        sha256: 'd8783b07bf73165770439ceca71f8017f0a899a4b437ef64f09ca2eb25320748',
+        btnText: '⬇️ Download for macOS (215 KB)'
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
-        fileName: 'KL-06-0.4.5-beta-windows-x64-UNTESTED.zip',
-        fileMeta: 'v0.4.5-beta Build 11 • 569 KB • Windows 7 SP1, 8, 8.1, 10, 11',
-        directUrl: 'https://drive.google.com/uc?id=1FEKRyah3fDVB-JuY9hq8rx573mCePu3N&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1FEKRyah3fDVB-JuY9hq8rx573mCePu3N/view?usp=sharing',
-        sha256: 'c0223277155de1efc28d2ff0129f25f51b2ab2440c81c4fc6e27b1db53704596',
-        btnText: '⬇️ Download for Windows x64 (569 KB)'
+        fileName: 'KL-06-0.4.7-beta-windows-x64-UNTESTED.zip',
+        fileMeta: 'v0.4.7-beta Build 12 • 582 KB • Windows 7 SP1, 8, 8.1, 10, 11',
+        directUrl: 'https://drive.google.com/uc?id=1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn/view?usp=sharing',
+        sha256: '976d460cb75a4953186dfc710f69fdecdac655b4f510779ea2efeb00c8b9dbee',
+        btnText: '⬇️ Download for Windows x64 (582 KB)'
     },
     ios: {
-        name: 'iOS Mobile Companion (Swift / devicectl)',
-        fileName: 'INSTALL-IOS.command & Xcode Project',
-        fileMeta: 'v0.4.5-beta Build 11 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
-        directUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command',
-        viewUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios',
-        sha256: 'Build via devicectl / AltStore / Xcode',
-        btnText: '🛠️ View iOS Install Guide'
+        name: 'iOS Mobile Companion (Swift / IPA)',
+        fileName: 'KL-06-0.4.7-beta-ios-UNTESTED.zip & KL06Mobile.ipa',
+        fileMeta: 'v0.4.7-beta Build 12 • iOS 16.0+ (iOS 16, 17, 18+) • Prebuilt IPA & Swift',
+        directUrl: 'https://drive.google.com/uc?id=1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2/view?usp=sharing',
+        sha256: '69ea66799d1207a2b2395e8339fc6b2c2af2d473026dd475dc205b9ee9481fb3',
+        btnText: '⬇️ Download iOS IPA Package (263 KB)'
     },
     source: {
         name: 'Complete Source Code Archive',
-        fileName: 'KL-06-0.4.5-beta-source-BUILD-READY.zip',
-        fileMeta: 'v0.4.5-beta Build 11 • 1.98 MB • 149 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=16SSqq-v1NwVEProYnRwBrVB_Ytap7MbW&export=download',
-        viewUrl: 'https://drive.google.com/file/d/16SSqq-v1NwVEProYnRwBrVB_Ytap7MbW/view',
-        sha256: 'e47af15702b29ac95fa8e339daf0cfba73fb03ed080663436ae2f67cf2796ff6',
-        btnText: '⬇️ Download Full Source ZIP'
+        fileName: 'KL-06-0.4.7-beta-source-BUILD-READY.zip',
+        fileMeta: 'v0.4.7-beta Build 12 • 2.08 MB • 154 Clean Files',
+        directUrl: 'https://drive.google.com/uc?id=1Cr1CfdnSG5COgBHqu1A-csr85XszDowC&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1Cr1CfdnSG5COgBHqu1A-csr85XszDowC/view?usp=sharing',
+        sha256: '0d215bddc6cf939dcb52562b575e6cccc1be6f820f4078fc0ce569e2dd992c9c',
+        btnText: '⬇️ Download Full Source ZIP (2.08 MB)'
     }
 };
 
@@ -102,27 +102,27 @@ const PLATFORM_DATA_V041 = {
     }
 };
 
-let currentSelectedVersion = '0.4.5';
+let currentSelectedVersion = '0.4.7';
 
 function switchVersionDisplay(version) {
     currentSelectedVersion = version;
-    const btn045 = document.getElementById('btn-ver-045') || document.getElementById('btn-ver-043') || document.getElementById('btn-ver-042');
+    const btn047 = document.getElementById('btn-ver-047') || document.getElementById('btn-ver-045') || document.getElementById('btn-ver-043') || document.getElementById('btn-ver-042');
     const btn041 = document.getElementById('btn-ver-041');
     const archiveSection = document.getElementById('archive-041-section');
     const latestSection = document.getElementById('latest-042-grid');
 
     if (version === '0.4.1') {
         if (btn041) btn041.classList.add('active');
-        if (btn045) btn045.classList.remove('active');
+        if (btn047) btn047.classList.remove('active');
         if (archiveSection) archiveSection.style.display = 'grid';
         if (latestSection) latestSection.style.display = 'none';
         showToast("Switched to Version 0.4.1-beta Archive Downloads.");
     } else {
-        if (btn045) btn045.classList.add('active');
+        if (btn047) btn047.classList.add('active');
         if (btn041) btn041.classList.remove('active');
         if (archiveSection) archiveSection.style.display = 'none';
         if (latestSection) latestSection.style.display = 'grid';
-        showToast("Showing Version 0.4.5-beta (Latest Release).");
+        showToast("Showing Version 0.4.7-beta (Latest Release).");
     }
 }
 

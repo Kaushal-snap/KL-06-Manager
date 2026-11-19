@@ -1,132 +1,99 @@
 {
     "app": "KL-06 Manager",
-    "owner": "Kaushal Labana",
-    "support_email": "labanayt@gmail.com",
-    "discord": "https://discord.gg/Z4my8c2ZH",
-    "discord_username": "labanayt5301",
-    "youtube": "https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM",
-    "current_version": "0.4.5-beta",
-    "build": 11,
+    "current_version": "0.4.7-beta",
+    "build": 12,
     "release_date": "2026-11-19",
     "platforms": {
-        "android": {
-            "version": "0.4.5-beta",
-            "build": 11,
-            "min_os": "Android 8.0 (API 26)",
-            "target_os": "Android 14 (API 34)",
-            "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
-            "filename": "KL-06-0.4.5-beta-android-debug-UNTESTED.zip",
-            "sha256": "5a7e3fe7f9b9595f29d037c71f9d65e57727f5689ee413bc83c6e28d290ae06e",
-            "drive_download_url": "https://drive.google.com/uc?id=1oeOX-cZoFTQgtq4c8wWBC_kyiQzxOJpW&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1oeOX-cZoFTQgtq4c8wWBC_kyiQzxOJpW/view?usp=sharing",
-            "apk_download_url": "https://drive.google.com/uc?id=1gQMBk9j5hwAU81AtwPbCoVtaF33YQc8K&export=download",
-            "apk_view_url": "https://drive.google.com/file/d/1gQMBk9j5hwAU81AtwPbCoVtaF33YQc8K/view?usp=sharing",
-            "apk_sha256": "8cb8488aa17775f0cfdbfc00a12034a0e4d9d6be02ea4bfc7a73d1a0ce784c49",
-            "notes": "Tiger Lake hardware optimization suite, mutual PIN pairing, hardware fan diagnostics with password protection, online diagnostic telemetry, auto-sharing to private Drive folder KL-06-Private-Logs, dual APK Signature Scheme v1 (JAR) + v2 signed, uncompressed 4-byte aligned resources.arsc, in-app OTA Updates engine, and real-time companion peer discovery."
-        },
         "mac": {
-            "version": "0.4.5-beta",
-            "build": 11,
+            "version": "0.4.7-beta",
+            "build": 12,
             "min_os": "macOS 13.0 Ventura",
-            "supported_os": "macOS 13, 14, 15+",
-            "filename": "KL-06 Manager 0.4.5.zip",
-            "sha256": "7eb162cd1b49a1f71343724bf03ecee7aa4c942432e356ee0cd56fd2ccf9edec",
-            "drive_download_url": "https://drive.google.com/uc?id=1sD8VbyAc5W-10i_0v49-yywJPavtznXI&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1sD8VbyAc5W-10i_0v49-yywJPavtznXI/view?usp=sharing",
-            "notes": "Verified working macOS 13+ (Ventura, Sonoma, Sequoia) native app bundle with Tiger Lake hardware optimization suite (HDR/EDR flicker fix, Sleep/Wake black screen recovery, AWDL coexistence, GPU watchdog panic protection), AppleSMC fan tachometer reader, OLED brightness, volume scalar, F13 hotkey, dual network compatibility, and UDP LAN discovery responder."
+            "supported_os": "macOS 13, 14, 15+ (Sequoia)",
+            "filename": "KL-06 Manager 0.4.7.zip",
+            "sha256": "d8783b07bf73165770439ceca71f8017f0a899a4b437ef64f09ca2eb25320748",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.7-beta/KL-06-Manager-0.4.7.zip",
+            "drive_download_url": "https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download",
+            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) AppKit companion with Tiger Lake fix suite, Lilu HDR kernel descriptors, OPEN-KL06 launcher, and zero Gatekeeper friction."
         },
         "windows": {
-            "version": "0.4.5-beta",
-            "build": 11,
+            "version": "0.4.7-beta",
+            "build": 12,
             "min_os": "Windows 7 SP1",
             "supported_os": "Windows 7, 8, 8.1, 10, 11",
-            "filename": "KL-06-0.4.5-beta-windows-x64-UNTESTED.zip",
-            "sha256": "c0223277155de1efc28d2ff0129f25f51b2ab2440c81c4fc6e27b1db53704596",
-            "drive_download_url": "https://drive.google.com/uc?id=1FEKRyah3fDVB-JuY9hq8rx573mCePu3N&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1FEKRyah3fDVB-JuY9hq8rx573mCePu3N/view?usp=sharing",
-            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, single-page dashboard, PIN authentication, OTA updates, Tiger Lake fix dashboard, and UDP companion discovery."
+            "filename": "KL-06-0.4.7-beta-windows-x64-UNTESTED.zip",
+            "sha256": "976d460cb75a4953186dfc710f69fdecdac655b4f510779ea2efeb00c8b9dbee",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.7-beta/KL-06-0.4.7-beta-windows-x64-UNTESTED.zip",
+            "drive_download_url": "https://drive.google.com/uc?id=1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn&export=download",
+            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, device connection fixes, and OTA updates."
+        },
+        "android": {
+            "version": "0.4.7-beta",
+            "build": 12,
+            "min_os": "Android 8.0 (API 26)",
+            "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
+            "filename": "KL-06-0.4.7-beta-android-debug-UNTESTED.zip",
+            "apk_filename": "KL-06-Manager.apk",
+            "sha256": "ea33a75776d954a7707f909b6e896720dfef3fb273a23b2bde3cc269fb81d060",
+            "apk_sha256": "a7cda1e545bb8c3c3887911c67d929d3333e130fedc9edd37f94bd205c6a56e6",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.7-beta/KL-06-Manager.apk",
+            "drive_download_url": "https://drive.google.com/uc?id=1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe&export=download",
+            "drive_apk_download_url": "https://drive.google.com/uc?id=1IqEQJneefBF9iXS8Zy8HI2DeTe6kAzMP&export=download",
+            "notes": "Android 8.0+ dual-signed APK (v1 JAR + v2 full-APK), 4KB page aligned, with UDP peer radar scanning and private Drive logging."
         },
         "ios": {
-            "version": "0.4.5-beta",
-            "build": 11,
+            "version": "0.4.7-beta",
+            "build": 12,
             "min_os": "iOS 16.0",
             "supported_os": "iOS 16, 17, 18+",
-            "source_script": "INSTALL-IOS.command",
-            "project_path": "ios/KL06Mobile.xcodeproj",
-            "notes": "iOS 16.0+ pure Swift / WKWebView companion with pinned TLS, OTA checkUpdate support, and local bridge. Build via Xcode or INSTALL-IOS.command."
+            "filename": "KL-06-0.4.7-beta-ios-UNTESTED.zip",
+            "ipa_filename": "KL06Mobile.ipa",
+            "sha256": "69ea66799d1207a2b2395e8339fc6b2c2af2d473026dd475dc205b9ee9481fb3",
+            "drive_download_url": "https://drive.google.com/uc?id=1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2&export=download",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command",
+            "notes": "iOS 16.0+ companion with SecTrustCopyCertificateChain pinned TLS, AirDrop file sender/receiver, and prebuilt KL06Mobile.ipa."
         },
         "source": {
-            "version": "0.4.5-beta",
-            "build": 11,
-            "filename": "KL-06-0.4.5-beta-source-BUILD-READY.zip",
-            "sha256": "e47af15702b29ac95fa8e339daf0cfba73fb03ed080663436ae2f67cf2796ff6",
-            "drive_download_url": "https://drive.google.com/uc?id=16SSqq-v1NwVEProYnRwBrVB_Ytap7MbW&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/16SSqq-v1NwVEProYnRwBrVB_Ytap7MbW/view?usp=sharing",
-            "notes": "Complete clean repository source archive with full Tiger Lake hardware fix suite passing 100% portable test assertions."
+            "version": "0.4.7-beta",
+            "build": 12,
+            "filename": "KL-06-0.4.7-beta-source-BUILD-READY.zip",
+            "sha256": "0d215bddc6cf939dcb52562b575e6cccc1be6f820f4078fc0ce569e2dd992c9c",
+            "drive_download_url": "https://drive.google.com/uc?id=1Cr1CfdnSG5COgBHqu1A-csr85XszDowC&export=download",
+            "notes": "Complete verified source code with Lilu kernel patches and 100% passing portable tests."
         }
     },
     "previous_releases": {
+        "0.4.5-beta": {
+            "version": "0.4.5-beta",
+            "build": 11,
+            "release_date": "2026-11-19"
+        },
         "0.4.3-beta": {
             "version": "0.4.3-beta",
             "build": 10,
-            "release_date": "2026-11-19",
-            "platforms": {
-                "android": {
-                    "filename": "KL-06-0.4.3-beta-android-debug-UNTESTED.zip",
-                    "sha256": "69333dcd9b972fd824acc782aa365b9f9bbba3053e8be7ddb6be67b5ecbcca05",
-                    "drive_download_url": "https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz/view?usp=sharing"
-                },
-                "mac": {
-                    "filename": "KL-06 Manager 0.4.3.zip",
-                    "sha256": "7ad49ff2d7ec76124642597a4d5e7170daa718999b9190c290c556a6b4773577",
-                    "drive_download_url": "https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1jfB-a7WobMvncb4RW9dNt1ipINB3khe9/view?usp=sharing"
-                },
-                "windows": {
-                    "filename": "KL-06-0.4.3-beta-windows-x64-UNTESTED.zip",
-                    "sha256": "6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b",
-                    "drive_download_url": "https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50/view?usp=sharing"
-                },
-                "source": {
-                    "filename": "KL-06-0.4.3-beta-source-BUILD-READY.zip",
-                    "sha256": "f1070b6e2823fe4e971be1ad3731f4176a2d1fff980d082371926ee4dc03bc93",
-                    "drive_download_url": "https://drive.google.com/uc?id=1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5/view?usp=sharing"
-                }
-            }
+            "release_date": "2026-11-19"
         },
         "0.4.2-beta": {
             "version": "0.4.2-beta",
             "build": 9,
-            "release_date": "2026-11-19",
-            "platforms": {
-                "android": {
-                    "filename": "KL-06-0.4.2-beta-android-debug-UNTESTED.zip",
-                    "sha256": "fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da",
-                    "drive_download_url": "https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj/view?usp=sharing"
-                },
-                "mac": {
-                    "filename": "KL-06 Manager 4.2 beta.zip",
-                    "sha256": "b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240",
-                    "drive_download_url": "https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT/view?usp=sharing"
-                },
-                "windows": {
-                    "filename": "KL-06-0.4.2-beta-windows-x64-UNTESTED.zip",
-                    "sha256": "6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b",
-                    "drive_download_url": "https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50/view?usp=sharing"
-                },
-                "source": {
-                    "filename": "KL-06-0.4.2-beta-source-BUILD-READY.zip",
-                    "sha256": "f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369",
-                    "drive_download_url": "https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download",
-                    "drive_view_url": "https://drive.google.com/file/d/1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD/view?usp=sharing"
-                }
-            }
+            "release_date": "2026-11-19"
+        },
+        "0.4.1-beta": {
+            "version": "0.4.1-beta",
+            "build": 8,
+            "release_date": "2026-11-18"
         }
+    },
+    "hacks_applied": {
+        "wex_hdr_leaf2": true,
+        "wex_hdr_adapt": true,
+        "wex_tgl_edp_keep": true,
+        "wex_tgl_edp_softsleep": true,
+        "wex_tgl_dpcd_bl": true,
+        "wex_tgl_hdr_render_wake": true,
+        "darkwake": "0",
+        "edr_value": "3.08-4.0",
+        "gpu_stability": true,
+        "sleep_wake_fix": true,
+        "fan_rpm_control": true
     }
 }

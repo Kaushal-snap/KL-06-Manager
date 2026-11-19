@@ -135,8 +135,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["powerSampleInfo"] = ["source": "Fixed five-sample powermetrics read", "sampledAt": latestPowerAt.map { $0 as Any } ?? NSNull(), "mode": "point-in-time-not-live"] as [String: Any]
         value["hotkey"] = ["keyCode": F13HotKey.keyCode, "modifiers": F13HotKey.modifiers, "registered": globalHotKey?.isRegistered == true] as [String: Any]
         value["companion"] = ["running": companion.isRunning, "requiresLocalConfirmation": true]
-        value["version"] = "0.4.1-beta"
-        value["build"] = 7
+        value["version"] = "0.4.7-beta"
+        value["build"] = 12
         value["powerProfile"] = powerProfile
         value["batteryLimit"] = batteryLimit
         value["fanMode"] = fanMode
@@ -240,16 +240,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 reply(id, "Local app caches cleaned safely.")
             case "checkUpdates":
                 reply(id, [
-                    "currentVersion": "0.4.5-beta",
-                    "currentBuild": 11,
+                    "currentVersion": "0.4.7-beta",
+                    "currentBuild": 12,
                     "channel": "beta",
                     "status": "up_to_date",
-                    "latestVersion": "0.4.5-beta",
-                    "latestBuild": 11,
+                    "latestVersion": "0.4.7-beta",
+                    "latestBuild": 12,
                     "releaseDate": "2026-11-19",
                     "catalogVerified": true,
-                    "downloadUrl": "https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download",
-                    "notice": "You are running the latest v0.4.5-beta candidate (Build 11). Dual signed with SHA-256 verified release catalog."
+                    "downloadUrl": "https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download",
+                    "notice": "You are running the latest v0.4.7-beta candidate (Build 12). Dual signed with SHA-256 verified release catalog."
                 ])
             case "setPowerProfile":
                 guard let profile = params["profile"] as? String else { throw ControlError(message: "Invalid power profile.") }

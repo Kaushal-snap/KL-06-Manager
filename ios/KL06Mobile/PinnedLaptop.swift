@@ -28,7 +28,7 @@ struct LANHTTP {
             sec_protocol_options_set_min_tls_protocol_version(tls.securityProtocolOptions, .TLSv12)
             sec_protocol_options_set_verify_block(tls.securityProtocolOptions, { _, trust, complete in
                 let secTrust = sec_trust_copy_ref(trust).takeRetainedValue()
-                guard let certificate = SecTrustGetCertificateAtIndex(secTrust, 0) else { complete(false); return }
+                guard let certificate = SecTrustCopyCertificateChain(secTrust, 0) else { complete(false); return }
                 let hash = SHA256.hash(data: SecCertificateCopyData(certificate) as Data).map { String(format: "%02x", $0) }.joined()
                 // Trust only the full out-of-band owner-confirmed pin for this one session.
                 // No global trust store/ATS exception or trust-all URLSession delegate.

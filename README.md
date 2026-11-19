@@ -47,16 +47,16 @@ Connect directly with the developer **Kaushal Labana**:
 
 <br/>
 
-## 📱 Device Downloads Matrix (v0.4.5-beta Build 11)
+## 📱 Device Downloads Matrix (v0.4.7-beta Build 12)
 
 | Platform | Deliverable Package | Compatibility / Min OS | Size | SHA-256 Checksum | Direct Download Mirror |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| 🤖 **Android (Zip)** | `KL-06-0.4.5-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.04 MB | `5a7e3fe7f9b9595f29d037c71f9d65e57727f5689ee413bc83c6e28d290ae06e` | [Direct Download (Drive)](https://drive.google.com/uc?id=1oeOX-cZoFTQgtq4c8wWBC_kyiQzxOJpW&export=download) |
-| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `8cb8488aa17775f0cfdbfc00a12034a0e4d9d6be02ea4bfc7a73d1a0ce784c49` | [Direct APK (Drive)](https://drive.google.com/uc?id=1gQMBk9j5hwAU81AtwPbCoVtaF33YQc8K&export=download) |
-| 🍎 **macOS** | `KL-06 Manager 0.4.5.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 207 KB | `7eb162cd1b49a1f71343724bf03ecee7aa4c942432e356ee0cd56fd2ccf9edec` | [Direct Download (Drive)](https://drive.google.com/uc?id=1sD8VbyAc5W-10i_0v49-yywJPavtznXI&export=download) |
-| 🪟 **Windows** | `KL-06-0.4.5-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 569 KB | `c0223277155de1efc28d2ff0129f25f51b2ab2440c81c4fc6e27b1db53704596` | [Direct Download (Drive)](https://drive.google.com/uc?id=1FEKRyah3fDVB-JuY9hq8rx573mCePu3N&export=download) |
-| 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.5-beta-source-BUILD-READY.zip` | Cross-Platform Build | 1.98 MB | `e47af15702b29ac95fa8e339daf0cfba73fb03ed080663436ae2f67cf2796ff6` | [Direct Download (Drive)](https://drive.google.com/uc?id=16SSqq-v1NwVEProYnRwBrVB_Ytap7MbW&export=download) |
+| 🤖 **Android (Zip)** | `KL-06-0.4.7-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.08 MB | `ea33a75776d954a7707f909b6e896720dfef3fb273a23b2bde3cc269fb81d060` | [Direct Download (Drive)](https://drive.google.com/uc?id=1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe&export=download) |
+| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.12 MB | `a7cda1e545bb8c3c3887911c67d929d3333e130fedc9edd37f94bd205c6a56e6` | [Direct APK (Drive)](https://drive.google.com/uc?id=1IqEQJneefBF9iXS8Zy8HI2DeTe6kAzMP&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 0.4.7.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 215 KB | `d8783b07bf73165770439ceca71f8017f0a899a4b437ef64f09ca2eb25320748` | [Direct Download (Drive)](https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.7-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 582 KB | `976d460cb75a4953186dfc710f69fdecdac655b4f510779ea2efeb00c8b9dbee` | [Direct Download (Drive)](https://drive.google.com/uc?id=1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn&export=download) |
+| 📱 **iOS** | `KL-06-0.4.7-beta-ios-UNTESTED.zip` (`KL06Mobile.ipa`) | **iOS 16.0+** (iOS 16, 17, 18+) | 263 KB | `69ea66799d1207a2b2395e8339fc6b2c2af2d473026dd475dc205b9ee9481fb3` | [Direct Download (Drive)](https://drive.google.com/uc?id=1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.7-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.08 MB | `0d215bddc6cf939dcb52562b575e6cccc1be6f820f4078fc0ce569e2dd992c9c` | [Direct Download (Drive)](https://drive.google.com/uc?id=1Cr1CfdnSG5COgBHqu1A-csr85XszDowC&export=download) |
 
 <br/>
 

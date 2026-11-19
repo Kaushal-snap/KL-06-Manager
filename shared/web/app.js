@@ -229,12 +229,12 @@
     if (savedFixes) Object.assign(fixStatus, JSON.parse(savedFixes));
   } catch(ignored){}
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.5-beta (Build 11) initialized.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.7-beta (Build 12) initialized.' },
     { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'ok', msg: 'Network active: Mobile Data & Wi-Fi internet access enabled. Companion listener at port 8766.' },
     { ts: new Date().toLocaleTimeString(), tag: 'DRIVE', level: 'ok', msg: 'Private Drive Sync: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) connected.' },
     { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework & Scoped MediaStore.' },
     { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active across local subnets and cellular hotspot.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 11).' },
+    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 12).' },
     { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Auto-saved to Download/KL-06/logs/kl06-diagnostic.log and private Drive.' }
   ];
 
@@ -254,10 +254,10 @@
   let otaStatus = 'up-to-date';
   let otaProgress = 0;
   let otaVersionInfo = {
-    currentVersion: '0.4.5-beta',
-    currentBuild: 11,
-    latestVersion: '0.4.5-beta',
-    latestBuild: 11,
+    currentVersion: '0.4.7-beta',
+    currentBuild: 12,
+    latestVersion: '0.4.7-beta',
+    latestBuild: 12,
     releaseNotes: 'Tiger Lake hardware optimization suite (HDR, Sleep/Wake, AirDrop AWDL, GPU stability, Fan RPM), OTA engine, and v0.4.5 beta ecosystem update.',
     downloadUrl: 'https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download'
   };
@@ -353,7 +353,7 @@
 
     <div style="background:#0e1e28;border:1px solid #1e4555;border-radius:10px;padding:12px 14px;margin:0 0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
       <div>
-        <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.5-beta)</strong>
+        <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.7-beta)</strong>
         <div style="color:#8ab4be;font-size:11px;margin-top:2px">
           ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">🟢 Hardware Link Active (Wi-Fi, Bluetooth &amp; Mobile Data Connected)</span>' : 'Mobile Data &amp; Wi-Fi Active • Auto-Send Private Drive Sync Ready'}
         </div>
@@ -938,7 +938,7 @@
       ).join('');
 
       if (!shellRendered || !app.querySelector('.shell')) {
-        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.5-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.5-beta · build 11<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><div style="display:flex;align-items:center;gap:8px"><button data-page="updates" class="btn-primary" style="padding:4px 8px;font-size:11px">🚀 OTA Updates</button><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></div></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}${permissionModal()}${fanDiagPasswordModal()}`;
+        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.7-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.7-beta · build 12<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><div style="display:flex;align-items:center;gap:8px"><button data-page="updates" class="btn-primary" style="padding:4px 8px;font-size:11px">🚀 OTA Updates</button><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></div></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}${permissionModal()}${fanDiagPasswordModal()}`;
         shellRendered = true;
       } else {
         app.querySelectorAll('#app-nav button').forEach(btn => {
@@ -1164,7 +1164,7 @@ KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (INBUILT AUTO-SYNC)
 ================================================================================
 Timestamp: ${nowIso}
 Application: KL-06 Control Center & Ecosystem Manager
-Version: 0.4.5-beta (Build 11)
+Version: 0.4.7-beta (Build 12)
 Security Auth: VERIFIED (Owner Security Password Validated)
 Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)
 Device Host: ${hostInfo} (${plat})
@@ -1322,12 +1322,12 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'check-app-update': {
         otaChecking = true;
         render();
-        toast('Checking signed update catalog for v0.4.5-beta…');
+        toast('Checking signed update catalog for v0.4.7-beta…');
         addLog('OTA', 'info', 'Querying release catalog for updates...');
         setTimeout(() => {
           otaChecking = false;
           otaStatus = 'ready';
-          addLog('OTA', 'ok', '✓ Validated v0.4.5-beta package against SHA-256 catalog. Ready to install.');
+          addLog('OTA', 'ok', '✓ Validated v0.4.7-beta package against SHA-256 catalog. Ready to install.');
           toast('✓ Package verified! Ready to install.');
           render();
         }, 1200);
@@ -1336,7 +1336,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 
       case'install-app-update': {
         addLog('OTA', 'info', 'Launching Android PackageInstaller for in-app update...');
-        toast('Launching system installer for v0.4.5-beta…');
+        toast('Launching system installer for v0.4.7-beta…');
         if (native) {
           try {
             act('installUpdate', { downloadUrl: otaVersionInfo.downloadUrl });
@@ -1465,8 +1465,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'export-logs': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.5-beta',
-          build: 11,
+          version: '0.4.7-beta',
+          build: 12,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
           network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'active (dual-mode)' },
@@ -1480,7 +1480,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 v0.4.5-beta Diagnostic Report',
+              title: 'KL-06 v0.4.7-beta Diagnostic Report',
               text: reportStr
             }).catch(()=>{});
           } catch(ignored){}
@@ -1496,8 +1496,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'send-error-report': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.5-beta',
-          build: 11,
+          version: '0.4.7-beta',
+          build: 12,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
           platform: state?.platform || 'android',
@@ -1516,7 +1516,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 Diagnostic Log (v0.4.5-beta)',
+              title: 'KL-06 Diagnostic Log (v0.4.7-beta)',
               text: reportStr
             }).catch(()=>{});
           } catch(ignored){}
@@ -1740,7 +1740,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 
   state = {
     platform: 'android',
-    version: '0.4.5-beta',
+    version: '0.4.7-beta',
     sampledAt: 'Live phone telemetry',
     battery: { chargePercent: 82, onAC: false },
     memory: { usedGB: 4.1, totalGB: 8.0, source: 'Android system RAM' },
@@ -1839,8 +1839,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   // ============================================================================
   const KL06_CONFIG = {
     repo: 'Kaushal-snap/KL-06-Manager',
-    currentVersion: '0.4.5-beta',
-    build: 11,
+    currentVersion: '0.4.7-beta',
+    build: 12,
     platform: null
   };
 
