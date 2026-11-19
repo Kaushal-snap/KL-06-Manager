@@ -3,8 +3,6 @@ import WebKit
 import UniformTypeIdentifiers
 import LocalAuthentication
 
-private final class LockedAuthResult { private let lock = NSLock(); private var value = false; func set(_ newValue: Bool) { lock.lock(); value = newValue; lock.unlock() }; func get() -> Bool { lock.lock(); defer { lock.unlock() }; return value } }
-
 final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNavigationDelegate, NSWindowDelegate {
     private var window: NSWindow!
     private var webView: WKWebView!
@@ -291,25 +289,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                     }
                 }
             case "diagnoseAndExport":
-                let context = LAContext()
-                context.localizedCancelTitle = "Cancel"
-                var authError: NSError?
-                guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else { throw ControlError(message: "macOS local authentication is unavailable: \\(authError?.localizedDescription ?? "not supported"). No report was created.") }
-                let semaphore = DispatchSemaphore(value: 0)
-                let authResult = LockedAuthResult()
-                context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authorize a private KL-06 hardware and connectivity diagnostic report.") { success, _ in authResult.set(success); semaphore.signal() }
-                semaphore.wait()
-                guard authResult.get() else { throw ControlError(message: "Authentication cancelled or failed. No report was created.") }
-                let snapshot = state()
-                let fan = snapshot["fan"] as? [String: Any] ?? [:]
-                let diagnostics: [String: Any] = ["fanRPM": ["status": fan["status"] ?? "unknown", "readings": fan["fans"] ?? [], "note": "Provider-reported SMC tachometer values only; no ASUS EC/WMI driver is installed."], "wifiBluetooth": ["status": "not-probed", "note": "No interface names, SSIDs, MAC addresses, Bluetooth identifiers or network addresses are collected."], "deviceTransfer": ["status": "not-end-to-end-verified", "note": "Physical device transfer success is not asserted."], "limitations": ["No firmware/EFI changes", "No fan-control writes", "No raw IORegistry dump", "No account identifiers or secrets"]]
-                let report: [String: Any] = ["schema": "KL06_DIAGNOSTICS_V1", "createdAt": ISO8601DateFormatter().string(from: Date()), "platform": "macOS", "system": snapshot, "diagnostics": diagnostics]
-                let panel = NSSavePanel(); panel.allowedContentTypes = [.json]; panel.nameFieldStringValue = "KL-06-diagnostics.json"
-                panel.message = "Save this minimized private diagnostic report. Review it before sharing; cloud upload is not configured in this build."
-                guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "Save cancelled. No report was written.") }
-                let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
-                try data.write(to: url, options: [.atomic]); try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
-                reply(id, "Authenticated diagnostic report saved locally with private file permissions. Cloud upload is not configured yet.")
+                beginAuthenticatedDiagnostics(id: id)
             case "exportReport":
                 let panel = NSSavePanel(); panel.allowedContentTypes = [.json]; panel.nameFieldStringValue = "KL-06-report.json"
                 guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "Export cancelled.") }
@@ -322,6 +302,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             }
         } catch { reply(id, error: (error as? ControlError)?.message ?? "The action could not be completed. No automatic retry or repair was attempted.") }
     }
+    private func beginAuthenticatedDiagnostics(id: String) {
+        let context = LAContext()
+        context.localizedCancelTitle = "Cancel"
+        var authError: NSError?
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else { reply(id, error: "macOS local authentication is unavailable: \\(authError?.localizedDescription ?? "not supported"). No report was created."); return }
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authorize a private KL-06 hardware and connectivity diagnostic report.") { [weak self] success, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                guard success else { self.reply(id, error: "Authentication cancelled or failed. No report was created."); return }
+                do {
+                    let snapshot = self.state()
+                    let fan = snapshot["fan"] as? [String: Any] ?? [:]
+                    let diagnostics: [String: Any] = ["fanRPM": ["status": fan["status"] ?? "unknown", "readings": fan["fans"] ?? [], "note": "Provider-reported SMC tachometer values only; no ASUS EC/WMI driver is installed."], "wifiBluetooth": ["status": "not-probed", "note": "No interface names, SSIDs, MAC addresses, Bluetooth identifiers or network addresses are collected."], "deviceTransfer": ["status": "not-end-to-end-verified", "note": "Physical device transfer success is not asserted."], "limitations": ["No firmware/EFI changes", "No fan-control writes", "No raw IORegistry dump", "No account identifiers or secrets"]]
+                    let report: [String: Any] = ["schema": "KL06_DIAGNOSTICS_V1", "createdAt": ISO8601DateFormatter().string(from: Date()), "platform": "macOS", "system": snapshot, "diagnostics": diagnostics]
+                    let panel = NSSavePanel(); panel.allowedContentTypes = [.json]; panel.nameFieldStringValue = "KL-06-diagnostics.json"
+                    panel.message = "Save this minimized private diagnostic report. Review it before sharing; cloud upload is not configured in this build."
+                    guard panel.runModal() == .OK, let url = panel.url else { self.reply(id, error: "Save cancelled. No report was written."); return }
+                    let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+                    try data.write(to: url, options: [.atomic]); try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+                    self.reply(id, "Authenticated diagnostic report saved locally with private file permissions. Cloud upload is not configured yet.")
+                } catch { self.reply(id, error: error.localizedDescription) }
+            }
+        }
+    }
+
     private func remoteAction(_ operation: String, _ params: [String: Any], _ expires: TimeInterval, _ uptimeDeadline: TimeInterval) -> (Bool, String) {
         guard !sampleBusy, CompanionPolicy.allowed(operation, params), Date().timeIntervalSince1970 < expires, DesktopCompanion.uptime < uptimeDeadline else { return (false, "Unsupported, busy or expired.") }
         showWindow()
