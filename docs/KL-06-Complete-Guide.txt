@@ -1,7 +1,7 @@
 ================================================================================
                     KL-06 MANAGER — COMPLETE FIX & ARENA AI INTEGRATION
 ================================================================================
-Version: 0.4.3-beta | Build: 10 | Date: 2026-11-19
+Version: 0.4.5-beta | Build: 11 | Date: 2026-11-19
 Machine: ASUS VivoBook K15 (Tiger Lake i5-1135G7, Iris Xe 9A49)
 macOS: 15.8.3 (24H241) | EFI: /Volumes/1401
 
@@ -188,8 +188,8 @@ Copy this entire block into your Arena AI app's main JavaScript file:
 
 const KL06_CONFIG = {
     repo: 'Kaushal-snap/KL-06-Manager',
-    currentVersion: '0.4.3-beta',
-    build: 10,
+    currentVersion: '0.4.5-beta',
+    build: 11,
     platform: null
 };
 

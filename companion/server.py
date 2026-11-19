@@ -370,8 +370,8 @@ class Broker:
                 return 200, {
                     "protocol": PROTOCOL,
                     "service": "KL-06 Companion",
-                    "version": "0.4.3-beta",
-                    "build": 10,
+                    "version": "0.4.5-beta",
+                    "build": 11,
                     "hostname": socket.gethostname(),
                     "platform": sys.platform
                 }
@@ -621,8 +621,8 @@ def main():
                         reply = json.dumps({
                             "service": "KL-06 Companion",
                             "protocol": PROTOCOL,
-                            "version": "0.4.3-beta",
-                            "build": 10,
+                            "version": "0.4.5-beta",
+                            "build": 11,
                             "platform": sys.platform,
                             "hostname": socket.gethostname(),
                             "port": 8766,

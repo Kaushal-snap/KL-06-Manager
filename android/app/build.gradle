@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 android {
     namespace 'app.klasus.controlcenter'
     compileSdk 34
-    defaultConfig { applicationId 'app.klasus.controlcenter'; minSdk 26; targetSdk 34; versionCode 10; versionName '0.4.3-beta' }
+    defaultConfig { applicationId 'app.klasus.controlcenter'; minSdk 26; targetSdk 34; versionCode 11; versionName '0.4.5-beta' }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
     sourceSets { main { assets.srcDirs = ['../../shared'] } }
     buildTypes { release { minifyEnabled false } }
