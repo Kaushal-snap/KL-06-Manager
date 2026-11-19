@@ -53,3 +53,54 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}" \
             -d "{\"state\":\"$STATE\",\"context\":\"KL-06 portable source checks\",\"description\":\"$DESCRIPTION\"}"
+
+  apple-native-builds:
+    runs-on: macos-15-intel
+    timeout-minutes: 45
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run macOS native source tests and build
+        env:
+          KL06_REVEAL_BUILD: '0'
+        run: |
+          /bin/bash macos/TEST-MAC.command
+          /bin/bash macos/BUILD-MAC.command
+      - name: Compile iOS simulator app without signing
+        run: /bin/bash ios/BUILD-IOS.command --simulator
+
+  android-native-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify trusted runner SDK prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          export JAVA_HOME="${JAVA_HOME_17_X64:?JDK 17 is required on the runner}"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          export ANDROID_HOME="${ANDROID_HOME:?Android SDK is required on the runner}"
+          test -f "$ANDROID_HOME/platforms/android-36/android.jar"
+          test -f "$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('android/gradle/wrapper/gradle-wrapper.jar')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f'
+          PY
+      - name: Assemble and verify Android debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          export JAVA_HOME="$JAVA_HOME_17_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          export ANDROID_HOME="$ANDROID_HOME"
+          cd android
+          /bin/bash ./gradlew --no-daemon --max-workers=2 :app:assembleDebug
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
