@@ -18,16 +18,28 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: true
-      - name: Regenerate source-only hashes after reviewed changes
+      - name: Regenerate source-only hashes with race-safe branch update
         run: |
-          python3 automation/source_manifest.py --write
-          if ! git diff --quiet -- SOURCE-MANIFEST.json SHA256SUMS; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            git reset --hard "origin/${GITHUB_REF_NAME}"
+            python3 automation/source_manifest.py --write
+            if git diff --quiet -- SOURCE-MANIFEST.json SHA256SUMS; then
+              echo "Source manifests already current."
+              exit 0
+            fi
             git add SOURCE-MANIFEST.json SHA256SUMS
             git commit -m "chore: refresh reviewed source integrity manifest"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Branch advanced during manifest update; retrying against latest branch."
+          done
+          echo "Could not publish source manifests after five branch-race retries." >&2
+          exit 1
       - name: Check JavaScript syntax
         run: |
           node --check shared/web/app.js
