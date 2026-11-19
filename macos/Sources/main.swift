@@ -331,7 +331,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         context.localizedCancelTitle = "Cancel"
         var authError: NSError?
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else {
-            reply(id, error: "macOS local authentication is unavailable: \\(authError?.localizedDescription ?? "not supported"). No report was created.")
+            reply(id, error: "macOS local authentication is unavailable: \(authError?.localizedDescription ?? "not supported"). No report was created.")
             return
         }
         context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authorize a private KL-06 hardware and connectivity diagnostic report.") { [weak self] success, _ in
@@ -363,12 +363,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                         DispatchQueue.main.async {
                             switch result {
                             case .success(let message): self.reply(id, "Diagnostic scan complete. " + message)
-                            case .failure(let error): self.reply(id, error: "Diagnostic report was generated but Drive upload failed: \\(error.localizedDescription)")
+                            case .failure(let error): self.reply(id, error: "Diagnostic report was generated but Drive upload failed: \(error.localizedDescription)")
                             }
                         }
                     }
                 } catch {
-                    self.reply(id, error: "Could not create diagnostic JSON: \\(error.localizedDescription)")
+                    self.reply(id, error: "Could not create diagnostic JSON: \(error.localizedDescription)")
                 }
             }
         }
