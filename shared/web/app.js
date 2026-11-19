@@ -171,22 +171,17 @@
   let currentPin = String(Math.floor(100000 + Math.random() * 900000)).replace(/(\d{3})(\d{3})/, '$1-$2');
   let pinCreated = Date.now();
   let incomingPair = null;
-  let pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
+  let pairedDevice = null;
+  let pairingTarget = null;
   let transferActive = false;
   let transferProgress = 0;
   let transferFileName = '';
-  let transferSpeed = '42.5 MB/s';
-  let recentTransfers = [
-    { id: 'tf-1', name: 'IMG_20261118_142010.jpg', size: '3.4 MB', time: 'Just now', peer: 'ASUS VivoBook K15', status: 'Delivered (SHA-256 verified)' },
-    { id: 'tf-2', name: 'kl06-diagnostic.log', size: '124 KB', time: '5m ago', peer: 'ASUS VivoBook K15', status: 'Saved in Downloads' }
-  ];
+  let transferSpeed = '—';
+  let recentTransfers = [];
 
   // Real-time peer discovery state
   let isScanning = false;
-  let hardwareConnected = false;
-  try {
-    hardwareConnected = localStorage.getItem('kl06_hardware_permission_granted') === 'true';
-  } catch(e){}
+  let hardwareConnected = false; // Permission grant is not a device connection.
 
   let keepAliveTimer = null;
   function startHardwareKeepAlive(){
@@ -200,11 +195,7 @@
   if (hardwareConnected) {
     startHardwareKeepAlive();
   }
-  let discoveredPeers = [
-    { id: 'peer-vivobook', name: 'ASUS VivoBook K15', ip: '192.168.1.42', host: 'https://192.168.1.42:8766', type: 'Laptop · Windows 11', route: 'Wi-Fi LAN :8766', signal: '98% (Ultra-fast)', pin: 'a'.repeat(64), online: true },
-    { id: 'peer-macbook', name: 'MacBook Pro 16"', ip: '192.168.1.108', host: 'https://192.168.1.108:8766', type: 'Mac · macOS Sonoma', route: 'Wi-Fi LAN :8766', signal: '95% (AirDrop)', pin: 'b'.repeat(64), online: true },
-    { id: 'peer-iphone', name: 'iPhone 15 Pro', ip: '192.168.1.115', host: 'https://192.168.1.115:8766', type: 'iOS · Direct AirDrop', route: 'Hotspot / LAN', signal: '92% (AirDrop)', pin: 'c'.repeat(64), online: true }
-  ];
+  let discoveredPeers = [];
   let activeLogModal = null;
 
   // Online diagnostic logging state & buffer
@@ -229,13 +220,7 @@
     if (savedFixes) Object.assign(fixStatus, JSON.parse(savedFixes));
   } catch(ignored){}
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.7-beta (Build 12) initialized.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'ok', msg: 'Network active: Mobile Data & Wi-Fi internet access enabled. Companion listener at port 8766.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'DRIVE', level: 'ok', msg: 'Private Drive Sync: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) connected.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework & Scoped MediaStore.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active across local subnets and cellular hotspot.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 12).' },
-    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Auto-saved to Download/KL-06/logs/kl06-diagnostic.log and private Drive.' }
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'info', msg: 'KL-06 UI initialized. Network, peer connection and Drive sync are unverified until a real native response succeeds.' }
   ];
 
   try {
@@ -1051,15 +1036,15 @@
     polling = true;
     try {
       const value = await request('state');
-      if (!value || !['windows','android','ios'].includes(value.platform)) throw Error();
+      if (!value || !['windows','android','ios','macos'].includes(value.platform)) throw Error();
       if (!force && document.querySelector('input:focus')) return;
       state = value;
       receivedAt = now();
-      render();
+      if (force) render();
     } catch {
       receivedAt = -Infinity;
       toast('Native state unavailable. No substitute readings.');
-      render();
+      if (force) render();
     } finally {
       polling = false;
     }
@@ -1079,6 +1064,7 @@
         try {
           addLog('TRANSFER', 'info', `Streaming "${fileName}" over TLS directly to ${pairedDevice.name}...`);
           const res = await request('streamFileToPeer', { uri });
+          if (!res || !['complete','completed'].includes(String(res.status || '').toLowerCase())) throw new Error('Peer did not confirm a completed transfer.');
           transferProgress = 100;
           transferActive = false;
           const rec = {
@@ -1096,15 +1082,15 @@
           render();
           return;
         } catch(err) {
-          addLog('TRANSFER', 'warn', `Direct companion stream: ${err.message}. Opening system Quick Share...`);
+          addLog('TRANSFER', 'warn', `Direct companion stream failed: ${err.message}. A system share sheet is only a handoff, not proof of delivery.`);
         }
       }
       try {
         await request('shareViaSystem', { uri });
         transferActive = false;
         transferProgress = 0;
-        addLog('TRANSFER', 'ok', `✓ Opened system Quick Share / Bluetooth for "${fileName}".`);
-        toast(`✓ System Quick Share dialog opened for "${fileName}".`);
+        addLog('TRANSFER', 'info', `System share sheet opened for "${fileName}". Delivery has not been confirmed by KL-06.`);
+        toast(`System share sheet opened for "${fileName}". Confirm delivery in the receiving app.`);
         render();
         return;
       } catch(err) {
@@ -1112,20 +1098,10 @@
       }
     }
 
-    transferProgress = 100;
+    transferProgress = 0;
     transferActive = false;
-    const rec = {
-      id: 'tf-' + Date.now(),
-      name: fileName,
-      size: (fileSize / 1024).toFixed(1) + ' KB',
-      time: new Date().toLocaleTimeString(),
-      peer: pairedDevice?.name || 'Local Device',
-      status: 'Staged (SHA-256 computed)'
-    };
-    recentTransfers.unshift(rec);
-    if (recentTransfers.length > 8) recentTransfers.pop();
-    addLog('TRANSFER', 'ok', `✓ Prepared "${fileName}" for transfer.`);
-    toast(`✓ File "${fileName}" ready for transfer.`);
+    addLog('TRANSFER', 'error', `No transfer transport is available for "${fileName}". No file was sent or staged.`);
+    toast('No compatible native transfer transport is available. No file was sent.');
     render();
   }
 
@@ -1197,9 +1173,9 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       try { await request('exportLogs', { logs: diagnosticLogs }); } catch(ignored){}
     }
     
-    addLog('FAN', 'ok', 'Fan diagnostics complete. Telemetry auto-sent to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n).');
+    addLog('FAN', 'info', 'Fan diagnostic report prepared locally. Private Google Drive upload is not configured in this build.');
     activeLogModal = { open: true, text: reportText };
-    toast('✓ Fan diagnostics complete! Inbuilt auto-sync to private Drive folder KL-06-Private-Logs successful!');
+    toast('Fan report prepared. It has not been uploaded to Google Drive.');
     render();
   }
 
@@ -1469,10 +1445,10 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           build: 12,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
-          network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'active (dual-mode)' },
-          permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted', internet: 'granted' },
-          storagePath: 'Download/KL-06/logs/kl06-diagnostic.log',
-          driveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
+          network: { wifi: state?.network?.wifi ? 'connected' : 'not-confirmed', cellular: state?.network?.cellular ? 'connected' : 'not-confirmed', port: 8766 },
+          permissions: { status: 'not-inferred-from-app-launch' },
+          storagePath: 'Local app storage only; platform export required',
+          driveSync: 'not-configured',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
@@ -1487,8 +1463,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events) to Download/KL-06/logs/kl06-diagnostic.log.`);
-        toast('✓ Diagnostic logs exported to Download/KL-06/logs/ & ready for Private Drive folder!');
+        addLog('LOG', 'info', `Diagnostic report prepared with ${diagnosticLogs.length} events. Native export/share action may save a local copy; no Drive upload occurred.`);
+        toast('Diagnostic report prepared. Use the platform export/share action; Drive sync is not configured.');
         render();
         return;
       }
@@ -1523,8 +1499,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('REPORT', 'ok', 'Diagnostic logs auto-shared to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) and saved to Download/KL-06/logs/.');
-        toast('✓ Diagnostic logs auto-shared to Private Drive folder & saved to Download/KL-06/logs/!');
+        addLog('REPORT', 'info', 'Diagnostic report opened for local share/export. No automatic Google Drive upload is configured.');
+        toast('Report prepared for local sharing. It was not uploaded to Google Drive.');
         render();
         return;
       }
@@ -1561,18 +1537,10 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         render();
         return;
 
-      case'pair-by-pin': {
-        const input=document.getElementById('peer-pin-input');
-        const pinVal=(input?.value||'').trim();
-        if(!pinVal||pinVal.length<6){toast('Enter a valid 6-digit PIN (e.g. 742-910)');return;}
-        toast(`Authenticating PIN ${pinVal} over local Wi-Fi / Bluetooth…`);
-        setTimeout(()=>{
-          pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          toast('✓ Successfully paired with ASUS VivoBook K15 via 6-digit PIN!');
-          render();
-        }, 600);
+      case'pair-by-pin':
+        addLog('NET', 'warn', 'PIN-only pairing is not implemented. KL-06 requires the desktop HTTPS URL, full certificate SHA-256 fingerprint and 32-character session code.');
+        toast('6-digit PIN pairing is not supported yet. Use Direct TLS Pairing details from the desktop.');
         return;
-      }
 
       case'scan-peers': {
         isScanning = true;
@@ -1634,15 +1602,13 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'connect-peer': {
-        const pId = b.dataset.peerId;
-        const pName = b.dataset.peerName || 'Nearby Device';
-        const pType = b.dataset.peerType || 'Ecosystem Peer';
-        const peer = discoveredPeers.find(x => x.id === pId) || { id: pId, name: pName, type: pType, host: b.dataset.peerHost || 'https://192.168.1.42:8766', pin: b.dataset.peerPin || '' };
-        pairedDevice = { ...peer };
-        incomingPair = null;
-        addLog('RADAR', 'ok', `✓ Paired with ${peer.name} (${peer.type}) via AirDrop / Quick Share.`);
-        toast(`✓ Connected to ${peer.name}! Ready for file drop.`);
-        render();
+        const peer = discoveredPeers.find(x => x.id === b.dataset.peerId);
+        if (!peer) { toast('Peer is no longer available. Scan again.'); return; }
+        const host = document.getElementById('direct-host');
+        const pin = document.getElementById('direct-pin');
+        if (host) host.value = peer.host || (peer.ip ? 'https://' + peer.ip + ':8766' : '');
+        if (pin) pin.value = peer.pin || '';
+        toast('Peer address and certificate fingerprint filled. Enter the session code shown on the desktop, then start TLS pairing.');
         return;
       }
 
@@ -1684,9 +1650,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'pick-share-file': {
         if (transferActive || busy) return;
         if (!pairedDevice) {
-          pairedDevice = discoveredPeers[0] || { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          addLog('RADAR', 'ok', `✓ Auto-connected to ${pairedDevice.name} for file sharing.`);
-          toast(`✓ Connected to ${pairedDevice.name}! Choose file to send.`);
+          toast('Connect to a desktop companion first. No automatic or placeholder peer is selected.');
+          return;
         }
         if (native) {
           try {
@@ -1738,20 +1703,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
     if (event.target.id === 'brightness') act('setBrightness', { value: Number(event.target.value) });
   });
 
-  state = {
-    platform: 'android',
-    version: '0.4.7-beta',
-    sampledAt: 'Live phone telemetry',
-    battery: { chargePercent: 82, onAC: false },
-    memory: { usedGB: 4.1, totalGB: 8.0, source: 'Android system RAM' },
-    storage: { freeGB: 68, totalGB: 128 },
-    volume: 70,
-    brightness: 60,
-    awake: false,
-    capabilities: { volume: true, brightness: true, awake: true, brightnessScope: 'Temporary app-window brightness only' },
-    tweaks: []
-  };
-  receivedAt = now();
+  state = null;
+  receivedAt = -Infinity;
 
   function init(){
     render();
@@ -1805,14 +1758,9 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 
   window.KLPermissionGranted = function() {
     activePermissionModal = false;
-    hardwareConnected = true;
-    try { localStorage.setItem('kl06_hardware_permission_granted', 'true'); } catch(e){}
-    addLog('PERM', 'ok', '✓ Hardware permissions granted: Wi-Fi, Bluetooth & Mobile Data active.');
-    addLog('LINK', 'ok', '✓ Hardware link connected continuously across Wi-Fi, Bluetooth & Mobile Data.');
-    toast('✓ Permissions granted! Hardware & companion connected.');
-    if (!pairedDevice) {
-      pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-    }
+    hardwareConnected = false;
+    addLog('PERM', 'info', 'OS permissions granted. No peer connection, Bluetooth transport or cellular relay is implied.');
+    toast('Permissions granted. Connect to a real desktop companion separately.');
     startHardwareKeepAlive();
     render();
   };
