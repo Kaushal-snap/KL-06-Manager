@@ -424,67 +424,26 @@
   }
 
   function kl06ApplyHDRFix() {
-    return {
-      success: true,
-      message: 'HDR fix applied. Reboot required.',
-      edr: '3.08-4.0',
-      flags: ['-wex-hdrleaf2', '-wex-hdradapt']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no boot arguments or display-driver settings were changed.' };
   }
-
   function kl06ApplySleepFix() {
-    return {
-      success: true,
-      message: 'Sleep/wake fix applied. Reboot required.',
-      flags: ['darkwake=0', '-wex-tgl-hold-render-wake', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no sleep/wake or EFI settings were changed.' };
   }
-
   function kl06ApplyGPUFix() {
-    return {
-      success: true,
-      message: 'GPU stability fix applied. Watchdog panics reduced.',
-      flags: ['-disablegfxfirmware', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep', '-wex-tgl-dpcd-bl']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no GPU driver, firmware or boot configuration was changed.' };
   }
-
   function kl06CheckFanRPM() {
-    return {
-      success: true,
-      message: 'Fan RPM reader active (read-only)',
-      status: 'provider-reported-not-calibrated',
-      manualControl: false,
-      note: 'Run: /Volumes/1401 or macos/KL-06-Fix-All.sh'
-    };
+    const readings = validFans();
+    return { success: readings.length > 0, status: readings.length ? 'provider-reported-not-calibrated' : 'unavailable', fans: readings, manualControl: false, message: readings.length ? 'Live native provider readings returned.' : 'No valid AppleSMC tachometer reading is available.' };
   }
-
   function kl06FixDeviceConnection() {
-    return {
-      success: true,
-      message: 'Device connection fix applied. Reboot required.',
-      flags: ['-btleadv', '-itlawdliface', '-itlawdlnativeup']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no Wi-Fi, Bluetooth, AirDrop or network driver repair was performed.' };
   }
-
   async function kl06FixAll() {
-    return {
-      success: true,
-      message: 'All fixes applied. Reboot required.',
-      results: {
-        device: kl06FixDeviceConnection(),
-        hdr: kl06ApplyHDRFix(),
-        sleep: kl06ApplySleepFix(),
-        gpu: kl06ApplyGPUFix(),
-        fan: kl06CheckFanRPM()
-      }
-    };
+    return { success: false, applied: false, message: 'No system fixes were applied. This build provides diagnostics and supported controls only.' };
   }
-
   function kl06RollbackAll() {
-    return {
-      success: true,
-      message: 'Rollback initiated. Restore from backup file.'
-    };
+    return { success: false, rolledBack: false, message: 'No placeholder fix changed system settings; nothing needs rollback.' };
   }
 
   if (typeof window !== 'undefined') {
