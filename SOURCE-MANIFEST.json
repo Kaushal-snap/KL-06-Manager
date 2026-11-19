@@ -68,10 +68,10 @@
       "sha256": "6dfc4f63e7aff52f285c9cc925005c36daffc933221d8aa50b6afb76f7178c03"
     },
     {
-      "bytes": 23447,
+      "bytes": 23786,
       "executable": false,
       "path": "README.md",
-      "sha256": "487c03499e85d15f023a9e634c499dca22dc64afb29681a391d7200cf39435f7"
+      "sha256": "ebb3f171229fa5a416bd30960159e1b612eae99a1005d40ef6dc4fea6ecb5d19"
     },
     {
       "bytes": 1599,
@@ -746,10 +746,10 @@
       "sha256": "1f259b902c840dd80cda7348a3978fd41b8b9a23960b91788edd27d50a8079c9"
     },
     {
-      "bytes": 89517,
+      "bytes": 89220,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "306d774ee0ba93cef965c4612478e8ae56796764241729cb1e98d85acaa9562e"
+      "sha256": "a50d8e04d771abde8a7098d469f12d63ebbd3707e0dbd064a6f08fb0a616b972"
     },
     {
       "bytes": 5483,
@@ -818,10 +818,10 @@
       "sha256": "df28263f3de33f78de650aea4d1d6bb52440abe46cab6aa7c3ec54282bc5824a"
     },
     {
-      "bytes": 12771,
+      "bytes": 14109,
       "executable": false,
       "path": "tests/test_companion.py",
-      "sha256": "2310ceae43f59f370db2d0b2ea10eb916e3d371d98dc79f0a71b3d26d1a3780d"
+      "sha256": "ff416a0274c144ea435938594b7eb100512ec85b035483c827d255cccf196322"
     },
     {
       "bytes": 14461,
