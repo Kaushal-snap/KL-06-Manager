@@ -47,16 +47,27 @@ Connect directly with the developer **Kaushal Labana**:
 
 <br/>
 
-## 📱 Device Downloads Matrix (v0.4.2-beta Build 9)
+## 📱 Device Downloads Matrix (v0.4.3-beta Build 10)
 
 | Platform | Deliverable Package | Compatibility / Min OS | Size | SHA-256 Checksum | Direct Download Mirror |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| 🤖 **Android (Zip)** | `KL-06-0.4.2-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da` | [Direct Download (Drive)](https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download) |
-| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `496e9a549eda285046a21fc010396a110414908c5d7a875aa26c70d134c1ccc1` | [Direct APK (Drive)](https://drive.google.com/uc?id=1rdyT6UrMW5asQ0IckIJGMFkzrIGsE5j1&export=download) |
-| 🍎 **macOS** | `KL-06 Manager 4.2 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
-| 🪟 **Windows** | `KL-06-0.4.2-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
+| 🤖 **Android (Zip)** | `KL-06-0.4.3-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `95e02aeb2b7b877aa0ecb9009661573eabf5996fbea8c21f84734979f884afb7` | [Direct Download (Drive)](https://drive.google.com/uc?id=1WEpT37FFFzY0LhfASUYggBbjswj1tv_p&export=download) |
+| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `fd8bab0c135f8ebaeb0c2a7c02e02e6ee9850d74fcc6df891f076496f5e0d3b7` | [Direct APK (Drive)](https://drive.google.com/uc?id=1XXwHOz3mpTpYtnMkoS-Hixi0GaYKOsyl&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 4.3 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.3-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
 | 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.2-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369` | [Direct Download (Drive)](https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.3-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `e2aea521137d1654f8c84fe4892bd3a1b51e9890d88bd873e8cc65131e46a550` | [Direct Download (Drive)](https://drive.google.com/uc?id=1onxh-6QO060tofPmNpKmXXdap7IRDWoP&export=download) |
+
+<br/>
+
+### 📦 Previous Release Archive (v0.4.2-beta Build 9)
+
+| Platform | Deliverable Package | Size | SHA-256 Checksum | Direct Download Mirror |
+| :--- | :--- | :---: | :---: | :---: |
+| 🤖 **Android** | `KL-06-0.4.2-beta-android-debug-UNTESTED.zip` | 1.07 MB | `fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da` | [Direct Download (Drive)](https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 4.2 beta.zip` | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.2-beta-windows-x64-UNTESTED.zip` | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.2-beta-source-BUILD-READY.zip` | 2.02 MB | `f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369` | [Direct Download (Drive)](https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download) |
 
 <br/>
 

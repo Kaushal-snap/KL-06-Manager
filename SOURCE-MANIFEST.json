@@ -1,5 +1,5 @@
 {
-  "build": 9,
+  "build": 10,
   "files": [
     {
       "bytes": 2666,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 21601,
+      "bytes": 22805,
       "executable": false,
       "path": "README.md",
-      "sha256": "5e8f6556a00657a97373f8d7b966962df6b672322ca82b9fba126b67f49fca89"
+      "sha256": "78a2a9459c7415df349ab64d5885bdfab626cdc8b745b5e1921e271faa84136e"
     },
     {
       "bytes": 1599,
@@ -68,10 +68,10 @@
       "sha256": "85133d7cdac1984d0f1947f5d8662ed242c02e1d69e9bdc9773c5eb853e0489d"
     },
     {
-      "bytes": 270,
+      "bytes": 271,
       "executable": false,
       "path": "VERSION.json",
-      "sha256": "532deb70e26b660c51324764ac6860d956af64754ff81b5aef4ba3a0c7056118"
+      "sha256": "80390e7e3347c5650bf40dae88e3aaac4da679df74ed02a9cf0cb8b530e5c6a0"
     },
     {
       "bytes": 687,
@@ -80,10 +80,10 @@
       "sha256": "ea4b4dd877b2e16d09a7754087d51fa1a52d096c09439fe2c98b5c2a42d212ef"
     },
     {
-      "bytes": 575,
+      "bytes": 576,
       "executable": false,
       "path": "android/app/build.gradle",
-      "sha256": "c30dc7bfdea18a3b6ac2fefc7e8edd180d242a79241ce27e58b2c3a398d02eaa"
+      "sha256": "9d7c2d61812d9f019654eb3b5cd46852907931b464af5d1f4c792ec2619e718f"
     },
     {
       "bytes": 4624,
@@ -104,10 +104,10 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 48090,
+      "bytes": 49648,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "dcd0190f7850d5fa8e738281936e86f1a8f7efd67bce76faf3fd86e137e5b39c"
+      "sha256": "0746f1876575fd3754d75267af89caf5376e08a910529b1f8bc2de1e6ab90e77"
     },
     {
       "bytes": 7231,
@@ -200,16 +200,16 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 28547,
+      "bytes": 28565,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "af63bf23fff69418077636c0afa11601d66290e3e8f5955c1a1eccdc3b9331f2"
+      "sha256": "a7655165faa04217616f14d33dd2400121b99434d500bed03123008b76d725fc"
     },
     {
-      "bytes": 4107,
+      "bytes": 4121,
       "executable": true,
       "path": "automation/source_manifest.py",
-      "sha256": "1f53bcffbf33dd83a78357a0f245b90f12306a1efd8ffaea25d98c7bc5816749"
+      "sha256": "e1720afd524e69aaa8de625cdb2805b4a4c77806663c347266e62db8e1a9dee7"
     },
     {
       "bytes": 8355,
@@ -218,10 +218,10 @@
       "sha256": "c6fd7a8edc92544112d8ecc1936090e3f766c003b05d0fb58e58041f6c51ec74"
     },
     {
-      "bytes": 30374,
+      "bytes": 30376,
       "executable": false,
       "path": "companion/server.py",
-      "sha256": "80c666c3fdcc48f69cd038723d908dabc36125ae00e0747068a0f439ffccd7e9"
+      "sha256": "b6b5f361cb5a0e473d0d974d4f985817ca950acd7a5ceded3f9093d0b64ff1d3"
     },
     {
       "bytes": 13315,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 79355,
+      "bytes": 79537,
       "executable": false,
       "path": "index.html",
-      "sha256": "32870e3b72b4e527f29760b61fe544d31a743db5b1e27a8a9f974db8b3cb7d48"
+      "sha256": "9e79a6b8d1ccec38285726fab2776403421255dfaf7823695d4520b6c7ee3c5f"
     },
     {
       "bytes": 5659,
@@ -278,10 +278,10 @@
       "sha256": "1cd39f53e9aa89802563cd26f19370cdccc65ddf6fdb2b4871056ae5eba4cb6d"
     },
     {
-      "bytes": 16489,
+      "bytes": 16536,
       "executable": false,
       "path": "ios/KL06Mobile/App.swift",
-      "sha256": "46c9db73586fd33e1d8e938a91945ee6f20b20bc65e3fdefdb6e1ea5398e8577"
+      "sha256": "99b337764ba9473602a8e76866ac1dd6c7cfb6522f3ff17a3369fad4b9cf818d"
     },
     {
       "bytes": 2134,
@@ -440,10 +440,10 @@
       "sha256": "69e5991c2116058a71070754a9fa950b10b064c4af5e872f94c54b5c3f15da2c"
     },
     {
-      "bytes": 1032,
+      "bytes": 1033,
       "executable": false,
       "path": "macos/Info.plist",
-      "sha256": "38da1d815a0d6fe069205e3a4e270a90195347d82777422a641e8d4cdb97c786"
+      "sha256": "752c1fc50f1df7c50699613e269879549e8cec5cd62da4412a2b8c3df49c8977"
     },
     {
       "bytes": 1086,
@@ -488,10 +488,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 61434,
+      "bytes": 61436,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "1cfb20a982fef82e42befd8ecd1d6ff5579827a861b8091db28b93afb1352e54"
+      "sha256": "3b10f2f58f6879251ec12e637b059bb20be32a64dbe616d97126452edd2c2d15"
     },
     {
       "bytes": 5483,
@@ -515,7 +515,7 @@
       "bytes": 8178,
       "executable": false,
       "path": "macos/Resources/model.js",
-      "sha256": "0029297e555d9f942ce84153f89e0c63f625acd62555976ab452a550b038f239"
+      "sha256": "ffe7842eed4b03761ea039cb307f39fa50aa7febef1a7bcf51ed4837e407cbec"
     },
     {
       "bytes": 29636,
@@ -572,10 +572,10 @@
       "sha256": "ae36a11c760b5b9c751a000cac7d33ea3fab2d0b216eaca7a8c2ff31b2d0830b"
     },
     {
-      "bytes": 32610,
+      "bytes": 32613,
       "executable": false,
       "path": "macos/Sources/main.swift",
-      "sha256": "f19615f7f9afb12727e2038d0642170ab61b58f8551d7d57015ed8930f5176a7"
+      "sha256": "cd71885b95f13d2d1278e85be15eacd03e62a887bc81a8f57c45078371b1f792"
     },
     {
       "bytes": 2090,
@@ -656,16 +656,16 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 36897,
+      "bytes": 36932,
       "executable": false,
       "path": "script.js",
-      "sha256": "83cfe049885835a16ac8cf5ec6eae420228056b04e3da057e9b2a80e3805f16a"
+      "sha256": "6fb7522122ff493b9111ac74196f6e73a421347ed096201f16892e4eb9a116e8"
     },
     {
-      "bytes": 74641,
+      "bytes": 82955,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "39915e74a96ab337c183c39ccd0dd1eaa9c67ad1de15da0e95945820a3aeba61"
+      "sha256": "0508777c5a928d46b932bd1547c88353470ad98a8d7cd3038cdbc98d7c42f2d9"
     },
     {
       "bytes": 5483,
@@ -692,10 +692,10 @@
       "sha256": "a7214d4209b5484395944a6c3cfa82ec26d769f0f141c9f0459c33baade2b9d3"
     },
     {
-      "bytes": 3964,
+      "bytes": 4049,
       "executable": false,
       "path": "shared/web/model.js",
-      "sha256": "a94ae70dc05add0e7184f383f6b9450ac57788df7ad6f865a2859545b2913101"
+      "sha256": "8a52588fa9f04239fb92430f65f845cdb16d905d7d277c74923d2f43b5911e00"
     },
     {
       "bytes": 13931,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 6558,
+      "bytes": 8514,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "4d7de0a651389b0adfb86b9b016d12caa35916bd9fe01ede8af0226d9ef61e6b"
+      "sha256": "8f3d10b0bd2b0c8f5840aa38a5e80fb706d1312c39595436b9d9544a0b0b7baf"
     },
     {
       "bytes": 1614,
@@ -794,10 +794,10 @@
       "sha256": "ab93b188c28ba36f4e45b54000ed0084e9f532245405067413e3cca683889ceb"
     },
     {
-      "bytes": 2315,
+      "bytes": 2316,
       "executable": false,
       "path": "windows/KL06.Windows/KL06.Windows.csproj",
-      "sha256": "4ec9cba21ee720e30f85b31630e04241df0fb8780b78070afd51fa6e8906eafe"
+      "sha256": "b2d3fbf187ea0a9ee8ea5a4267867a7b1161be8a242275e3990eab5fd7e990bf"
     },
     {
       "bytes": 11249,
@@ -806,10 +806,10 @@
       "sha256": "54bfa9d2e2460f728ca1e0baaf387951bdf33471a3abd08492fc22213abd480b"
     },
     {
-      "bytes": 6862,
+      "bytes": 6863,
       "executable": false,
       "path": "windows/KL06.Windows/NativeDevice.cs",
-      "sha256": "59350ea484ca9ca838576c374004663b2c4b6a00b2d6b0af4a45c3f7904e9e89"
+      "sha256": "0eefca8dc89bed4bf1d13e45c23296be8b5938f7d30c02fb0e6a9744812314ff"
     },
     {
       "bytes": 184,
@@ -862,5 +862,5 @@
   ],
   "schema": "KL06_SOURCE_MANIFEST_V1",
   "scope": "source-only-not-native-build-or-owner-approval",
-  "version": "0.4.2-beta"
+  "version": "0.4.3-beta"
 }
