@@ -1,0 +1,22 @@
+name: Portable source checks
+on:
+  push:
+    branches: [fix/real-connectivity-transfer-logs]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: kl06-portable-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  portable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run isolated portable tests
+        run: /bin/bash TEST-PORTABLE.sh
