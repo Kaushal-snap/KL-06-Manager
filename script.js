@@ -9,9 +9,9 @@ const PLATFORM_DATA = {
         name: 'Android Package (Dual v1 + v2 Signed)',
         fileName: 'KL-06-0.4.2-beta-android-debug-UNTESTED.zip',
         fileMeta: 'v0.4.2-beta Build 9 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1N9C0--kbnpqhSY9gg3sSF8tQN5oYeBNv&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1N9C0--kbnpqhSY9gg3sSF8tQN5oYeBNv/view?usp=sharing',
-        sha256: 'd510a4c71f620224339ad29aa55f14a7559ab6fb642f2d62126a46489214f0c0',
+        directUrl: 'https://drive.google.com/uc?id=1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1DbBrzzdzXwbphkQdz-tRCjoQNzMw22z5/view?usp=sharing',
+        sha256: '57cc4de6a9c952edb0fb435cb8c45a6cd2d9cf1cb848ecc55045a57b16b94dd7',
         btnText: '⬇️ Download for Android (1.07 MB)'
     },
     mac: {
@@ -27,9 +27,9 @@ const PLATFORM_DATA = {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
         fileName: 'KL-06-0.4.2-beta-windows-x64-UNTESTED.zip',
         fileMeta: 'v0.4.2-beta Build 9 • 561 KB • Windows 7 SP1, 8, 8.1, 10, 11',
-        directUrl: 'https://drive.google.com/uc?id=1vCVx-j0zeXVbx94orP987BOzoSrX1SzI&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1vCVx-j0zeXVbx94orP987BOzoSrX1SzI/view?usp=sharing',
-        sha256: '383f47e43d4f878a22a43776732a47bebf63c056bdf0074f114bed83cb10d457',
+        directUrl: 'https://drive.google.com/uc?id=133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB&export=download',
+        viewUrl: 'https://drive.google.com/file/d/133-YCMnm6LoTaeqZFVKrLhv3nCGOYSCB/view?usp=sharing',
+        sha256: 'a52ffda2caf54a23081b4ba8f58aab1a0dd19fd90b7f1f67ffb1be106927a11c',
         btnText: '⬇️ Download for Windows x64 (561 KB)'
     },
     ios: {
@@ -45,9 +45,9 @@ const PLATFORM_DATA = {
         name: 'Complete Source Code Archive',
         fileName: 'KL-06-0.4.2-beta-source-BUILD-READY.zip',
         fileMeta: 'v0.4.2-beta Build 9 • 2.02 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1wx3ScGO7FhVyhex9eoRlwrcRScnV9ioh&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1wx3ScGO7FhVyhex9eoRlwrcRScnV9ioh/view?usp=sharing',
-        sha256: '2fafca48947d022ba36b315fa91a5d0fa17f6669892b902b79868fb577c02261',
+        directUrl: 'https://drive.google.com/uc?id=10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l&export=download',
+        viewUrl: 'https://drive.google.com/file/d/10gjsCpNrx-fCRn_E0wEtEsqaiNr8584l/view?usp=sharing',
+        sha256: 'db3e38a01aa8f9a099b52470fade08c13bbb900f992fa8156644813664993cb4',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };

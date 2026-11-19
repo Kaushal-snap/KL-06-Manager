@@ -220,7 +220,7 @@
     latestVersion: '0.4.2-beta',
     latestBuild: 9,
     releaseNotes: 'Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.',
-    downloadUrl: 'https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download'
+    downloadUrl: 'https://drive.google.com/uc?id=1crZyJD8ETzKxIYJkDkjpwg7uPfIxWEg8&export=download'
   };
 
   function inAppUpdateHub(){
@@ -311,6 +311,17 @@
   function fileSharing(){
     return `<h1>File Sharing &amp; Hardware Link</h1>
     <p class="intro">Universal AirDrop &amp; Quick Share file streaming across Android, iOS, Mac, and Windows. Instant chunked TLS transfer over Wi-Fi, Personal Hotspot (Xender style), or Bluetooth.</p>
+
+    <div style="background:#0e1e28;border:1px solid #1e4555;border-radius:10px;padding:12px 14px;margin:0 0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.2-beta)</strong>
+        <div style="color:#8ab4be;font-size:11px;margin-top:2px">Mobile Data &amp; Wi-Fi Active • Auto-Send Private Drive Sync Ready</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button data-action="prompt-permissions" class="btn-primary" style="padding:6px 12px;font-size:11px">⚙️ Allow Permissions</button>
+        <button data-page="updates" class="btn-secondary" style="padding:6px 12px;font-size:11px">🚀 Check Updates (OTA)</button>
+      </div>
+    </div>
 
     <div class="drop-card" data-action="pick-share-file" id="share-drop-card" style="cursor:pointer">
       <span class="drop-icon">📤</span>
@@ -655,14 +666,51 @@
   function history(){return `<h1>Windows history</h1><p class="intro">Windows HWiNFO CSV · local only · never live Mac/phone telemetry.</p>${button('Import local HWiNFO CSV','history-import')}${recording?`<section class="panel"><h2>${e(recording.samples)} timestamped rows · ${e(recording.recordedDate)}</h2><p>Only fixed numeric channels retained; raw paths/identities discarded. Recording timezone, sensor calibration and platform equivalence are unverified.</p><div class="table-wrap"><table><thead><tr><th>Historical channel</th><th>Samples</th><th>Min</th><th>Median</th><th>Max</th></tr></thead><tbody>${recording.series.map(s=>`<tr><td>${e(s.label)}<small>${e(s.source)} · ${e(s.unit)}</small></td><td>${e(s.count)}</td><td>${n(s.min,2)}</td><td>${n(s.median,2)}</td><td>${n(s.max,2)}</td></tr>`).join('')}</tbody></table></div>${button('Clear imported history','history-clear')}</section>${recording.series.slice(0,8).map(graph).join('')}`:'<section class="panel empty"><h2>No recording imported</h2><p>Choose a sensor CSV up to 5 MiB / 10,000 samples. No file is scanned automatically or uploaded. Numeric data remains in app memory until cleared or quit.</p></section>'}`;}
   function laptop(){return etcPcToolsView();}
 
-  // Primary 4 tabs prioritized according to user instructions
+  function inAppUpdatePage(){
+    return `<h1>Software Updates &amp; OTA</h1>
+    <p class="intro">Inbuilt Android PackageInstaller handoff, signed beta channel updates, and dual-mode internet access over Mobile Data and Wi-Fi.</p>
+    ${inAppUpdateHub()}`;
+  }
+
+  // Primary tabs prioritized according to user instructions
   const pages = [
-    ['share', '🚀 File Sharing'],
+    ['share', '📁 File Sharing'],
     ['controls', '📱 Mobile Controls'],
-    ['etc', '💻 Etc (PC & Mac)'],
+    ['updates', '🚀 Updates & OTA'],
+    ['etc', '💻 PC & Mac (Etc)'],
     ['privacy', '🛡️ Safety & Privacy']
   ];
   const legacyPages = ['device','display','audio','storage','fan','history','laptop'];
+
+  let activePermissionModal = false;
+  function permissionModal(){
+    if (!activePermissionModal) return '';
+    return `<div class="pair-modal-backdrop" id="permission-modal">
+      <div class="pair-modal-card" style="max-width:440px">
+        <div class="pair-modal-icon">⚙️ ⇄ 📱</div>
+        <h3 style="margin:0 0 8px;font-size:16px;color:#d8f4ee">KL-06 Hardware &amp; Ecosystem Setup</h3>
+        <p style="font-size:12px;color:#8ab4be;line-height:1.6;margin:0 0 14px">
+          Allow network and nearby hardware permissions so KL-06 stays continuously linked with your PC/Mac companion across both <strong>Mobile Data and Wi-Fi</strong>, and enables seamless volume, display and AirDrop/Quick Share streaming.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button data-action="request-permissions" class="btn-primary" style="padding:10px;font-size:13px;font-weight:600">
+            🛡️ Allow All Hardware Permissions
+          </button>
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button data-action="open-app-settings" class="btn-secondary" style="flex:1;padding:8px;font-size:12px">
+              ⚙️ App Settings
+            </button>
+            <button data-action="open-accessibility" class="btn-secondary" style="flex:1;padding:8px;font-size:12px">
+              ♿ Accessibility
+            </button>
+          </div>
+          <button data-action="close-permission-modal" class="btn-secondary" style="margin-top:4px;padding:6px;font-size:11px;opacity:0.8">
+            Dismiss / Continue
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }
 
   function autoPairModal(){
     if (!incomingPair) return '';
@@ -708,7 +756,7 @@
       const platform=state?.platform||'device';
       const app = document.getElementById('app');
       if (!app) return;
-      const pageFn = {share:fileSharing, controls:mobileControlsView, etc:etcPcToolsView, privacy, device, display, audio, storage, fan, history, laptop}[page] || fileSharing;
+      const pageFn = {share:fileSharing, controls:mobileControlsView, updates:inAppUpdatePage, etc:etcPcToolsView, privacy, device, display, audio, storage, fan, history, laptop}[page] || fileSharing;
       const pageHtml = pageFn();
       
       const auxButtons = legacyPages.map(id => 
@@ -716,7 +764,7 @@
       ).join('');
 
       if (!shellRendered || !app.querySelector('.shell')) {
-        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.2-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.2-beta · build 9<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}`;
+        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.2-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.2-beta · build 9<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><div style="display:flex;align-items:center;gap:8px"><button data-page="updates" class="btn-primary" style="padding:4px 8px;font-size:11px">🚀 OTA Updates</button><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></div></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}${permissionModal()}`;
         shellRendered = true;
       } else {
         app.querySelectorAll('#app-nav button').forEach(btn => {
@@ -757,6 +805,16 @@
           }
         } else if (logModalEl) {
           logModalEl.remove();
+        }
+        let permModalEl = document.getElementById('permission-modal');
+        if (activePermissionModal) {
+          if (!permModalEl) {
+            const div = document.createElement('div');
+            div.innerHTML = permissionModal();
+            document.body.appendChild(div.firstElementChild);
+          }
+        } else if (permModalEl) {
+          permModalEl.remove();
         }
       }
     } catch (err) {
@@ -944,6 +1002,37 @@
         return;
       }
 
+      case'prompt-permissions':
+        if (native) {
+          try { request('promptPermissionDialog').catch(()=>{}); } catch(ignored){}
+        }
+        activePermissionModal = true;
+        render();
+        return;
+
+      case'request-permissions':
+        if (native) {
+          try { request('requestPermissions').catch(()=>{}); } catch(ignored){}
+        }
+        toast('✓ Requesting OS hardware, network & storage permissions…');
+        activePermissionModal = false;
+        render();
+        return;
+
+      case'open-accessibility':
+        if (native) {
+          try { request('openAccessibilitySettings').catch(()=>{}); } catch(ignored){}
+          toast('Opening Accessibility Settings…');
+        } else {
+          toast('Demo: Accessibility Settings opened.');
+        }
+        return;
+
+      case'close-permission-modal':
+        activePermissionModal = false;
+        render();
+        return;
+
       case'hotspot-mode':
         toast('📲 Personal Hotspot mode: connect peer device to this phone\'s hotspot, then stream files directly!');
         addLog('RADAR', 'info', 'Personal Hotspot direct link ready. Subnet IP 192.168.43.1 / 192.168.x.x active.');
@@ -1039,8 +1128,6 @@
         addLog('REPORT', 'ok', 'Error report packaged and saved to Download/KL-06/logs/. Share ready.');
         toast('✓ Error report packaged & saved! Ready to save directly to Private Drive folder.');
         render();
-        return;
-      }
         return;
       }
 

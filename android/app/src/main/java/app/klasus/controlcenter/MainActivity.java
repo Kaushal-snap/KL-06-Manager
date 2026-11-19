@@ -62,6 +62,78 @@ public final class MainActivity extends Activity {
         });
         WebViewCompat.addWebMessageListener(web,"KLNative",Collections.singleton(ORIGIN),(view,message,source,isMainFrame,proxy)->{if(!isMainFrame||!"https".equals(source.getScheme())||!"appassets.androidplatform.net".equals(source.getHost())||(source.getPort()!=-1&&source.getPort()!=443)||!PAGE.equals(view.getUrl()))return;String raw=message.getData();if(raw==null||raw.length()>16384)return;try{JSONObject body=new JSONObject(raw);if(body.length()!=3||!(body.opt("params") instanceof JSONObject)||!body.has("id")||!body.has("method"))return;String id=body.getString("id"),method=body.getString("method");if(!id.matches("[A-Za-z0-9-]{1,64}"))return;JSONObject p=body.optJSONObject("params");handle(id,method,p==null?new JSONObject():p);}catch(Exception ignored){}});
         web.loadUrl(PAGE);
+        main.postDelayed(() -> {
+            try {
+                requestAppPermissions();
+            } catch(Exception ignored){}
+        }, 1200);
+    }
+    private void requestAppPermissions(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+            List<String> list=new ArrayList<>();
+            String[] base={
+                "android.permission.ACCESS_NETWORK_STATE",
+                "android.permission.ACCESS_WIFI_STATE",
+                "android.permission.CHANGE_WIFI_STATE",
+                "android.permission.CHANGE_WIFI_MULTICAST_STATE",
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+            };
+            for(String p:base){
+                if(checkSelfPermission(p)!=android.content.pm.PackageManager.PERMISSION_GRANTED){
+                    list.add(p);
+                }
+            }
+            if(Build.VERSION.SDK_INT>=31){
+                String[] bt={"android.permission.BLUETOOTH_SCAN","android.permission.BLUETOOTH_CONNECT","android.permission.BLUETOOTH_ADVERTISE"};
+                for(String p:bt){
+                    if(checkSelfPermission(p)!=android.content.pm.PackageManager.PERMISSION_GRANTED){
+                        list.add(p);
+                    }
+                }
+            }
+            if(Build.VERSION.SDK_INT>=33){
+                String[] media={"android.permission.NEARBY_WIFI_DEVICES","android.permission.READ_MEDIA_IMAGES","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_AUDIO"};
+                for(String p:media){
+                    if(checkSelfPermission(p)!=android.content.pm.PackageManager.PERMISSION_GRANTED){
+                        list.add(p);
+                    }
+                }
+            }
+            if(!list.isEmpty()){
+                requestPermissions(list.toArray(new String[0]),PERMISSION_REQ_CODE);
+            }
+        }
+    }
+    private void promptPermissionSettingsDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle("KL-06 Permissions & Link")
+            .setMessage("Allow network, nearby devices and storage permissions so KL-06 can discover companions over Wi-Fi and Mobile Data, and manage hardware volume/display.")
+            .setPositiveButton("Grant Permissions",(d,w)->requestAppPermissions())
+            .setNeutralButton("App Settings",(d,w)->openAppSettings())
+            .setNegativeButton("Accessibility",(d,w)->openAccessibilitySettings())
+            .show();
+    }
+    private void openAppSettings(){
+        try{
+            Intent intent=new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:"+getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }catch(Exception e){
+            try{startActivity(new Intent(Settings.ACTION_SETTINGS));}catch(Exception ignored){}
+        }
+    }
+    private void openAccessibilitySettings(){
+        try{
+            Intent intent=new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }catch(Exception e){
+            try{startActivity(new Intent(Settings.ACTION_SETTINGS));}catch(Exception ignored){}
+        }
     }
     private void reply(String id,Object result,String error){main.post(()->{if(web==null||!PAGE.equals(web.getUrl()))return;try{JSONObject r=new JSONObject().put("id",id).put("ok",error==null);if(error==null)r.put("result",result==null?JSONObject.NULL:result);else r.put("error",error);web.evaluateJavascript("window.KL06.receive("+r.toString()+")",null);}catch(Exception ignored){}});}
     private void confirm(String id,String label,Runnable action){new AlertDialog.Builder(this).setTitle(label).setMessage("Only the supported local control is changed. Temporary app brightness/awake and owned volume changes are restored on background when still matching this app’s write. No root, firmware, microphone or system-security changes.").setPositiveButton("Continue",(d,w)->{try{action.run();reply(id,"Supported local action completed.",null);}catch(Exception e){reply(id,null,"Local control unavailable; no automatic retry.");}}).setNegativeButton("Cancel",(d,w)->reply(id,null,"Cancelled. No action applied.")).setOnCancelListener(d->reply(id,null,"Cancelled.")).show();}
@@ -96,6 +168,26 @@ public final class MainActivity extends Activity {
     }
     private void handle(String id,String method,JSONObject p){try{
         switch(method){
+        case "requestPermissions":{
+            runOnUiThread(this::requestAppPermissions);
+            reply(id,new JSONObject().put("status","requested"),null);
+            return;
+        }
+        case "openAppSettings":{
+            runOnUiThread(this::openAppSettings);
+            reply(id,new JSONObject().put("status","opened"),null);
+            return;
+        }
+        case "openAccessibilitySettings":{
+            runOnUiThread(this::openAccessibilitySettings);
+            reply(id,new JSONObject().put("status","opened"),null);
+            return;
+        }
+        case "promptPermissionDialog":{
+            runOnUiThread(this::promptPermissionSettingsDialog);
+            reply(id,new JSONObject().put("status","dialog_shown"),null);
+            return;
+        }
         case "state":if(p.length()!=0)throw new IllegalArgumentException();reply(id,snapshot(),null);return;
         case "nfcStatus":{
             boolean sup=nfcAdapter!=null;
@@ -165,13 +257,13 @@ public final class MainActivity extends Activity {
                 .put("upToDate",true)
                 .put("channel","beta")
                 .put("releaseNotes","Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.")
-                .put("downloadUrl","https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download");
+                .put("downloadUrl","https://drive.google.com/uc?id=1crZyJD8ETzKxIYJkDkjpwg7uPfIxWEg8&export=download");
             reply(id,res,null);
             return;
         }
         case "installUpdate":{
             writeLog("OTA","Triggering system PackageInstaller for in-app update");
-            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download");
+            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1crZyJD8ETzKxIYJkDkjpwg7uPfIxWEg8&export=download");
             Intent intent=new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(url),"application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
