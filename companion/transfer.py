@@ -157,6 +157,7 @@ class TransferSession:
             if self.state not in ("awaiting_approval", "transferring"):
                 raise TransferError(f"cannot_decline_in_state_{self.state}")
             self.state = "declined"
+            self.expires_at = self.clock() + 60
             self._close_and_clean()
 
     def cancel(self, requester_token: str):
@@ -167,6 +168,7 @@ class TransferSession:
             if self.state in ("complete", "failed", "cancelled", "declined"):
                 return
             self.state = "cancelled"
+            self.expires_at = self.clock() + 60
             self._close_and_clean()
 
     def append_chunk(self, chunk_offset: int, data: bytes):
@@ -176,6 +178,7 @@ class TransferSession:
                 raise TransferError(f"cannot_write_chunk_in_state_{self.state}")
             if self.clock() > self.expires_at:
                 self.state = "failed"
+                self.expires_at = self.clock() + 60
                 self._close_and_clean()
                 raise TransferError("transfer_expired")
 
@@ -205,6 +208,7 @@ class TransferSession:
         digest = self.hasher.hexdigest().lower()
         if digest != self.expected_sha256:
             self.state = "failed"
+            self.expires_at = self.clock() + 60
             self._close_and_clean()
             raise TransferError(f"sha256_verification_failed_expected_{self.expected_sha256}_computed_{digest}")
 
@@ -212,8 +216,10 @@ class TransferSession:
         try:
             os.replace(self.staging_path, self.destination_path)
             self.state = "complete"
+            self.expires_at = self.clock() + 60
         except Exception as e:
             self.state = "failed"
+            self.expires_at = self.clock() + 60
             self._close_and_clean()
             raise TransferError(f"finalization_rename_failed: {e}")
 
@@ -318,7 +324,8 @@ class TransferEngine:
 
     def _prune_expired(self):
         now = self.clock()
-        expired = [tid for tid, s in self.transfers.items() if s.state in ("complete", "declined", "cancelled", "failed") or now > s.expires_at]
+        # Keep terminal status available briefly so senders can confirm completion/failure.
+        expired = [tid for tid, s in self.transfers.items() if now > s.expires_at]
         for tid in expired:
             session = self.transfers.pop(tid)
             session._close_and_clean()
