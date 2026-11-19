@@ -32,7 +32,7 @@ printf '%s\n' "Building KL-06 locally for ${ARCH}. First build may take a minute
   -module-cache-path "$WORK/ModuleCache" \
   -import-objc-header "$ROOT/Sources/SMCReader.h" "$WORK/SMCReader.o" \
   "$ROOT/Sources/Core.swift" "$ROOT/Sources/FanMonitor.swift" "$ROOT/Sources/HotKey.swift" "$ROOT/Sources/DesktopCompanion.swift" "$ROOT/Sources/main.swift" \
-  -framework AppKit -framework Carbon -framework WebKit -framework IOKit -framework Metal -framework CoreAudio \
+  -framework AppKit -framework Carbon -framework WebKit -framework IOKit -framework Metal -framework CoreAudio -framework LocalAuthentication \
   -o "$APP/Contents/MacOS/KL-06" 2>&1 | /usr/bin/tee "$WORK/BUILD.log"
 /bin/chmod +x "$APP/Contents/MacOS/KL-06"
 /bin/cp "$ROOT/Info.plist" "$APP/Contents/Info.plist"
