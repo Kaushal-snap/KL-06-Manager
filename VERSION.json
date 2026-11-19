@@ -1,7 +1,7 @@
 {
-  "version": "0.4.0-beta.2",
-  "shortVersion": "0.4.0",
-  "build": 7,
+  "version": "0.4.1-beta",
+  "shortVersion": "0.4.1",
+  "build": 8,
   "macBundleID": "app.klasus.controlcenter",
   "baseSourceZipSha256": "cce814de5a752fb87d0dcfffdf052aeb8e4b5fe5f13e774cfa15bef674a61f06",
   "nativeBuildsVerified": false,

@@ -1,5 +1,5 @@
 {
-  "build": 7,
+  "build": 8,
   "files": [
     {
       "bytes": 2666,
@@ -26,10 +26,10 @@
       "sha256": "269fcbf750c5b691128b8749945cac62d74aa8fdd8ba5974db2ef826aca67821"
     },
     {
-      "bytes": 19055,
+      "bytes": 22445,
       "executable": false,
       "path": "CHANGELOG.md",
-      "sha256": "fd9ebc0a517b079f171c6341c52746a4f79d926974d976092a0168a95ee77c44"
+      "sha256": "5691d3b32791a1e1489b01d55b4b985f67f796f5adba9a54fbffe7829c69b138"
     },
     {
       "bytes": 6066,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 20135,
+      "bytes": 20121,
       "executable": false,
       "path": "README.md",
-      "sha256": "2351fcff9b580c5c6137e19cbeb0767669b1e86b520a26ae111f3c7658040abb"
+      "sha256": "de4decda7a7696e9dc32f23978676df89e6acc0dacab5cc9baa949c5f155d834"
     },
     {
       "bytes": 1599,
@@ -68,10 +68,10 @@
       "sha256": "85133d7cdac1984d0f1947f5d8662ed242c02e1d69e9bdc9773c5eb853e0489d"
     },
     {
-      "bytes": 272,
+      "bytes": 270,
       "executable": false,
       "path": "VERSION.json",
-      "sha256": "c91265cc46d8dcbbf599b4b7b4568b8ac105d68922bd8af5e20a5080f75f9d51"
+      "sha256": "f65713261c80becaa8aff6d9f9fe11394462eccee497fe2582f29a0e7fde4b3f"
     },
     {
       "bytes": 687,
@@ -80,10 +80,10 @@
       "sha256": "ea4b4dd877b2e16d09a7754087d51fa1a52d096c09439fe2c98b5c2a42d212ef"
     },
     {
-      "bytes": 577,
+      "bytes": 575,
       "executable": false,
       "path": "android/app/build.gradle",
-      "sha256": "471edc9685994afebc127bd4f5f5fde6b175191844e31d8dc4b4fba84b23b628"
+      "sha256": "9100c7c2332ad8c8abb766183ecbd2e62c444fc40bca6b8f2bbee3b103b36bbf"
     },
     {
       "bytes": 4624,
@@ -92,10 +92,10 @@
       "sha256": "756b86329deae2b30fb58f29c4621fb361e4912b43594bf5013f5fb6038e1996"
     },
     {
-      "bytes": 2256,
+      "bytes": 2246,
       "executable": false,
       "path": "android/app/src/main/AndroidManifest.xml",
-      "sha256": "41c2b15d11b8871dd16fc4c308afa6e5c4741c95083d21028a197815480e20b2"
+      "sha256": "4908f871b9ef7cfe7d4b20a162ff91f8b97df327b3d7b68bd85d96cdbe3ae604"
     },
     {
       "bytes": 880,
@@ -104,16 +104,16 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 26492,
+      "bytes": 37120,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "e3f343e9fa0e67c9eb4d8962c91e39118fff6eee3e8ae19f3a967bde43e25c31"
+      "sha256": "068a8b2cf3565b0d7c829a52e17a70cdd428d009abe6c6b4571ee3169670e42a"
     },
     {
-      "bytes": 6625,
+      "bytes": 6707,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/PinnedLaptop.java",
-      "sha256": "789170b063f1493b782942d6573a5353150c86a1d938db02397053eb4470331d"
+      "sha256": "10b56da8f36969d9951d485fb8ebeaa500b8e934c0c13502051a37e7dc847e64"
     },
     {
       "bytes": 633,
@@ -200,10 +200,10 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 28251,
+      "bytes": 28255,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "a27acb8534c91c59919a54b051792ebdd7b27e0cfed00e4ca1d7b3c24bcfb0d0"
+      "sha256": "86388f224835b08a00b300f4bbfa0b3b64591b8180afd7bf1fa64f0ecfa67b7e"
     },
     {
       "bytes": 4085,
@@ -218,10 +218,10 @@
       "sha256": "c6fd7a8edc92544112d8ecc1936090e3f766c003b05d0fb58e58041f6c51ec74"
     },
     {
-      "bytes": 26657,
+      "bytes": 26673,
       "executable": false,
       "path": "companion/server.py",
-      "sha256": "7093edcd3c5983a7f2ad727d1b64032f5b3b259c05d7678e71d417fc8b642c5f"
+      "sha256": "95b080377c3cbdee140e51243d797523166613494951e6662d84f6836b28d1a2"
     },
     {
       "bytes": 13315,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 56076,
+      "bytes": 66363,
       "executable": false,
       "path": "index.html",
-      "sha256": "b8950ced0900b031083e8387d5d926d388ba95a7bcdb4f3d737168c7bcddc0cf"
+      "sha256": "70d1bd39a346766270c12417225da56ec60076a31b730e036df631582bf247c5"
     },
     {
       "bytes": 5659,
@@ -278,10 +278,10 @@
       "sha256": "1cd39f53e9aa89802563cd26f19370cdccc65ddf6fdb2b4871056ae5eba4cb6d"
     },
     {
-      "bytes": 13374,
+      "bytes": 15884,
       "executable": false,
       "path": "ios/KL06Mobile/App.swift",
-      "sha256": "1058fa12c2119148e3f10203609581bf560fdeecaf68996842a26590c9030a10"
+      "sha256": "e8e7d9e094980500e767f055a9c3f89eac1310e2fe38e75a76fce8ce6408096d"
     },
     {
       "bytes": 2134,
@@ -380,10 +380,10 @@
       "sha256": "88f20e76b213d3b354d67050fa76ea62dd8166a56d2c73caaafeb21aecba5a55"
     },
     {
-      "bytes": 10407,
+      "bytes": 10536,
       "executable": false,
       "path": "ios/KL06Mobile/PinnedLaptop.swift",
-      "sha256": "e11c11b8f3174ffab5cc829f222917c533082fec4a8650fc5e9c01cac832c777"
+      "sha256": "3af9e926f8a3ecbd5a913952a97d81861d21dbf644bfa5244d058242838bb4f2"
     },
     {
       "bytes": 214,
@@ -440,10 +440,10 @@
       "sha256": "69e5991c2116058a71070754a9fa950b10b064c4af5e872f94c54b5c3f15da2c"
     },
     {
-      "bytes": 1031,
+      "bytes": 1032,
       "executable": false,
       "path": "macos/Info.plist",
-      "sha256": "4208f127165c71e481c669e701b9c2ef2dafe69a96bccc3b5ffefa76480d83f0"
+      "sha256": "b1152e948ba631602eac31ab36aa7a1be91bec0eac9645c90672b9d30023fa31"
     },
     {
       "bytes": 1086,
@@ -488,10 +488,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 61440,
+      "bytes": 61434,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "d34afa2a2c889fc62c067cf3283a3234a5a7b4a5d73ddfd2740d243cd9d110d9"
+      "sha256": "fa41231cdf9a427d19ecfa825cefd4ffd5e862e2d383b67aebd3a4a1b939925b"
     },
     {
       "bytes": 5483,
@@ -512,10 +512,10 @@
       "sha256": "791a243c957ae69610386bf9471ff535a8a53102d24655b3b7e84e41bee39ed4"
     },
     {
-      "bytes": 8180,
+      "bytes": 8178,
       "executable": false,
       "path": "macos/Resources/model.js",
-      "sha256": "4acf1f6956ebc35b2d0983f14a86ae54b412443b6542fba5ce94a5545e0dfd20"
+      "sha256": "e105266cd30664a1628169de1f3abbebc09d98396e6f51cdb6013c1c00e52912"
     },
     {
       "bytes": 29636,
@@ -572,10 +572,10 @@
       "sha256": "ae36a11c760b5b9c751a000cac7d33ea3fab2d0b216eaca7a8c2ff31b2d0830b"
     },
     {
-      "bytes": 32496,
+      "bytes": 32488,
       "executable": false,
       "path": "macos/Sources/main.swift",
-      "sha256": "289377360e3d4a87c54935b66c2f98947abab6c90421962449b1914f776169a2"
+      "sha256": "aacf47a5c27a7e9a06253c573b3876482a96c7b4d6deebddc4a63ff60b4d68f0"
     },
     {
       "bytes": 2090,
@@ -632,10 +632,10 @@
       "sha256": "a21d82a38ddbcbb2c1a3450bdaa90d236786bfe30f46e6cf96b02cc8fd54df03"
     },
     {
-      "bytes": 3157,
+      "bytes": 3173,
       "executable": false,
       "path": "macos/tests/package.test.py",
-      "sha256": "5ec1f1a62dfedadcff617a851257bad9967fe4e8987078ceb4e0685114436928"
+      "sha256": "a97e9c3aca277d791e1e490884e41f671aeb3116200a23e5d9be2b1ae317e463"
     },
     {
       "bytes": 3803,
@@ -656,16 +656,16 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 18101,
+      "bytes": 32842,
       "executable": false,
       "path": "script.js",
-      "sha256": "a1e2df6f818517b2e6929b10de2816ce5c68dea4197bdf552fce814fa0568985"
+      "sha256": "502b44ef3fb646da4f5fb8d43312b9957f3754b7fe134826da7f407f95593dc7"
     },
     {
-      "bytes": 50599,
+      "bytes": 67276,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "0766ebb76a6920f84f23567963f12e3f66aa6acd2a6b31fbb53a433532064baf"
+      "sha256": "f152ecac9c76ade5da46bdfd8b26d325428809201cc072e3cd2a09c7c4001016"
     },
     {
       "bytes": 5483,
@@ -692,22 +692,22 @@
       "sha256": "a7214d4209b5484395944a6c3cfa82ec26d769f0f141c9f0459c33baade2b9d3"
     },
     {
-      "bytes": 3614,
+      "bytes": 3782,
       "executable": false,
       "path": "shared/web/model.js",
-      "sha256": "835982dcefdf20fb0cbff8a10be1b2f80fecc6c4e4fbc975045022e18bcf5d0e"
+      "sha256": "5ddb086d113bafe314d9f66553e5a8ad81b3739bcd50a3747718bf2a00677889"
     },
     {
-      "bytes": 11759,
+      "bytes": 13931,
       "executable": false,
       "path": "shared/web/style.css",
-      "sha256": "9043f14038b645f447311096d22718f83e2723c9336e250371ff0384e08d87ab"
+      "sha256": "bed179dc3223ac975eb04f95761ad725249a120021f85798c5165b22f91360e0"
     },
     {
-      "bytes": 43574,
+      "bytes": 51028,
       "executable": false,
       "path": "style.css",
-      "sha256": "7f4ce9af405a2fcff77bccfb62e48eb377c62ff560c9e1690dc80cdc356dea35"
+      "sha256": "1932c5a528bce791857f58b60bf974d5ebac031a5de22d04d9ba1001a23f24b7"
     },
     {
       "bytes": 10515,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 3891,
+      "bytes": 3927,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "f22fda1b001164fa9fd8f05195c00b619f5549f0b0dd8477e6dbf365ba4e7181"
+      "sha256": "6aeb2049ddb3bc5bf26df21ef2856dae54b6a9349b2f77ef431ccd791a34d6db"
     },
     {
       "bytes": 1614,
@@ -782,10 +782,10 @@
       "sha256": "56654c208efec142beb13b26562e51c2512fcf42f72fd00df02f2c9bd15759b5"
     },
     {
-      "bytes": 3002,
+      "bytes": 3432,
       "executable": false,
       "path": "windows/KL06.Windows/ControlPolicy.cs",
-      "sha256": "554a32be5566460a361438c1662e89707b2b28ff3c6013f8e5833057dfb2e623"
+      "sha256": "77d3c183dddf3f48e3e650dbb43254eb5e7f7fe93a78ebc8f6de353a6d77fd83"
     },
     {
       "bytes": 7623,
@@ -794,22 +794,22 @@
       "sha256": "ab93b188c28ba36f4e45b54000ed0084e9f532245405067413e3cca683889ceb"
     },
     {
-      "bytes": 2317,
+      "bytes": 2315,
       "executable": false,
       "path": "windows/KL06.Windows/KL06.Windows.csproj",
-      "sha256": "17da6cf1cc9eb504ccd646007ca8d5e8604fcba1c58cab99080bab86dbb83485"
+      "sha256": "55b5a3dbcf6c12043f926617840371f2a84707e64c0589bf15e71e161dbceae9"
     },
     {
-      "bytes": 11139,
+      "bytes": 11249,
       "executable": false,
       "path": "windows/KL06.Windows/MainForm.cs",
-      "sha256": "f60b8434f3620efbe938fb0c5612e691e4161f2e48670f1a4d3770f50cc95c0a"
+      "sha256": "54bfa9d2e2460f728ca1e0baaf387951bdf33471a3abd08492fc22213abd480b"
     },
     {
-      "bytes": 6864,
+      "bytes": 6862,
       "executable": false,
       "path": "windows/KL06.Windows/NativeDevice.cs",
-      "sha256": "bef67f78ea53616d072d18e6ade1ffd074a422232a9ef40ffd9feefa5b12ffc9"
+      "sha256": "36b7ed6ca6f18a10872a42487d81a637531743e4243d64afb42c16f8c0399d19"
     },
     {
       "bytes": 184,
@@ -839,7 +839,7 @@
       "bytes": 1091,
       "executable": false,
       "path": "windows/KL06.Windows/app.manifest",
-      "sha256": "478aefc18d8bc172243c5ce0aa7cf83b0e2d1165ab05aa3286e1ef51be5e8ba8"
+      "sha256": "c79345d852b63ca9381a45311b45973f22f314b856a38b92ec5da67ea462c56e"
     },
     {
       "bytes": 969,
@@ -862,5 +862,5 @@
   ],
   "schema": "KL06_SOURCE_MANIFEST_V1",
   "scope": "source-only-not-native-build-or-owner-approval",
-  "version": "0.4.0-beta.2"
+  "version": "0.4.1-beta"
 }

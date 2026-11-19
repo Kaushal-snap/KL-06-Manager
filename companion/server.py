@@ -306,7 +306,7 @@ class Broker:
 
     def pair(self, body):
         self.rate("pair", 8)
-        if set(body) != {"code", "platform"} or body["platform"] not in ("android", "ios"):
+        if set(body) != {"code", "platform"} or body["platform"] not in ("android", "ios", "macos", "windows"):
             raise Rejected("pair-schema")
         if (self.clock() - self.started >= 300 or self.monotonic() - self.started_mono >= 300
                 or not isinstance(body["code"], str) or not hmac.compare_digest(body["code"], self.pair_code)):
@@ -376,8 +376,8 @@ class Broker:
                 return 200, {
                     "protocol": PROTOCOL,
                     "service": "KL-06 Companion",
-                    "version": "0.4.0-beta.2",
-                    "build": 7,
+                    "version": "0.4.1-beta",
+                    "build": 8,
                     "hostname": socket.gethostname(),
                     "platform": sys.platform
                 }
@@ -553,8 +553,8 @@ def main():
                         reply = json.dumps({
                             "service": "KL-06 Companion",
                             "protocol": PROTOCOL,
-                            "version": "0.4.0-beta.2",
-                            "build": 7,
+                            "version": "0.4.1-beta",
+                            "build": 8,
                             "platform": sys.platform,
                             "hostname": socket.gethostname(),
                             "port": 8766,

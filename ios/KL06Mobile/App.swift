@@ -48,7 +48,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         if device.batteryState != .unknown { battery["onAC"] = device.batteryState == .charging || device.batteryState == .full }
         var storage: [String: Any] = [:]
         if let a = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()), let free = a[.systemFreeSize] as? NSNumber, let total = a[.systemSize] as? NSNumber { storage = ["freeGB": free.doubleValue / 1073741824, "totalGB": total.doubleValue / 1073741824] }
-        return ["platform": "ios", "version": "0.4.0-beta.2", "build": 7, "sampledAt": ISO8601DateFormatter().string(from: Date()),
+        return ["platform": "ios", "version": "0.4.1-beta", "build": 8, "sampledAt": ISO8601DateFormatter().string(from: Date()),
                 "battery": battery, "memory": ["totalGB": Double(ProcessInfo.processInfo.physicalMemory) / 1073741824, "source": "iOS system-used RAM unavailable through this app"],
                 "storage": storage, "volume": Double(AVAudioSession.sharedInstance().outputVolume) * 100, "brightness": Double(UIScreen.main.brightness) * 100, "awake": awake,
                 "capabilities": ["volume": false, "nativeVolume": true, "brightness": true, "brightnessScope": "Temporary screen brightness; restores on background if unchanged; not physical nits", "awake": true] as [String: Any],
@@ -89,6 +89,18 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         case "pickHistoryCSV":
             guard p.isEmpty, pickerID == nil, presentedViewController == nil else { reply(id, error: "Picker is busy."); return }; pickerID = id
             let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText], asCopy: false); picker.allowsMultipleSelection = false; picker.delegate = self; present(picker, animated: true)
+        case "pickShareFile":
+            guard p.isEmpty, pickerID == nil, presentedViewController == nil else { reply(id, error: "Picker is busy."); return }; pickerID = id
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item, .content, .data], asCopy: false); picker.allowsMultipleSelection = false; picker.delegate = self; present(picker, animated: true)
+        case "exportLogs", "saveErrorReport", "shareLogs":
+            let logs = p["logs"] as? [[String: Any]] ?? []
+            var text = "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.1-beta (Build 8)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
+            for log in logs {
+                text += "[\(log["ts"] as? String ?? "")] [\(log["tag"] as? String ?? "LOG")] \(log["msg"] as? String ?? "")\n"
+            }
+            let shareSheet = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+            present(shareSheet, animated: true)
+            reply(id, result: ["status": "saved", "message": "Diagnostic report opened in iOS Share Sheet."])
         case "discoverPeers":
             reply(id, result: [
                 "peers": [
@@ -132,16 +144,26 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { if let id = pickerID { reply(id, error: "Import cancelled.") }; pickerID = nil }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let id = pickerID else { return }; pickerID = nil
-        guard urls.count == 1 else { reply(id, error: "Choose one CSV."); return }; let url = urls[0]
+        guard urls.count == 1 else { reply(id, error: "Choose one file."); return }; let url = urls[0]
         let scoped = url.startAccessingSecurityScopedResource(); defer { if scoped { url.stopAccessingSecurityScopedResource() } }
         do {
             let a = try FileManager.default.attributesOfItem(atPath: url.path)
-            guard (a[.type] as? FileAttributeType) == .typeRegular, let size = a[.size] as? NSNumber, size.intValue <= 5 * 1024 * 1024 else { throw LANError.invalid }
-            let handle = try FileHandle(forReadingFrom: url); defer { try? handle.close() }
-            let data = try handle.read(upToCount: 5 * 1024 * 1024 + 1) ?? Data()
-            guard data.count <= 5 * 1024 * 1024, let text = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .windowsCP1252), !text.contains("\0") else { throw LANError.invalid }
-            reply(id, result: ["csvText": text])
-        } catch { reply(id, error: "Choose a regular UTF-8/cp1252 CSV no larger than 5 MiB. No path or file was uploaded.") }
+            guard (a[.type] as? FileAttributeType) == .typeRegular, let size = a[.size] as? NSNumber else { throw LANError.invalid }
+            if url.pathExtension.lowercased() == "csv" && size.intValue <= 5 * 1024 * 1024 {
+                let handle = try FileHandle(forReadingFrom: url); defer { try? handle.close() }
+                let data = try handle.read(upToCount: 5 * 1024 * 1024 + 1) ?? Data()
+                if let text = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .windowsCP1252), !text.contains("\0") {
+                    reply(id, result: ["csvText": text, "status": "selected", "fileName": url.lastPathComponent, "fileSize": size.intValue])
+                    return
+                }
+            }
+            reply(id, result: [
+                "status": "selected",
+                "fileName": url.lastPathComponent,
+                "fileSize": size.intValue,
+                "mimeType": "application/octet-stream"
+            ])
+        } catch { reply(id, error: "Choose a regular file no larger than 5 MiB. No path was uploaded.") }
     }
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) { decisionHandler(navigationAction.request.url?.standardizedFileURL == page?.standardizedFileURL ? .allow : .cancel) }
     deinit { awakeTimer?.invalidate(); if let background = background { NotificationCenter.default.removeObserver(background) } }

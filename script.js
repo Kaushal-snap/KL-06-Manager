@@ -7,35 +7,35 @@
 const PLATFORM_DATA = {
     android: {
         name: 'Android Package (Dual v1 + v2 Signed)',
-        fileName: 'KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 1.02 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd/view?usp=sharing',
-        sha256: 'fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7',
-        btnText: '⬇️ Download for Android (1.02 MB)'
+        fileName: 'KL-06-0.4.1-beta-android-debug-UNTESTED.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
+        directUrl: 'https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing',
+        sha256: '9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c',
+        btnText: '⬇️ Download for Android (1.07 MB)'
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
-        fileName: 'KL-06 Manager 4.0 beta.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 195 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
-        directUrl: 'https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download',
-        viewUrl: 'https://drive.google.com/file/d/16SE_Z25itABzXg8p0aUrITkLr-2E-DVB/view?usp=sharing',
-        sha256: '88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941',
-        btnText: '⬇️ Download for macOS (195 KB)'
+        fileName: 'KL-06 Manager 4.1 beta.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 196 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        directUrl: 'https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download',
+        viewUrl: 'https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing',
+        sha256: '8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0',
+        btnText: '⬇️ Download for macOS (196 KB)'
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
-        fileName: 'KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 553 KB • Windows 7 SP1, 8, 8.1, 10, 11',
-        directUrl: 'https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM/view?usp=sharing',
-        sha256: '9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f',
-        btnText: '⬇️ Download for Windows x64 (553 KB)'
+        fileName: 'KL-06-0.4.1-beta-windows-x64-UNTESTED.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 561 KB • Windows 7 SP1, 8, 8.1, 10, 11',
+        directUrl: 'https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing',
+        sha256: '3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c',
+        btnText: '⬇️ Download for Windows x64 (561 KB)'
     },
     ios: {
         name: 'iOS Mobile Companion (Swift / devicectl)',
         fileName: 'INSTALL-IOS.command & Xcode Project',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
+        fileMeta: 'v0.4.1-beta Build 8 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
         directUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command',
         viewUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios',
         sha256: 'Build via devicectl / AltStore / Xcode',
@@ -43,11 +43,11 @@ const PLATFORM_DATA = {
     },
     source: {
         name: 'Complete Source Code Archive',
-        fileName: 'KL-06-0.4.0-beta.1-source-BUILD-READY.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 1.88 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW/view?usp=sharing',
-        sha256: 'd4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029',
+        fileName: 'KL-06-0.4.1-beta-source-BUILD-READY.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 1.94 MB • 143 Clean Files',
+        directUrl: 'https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing',
+        sha256: '328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeviceDetection();
     initPlatformTabs();
     initPinGenerators();
+    initPriorityMockup();
     initMobileNav();
     initSmoothScroll();
 });
@@ -334,10 +335,11 @@ const PROGRESSIVE_FEATURES = {
         accent: '#ec4899',
         highlights: [
             '✅ PackageParser Installation Fix: Dual v1 (JAR) + v2 signing with REL release codename',
+            '📁 Priority 1 File Sharing: Instant AirDrop / Quick Share radar and dropzone',
             '🔔 Runtime POST_NOTIFICATIONS transfer progress alerts',
             '💬 Auto-Pair incoming consent prompt dialog with Accept & Connect',
             '🔒 6-digit mutual PIN confirmation with 60-second validity window',
-            '🖼️ Granular photo and document picker integration without broad storage access'
+            '💾 Scoped MediaStore auto-saver exporting logs to Download/KL-06/logs/'
         ]
     },
     'android-14-15': {
@@ -347,8 +349,9 @@ const PROGRESSIVE_FEATURES = {
         highlights: [
             '🔄 Predictive back gesture navigation with smooth swipe-to-dismiss preview',
             '🚀 Foreground dataSync service type for reliable background multi-gigabyte transfers',
+            '📂 WebChromeClient onShowFileChooser integration for native file choosing',
             '📶 Multi-gigabit chunked LAN streaming with zero TCP packet stalls',
-            '📸 Screenshot detection API for security audit event logging',
+            '📱 Inbuilt Mobile Controls (Priority 2): Direct volume, brightness & Keep-Awake',
             '🔋 Advanced standby power management with zero battery drain'
         ]
     },
@@ -360,6 +363,7 @@ const PROGRESSIVE_FEATURES = {
             '⚡ 16KB memory page size architecture alignment for next-gen Android kernels',
             '🌐 Wi-Fi 7 Multi-Link Operation (MLO) high-speed P2P wireless mesh',
             '📐 Edge-to-edge window insets integration with transparent system bars',
+            '⚙️ Priority 3 "Etc" PC tools: Mac & Windows fan monitor and HWiNFO charts',
             '🛡️ Advanced post-quantum TLS cryptography cipher support',
             '📱 Ultra-low latency multi-device screen & audio sync'
         ]
@@ -371,6 +375,7 @@ const PROGRESSIVE_FEATURES = {
         highlights: [
             '🛡️ Zero ATS bypass: strict main-frame WKWebView isolated bridge',
             '🔒 Per-connection TLS certificate pinning with public Swift APIs',
+            '📂 UIDocumentPickerDelegate native file selection and AirDrop streaming',
             '📱 Lock Screen live hardware telemetry widgets',
             '⚡ Pure Swift 5.0 compilation with devicectl and Xcode support'
         ]
@@ -383,6 +388,7 @@ const PROGRESSIVE_FEATURES = {
             '🏝️ Dynamic Island live file transfer progress and transfer speed tracker',
             '⏰ StandBy Mode horizontal bedside companion dashboard',
             '🤝 Seamless AirDrop mesh companion pairing with nearby Android & Mac peers',
+            '🛠️ Native pickShareFile and openAppSettings bridge handlers in Swift',
             '✨ Interactive home screen widgets with one-tap toggle'
         ]
     },
@@ -394,6 +400,7 @@ const PROGRESSIVE_FEATURES = {
             '💻 Native Menu Bar item with instant status and F13 PrtSc hotkey toggle',
             '☀️ OLED and DPCD hardware brightness scalar without driver overwrites',
             '🪟 Stage Manager multi-window companion integration',
+            '🌪️ Safe read-only fan RPM monitor (zero SMC/EC write risks)',
             '⚡ Zero-flicker persistent DOM shell architecture'
         ]
     },
@@ -404,6 +411,7 @@ const PROGRESSIVE_FEATURES = {
         highlights: [
             '🖥️ Interactive Desktop Widgets for live CPU, battery, and fan status',
             '🎮 Sonoma Game Mode compatibility with process priority tuning',
+            '📈 HWiNFO CSV sensor history parser with interactive canvas graphing',
             '📐 Sequoia native window tiling and snap layouts',
             '🔒 macOS Gatekeeper and notarization compliance'
         ]
@@ -427,6 +435,7 @@ const PROGRESSIVE_FEATURES = {
             '🌐 Evergreen Microsoft Edge WebView2 runtime integration',
             '💎 Windows 11 Mica and Acrylic translucent materials',
             '📐 Per-Monitor v2 dynamic high-DPI scaling across multi-monitor setups',
+            '💻 Remote PC controls: lock, sleep, and master volume slider from phone',
             '🔔 Action Center toast notifications with real-time transfer progress'
         ]
     }
@@ -457,4 +466,236 @@ function selectProgressiveVersion(key) {
     if (listEl) {
         listEl.innerHTML = data.highlights.map(item => `<li>${item}</li>`).join('');
     }
+}
+
+/**
+ * Priority Mockup Interactive Switcher (v0.4.1-beta)
+ */
+const PRIORITY_MOCKUP_DATA = {
+    1: {
+        title: "Priority 1: Instant File Sharing & AirDrop Hub",
+        desc: "When opening KL-06 Manager on mobile, you land directly on the File Sharing radar. Nearby companions running on Mac and Windows are discovered instantly on UDP/TLS port 8766. Drag-and-drop or use the file chooser for instant high-speed streaming with SHA-256 chunk validation.",
+        tags: ["UDP Port 8766", "Direct TLS P2P", "Document Picker", "SHA-256 Validation"],
+        bullets: [
+            "📡 Automatic discovery of nearby Mac and Windows companions on Wi-Fi or Hotspot",
+            "📥 One-tap file receiving with consent dialog confirmation",
+            "🔄 Multi-gigabit transfer rate with real-time ETA and byte progress indicator"
+        ],
+        screenHtml: `
+            <div style="text-align:center;margin-bottom:0.5rem">
+                <span class="pulse-dot" style="display:inline-block;margin-right:6px"></span>
+                <strong style="color:#60a5fa;font-size:0.85rem">P2P Radar Scanner Active</strong>
+            </div>
+            <div class="demo-dropzone-box" onclick="simulateFileUpload()" style="cursor:pointer">
+                <div style="font-size:1.8rem">📂</div>
+                <strong style="font-size:0.9rem;color:#f8fafc;display:block;margin-top:4px">Tap or Drop Files to Share</strong>
+                <p>Using WebChromeClient / DocumentPicker • Up to 10 GB</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0.75rem">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem">
+                    <span><strong>Active:</strong> 4K_B-Roll_Clip.mov</span>
+                    <span style="color:#34d399">78 MB/s</span>
+                </div>
+                <div class="demo-progress-bar">
+                    <div class="demo-progress-fill" id="demo-share-fill" style="width: 68%;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#94a3b8;margin-top:4px">
+                    <span>Sending to Kaushal's VivoBook</span>
+                    <span id="demo-share-percent">68% (1.2 GB / 1.8 GB)</span>
+                </div>
+            </div>
+        `
+    },
+    2: {
+        title: "Priority 2: Inbuilt Mobile Device Controls",
+        desc: "Direct on-device hardware governance. Adjust media volume and screen brightness smoothly with tactile sliders, enable Keep-Awake to protect long file transfers, inspect battery statistics, and export diagnostics directly to public Downloads.",
+        tags: ["Volume Scalar", "Display Brightness", "Keep-Awake Timer", "MediaStore Auto-Save"],
+        bullets: [
+            "🔊 Direct in-app media volume override without hardware buttons",
+            "☀️ Screen brightness adjustment slider for daylight or night reading",
+            "☕ Bounded Keep-Awake lock preventing screen sleep during massive transfers",
+            "💾 One-click diagnostic report exporter to Download/KL-06/logs via MediaStore"
+        ],
+        screenHtml: `
+            <div style="display:flex;flex-direction:column;gap:0.75rem">
+                <div class="demo-slider-row">
+                    <label><span>🔊 Phone Media Volume</span><strong id="vol-val">75%</strong></label>
+                    <input type="range" min="0" max="100" value="75" oninput="document.getElementById('vol-val').textContent=this.value+'%'">
+                </div>
+                <div class="demo-slider-row">
+                    <label><span>☀️ Screen Brightness</span><strong id="bri-val">82%</strong></label>
+                    <input type="range" min="10" max="100" value="82" oninput="document.getElementById('bri-val').textContent=this.value+'%'">
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);padding:0.6rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.08)">
+                    <span style="font-size:0.82rem">☕ Screen Keep-Awake</span>
+                    <span class="badge-tag" style="background:#10b981;color:#fff">ACTIVE (10m)</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);padding:0.6rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.08)">
+                    <span style="font-size:0.82rem">🔋 Battery Telemetry</span>
+                    <span style="font-size:0.82rem;color:#34d399">88% (Healthy)</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="showToast('Diagnostic log auto-saved to Download/KL-06/logs/KL-06-Report.log via Android MediaStore!')" style="width:100%;font-size:0.78rem">
+                    💾 Export Diagnostics to Download/KL-06
+                </button>
+            </div>
+        `
+    },
+    3: {
+        title: "Priority 3: \"Etc\" PC & Mac Hardware Tools",
+        desc: "Specialized laptop and desktop companion features are cleanly housed under Etc. Mobile users never face screen clutter, yet full access to fan telemetry, HWiNFO history charts, and remote PC companion controls is just one tap away.",
+        tags: ["Mac / Win Fans", "HWiNFO CSV Graph", "System Tweaks", "Remote PC Control"],
+        bullets: [
+            "🌪️ Non-invasive read-only fan RPM monitoring with aging cache protection",
+            "📈 Interactive HWiNFO sensor CSV parser with dynamic HTML5 canvas chart",
+            "🎛️ Reversible Dock, Finder, and system tweaks with atomic restore journal",
+            "💻 Remote PC control: lock, sleep, and master laptop audio slider"
+        ],
+        screenHtml: `
+            <div style="display:flex;flex-direction:column;gap:0.7rem">
+                <div style="background:rgba(255,255,255,0.04);padding:0.6rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div style="font-size:0.75rem;color:#94a3b8">Mac / Win Fan Telemetry</div>
+                        <strong style="color:#60a5fa;font-size:0.95rem">2,420 RPM</strong>
+                    </div>
+                    <span class="badge-tag" style="background:rgba(59,130,246,0.2);color:#60a5fa">READ-ONLY</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.04);padding:0.6rem 0.8rem;border-radius:10px;border:1px solid rgba(255,255,255,0.08)">
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px">
+                        <span style="color:#94a3b8">HWiNFO Sensor History (CPU Temp)</span>
+                        <span style="color:#fbbf24">52°C</span>
+                    </div>
+                    <div style="height:36px;background:rgba(0,0,0,0.3);border-radius:6px;display:flex;align-items:flex-end;gap:3px;padding:3px">
+                        <div style="height:40%;flex-grow:1;background:#38bdf8;border-radius:2px"></div>
+                        <div style="height:48%;flex-grow:1;background:#38bdf8;border-radius:2px"></div>
+                        <div style="height:55%;flex-grow:1;background:#fbbf24;border-radius:2px"></div>
+                        <div style="height:62%;flex-grow:1;background:#fbbf24;border-radius:2px"></div>
+                        <div style="height:50%;flex-grow:1;background:#38bdf8;border-radius:2px"></div>
+                        <div style="height:58%;flex-grow:1;background:#fbbf24;border-radius:2px"></div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+                    <button class="btn btn-outline btn-sm" onclick="showToast('Sent remote lock signal to paired PC!')" style="font-size:0.72rem">🔒 Lock Laptop</button>
+                    <button class="btn btn-outline btn-sm" onclick="showToast('Sent remote sleep signal to paired PC!')" style="font-size:0.72rem">💤 Sleep Laptop</button>
+                </div>
+            </div>
+        `
+    },
+    4: {
+        title: "Priority 4: Verified Safety & Security Invariants",
+        desc: "Guaranteed system preservation. No kernel tampering, no unauthorized persistent modifications, no broad storage or camera permissions, and zero tracking servers.",
+        tags: ["Dual Signed v1+v2", "Zero Cloud Telemetry", "Atomic Restore Journal", "4KB Page Aligned"],
+        bullets: [
+            "🔒 6-digit mutual PIN code with 60-second monotonic expiry window",
+            "📦 Dual APK Signature Scheme v1 (JAR) + v2 with 4KB page alignment",
+            "🛡️ 20 strictly declared permissions; zero broad storage, mic, or camera access",
+            "🔕 100% offline local network; zero data transmission to external servers"
+        ],
+        screenHtml: `
+            <div style="display:flex;flex-direction:column;gap:0.6rem">
+                <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:8px">
+                    <span style="color:#34d399">✅</span>
+                    <div style="font-size:0.78rem"><strong>Dual v1 + v2 Signed:</strong> RSA-2048 persistent key lineage</div>
+                </div>
+                <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:8px">
+                    <span style="color:#34d399">✅</span>
+                    <div style="font-size:0.78rem"><strong>Zero Cloud Telemetry:</strong> Offline LAN only</div>
+                </div>
+                <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:8px">
+                    <span style="color:#34d399">✅</span>
+                    <div style="font-size:0.78rem"><strong>Scoped Storage:</strong> MediaStore public Download auto-save</div>
+                </div>
+                <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:0.6rem 0.8rem;display:flex;align-items:center;gap:8px">
+                    <span style="color:#34d399">✅</span>
+                    <div style="font-size:0.78rem"><strong>Read-Only Fan Safety:</strong> Zero SMC/EC write risks</div>
+                </div>
+            </div>
+        `
+    }
+};
+
+function initPriorityMockup() {
+    switchPriorityMockup(1);
+}
+
+function switchPriorityMockup(id) {
+    const data = PRIORITY_MOCKUP_DATA[id];
+    if (!data) return;
+
+    // Update switcher buttons
+    document.querySelectorAll('.p-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-mockup') === id.toString()) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Update phone bottom nav items
+    for (let i = 1; i <= 4; i++) {
+        const navItem = document.getElementById(`pnav-${i}`);
+        if (navItem) {
+            if (i === id) navItem.classList.add('active');
+            else navItem.classList.remove('active');
+        }
+    }
+
+    // Update left description
+    const titleEl = document.getElementById('mockup-detail-title');
+    const descEl = document.getElementById('mockup-detail-desc');
+    const tagsEl = document.getElementById('mockup-detail-tags');
+    const listEl = document.getElementById('mockup-detail-list');
+    const screenEl = document.getElementById('mockup-screen-content');
+
+    if (titleEl) titleEl.textContent = data.title;
+    if (descEl) descEl.textContent = data.desc;
+    if (tagsEl) {
+        tagsEl.innerHTML = data.tags.map(tag => `<span>${tag}</span>`).join('');
+    }
+    if (listEl) {
+        listEl.innerHTML = data.bullets.map(b => `<li>${b}</li>`).join('');
+    }
+    if (screenEl) {
+        screenEl.innerHTML = data.screenHtml;
+    }
+}
+
+function simulateFileUpload() {
+    showToast("Simulating file drop: 4K_B-Roll_Clip.mov selected via DocumentPicker!");
+    const fill = document.getElementById('demo-share-fill');
+    const pct = document.getElementById('demo-share-percent');
+    if (fill && pct) {
+        let p = 10;
+        fill.style.width = p + '%';
+        pct.textContent = p + '% (0.2 GB / 1.8 GB)';
+        const interval = setInterval(() => {
+            p += 15;
+            if (p >= 100) {
+                p = 100;
+                fill.style.width = '100%';
+                pct.textContent = '100% Transfer Complete (Verified SHA-256)!';
+                clearInterval(interval);
+                showToast("File transfer completed successfully to Kaushal's VivoBook!");
+            } else {
+                fill.style.width = p + '%';
+                pct.textContent = p + '% (' + (p * 0.018).toFixed(1) + ' GB / 1.8 GB)';
+            }
+        }, 200);
+    }
+}
+
+function showToast(message) {
+    let toast = document.getElementById('global-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'global-toast';
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#f8fafc;padding:12px 24px;border-radius:9999px;border:1px solid rgba(99,102,241,0.5);box-shadow:0 10px 30px rgba(0,0,0,0.5);font-size:0.88rem;z-index:99999;transition:all 0.3s ease;opacity:0;pointer-events:none;';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(10px)';
+    }, 3500);
 }
