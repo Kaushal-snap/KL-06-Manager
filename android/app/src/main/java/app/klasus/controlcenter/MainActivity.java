@@ -387,7 +387,7 @@ public final class MainActivity extends Activity {
             sb.append("Version: 0.4.7-beta (Build 12)\n");
             sb.append("Generated At: ").append(Instant.now().toString()).append("\n");
             sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n");
-            sb.append("Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n\n");
+            sb.append("Google Drive Sync: NOT CONFIGURED; this report is saved locally only.\n\n");
             if(arr!=null){
                 for(int idx=0;idx<arr.length();idx++){
                     JSONObject obj=arr.optJSONObject(idx);
@@ -409,22 +409,22 @@ public final class MainActivity extends Activity {
                     sendIntent.setType("text/plain");
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.7-beta Build 12)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
-                    Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Log to Private Drive / Share");
+                    Intent chooser=Intent.createChooser(sendIntent,"Export KL-06 diagnostic report");
                     startActivity(chooser);
                 }catch(Exception e){
                     writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
                 }
             });
 
-            reply(id,new JSONObject().put("status","saved").put("logPath",savedPath).put("message","Logs saved to "+savedPath+" and ready for Google Drive upload"),null);
+            reply(id,new JSONObject().put("status","saved-locally").put("logPath",savedPath).put("message","Logs saved locally to "+savedPath+". Google Drive upload is not configured."),null);
             return;
         }
         case "saveFanDiagnosticReport":{
             String reportText=p.optString("reportText","");
             if(reportText.isEmpty()){
-                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.7-beta (Build 12)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
+                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.7-beta (Build 12)\nTimestamp: "+Instant.now().toString()+"\nGoogle Drive Sync: NOT CONFIGURED; local export only.\n";
             }
-            writeLog("FAN_DIAG","Fan diagnostic report generated with security password validation.");
+            writeLog("FAN_DIAG","Fan diagnostic report requested. Values are not independently validated; Drive sync is not configured.");
             String savedPath="Download/KL-06/logs/kl06-fan-diagnostic.log";
             savePublicLog("kl06-fan-diagnostic.log",reportText);
             final String finalReport=reportText;
@@ -434,7 +434,7 @@ public final class MainActivity extends Activity {
                     sendIntent.setType("text/plain");
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.4.7-beta Build 12)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,finalReport);
-                    Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Fan Diagnostic to Private Drive / Share");
+                    Intent chooser=Intent.createChooser(sendIntent,"Export KL-06 fan diagnostic report");
                     startActivity(chooser);
                 }catch(Exception e){
                     writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
