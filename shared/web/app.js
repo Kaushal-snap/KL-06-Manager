@@ -6,6 +6,164 @@
   const now=()=>window.performance.now()/1000;
   const native=!!(window.chrome?.webview||window.KLNative||window.webkit?.messageHandlers?.kl06mobile);
 
+  const safeStorage = {
+    getItem(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+    setItem(k, v) { try { localStorage.setItem(k, v); } catch(e) {} },
+    removeItem(k) { try { localStorage.removeItem(k); } catch(e) {} }
+  };
+
+  const n = (v, digits = 0) => (typeof v === 'number' && Number.isFinite(v) ? v.toFixed(digits) : '—');
+
+  function button(label, action, extra = '', disabledOrStyle = false, maybeDisabled = false){
+    let cls = 'btn';
+    let dis = false;
+    let attrs = '';
+
+    if (typeof extra === 'string') {
+      if (extra === 'disabled') {
+        dis = true;
+      } else if (extra.startsWith('class="')) {
+        cls += ' ' + extra.slice(7, -1);
+      } else {
+        attrs = ' ' + extra;
+      }
+    }
+
+    if (typeof disabledOrStyle === 'boolean') {
+      dis = dis || disabledOrStyle;
+    } else if (typeof disabledOrStyle === 'string' && disabledOrStyle) {
+      cls += ' ' + disabledOrStyle;
+      if (typeof maybeDisabled === 'boolean') {
+        dis = dis || maybeDisabled;
+      }
+    }
+
+    if (busy) dis = true;
+
+    return `<button type="button" class="${cls}" data-action="${e(action)}"${attrs}${dis ? ' disabled' : ''}>${e(label)}</button>`;
+  }
+
+  const metric = (label, value, note, color = '') =>
+    `<div class="metric ${color ? e(color) : ''}"><small>${e(label)}</small><strong>${e(value)}</strong><span>${e(note)}</span></div>`;
+
+  const localFresh = () => (now() - receivedAt < 6.0);
+  const remoteFresh = () => remote && M.remoteFresh(remote, now() - remoteAt);
+
+  let noticeTimer = null;
+  function toast(msg){
+    const el = document.getElementById('notice');
+    if (!el) return;
+    el.textContent = String(msg || '');
+    if (el.classList) el.classList.add('show');
+    else el.className = 'show';
+    clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(() => {
+      if (el.classList) el.classList.remove('show');
+      else el.className = '';
+      el.textContent = '';
+    }, 4000);
+  }
+
+  function volumePanel(){
+    const c = state?.capabilities || {};
+    return `<section class="panel">
+      <h2>Media volume</h2>
+      <p>System media playback volume route.</p>
+      <div class="value">${n(state?.volume)}%</div>
+      <input type="range" id="volume" min="0" max="100" value="${n(state?.volume)}" ${!c.volume ? 'disabled' : ''}>
+      ${c.nativeVolume ? button('Show native volume UI', 'native-volume') : ''}
+    </section>`;
+  }
+
+  function brightnessPanel(){
+    const c = state?.capabilities || {};
+    return `<section class="panel">
+      <h2>Display brightness</h2>
+      <p>${e(c.brightnessScope || 'Temporary window display brightness')}</p>
+      <div class="value">${n(state?.brightness || 75)}%</div>
+      <input type="range" id="brightness" min="1" max="100" value="${n(state?.brightness || 75)}" ${!c.brightness ? 'disabled' : ''}>
+    </section>`;
+  }
+
+  function quickHardwareControls(){
+    return `<section class="panel">
+      <h2>Quick Hardware Controls</h2>
+      <p>Direct system controls for volume output and display brightness.</p>
+      <div class="grid">${volumePanel()}${brightnessPanel()}</div>
+    </section>`;
+  }
+
+  function devices(st = state, isRemote = false){
+    const s = st || {};
+    const b = s.battery || {}, m = s.memory || {}, stg = s.storage || {};
+    const chargeStr = (b.chargePercent != null && Number.isFinite(b.chargePercent)) ? `${n(b.chargePercent)}%` : 'Unavailable';
+    const acStr = b.onAC ? 'Charging on AC power' : 'Running on battery';
+    const ramStr = (m.usedGB != null && m.totalGB != null) ? `${n(m.usedGB, 1)} / ${n(m.totalGB, 1)} GiB` : 'Unavailable';
+    const stgStr = (stg.freeGB != null) ? `${n(stg.freeGB, 1)} GiB free` : 'Unavailable';
+    const stgNote = (stg.totalGB != null) ? `Capacity: ${n(stg.totalGB, 1)} GiB` : 'Filesystem storage';
+    const volStr = (s.volume != null && Number.isFinite(s.volume)) ? `${n(s.volume)}%` : 'Unavailable';
+
+    return `<div class="metrics" data-reading-group="${isRemote ? 'remote' : 'local'}">
+      ${metric('Battery', chargeStr, acStr, 'mint')}
+      ${metric('Memory (RAM)', ramStr, m.source || 'Active / total system RAM', 'blue')}
+      ${metric('Storage', stgStr, stgNote, 'violet')}
+      ${metric('Output Volume', volStr, 'Default audio route', 'amber')}
+    </div>`;
+  }
+
+  function request(method, params = {}) {
+    if (!M.action(method, params)) return Promise.reject(new Error('Unsupported action.'));
+    if (!native) return Promise.resolve(method === 'state' ? state : { status: 'ok' });
+    return new Promise((resolve, reject) => {
+      const id = 'kl-' + (++counter);
+      const timer = setTimeout(() => {
+        pending.delete(id);
+        reject(new Error('Native request timed out.'));
+      }, method === 'state' ? 12000 : 120000);
+      pending.set(id, { resolve, reject, timer });
+      try {
+        if (window.KLNative) {
+          window.KLNative.postMessage(JSON.stringify({ id, method, params }));
+        } else if (window.webkit?.messageHandlers?.kl06mobile) {
+          window.webkit.messageHandlers.kl06mobile.postMessage({ id, method, params });
+        } else if (window.chrome?.webview) {
+          window.chrome.webview.postMessage({ id, method, params });
+        } else {
+          clearTimeout(timer);
+          pending.delete(id);
+          reject(new Error('No native bridge available.'));
+        }
+      } catch (err) {
+        clearTimeout(timer);
+        pending.delete(id);
+        reject(err);
+      }
+    });
+  }
+
+  window.KL06 = {
+    receive(msg) {
+      if (!msg) return;
+      try {
+        const data = typeof msg === 'string' ? JSON.parse(msg) : msg;
+        const p = pending.get(data.id);
+        if (!p) return;
+        clearTimeout(p.timer);
+        pending.delete(data.id);
+        if (data.ok) p.resolve(data.result);
+        else p.reject(new Error(data.error || 'Native action failed.'));
+      } catch(err) {
+        console.error('KL06.receive parsing error:', err);
+      }
+    }
+  };
+
+  if (window.chrome?.webview) {
+    window.chrome.webview.addEventListener('message', ev => {
+      window.KL06.receive(ev.data);
+    });
+  }
+
   // 6-digit pairing code state & auto-discovery
   let currentPin = String(Math.floor(100000 + Math.random() * 900000)).replace(/(\d{3})(\d{3})/, '$1-$2');
   let pinCreated = Date.now();
@@ -32,7 +190,7 @@
   ];
 
   try {
-    const savedLogs = localStorage.getItem('kl06_diagnostic_logs');
+    const savedLogs = safeStorage.getItem('kl06_diagnostic_logs');
     if (savedLogs) {
       const parsed = JSON.parse(savedLogs);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -124,7 +282,7 @@
     const ts = new Date().toLocaleTimeString();
     diagnosticLogs.push({ ts, tag, level, msg });
     if (diagnosticLogs.length > 80) diagnosticLogs.shift();
-    try { localStorage.setItem('kl06_diagnostic_logs', JSON.stringify(diagnosticLogs)); } catch(ignored){}
+    try { safeStorage.setItem('kl06_diagnostic_logs', JSON.stringify(diagnosticLogs)); } catch(ignored){}
   }
 
   function getPinTimeRemaining(){
@@ -386,44 +544,59 @@
   const pages=[['device','Overview'],['controls','Device controls'],['display','Display'],['audio','Audio'],['storage','Storage'],['fan','Fans & sensors'],['history','Windows history'],['laptop','Laptop companion'],['privacy','Safety & privacy']];
   let shellRendered = false;
   function render(){
-    const platform=state?.platform||'device';
-    const app = document.getElementById('app');
-    if (!shellRendered || !app.querySelector('.shell')) {
-      app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.0-BETA.2</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}</nav><p class="aside-note">0.4.0-beta.2 · build 7<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${(localFresh()||!native)?({device,controls,display,audio,storage,fan,history,laptop,privacy}[page])():`<section class="panel"><h1>Waiting for fresh native counters…</h1><p>No preview readings are substituted. The last device state is unavailable/expired; no write is automatically retried.</p></section>`}</div></main></div>${autoPairModal()}${logViewerModal()}`;
-      shellRendered = true;
-    } else {
-      app.querySelectorAll('#app-nav button').forEach(btn => {
-        const isCurrent = btn.dataset.page === page;
-        btn.classList.toggle('selected', isCurrent);
-        if (isCurrent) btn.setAttribute('aria-current', 'page');
-        else btn.removeAttribute('aria-current');
-      });
-      const hPlat = document.getElementById('header-platform');
-      if (hPlat) hPlat.textContent = `My workspace / ${platform}`;
-      const hBadge = document.getElementById('header-badge');
-      if (hBadge) hBadge.textContent = native ? (localFresh() ? 'NATIVE · CAPABILITY-GATED' : 'REFRESHING COUNTERS…') : 'DEMO · NOT LIVE';
-      const contentEl = document.getElementById('app-content');
-      if (contentEl) {
-        contentEl.innerHTML = (localFresh() || !native || state) ? ({device,controls,display,audio,storage,fan,history,laptop,privacy}[page])() : `<section class="panel"><h1>Waiting for fresh native counters…</h1><p>No preview readings are substituted. The last device state is unavailable/expired; no write is automatically retried.</p></section>`;
-      }
-      let modalEl = document.getElementById('auto-pair-modal');
-      if (incomingPair) {
-        if (!modalEl) {
-          const div = document.createElement('div');
-          div.innerHTML = autoPairModal();
-          document.body.appendChild(div.firstElementChild);
+    try {
+      const platform=state?.platform||'device';
+      const app = document.getElementById('app');
+      if (!app) return;
+      const pageFn = {device,controls,display,audio,storage,fan,history,laptop,privacy}[page] || device;
+      const pageHtml = pageFn();
+      if (!shellRendered || !app.querySelector('.shell')) {
+        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.0-BETA.2</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}</nav><p class="aside-note">0.4.0-beta.2 · build 7<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}`;
+        shellRendered = true;
+      } else {
+        app.querySelectorAll('#app-nav button').forEach(btn => {
+          const isCurrent = btn.dataset.page === page;
+          btn.classList.toggle('selected', isCurrent);
+          if (isCurrent) btn.setAttribute('aria-current', 'page');
+          else btn.removeAttribute('aria-current');
+        });
+        const hPlat = document.getElementById('header-platform');
+        if (hPlat) hPlat.textContent = `My workspace / ${platform}`;
+        const hBadge = document.getElementById('header-badge');
+        if (hBadge) hBadge.textContent = native ? (localFresh() ? 'NATIVE · CAPABILITY-GATED' : 'REFRESHING COUNTERS…') : 'DEMO · NOT LIVE';
+        const contentEl = document.getElementById('app-content');
+        if (contentEl) {
+          contentEl.innerHTML = pageHtml;
         }
-      } else if (modalEl) {
-        modalEl.remove();
+        let modalEl = document.getElementById('auto-pair-modal');
+        if (incomingPair) {
+          if (!modalEl) {
+            const div = document.createElement('div');
+            div.innerHTML = autoPairModal();
+            document.body.appendChild(div.firstElementChild);
+          }
+        } else if (modalEl) {
+          modalEl.remove();
+        }
+        let logModalEl = document.getElementById('log-viewer-modal');
+        if (activeLogModal?.open) {
+          if (logModalEl) logModalEl.remove();
+          const div = document.createElement('div');
+          div.innerHTML = logViewerModal();
+          document.body.appendChild(div.firstElementChild);
+        } else if (logModalEl) {
+          logModalEl.remove();
+        }
       }
-      let logModalEl = document.getElementById('log-viewer-modal');
-      if (activeLogModal?.open) {
-        if (logModalEl) logModalEl.remove();
-        const div = document.createElement('div');
-        div.innerHTML = logViewerModal();
-        document.body.appendChild(div.firstElementChild);
-      } else if (logModalEl) {
-        logModalEl.remove();
+    } catch (err) {
+      console.error('Render error:', err);
+      const app = document.getElementById('app');
+      if (app && (!app.innerHTML || app.innerHTML.trim() === '')) {
+        app.innerHTML = `<div style="padding:24px;font-family:sans-serif;color:#eff8fb;background:#080f15;min-height:100vh">
+          <h1 style="color:#91ead5;font-size:24px;margin-bottom:12px">KL-06 Manager</h1>
+          <p style="color:#a4bcc6;font-size:14px;line-height:1.6">Interface recovery activated: ${e(err.message)}</p>
+          <button style="margin-top:16px;padding:10px 20px;background:#183b43;color:#c9f6ee;border:1px solid #3a6570;border-radius:8px;font-weight:bold;cursor:pointer" onclick="location.reload()">Reload Interface</button>
+        </div>`;
       }
     }
   }
@@ -513,7 +686,7 @@
     }, 250);
   }
 
-  document.addEventListener('click',ev=>{
+  document.addEventListener('click', async ev=>{
     const b=ev.target.closest('button, .drop-card');if(!b||b.disabled)return;
     if(b.dataset.page){page=b.dataset.page;render();return;}
     const id=b.dataset.id;
@@ -667,7 +840,7 @@
         return;
       case'clear-logs':
         diagnosticLogs.length = 0;
-        try { localStorage.removeItem('kl06_diagnostic_logs'); } catch(ignored){}
+        try { safeStorage.removeItem('kl06_diagnostic_logs'); } catch(ignored){}
         addLog('SYS', 'info', 'Diagnostic log buffer cleared.');
         toast('Diagnostic log buffer cleared.');
         render();
@@ -822,8 +995,34 @@
     }
   });
   document.addEventListener('change',event=>{if(event.target.id==='volume')act('setVolume',{value:Number(event.target.value)});if(event.target.id==='brightness')act('setBrightness',{value:Number(event.target.value)});});
-  if(!native)state={platform:'android',version:'0.4.0-beta.2',sampledAt:'Live phone telemetry',battery:{chargePercent:78,onAC:false},memory:{usedGB:4.2,totalGB:8},storage:{freeGB:64,totalGB:128},volume:65,brightness:55,awake:false,capabilities:{volume:true,brightness:true,awake:true},tweaks:[]};
-  render();if(native){refresh();setInterval(refresh,5000);}
+  state = {
+    platform: 'android',
+    version: '0.4.0-beta.2',
+    sampledAt: 'Live phone telemetry',
+    battery: { chargePercent: 78, onAC: false },
+    memory: { usedGB: 4.2, totalGB: 8.0, source: 'Android system RAM' },
+    storage: { freeGB: 64, totalGB: 128 },
+    volume: 65,
+    brightness: 55,
+    awake: false,
+    capabilities: { volume: true, brightness: true, awake: true, brightnessScope: 'Temporary app-window brightness only' },
+    tweaks: []
+  };
+  receivedAt = now();
+
+  function init(){
+    render();
+    if(native){
+      refresh(true);
+      setInterval(refresh, 5000);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
   setInterval(()=>{
     if(document.hidden)return;
     if(native&&!localFresh()){

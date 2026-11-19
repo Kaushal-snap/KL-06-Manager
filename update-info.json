@@ -16,9 +16,9 @@
             "target_os": "Android 14 (API 34)",
             "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
             "filename": "KL-06-0.4.0-beta.2-android-debug-UNTESTED.zip",
-            "sha256": "e634d7a66bef9bd968e1087e93e3ce1a1ae489fd7f5727340e5664655a340610",
-            "drive_download_url": "https://drive.google.com/uc?id=1H4J5hCMf3-0q9575QMsOYoaOqDmaUx7Z&export=download",
-            "drive_view_url": "https://drive.google.com/file/d/1H4J5hCMf3-0q9575QMsOYoaOqDmaUx7Z/view?usp=sharing",
+            "sha256": "093d7ff7e90388dba438602db308352390963c40e628af42561225916bb13118",
+            "drive_download_url": "https://drive.google.com/uc?id=1S02p4i_TGqjIHCloVCcEuEfG07_IP5ME&export=download",
+            "drive_view_url": "https://drive.google.com/file/d/1S02p4i_TGqjIHCloVCcEuEfG07_IP5ME/view?usp=sharing",
             "notes": "Dual APK Signature Scheme v1 (JAR) + v2 signed with persistent RSA key lineage, uncompressed 4-byte aligned resources.arsc, and 4KB aligned APK Signing Block. Includes real-time UDP & TLS companion peer discovery on port 8766, public Download/KL-06 log auto-save, Google Drive share sheet integration, in-app OTA Update Engine, PackageInstaller handoff, and multi-device radar scanning."
         },
         "mac": {
