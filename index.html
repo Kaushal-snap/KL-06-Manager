@@ -26,8 +26,8 @@
     <div class="top-announcement">
         <div class="container announcement-inner">
             <span class="badge-new">NEW v0.4.1-BETA</span>
-            <span>Universal AirDrop / Quick Share, 6-digit PIN pairing & single-page mobile dashboard!</span>
-            <a href="#download" class="announcement-link">Get Update &rarr;</a>
+            <span>Restructured Priorities: 1st File Sharing, 2nd Mobile Controls, 3rd Etc PC Tools &amp; Scoped MediaStore Log Auto-Save!</span>
+            <a href="#priorities" class="announcement-link">Explore v0.4.1 Architecture &rarr;</a>
         </div>
     </div>
 
@@ -47,8 +47,10 @@
             </a>
 
             <ul class="nav-menu" id="nav-menu">
+                <li><a href="#priorities" class="nav-link">Priorities</a></li>
                 <li><a href="#download" class="nav-link">Downloads</a></li>
                 <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#progressive-features" class="nav-link">OS Matrix</a></li>
                 <li><a href="#radar-demo" class="nav-link">Live Radar</a></li>
                 <li><a href="#screenshots" class="nav-link">Screenshots</a></li>
                 <li><a href="#community" class="nav-link">Community</a></li>
@@ -101,7 +103,7 @@
                     Across Every Device.
                 </h1>
                 <p class="hero-lead">
-                    Connect <strong>Android, macOS, Windows, and iPhone</strong> over Wi-Fi, Hotspot, Bluetooth, and NFC beam. Featuring mutual 6-digit PIN pairing, incoming auto-pair consent alert modal, live hardware telemetry, and remote laptop control in a single unified dashboard.
+                    Connect <strong>Android, macOS, Windows, and iPhone</strong> over Wi-Fi, Hotspot, Bluetooth, and NFC beam. Featuring restructured mobile navigation: <strong>Priority 1 File Sharing</strong> (AirDrop/Quick Share), <strong>Priority 2 Inbuilt Mobile Controls</strong>, and <strong>Priority 3 Etc</strong> for PC &amp; Mac tools with 6-digit PIN pairing and MediaStore log auto-saving.
                 </p>
 
                 <!-- Smart Auto-Detected Device Card -->
@@ -197,6 +199,169 @@
         </div>
     </header>
 
+    <!-- Restructured Mobile Navigation Priorities Section -->
+    <section id="priorities" class="section priorities-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-pill">V0.4.1-BETA MOBILE ARCHITECTURE</span>
+                <h2 class="section-title">Restructured Navigation Priorities</h2>
+                <p class="section-subtitle">
+                    KL-06 Manager reorganizes mobile controls around real-world workflows: instant wireless file sharing first, direct on-device hardware controls second, and desktop telemetry consolidated cleanly into Etc.
+                </p>
+            </div>
+
+            <!-- 4 Priority Cards Grid -->
+            <div class="priority-grid">
+                <!-- Priority 1 Card -->
+                <div class="priority-card p1">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">1st Priority</span>
+                        <span class="badge-tag">Default Landing</span>
+                    </div>
+                    <div class="priority-icon-large">📁</div>
+                    <h3 class="priority-title">File Sharing (AirDrop / Quick Share)</h3>
+                    <p class="priority-desc">
+                        Instant wireless peer-to-peer file drop. Lands directly on radar discovery when opening the mobile app for immediate transfers.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>📡 Real-time UDP &amp; TLS port 8766 radar scanning</li>
+                        <li>🚀 High-speed chunked LAN streaming with SHA-256</li>
+                        <li>📂 WebChromeClient file chooser &amp; document picker</li>
+                        <li>🔄 Active transfer queue with pause &amp; auto-retry</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 2 Card -->
+                <div class="priority-card p2">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">2nd Priority</span>
+                        <span class="badge-tag">On-Device Tools</span>
+                    </div>
+                    <div class="priority-icon-large">📱</div>
+                    <h3 class="priority-title">Inbuilt Mobile Controls</h3>
+                    <p class="priority-desc">
+                        Immediate tactile control over your phone or tablet's local hardware without digging through deep operating system settings.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🔊 Direct in-app media volume scalar slider</li>
+                        <li>☀️ Window &amp; screen brightness tuning slider</li>
+                        <li>☕ Bounded Keep-Awake toggle for large transfers</li>
+                        <li>🔋 Live battery percentage &amp; power telemetry</li>
+                        <li>💾 Scoped MediaStore auto-save to Download/KL-06/logs</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 3 Card -->
+                <div class="priority-card p3">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">3rd Priority</span>
+                        <span class="badge-tag">Consolidated</span>
+                    </div>
+                    <div class="priority-icon-large">⚙️</div>
+                    <h3 class="priority-title">"Etc" PC &amp; Mac Companion</h3>
+                    <p class="priority-desc">
+                        Desktop and laptop features are cleanly organized into a dedicated "Etc" menu, keeping the mobile interface lightweight and responsive.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🌪️ Safe read-only Mac &amp; Windows fan RPM monitor</li>
+                        <li>📈 HWiNFO sensor CSV history parser &amp; canvas graph</li>
+                        <li>🎛️ Reversible Dock, Finder, and system tweaks</li>
+                        <li>💻 Remote PC lock, sleep, and master volume control</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 4 Card -->
+                <div class="priority-card p4">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">4th Priority</span>
+                        <span class="badge-tag">Verified Safety</span>
+                    </div>
+                    <div class="priority-icon-large">🛡️</div>
+                    <h3 class="priority-title">Safety, Invariants &amp; Privacy</h3>
+                    <p class="priority-desc">
+                        Zero compromise on system stability and user privacy. Strict cryptographic verification and sandboxed local execution.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🔒 Mutual 6-digit PIN pairing with 60s monotonic window</li>
+                        <li>🔕 100% offline local network (zero cloud telemetry)</li>
+                        <li>🛡️ 20 declared permissions; no mic, camera, or broad storage</li>
+                        <li>📦 Dual APK Signature Scheme v1 (JAR) + v2 signed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Navigation & Screen Showcase -->
+            <div class="nav-showcase-box">
+                <div class="showcase-header">
+                    <span class="section-pill">LIVE INTERACTIVE MOCKUP</span>
+                    <h3>Preview the v0.4.1-beta Mobile UI Flow</h3>
+                    <p>Switch between priorities below to experience how each tier renders inside the mobile companion app:</p>
+                </div>
+
+                <div class="priority-tab-switcher">
+                    <button class="p-tab-btn active" data-mockup="1" onclick="switchPriorityMockup(1)">
+                        <span>📁</span> 1st: File Sharing
+                    </button>
+                    <button class="p-tab-btn" data-mockup="2" onclick="switchPriorityMockup(2)">
+                        <span>📱</span> 2nd: Mobile Controls
+                    </button>
+                    <button class="p-tab-btn" data-mockup="3" onclick="switchPriorityMockup(3)">
+                        <span>⚙️</span> 3rd: Etc (PC Tools)
+                    </button>
+                    <button class="p-tab-btn" data-mockup="4" onclick="switchPriorityMockup(4)">
+                        <span>🛡️</span> 4th: Safety &amp; Invariants
+                    </button>
+                </div>
+
+                <div class="mockup-display-area">
+                    <!-- Left: Description and Capabilities -->
+                    <div class="mockup-details">
+                        <h4 id="mockup-detail-title">Priority 1: Instant File Sharing &amp; AirDrop Hub</h4>
+                        <p id="mockup-detail-desc">
+                            When you open KL-06 Manager on your phone, you land directly in the File Sharing workspace. Nearby laptops running the companion are visible on the radar blip circle. You can drag and drop photos, documents, or APKs for instant TLS-encrypted chunked transmission.
+                        </p>
+                        <div class="mockup-pill-tags" id="mockup-detail-tags">
+                            <span>UDP Port 8766</span>
+                            <span>Direct TLS P2P</span>
+                            <span>Document Picker</span>
+                            <span>SHA-256 Validation</span>
+                        </div>
+                        <ul class="prog-list" id="mockup-detail-list">
+                            <li>📡 Automatic discovery of nearby Mac and Windows companions on Wi-Fi or Hotspot</li>
+                            <li>📥 One-tap file receiving with consent dialog confirmation</li>
+                            <li>🔄 Multi-gigabit transfer rate with real-time ETA and byte progress indicator</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right: Glassmorphic Interactive Phone Container -->
+                    <div class="phone-screen-container">
+                        <div class="phone-top-bar">
+                            <span>KL-06 v0.4.1-beta</span>
+                            <span>🔋 88% • 📶 Wi-Fi 5GHz</span>
+                        </div>
+
+                        <!-- Dynamic Mockup Screen Content -->
+                        <div class="demo-interactive-content" id="mockup-screen-content">
+                            <!-- Populated dynamically via script.js -->
+                        </div>
+
+                        <!-- Phone Bottom Nav Bar -->
+                        <div class="phone-bottom-nav">
+                            <div class="phone-nav-item active" id="pnav-1" onclick="switchPriorityMockup(1)">📁 Share</div>
+                            <div class="phone-nav-item" id="pnav-2" onclick="switchPriorityMockup(2)">📱 Controls</div>
+                            <div class="phone-nav-item" id="pnav-3" onclick="switchPriorityMockup(3)">⚙️ Etc</div>
+                            <div class="phone-nav-item" id="pnav-4" onclick="switchPriorityMockup(4)">🛡️ Safety</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Downloads Section: Device-According Direct Downloads -->
     <section id="download" class="section download-section">
         <div class="container">
@@ -238,14 +403,14 @@
                         <span class="spec-tag">4-byte Aligned</span>
                     </div>
                     <ul class="card-features">
-                        <li>📡 <strong>Real-Time LAN Discovery:</strong> UDP port 8766 responder &amp; active radar scanning across Wi-Fi &amp; Hotspot</li>
-                        <li>📂 <strong>Public Log &amp; Drive Auto-Save:</strong> Auto-saves to <code>Download/KL-06/logs/</code> with native Google Drive share sheet</li>
+                        <li>📁 <strong>Priority 1 File Sharing:</strong> AirDrop &amp; Quick Share hub with UDP port 8766 radar scanning</li>
+                        <li>📱 <strong>Priority 2 Mobile Controls:</strong> Direct volume &amp; brightness sliders, bounded Keep-Awake toggle</li>
+                        <li>💾 <strong>Scoped MediaStore Auto-Save:</strong> Automatically writes diagnostic reports to <code>Download/KL-06/logs/</code></li>
+                        <li>⚙️ <strong>Priority 3 "Etc" PC Tools:</strong> Mac &amp; Win fan monitoring, HWiNFO sensor CSV graphs &amp; tweaks</li>
                         <li>🚀 <strong>In-App Software Update:</strong> Inbuilt OTA updates directly inside the app with PackageInstaller handoff</li>
-                        <li>🌐 <strong>Full Network &amp; LAN:</strong> Wi-Fi, Bluetooth LE, mobile data permissions &amp; Multicast LAN discovery lock</li>
-                        <li>✅ <strong>Permanent Install Support:</strong> Persistent RSA-2048 signing lineage &amp; 4KB page alignment prevents update conflicts</li>
-                        <li>⚡ Single-page consolidated mobile dashboard with 6-digit mutual PIN pairing</li>
-                        <li>📡 Auto-pair consent alert popup on same Wi-Fi / Hotspot</li>
-                        <li>🔊 Integrated volume, brightness &amp; keep-awake controls</li>
+                        <li>✅ <strong>Dual APK v1+v2 Signing:</strong> Persistent RSA-2048 lineage &amp; 4KB page alignment prevents update conflicts</li>
+                        <li>🔒 <strong>6-Digit Mutual PIN Pairing:</strong> Automatic pairing consent popup across same Wi-Fi / Hotspot</li>
+                        <li>🌐 <strong>Comprehensive Networking:</strong> Wi-Fi, Bluetooth LE, mobile data &amp; Multicast lock</li>
                     </ul>
 
                     <div class="card-actions">
@@ -362,8 +527,9 @@
                     </div>
                     <ul class="card-features">
                         <li>⚡ Native WKWebView bridge with pinned TLS certificate</li>
-                        <li>📲 AirDrop / Quick Share peer file receiver</li>
-                        <li>🔒 6-digit mutual PIN authentication</li>
+                        <li>📲 AirDrop / Quick Share peer file receiver &amp; sender</li>
+                        <li>📂 UIDocumentPickerDelegate native file selection in Swift</li>
+                        <li>🔒 6-digit mutual PIN authentication with code normalization</li>
                         <li>🛠️ 1-click install via devicectl or Sideloadly / AltStore</li>
                         <li>🛡️ Zero ATS bypass, zero broad privacy permissions</li>
                     </ul>

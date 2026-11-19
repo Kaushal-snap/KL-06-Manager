@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 56062,
+      "bytes": 66363,
       "executable": false,
       "path": "index.html",
-      "sha256": "0784ee853513d23400e9fa7d934bf0daf2e98f50cc529c4626c7db1bf1e7756c"
+      "sha256": "4219a95284fb5cd4371863ee0641539b6bb18279b9abb7bbc15f7d584926030f"
     },
     {
       "bytes": 5659,
@@ -656,10 +656,10 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 18085,
+      "bytes": 32842,
       "executable": false,
       "path": "script.js",
-      "sha256": "685eee0526b6801d490e29c6f4d05a893079a1c3a3ebee03df6c109aeabb0d13"
+      "sha256": "ec6fa291650a92b719954ee7303eb6be45f6659c00010ecced513eaaaad5708b"
     },
     {
       "bytes": 67276,
@@ -704,10 +704,10 @@
       "sha256": "bed179dc3223ac975eb04f95761ad725249a120021f85798c5165b22f91360e0"
     },
     {
-      "bytes": 43574,
+      "bytes": 51028,
       "executable": false,
       "path": "style.css",
-      "sha256": "7f4ce9af405a2fcff77bccfb62e48eb377c62ff560c9e1690dc80cdc356dea35"
+      "sha256": "1932c5a528bce791857f58b60bf974d5ebac031a5de22d04d9ba1001a23f24b7"
     },
     {
       "bytes": 10515,
