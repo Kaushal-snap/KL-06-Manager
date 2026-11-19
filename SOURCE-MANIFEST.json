@@ -554,10 +554,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 64399,
+      "bytes": 64706,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "17c408c42a77a53b188973a516624e4b66521bbb107cc36dd300fbf9d5f49f44"
+      "sha256": "8c5f927335618aa8a63705e1fa0fc72e964d834401535e34b33abb76c7e0b335"
     },
     {
       "bytes": 5483,
