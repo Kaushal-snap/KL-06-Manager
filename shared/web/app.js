@@ -558,11 +558,11 @@
         </div>
         <div class="conn-card">
           <strong>🍎 macOS Target</strong>
-          <small>Sequoia 15.8.3 (24H241) · /Volumes/1401</small>
+          <small>Detected at runtime; no fixed OS version is assumed</small>
         </div>
         <div class="conn-card">
           <strong>✨ WhateverXe Driver</strong>
-          <small>v0.8.2 Active · EDR 3.08-4.0 Capable</small>
+          <small>Existing driver state is not independently verified by KL-06</small>
         </div>
         <div class="conn-card">
           <strong>⚡ Overall Status</strong>
@@ -574,7 +574,7 @@
         <div class="row">
           <div>
             <strong>📶 Device Connection &amp; AirDrop File Transfer</strong>
-            <small>AWDL coexistence flags (-itlawdlcoex... &amp; -btleadv) for reliable AirDrop streaming</small>
+            <small>Network-driver repair is not implemented; use existing OS Wi-Fi/Bluetooth settings.</small>
           </div>
           ${button('Not implemented', 'kl06-fix-device', '', 'ghost', true)}
         </div>
@@ -590,17 +590,17 @@
         <div class="row">
           <div>
             <strong>🌙 Sleep &amp; Wake Black Screen Recovery</strong>
-            <small>Applies -wex-tgl-hold-render-wake and darkwake=0 to eliminate 30s wake freeze</small>
+            <small>Sleep/wake boot-argument changes are not implemented by this app.</small>
           </div>
-          ${button(fixStatus.sleep ? '✓ Fixed' : 'Fix Sleep/Wake', 'kl06-fix-sleep', fixStatus.sleep ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-sleep', '', 'ghost', true)}
         </div>
 
         <div class="row">
           <div>
             <strong>⚡ GPU Stability &amp; WindowServer Watchdog</strong>
-            <small>Guards against graphics panics with -disablegfxfirmware, -softsleep, -dpcd-bl</small>
+            <small>GPU boot-argument and driver changes are not implemented by this app.</small>
           </div>
-          ${button(fixStatus.gpu ? '✓ Fixed' : 'Fix GPU Stability', 'kl06-fix-gpu', fixStatus.gpu ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-gpu', '', 'ghost', true)}
         </div>
 
         <div class="row">
@@ -613,7 +613,7 @@
       </div>
 
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        ${button('📥 Download Terminal Fix Script (KL-06-Fix-All.sh)', 'kl06-download-fix-script', 'class="btn-secondary"')}
+        ${button('Fix script unavailable', 'kl06-download-fix-script', '', 'ghost', true)}
       </div>
     </section>
 
@@ -625,14 +625,14 @@
           <h2 style="margin:4px 0 0">Fans &amp; Thermal Sensors (Windows &amp; Mac)</h2>
         </div>
         <div>
-          ${button('🩺 Fan Diagnostics (Auto-Sync to Drive)', 'open-fan-diag-modal', 'class="btn-primary"')}
+          ${button('🩺 Export Fan Diagnostic', 'open-fan-diag-modal', 'class="btn-primary"')}
         </div>
       </div>
       <p>Live read-only fan RPM queried from Mac SMC or imported from Windows HWiNFO sensors. No risky firmware fan curves or charge cap overwrites.</p>
       
       <div class="metrics" data-reading-group="local">
-        ${metric('Current Fan RPM', rows.length ? rows.map(x=>n(x.rpm)).join(' / ') : 'Unavailable', state?.fan?.source || 'HWiNFO / Mac SMC Sensor Provider', 'violet')}
-        ${metric('Sensor Quality', state?.fan?.status || 'Active / Verified', 'Firmware is preserved in control', 'mint')}
+        ${metric('Current Fan RPM', rows.length ? rows.map(x=>n(x.rpm)).join(' / ') : 'Unavailable', state?.fan?.source || 'No sensor provider reported', 'violet')}
+        ${metric('Sensor Quality', state?.fan?.status || 'not-sampled', 'Firmware is preserved in control', 'mint')}
       </div>
     </section>
 
@@ -1307,8 +1307,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'kl06-download-fix-script':
-        window.open('https://github.com/Kaushal-snap/KL-06-Manager/blob/main/macos/KL-06-Fix-All.sh', '_blank');
-        toast('Opening KL-06-Fix-All.sh in GitHub…');
+        toast('No validated one-click hardware repair script is available. No file was downloaded or executed.');
         return;
 
       case'toggle-online-logs':
@@ -1316,10 +1315,10 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         try { safeStorage.setItem('kl06_online_logging', onlineLogging ? '1' : '0'); } catch(ignored){}
         if (onlineLogging) {
           addLog('ONLINE', 'ok', 'Online log collection ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
-          toast('✓ Online Log Collection ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
+          toast('✓ Local Diagnostic Buffer ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
           try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         } else {
-          addLog('ONLINE', 'info', 'Online log collection DISABLED by user.');
+          addLog('ONLINE', 'info', 'Local diagnostic buffer disabled by user.');
           toast('Online Log Collection paused.');
         }
         render();
