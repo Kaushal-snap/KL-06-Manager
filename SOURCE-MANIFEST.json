@@ -56,6 +56,12 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
+      "bytes": 22929,
+      "executable": false,
+      "path": "KL-06-Manager-App.html",
+      "sha256": "a870d36fc96038ea420c2e93f2c47ac296c9618b32bcce28a526f713deb3a13b"
+    },
+    {
       "bytes": 22802,
       "executable": false,
       "path": "README.md",
@@ -230,6 +236,18 @@
       "sha256": "26db10d2f54de957d1bae97ccc5474dee9f86ed74c74172797c6236ca4209966"
     },
     {
+      "bytes": 20278,
+      "executable": false,
+      "path": "docs/KL-06-Complete-Guide.md",
+      "sha256": "689439464156843510e6625b6561fdded3c3c5d8c3cd332c3e8b85711ec068ff"
+    },
+    {
+      "bytes": 20278,
+      "executable": false,
+      "path": "docs/KL-06-Complete-Guide.txt",
+      "sha256": "689439464156843510e6625b6561fdded3c3c5d8c3cd332c3e8b85711ec068ff"
+    },
+    {
       "bytes": 204015,
       "executable": false,
       "path": "docs/screenshots/about.png",
@@ -254,10 +272,16 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 79546,
+      "bytes": 22929,
+      "executable": false,
+      "path": "fix-app.html",
+      "sha256": "a870d36fc96038ea420c2e93f2c47ac296c9618b32bcce28a526f713deb3a13b"
+    },
+    {
+      "bytes": 80202,
       "executable": false,
       "path": "index.html",
-      "sha256": "b7f42770abb04c00bee12ed0d31a63edeb76e5fd12e480458f6b407c159f5681"
+      "sha256": "fc468e482cc651e553bd2a8c011b908a4c14008c3c95c6b829982ed41d985f98"
     },
     {
       "bytes": 5659,
@@ -446,6 +470,18 @@
       "sha256": "752c1fc50f1df7c50699613e269879549e8cec5cd62da4412a2b8c3df49c8977"
     },
     {
+      "bytes": 198,
+      "executable": true,
+      "path": "macos/KL-06-Fix-All.command",
+      "sha256": "d6e7d2f8f9371968db20d1ae0cdb5633c40201ebea4302efc07c77314d819b22"
+    },
+    {
+      "bytes": 4904,
+      "executable": true,
+      "path": "macos/KL-06-Fix-All.sh",
+      "sha256": "9476f645a62a5ac5cbf3b38d2d7afda1a42e902692c6286fad65fa0fe0421633"
+    },
+    {
       "bytes": 1086,
       "executable": false,
       "path": "macos/LICENSE",
@@ -488,10 +524,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 61436,
+      "bytes": 64556,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "3b10f2f58f6879251ec12e637b059bb20be32a64dbe616d97126452edd2c2d15"
+      "sha256": "a32ffff851ee890bb2ead1a6ed72a68cf5dbea99fc0567969c474fcdecf2c86a"
     },
     {
       "bytes": 5483,
@@ -662,10 +698,10 @@
       "sha256": "5719f1cf397e82eb6bc22501bb4a0ef089b48caee7febc9ab6885821a83febc0"
     },
     {
-      "bytes": 84414,
+      "bytes": 99708,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "bb0757873d156af3d2e05d0b389ae22068511da163ce3f906f3d6f125890abd4"
+      "sha256": "0522c3c99927b846d538bad15411fa56cf5cd8a8983730c59913550663965c07"
     },
     {
       "bytes": 5483,
