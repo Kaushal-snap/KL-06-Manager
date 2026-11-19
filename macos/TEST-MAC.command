@@ -15,8 +15,8 @@ WORK=$(/usr/bin/mktemp -d "$ROOT/Local-build/Test.XXXXXX")
 /usr/bin/xcrun --sdk macosx clang -std=c11 -O2 -target x86_64-apple-macosx13.0 -isysroot "$SDK" -I"$ROOT/Sources" -c "$ROOT/Sources/SMCReader.c" -o "$WORK/SMCReader.o"
 /usr/bin/xcrun --sdk macosx swiftc -swift-version 5 -target x86_64-apple-macosx13.0 -sdk "$SDK" -module-cache-path "$WORK/ModuleCache" \
   -import-objc-header "$ROOT/Sources/SMCReader.h" "$WORK/SMCReader.o" \
-  "$ROOT/Sources/Core.swift" "$ROOT/Sources/FanMonitor.swift" "$ROOT/Sources/HotKey.swift" "$ROOT/Sources/DesktopCompanion.swift" "$ROOT/tests/mac/main.swift" \
-  -framework AppKit -framework Carbon -framework IOKit -framework Metal -framework CoreAudio -o "$WORK/NativeTests" 2>&1 | /usr/bin/tee "$WORK/TEST-BUILD.log"
+  "$ROOT/Sources/Core.swift" "$ROOT/Sources/FanMonitor.swift" "$ROOT/Sources/HotKey.swift" "$ROOT/Sources/DesktopCompanion.swift" "$ROOT/Sources/GoogleDriveUploader.swift" "$ROOT/tests/mac/main.swift" \
+  -framework AppKit -framework Carbon -framework IOKit -framework Metal -framework CoreAudio -framework Network -o "$WORK/NativeTests" 2>&1 | /usr/bin/tee "$WORK/TEST-BUILD.log"
 /usr/bin/xcrun --sdk macosx clang -std=c11 -O2 -DKL06_SMC_TEST -I"$ROOT/Sources" "$ROOT/Sources/SMCReader.c" "$ROOT/tests/smc/test_smc.c" -framework IOKit -framework CoreFoundation -o "$WORK/SMCTests"
 "$WORK/SMCTests" 2>&1 | /usr/bin/tee "$WORK/SMC-TEST-RESULTS.log"
 "$WORK/NativeTests" 2>&1 | /usr/bin/tee "$WORK/TEST-RESULTS.log"
