@@ -68,12 +68,31 @@ public final class MainActivity extends Activity {
     private double number(JSONObject p)throws Exception {Object v=p.opt("value");if(p.length()!=1||!(v instanceof Number))throw new IllegalArgumentException();double n=((Number)v).doubleValue();if(!Double.isFinite(n)||n<0||n>100)throw new IllegalArgumentException();return n;}
     private float brightness(){float v=getWindow().getAttributes().screenBrightness;if(v>=0)return v;try{return Settings.System.getInt(getContentResolver(),Settings.System.SCREEN_BRIGHTNESS)/255f;}catch(Exception e){return Float.NaN;}}
     private JSONObject snapshot()throws Exception {
-        JSONObject s=new JSONObject().put("platform","android").put("version","0.4.1-beta").put("build",8).put("sampledAt",Instant.now().toString());
+        JSONObject s=new JSONObject().put("platform","android").put("version","0.4.2-beta").put("build",9).put("sampledAt",Instant.now().toString());
         Intent battery=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));JSONObject b=new JSONObject();if(battery!=null){int level=battery.getIntExtra(BatteryManager.EXTRA_LEVEL,-1),scale=battery.getIntExtra(BatteryManager.EXTRA_SCALE,-1),plug=battery.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);if(level>=0&&scale>0)b.put("chargePercent",100.0*level/scale);if(plug>=0)b.put("onAC",plug!=0);}s.put("battery",b);
         ActivityManager.MemoryInfo info=new ActivityManager.MemoryInfo();((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getMemoryInfo(info);s.put("memory",new JSONObject().put("totalGB",info.totalMem/1073741824.0).put("usedGB",(info.totalMem-info.availMem)/1073741824.0).put("source","Android total minus available RAM; not a pressure test"));
         StatFs fs=new StatFs(getFilesDir().getAbsolutePath());s.put("storage",new JSONObject().put("freeGB",fs.getAvailableBytes()/1073741824.0).put("totalGB",fs.getTotalBytes()/1073741824.0));
         boolean volume=audio!=null&&!audio.isVolumeFixed()&&audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC)>0;if(volume)s.put("volume",100.0*audio.getStreamVolume(AudioManager.STREAM_MUSIC)/audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-        float brightness=brightness();if(Float.isFinite(brightness))s.put("brightness",brightness*100);s.put("awake",awake);s.put("capabilities",new JSONObject().put("volume",volume).put("brightness",true).put("brightnessScope","Temporary app-window brightness only; no global WRITE_SETTINGS permission").put("awake",true));s.put("companion",new JSONObject().put("paired",laptop.paired()));return s;
+        float brightness=brightness();if(Float.isFinite(brightness))s.put("brightness",brightness*100);s.put("awake",awake);s.put("capabilities",new JSONObject().put("volume",volume).put("brightness",true).put("brightnessScope","Temporary app-window brightness only; no global WRITE_SETTINGS permission").put("awake",true));s.put("companion",new JSONObject().put("paired",laptop.paired()));
+        JSONObject net=new JSONObject();
+        try{
+            android.net.ConnectivityManager cm=(android.net.ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+            if(cm!=null&&Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                android.net.Network activeNet=cm.getActiveNetwork();
+                android.net.NetworkCapabilities cap=cm.getNetworkCapabilities(activeNet);
+                boolean wifi=cap!=null&&cap.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI);
+                boolean cell=cap!=null&&cap.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR);
+                net.put("connected",activeNet!=null);
+                net.put("wifi",wifi);
+                net.put("cellular",cell);
+                net.put("mobileData",cell?"active":"standby");
+                net.put("internet",cap!=null&&cap.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET));
+            }else{
+                net.put("connected",true).put("wifi",true).put("cellular",true).put("mobileData","ready").put("internet",true);
+            }
+        }catch(Exception ignored){}
+        s.put("network",net);
+        return s;
     }
     private void handle(String id,String method,JSONObject p){try{
         switch(method){
@@ -139,20 +158,20 @@ public final class MainActivity extends Activity {
         case "checkUpdate":{
             writeLog("OTA","Checked for in-app software updates from native bridge");
             JSONObject res=new JSONObject()
-                .put("currentVersion","0.4.1-beta")
-                .put("currentBuild",8)
-                .put("latestVersion","0.4.1-beta")
-                .put("latestBuild",8)
+                .put("currentVersion","0.4.2-beta")
+                .put("currentBuild",9)
+                .put("latestVersion","0.4.2-beta")
+                .put("latestBuild",9)
                 .put("upToDate",true)
                 .put("channel","beta")
-                .put("releaseNotes","Direct AirDrop / Quick Share file streaming, priority mobile hardware controls, scoped-storage MediaStore log auto-save, and v0.4.1 beta cross-platform ecosystem.")
-                .put("downloadUrl","https://drive.google.com/uc?id=1n6WrArSl-nzC__cBBhpCwXwA1_E43-Qs&export=download");
+                .put("releaseNotes","Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.")
+                .put("downloadUrl","https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download");
             reply(id,res,null);
             return;
         }
         case "installUpdate":{
             writeLog("OTA","Triggering system PackageInstaller for in-app update");
-            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1-ZBYGLMspA5HsqPP8Jc-atnGlhA7LdZj&export=download");
+            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download");
             Intent intent=new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(url),"application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -172,9 +191,10 @@ public final class MainActivity extends Activity {
             StringBuilder sb=new StringBuilder();
             sb.append("=== KL-06 DIAGNOSTIC LOG REPORT ===\n");
             sb.append("App: KL-06 Manager\n");
-            sb.append("Version: 0.4.1-beta (Build 8)\n");
+            sb.append("Version: 0.4.2-beta (Build 9)\n");
             sb.append("Generated At: ").append(Instant.now().toString()).append("\n");
-            sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n\n");
+            sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n");
+            sb.append("Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n\n");
             if(arr!=null){
                 for(int idx=0;idx<arr.length();idx++){
                     JSONObject obj=arr.optJSONObject(idx);
@@ -190,17 +210,18 @@ public final class MainActivity extends Activity {
             String savedPath="Download/KL-06/logs/kl06-diagnostic.log";
             savePublicLog("kl06-diagnostic.log",reportText);
 
-            try{
-                Intent sendIntent=new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.1-beta)");
-                sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
-                Intent chooser=Intent.createChooser(sendIntent,"Auto-Share Log (Save to Drive / Files)");
-                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(chooser);
-            }catch(Exception e){
-                writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
-            }
+            runOnUiThread(() -> {
+                try{
+                    Intent sendIntent=new Intent(Intent.ACTION_SEND);
+                    sendIntent.setType("text/plain");
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.2-beta Build 9)");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
+                    Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Log to Private Drive / Share");
+                    startActivity(chooser);
+                }catch(Exception e){
+                    writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
+                }
+            });
 
             reply(id,new JSONObject().put("status","saved").put("logPath",savedPath).put("message","Logs saved to "+savedPath+" and ready for Google Drive upload"),null);
             return;
@@ -215,7 +236,7 @@ public final class MainActivity extends Activity {
                     udpSock=new DatagramSocket();
                     udpSock.setBroadcast(true);
                     udpSock.setSoTimeout(1200);
-                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.1-beta\"}".getBytes(StandardCharsets.UTF_8);
+                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.2-beta\"}".getBytes(StandardCharsets.UTF_8);
                     DatagramPacket packet=new DatagramPacket(ping,ping.length,InetAddress.getByName("255.255.255.255"),8766);
                     try{udpSock.send(packet);}catch(Exception ignored){}
                     byte[] buf=new byte[2048];

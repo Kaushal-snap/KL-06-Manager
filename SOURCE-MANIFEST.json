@@ -1,5 +1,5 @@
 {
-  "build": 8,
+  "build": 9,
   "files": [
     {
       "bytes": 2666,
@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 20121,
+      "bytes": 20120,
       "executable": false,
       "path": "README.md",
-      "sha256": "de4decda7a7696e9dc32f23978676df89e6acc0dacab5cc9baa949c5f155d834"
+      "sha256": "98d09c789417476cb31bbe7e31b9d32f2346a64d908320d8d09b1b3448236391"
     },
     {
       "bytes": 1599,
@@ -71,7 +71,7 @@
       "bytes": 270,
       "executable": false,
       "path": "VERSION.json",
-      "sha256": "f65713261c80becaa8aff6d9f9fe11394462eccee497fe2582f29a0e7fde4b3f"
+      "sha256": "532deb70e26b660c51324764ac6860d956af64754ff81b5aef4ba3a0c7056118"
     },
     {
       "bytes": 687,
@@ -83,7 +83,7 @@
       "bytes": 575,
       "executable": false,
       "path": "android/app/build.gradle",
-      "sha256": "9100c7c2332ad8c8abb766183ecbd2e62c444fc40bca6b8f2bbee3b103b36bbf"
+      "sha256": "c30dc7bfdea18a3b6ac2fefc7e8edd180d242a79241ce27e58b2c3a398d02eaa"
     },
     {
       "bytes": 4624,
@@ -104,10 +104,10 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 37120,
+      "bytes": 38426,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "068a8b2cf3565b0d7c829a52e17a70cdd428d009abe6c6b4571ee3169670e42a"
+      "sha256": "99e287b3a18476ef4e0b76b15522816155468c5c707131654ceaffd6de1430a7"
     },
     {
       "bytes": 6707,
@@ -200,16 +200,16 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 28255,
+      "bytes": 28498,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "86388f224835b08a00b300f4bbfa0b3b64591b8180afd7bf1fa64f0ecfa67b7e"
+      "sha256": "a325f74714135a2fc8319bba9c87ec0ca07ea332cb4b65bcddbe05f18403acce"
     },
     {
-      "bytes": 4085,
+      "bytes": 4107,
       "executable": true,
       "path": "automation/source_manifest.py",
-      "sha256": "de7e2881a4b737015b70684a2202ca61b6bb0e067f798da86b5d5d8570150cf8"
+      "sha256": "1f53bcffbf33dd83a78357a0f245b90f12306a1efd8ffaea25d98c7bc5816749"
     },
     {
       "bytes": 8355,
@@ -221,7 +221,7 @@
       "bytes": 26673,
       "executable": false,
       "path": "companion/server.py",
-      "sha256": "95b080377c3cbdee140e51243d797523166613494951e6662d84f6836b28d1a2"
+      "sha256": "35dac0f817e6310c1ef42a29c71e71f508dcdbd222a33436f21016d34a219e6c"
     },
     {
       "bytes": 13315,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 66363,
+      "bytes": 66531,
       "executable": false,
       "path": "index.html",
-      "sha256": "70d1bd39a346766270c12417225da56ec60076a31b730e036df631582bf247c5"
+      "sha256": "0a46758011f60d8cdfe267e86c6e4659f78e02ebd122e556e3b3b5c948723c7f"
     },
     {
       "bytes": 5659,
@@ -443,7 +443,7 @@
       "bytes": 1032,
       "executable": false,
       "path": "macos/Info.plist",
-      "sha256": "b1152e948ba631602eac31ab36aa7a1be91bec0eac9645c90672b9d30023fa31"
+      "sha256": "38da1d815a0d6fe069205e3a4e270a90195347d82777422a641e8d4cdb97c786"
     },
     {
       "bytes": 1086,
@@ -491,7 +491,7 @@
       "bytes": 61434,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "fa41231cdf9a427d19ecfa825cefd4ffd5e862e2d383b67aebd3a4a1b939925b"
+      "sha256": "1cfb20a982fef82e42befd8ecd1d6ff5579827a861b8091db28b93afb1352e54"
     },
     {
       "bytes": 5483,
@@ -515,7 +515,7 @@
       "bytes": 8178,
       "executable": false,
       "path": "macos/Resources/model.js",
-      "sha256": "e105266cd30664a1628169de1f3abbebc09d98396e6f51cdb6013c1c00e52912"
+      "sha256": "0029297e555d9f942ce84153f89e0c63f625acd62555976ab452a550b038f239"
     },
     {
       "bytes": 29636,
@@ -632,10 +632,10 @@
       "sha256": "a21d82a38ddbcbb2c1a3450bdaa90d236786bfe30f46e6cf96b02cc8fd54df03"
     },
     {
-      "bytes": 3173,
+      "bytes": 3185,
       "executable": false,
       "path": "macos/tests/package.test.py",
-      "sha256": "a97e9c3aca277d791e1e490884e41f671aeb3116200a23e5d9be2b1ae317e463"
+      "sha256": "22c7cf3d45e1c37408fdf5da507f33a27694ade9bb9db09b243b8d2b57a45ba8"
     },
     {
       "bytes": 3803,
@@ -659,13 +659,13 @@
       "bytes": 32842,
       "executable": false,
       "path": "script.js",
-      "sha256": "502b44ef3fb646da4f5fb8d43312b9957f3754b7fe134826da7f407f95593dc7"
+      "sha256": "78992c8659c0a42678439b6745db64337f45eab1b3fac124c1b4b2eb6aa2c1d0"
     },
     {
-      "bytes": 67276,
+      "bytes": 67471,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "f152ecac9c76ade5da46bdfd8b26d325428809201cc072e3cd2a09c7c4001016"
+      "sha256": "432dfd46c627fa488e67a4c22e8cf33f9a1171c7031afe5120d7c677e7c904f1"
     },
     {
       "bytes": 5483,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 3927,
+      "bytes": 4342,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "6aeb2049ddb3bc5bf26df21ef2856dae54b6a9349b2f77ef431ccd791a34d6db"
+      "sha256": "364eadd8ed6be31da0de9fdfc88025a635e2e5cb8751ae2811594ebe4451892e"
     },
     {
       "bytes": 1614,
@@ -797,7 +797,7 @@
       "bytes": 2315,
       "executable": false,
       "path": "windows/KL06.Windows/KL06.Windows.csproj",
-      "sha256": "55b5a3dbcf6c12043f926617840371f2a84707e64c0589bf15e71e161dbceae9"
+      "sha256": "4ec9cba21ee720e30f85b31630e04241df0fb8780b78070afd51fa6e8906eafe"
     },
     {
       "bytes": 11249,
@@ -862,5 +862,5 @@
   ],
   "schema": "KL06_SOURCE_MANIFEST_V1",
   "scope": "source-only-not-native-build-or-owner-approval",
-  "version": "0.4.1-beta"
+  "version": "0.4.2-beta"
 }

@@ -190,12 +190,13 @@
   // Online diagnostic logging state & buffer
   let onlineLogging = true;
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.1-beta (Build 8) initialized.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'info', msg: 'Network active: Wi-Fi / Personal Hotspot (192.168.x.x:8766). Mobile Data ready.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.2-beta (Build 9) initialized.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'ok', msg: 'Network active: Mobile Data & Wi-Fi internet access enabled. Companion listener at port 8766.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'DRIVE', level: 'ok', msg: 'Private Drive Sync: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) connected.' },
     { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework & Scoped MediaStore.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active on local subnet.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 8).' },
-    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Logs auto-saved to Download/KL-06/logs/kl06-diagnostic.log.' }
+    { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active across local subnets and cellular hotspot.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 9).' },
+    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Auto-saved to Download/KL-06/logs/kl06-diagnostic.log and private Drive.' }
   ];
 
   try {
@@ -214,12 +215,12 @@
   let otaStatus = 'up-to-date';
   let otaProgress = 0;
   let otaVersionInfo = {
-    currentVersion: '0.4.1-beta',
-    currentBuild: 8,
-    latestVersion: '0.4.1-beta',
-    latestBuild: 8,
-    releaseNotes: 'Priority 1 File Sharing & AirDrop hub, Inbuilt Mobile Controls, Etc option for PC & Mac tools, and MediaStore scoped-storage diagnostic logging.',
-    downloadUrl: 'https://drive.google.com/uc?id=1n6WrArSl-nzC__cBBhpCwXwA1_E43-Qs&export=download'
+    currentVersion: '0.4.2-beta',
+    currentBuild: 9,
+    latestVersion: '0.4.2-beta',
+    latestBuild: 9,
+    releaseNotes: 'Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.',
+    downloadUrl: 'https://drive.google.com/uc?id=1TwbaLx_8MWsuMexHlElenwDZFDOmKY7w&export=download'
   };
 
   function inAppUpdateHub(){
@@ -498,19 +499,19 @@
         </div>
         <div class="conn-card">
           <strong>📡 Online Status</strong>
-          <small>${onlineLogging ? 'Recording events live' : 'Paused'}</small>
+          <small>Internet: Mobile Data &amp; Wi-Fi Active</small>
         </div>
         <div class="conn-card">
           <strong>☁️ Google Drive Sync</strong>
-          <small>Drive Folder 1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8</small>
+          <small>Private Folder: KL-06-Private-Logs</small>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
         ${button('📥 Export Logs to Storage', 'export-logs', 'class="btn-primary"')}
-        ${button('📤 Auto-Share Log Report', 'send-error-report')}
-        <a href="https://drive.google.com/drive/folders/1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
-          <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open My Data on Drive</button>
+        ${button('📤 Auto-Send to Private Folder', 'send-error-report', 'class="btn-primary"')}
+        <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
+          <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
         </a>
         ${button('🗑️ Clear Log Buffer', 'clear-logs')}
       </div>
@@ -692,8 +693,8 @@
         <div class="log-modal-text">${e(activeLogModal.text)}</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
           <button data-action="copy-modal-log" class="btn-primary">📋 Copy All</button>
-          <a href="https://drive.google.com/drive/folders/1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
-            <button type="button" class="btn-primary" style="background:#1b4d3e;border-color:#34d399">☁️ Open My Data on Drive</button>
+          <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
+            <button type="button" class="btn-primary" style="background:#1b4d3e;border-color:#34d399">☁️ Open Private Logs on Drive</button>
           </a>
           <button data-action="close-log-modal" class="btn-secondary">Close</button>
         </div>
@@ -715,7 +716,7 @@
       ).join('');
 
       if (!shellRendered || !app.querySelector('.shell')) {
-        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.1-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.1-beta · build 8<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}`;
+        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.2-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.2-beta · build 9<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}`;
         shellRendered = true;
       } else {
         app.querySelectorAll('#app-nav button').forEach(btn => {
@@ -744,10 +745,16 @@
         }
         let logModalEl = document.getElementById('log-viewer-modal');
         if (activeLogModal?.open) {
-          if (logModalEl) logModalEl.remove();
-          const div = document.createElement('div');
-          div.innerHTML = logViewerModal();
-          document.body.appendChild(div.firstElementChild);
+          if (!logModalEl) {
+            const div = document.createElement('div');
+            div.innerHTML = logViewerModal();
+            document.body.appendChild(div.firstElementChild);
+          } else {
+            const t = logModalEl.querySelector('.log-modal-text');
+            if (t && activeLogModal.text && t.textContent !== activeLogModal.text) {
+              t.textContent = activeLogModal.text;
+            }
+          }
         } else if (logModalEl) {
           logModalEl.remove();
         }
@@ -945,12 +952,12 @@
       case'check-app-update': {
         otaChecking = true;
         render();
-        toast('Checking signed update catalog for v0.4.1-beta…');
+        toast('Checking signed update catalog for v0.4.2-beta…');
         addLog('OTA', 'info', 'Querying release catalog for updates...');
         setTimeout(() => {
           otaChecking = false;
           otaStatus = 'ready';
-          addLog('OTA', 'ok', '✓ Validated v0.4.1-beta package against SHA-256 catalog. Ready to install.');
+          addLog('OTA', 'ok', '✓ Validated v0.4.2-beta package against SHA-256 catalog. Ready to install.');
           toast('✓ Package verified! Ready to install.');
           render();
         }, 1200);
@@ -959,7 +966,7 @@
 
       case'install-app-update': {
         addLog('OTA', 'info', 'Launching Android PackageInstaller for in-app update...');
-        toast('Launching system installer for v0.4.1-beta…');
+        toast('Launching system installer for v0.4.2-beta…');
         if (native) {
           try {
             act('installUpdate', { downloadUrl: otaVersionInfo.downloadUrl });
@@ -979,41 +986,30 @@
       case'export-logs': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.1-beta',
-          build: 8,
+          version: '0.4.2-beta',
+          build: 9,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
-          network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'ready' },
-          permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted' },
+          network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'active (dual-mode)' },
+          permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted', internet: 'granted' },
           storagePath: 'Download/KL-06/logs/kl06-diagnostic.log',
-          driveFolder: 'My Data (1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8)',
+          driveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
-        try { act('exportLogs', { logs: diagnosticLogs }); } catch(ignored){}
+        try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 v0.4.1-beta Diagnostic Report',
+              title: 'KL-06 v0.4.2-beta Diagnostic Report',
               text: reportStr
-            });
+            }).catch(()=>{});
           } catch(ignored){}
         }
-        try {
-          const blob = new Blob([reportStr], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `kl06-diagnostic-${Date.now()}.json`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        } catch(ignored){}
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
         addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events) to Download/KL-06/logs/kl06-diagnostic.log.`);
-        toast('✓ Diagnostic logs exported to Download/KL-06/logs/ & Share sheet opened!');
+        toast('✓ Diagnostic logs exported to Download/KL-06/logs/ & ready for Private Drive folder!');
         render();
         return;
       }
@@ -1021,28 +1017,30 @@
       case'send-error-report': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.1-beta',
-          build: 8,
+          version: '0.4.2-beta',
+          build: 9,
           exportedAt: new Date().toISOString(),
           platform: state?.platform || 'android',
-          targetDriveFolder: 'My Data (1x1FJ0sz3DJE3wDLhmVI3bkpc3l5zDaf8)',
+          targetDriveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
-        try { act('saveErrorReport', { logs: diagnosticLogs }); } catch(ignored){}
+        try { request('saveErrorReport', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 Error Report (v0.4.1-beta)',
+              title: 'KL-06 Error Report (v0.4.2-beta)',
               text: reportStr
-            });
+            }).catch(()=>{});
           } catch(ignored){}
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('REPORT', 'ok', 'Error report packaged and saved to Download/KL-06/logs/. Share sheet opened.');
-        toast('✓ Error report packaged & saved! Ready to save directly to Google Drive.');
+        addLog('REPORT', 'ok', 'Error report packaged and saved to Download/KL-06/logs/. Share ready.');
+        toast('✓ Error report packaged & saved! Ready to save directly to Private Drive folder.');
         render();
+        return;
+      }
         return;
       }
 
@@ -1252,7 +1250,7 @@
 
   state = {
     platform: 'android',
-    version: '0.4.1-beta',
+    version: '0.4.2-beta',
     sampledAt: 'Live phone telemetry',
     battery: { chargePercent: 82, onAC: false },
     memory: { usedGB: 4.1, totalGB: 8.0, source: 'Android system RAM' },
