@@ -56,10 +56,10 @@
       "sha256": "33c20c3c3c64a9a2b7b29527bff4e3a338b1d78b5e4591641a096f61435b1df9"
     },
     {
-      "bytes": 22805,
+      "bytes": 22802,
       "executable": false,
       "path": "README.md",
-      "sha256": "ce189c36ff57ab42b89cc19e3243852b2ff8e441b85d52dc8b26da11f5810575"
+      "sha256": "242b7ac21b3dad3fbe00a54ccdae60e9da0296208829c02fa868a02cc4404c0f"
     },
     {
       "bytes": 1599,
@@ -254,10 +254,10 @@
       "sha256": "4d6e4ac0c44bdcdd58a13ac2d18ad2ba69545e06c174eb78092a00777d3d75bc"
     },
     {
-      "bytes": 79537,
+      "bytes": 79546,
       "executable": false,
       "path": "index.html",
-      "sha256": "36c01035d94a9ff0dd0eaff1348e927bee96c60e3e7adc9b04d5fa8697f7a554"
+      "sha256": "b7f42770abb04c00bee12ed0d31a63edeb76e5fd12e480458f6b407c159f5681"
     },
     {
       "bytes": 5659,
@@ -656,10 +656,10 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 36932,
+      "bytes": 36929,
       "executable": false,
       "path": "script.js",
-      "sha256": "7618821f660305bfd64c9a51fcdd46308254d6960f4f2969fa2cc70e56d53453"
+      "sha256": "5719f1cf397e82eb6bc22501bb4a0ef089b48caee7febc9ab6885821a83febc0"
     },
     {
       "bytes": 84414,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 8578,
+      "bytes": 8600,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "1425eb4fec186ae6851ef7c426584bbf897f3034877b9f4c2636a85194c6c78e"
+      "sha256": "d28ab7515ec2b6161011884e2d0c9dd8a62c63c32eb918cf57265cd144332f7e"
     },
     {
       "bytes": 1614,

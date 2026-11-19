@@ -53,10 +53,10 @@ Connect directly with the developer **Kaushal Labana**:
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | 🤖 **Android (Zip)** | `KL-06-0.4.3-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `38f2defea0a5c0475f0a3b46a71083b4623f2f71eab6eb8f1dfee8e441115dc5` | [Direct Download (Drive)](https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download) |
 | 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `163a9806c806c5602255b68e18b3b93c54ce5e72571c70cd0adc1db1b16f7417` | [Direct APK (Drive)](https://drive.google.com/uc?id=1ahcqo7n7ROvtJib3Yb654BJUOp2SqdDW&export=download) |
-| 🍎 **macOS** | `KL-06 Manager 4.3 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
+| 🍎 **macOS** | `KL-06 Manager 0.4.3.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 207 KB | `7ad49ff2d7ec76124642597a4d5e7170daa718999b9190c290c556a6b4773577` | [Direct Download (Drive)](https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download) |
 | 🪟 **Windows** | `KL-06-0.4.3-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
 | 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.3-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `a5cb4f3b0124db1106b01c146ce1782fd2cfec19d19faffc47ffb0e02bf1ddf4` | [Direct Download (Drive)](https://drive.google.com/uc?id=1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.3-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `f1070b6e2823fe4e971be1ad3731f4176a2d1fff980d082371926ee4dc03bc93` | [Direct Download (Drive)](https://drive.google.com/uc?id=1sUDU_9ZAnfZt31ncXxEFHGB_xIzwodq5&export=download) |
 
 <br/>
 
