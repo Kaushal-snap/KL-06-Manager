@@ -48,7 +48,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         if device.batteryState != .unknown { battery["onAC"] = device.batteryState == .charging || device.batteryState == .full }
         var storage: [String: Any] = [:]
         if let a = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()), let free = a[.systemFreeSize] as? NSNumber, let total = a[.systemSize] as? NSNumber { storage = ["freeGB": free.doubleValue / 1073741824, "totalGB": total.doubleValue / 1073741824] }
-        return ["platform": "ios", "version": "0.4.3-beta", "build": 10, "sampledAt": ISO8601DateFormatter().string(from: Date()),
+        return ["platform": "ios", "version": "0.4.7-beta", "build": 12, "sampledAt": ISO8601DateFormatter().string(from: Date()),
                 "battery": battery, "memory": ["totalGB": Double(ProcessInfo.processInfo.physicalMemory) / 1073741824, "source": "iOS system-used RAM unavailable through this app"],
                 "storage": storage, "volume": Double(AVAudioSession.sharedInstance().outputVolume) * 100, "brightness": Double(UIScreen.main.brightness) * 100, "awake": awake,
                 "capabilities": ["volume": false, "nativeVolume": true, "brightness": true, "brightnessScope": "Temporary screen brightness; restores on background if unchanged; not physical nits", "awake": true] as [String: Any],
@@ -94,7 +94,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
             let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item, .content, .data], asCopy: false); picker.allowsMultipleSelection = false; picker.delegate = self; present(picker, animated: true)
         case "exportLogs", "saveErrorReport", "shareLogs", "saveFanDiagnosticReport":
             let logs = p["logs"] as? [[String: Any]] ?? []
-            var text = p["reportText"] as? String ?? "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.3-beta (Build 10)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
+            var text = p["reportText"] as? String ?? "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.7-beta (Build 12)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
             for log in logs {
                 text += "[\(log["ts"] as? String ?? "")] [\(log["tag"] as? String ?? "LOG")] \(log["msg"] as? String ?? "")\n"
             }
@@ -103,13 +103,13 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
             reply(id, result: ["status": "saved", "message": "Diagnostic report opened in iOS Share Sheet."])
         case "checkUpdate":
             reply(id, result: [
-                "currentVersion": "0.4.3-beta",
-                "currentBuild": 10,
-                "latestVersion": "0.4.3-beta",
-                "latestBuild": 10,
+                "currentVersion": "0.4.7-beta",
+                "currentBuild": 12,
+                "latestVersion": "0.4.7-beta",
+                "latestBuild": 12,
                 "upToDate": true,
                 "channel": "beta",
-                "releaseNotes": "Hardware fan diagnostics with password protection, auto-sync to private Drive folder KL-06-Private-Logs, and v0.4.3 beta ecosystem update.",
+                "releaseNotes": "Tiger Lake hardware optimization suite (HDR, Sleep/Wake, AirDrop AWDL, GPU stability, Fan RPM), OTA engine, and v0.4.7 beta ecosystem update.",
                 "downloadUrl": "https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command"
             ])
         case "discoverPeers":

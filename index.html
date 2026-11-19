@@ -3,173 +3,1214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KL-06 Manager | Multi-Device Control Center</title>
-    <meta name="description" content="KL-06 Manager - Universal device control center with file transfer, HDR control, GPU stability, sleep/wake fix, and fan control. All-in-one Hackintosh & multi-device utility.">
+    <title>KL-06 Manager | Universal Multi-Device Control & AirDrop Hub by Kaushal Labana</title>
+    <meta name="description" content="KL-06 Manager by Kaushal Labana - Universal AirDrop & Quick Share companion across Mac, Windows, Android, and iPhone with 6-digit PIN pairing and hardware telemetry.">
+    <meta name="author" content="Kaushal Labana">
+    <meta name="theme-color" content="#0b0f19">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
+    <!-- Background Animated Mesh Glows -->
+    <div class="mesh-bg">
+        <div class="mesh-orb orb-1"></div>
+        <div class="mesh-orb orb-2"></div>
+        <div class="mesh-orb orb-3"></div>
+        <div class="mesh-orb orb-4"></div>
+    </div>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container announcement-inner">
+            <span class="badge-new">NEW v0.4.7-BETA</span>
+            <span>Tiger Lake C++ Kernel Patch Suite (Lilu HDR, Sleep/Wake, AWDL AirDrop) &amp; OPEN-KL06 Gatekeeper Fix!</span>
+            <a href="#priorities" class="announcement-link">Explore v0.4.7 Architecture &rarr;</a>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">KL-06 <span class="logo-accent">Manager</span></div>
-        <ul class="nav-links">
-            <li><a href="#download">Download</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#fix-all">One-Click Fix</a></li>
-            <li><a href="#updates">Updates</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="nav-mobile">
-            <span class="menu-toggle"></span>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="brand">
+                <div class="brand-logo-glow">
+                    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">KL-06 <span class="gradient-text">Manager</span></span>
+                    <span class="brand-author">by Kaushal Labana</span>
+                </div>
+            </a>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#priorities" class="nav-link">Priorities</a></li>
+                <li><a href="#download" class="nav-link">Downloads</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#progressive-features" class="nav-link">OS Matrix</a></li>
+                <li><a href="#radar-demo" class="nav-link">Live Radar</a></li>
+                <li><a href="#screenshots" class="nav-link">Screenshots</a></li>
+                <li><a href="#community" class="nav-link">Community</a></li>
+                <li><a href="#about-creator" class="nav-link">Creator</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="mailto:labanayt@gmail.com" class="btn-icon email-btn" title="Email: labanayt@gmail.com">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <span>Email</span>
+                </a>
+                <a href="https://discord.gg/Z4my8c2ZH" target="_blank" rel="noopener noreferrer" class="btn-icon discord-btn" title="Discord: labanayt5301">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+                <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM" target="_blank" rel="noopener noreferrer" class="btn-icon youtube-btn" title="YouTube: @labanayt">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://github.com/Kaushal-snap/KL-06-Manager" target="_blank" rel="noopener noreferrer" class="btn-icon github-btn" title="GitHub Repo">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <header class="hero">
-        <div class="hero-content">
-            <h1>KL-06 Manager</h1>
-            <p class="tagline">Universal device control center • File transfer • HDR/EDR control • GPU stability • Sleep/wake fix • Fan control • All-in-one fix</p>
-            <div class="hero-buttons">
-                <a href="#download" class="btn btn-primary">Download Now</a>
-                <a href="#fix-all" class="btn btn-outline">One-Click Fix All</a>
+        <div class="container hero-container">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    <span>Created by <strong>Kaushal Labana</strong> • v0.4.7-beta Build 12</span>
+                </div>
+                <h1 class="hero-title">
+                    Universal Control &amp; <br>
+                    <span class="gradient-text-alt">AirDrop / Quick Share</span> <br>
+                    Across Every Device.
+                </h1>
+                <p class="hero-lead">
+                    Connect <strong>Android, macOS, Windows, and iPhone</strong> over Wi-Fi, Hotspot, Bluetooth, and NFC beam. Featuring restructured mobile navigation: <strong>Priority 1 File Sharing</strong> (AirDrop/Quick Share), <strong>Priority 2 Inbuilt Mobile Controls</strong>, and <strong>Priority 3 Etc</strong> for PC &amp; Mac tools with 6-digit PIN pairing and MediaStore log auto-saving.
+                </p>
+
+                <!-- Smart Auto-Detected Device Card -->
+                <div class="smart-detect-card" id="smart-detect-card">
+                    <div class="detect-header">
+                        <span class="detect-pill">⚡ Auto-Detected Platform</span>
+                        <span class="detect-name" id="detected-os-name">Detecting your device...</span>
+                    </div>
+                    <div class="detect-body">
+                        <div class="detect-info">
+                            <span class="detect-file" id="detected-file-name">KL-06 Package</span>
+                            <span class="detect-meta" id="detected-file-meta">Optimized for your system</span>
+                        </div>
+                        <div class="detect-actions">
+                            <a href="#" id="detected-download-btn" class="btn btn-primary btn-glow">
+                                <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                <span id="detected-btn-text">Download for Your Device</span>
+                            </a>
+                            <a href="#download" class="btn btn-secondary">All Platforms</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-socials">
+                    <span class="socials-label">Connect with Kaushal:</span>
+                    <a href="mailto:labanayt@gmail.com" class="social-tag email-tag">
+                        <span class="email-bullet"></span> Support: <strong>labanayt@gmail.com</strong>
+                    </a>
+                    <a href="https://discord.gg/Z4my8c2ZH" target="_blank" rel="noopener noreferrer" class="social-tag discord-tag">
+                        <span class="discord-bullet"></span> Discord: <strong>labanayt5301</strong>
+                    </a>
+                    <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM" target="_blank" rel="noopener noreferrer" class="social-tag youtube-tag">
+                        <span class="youtube-bullet"></span> YouTube: <strong>@labanayt</strong>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Interactive Preview Showcase -->
+            <div class="hero-visual">
+                <div class="glass-device-mockup">
+                    <div class="mockup-header">
+                        <div class="window-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <span class="mockup-title">KL-06 Ecosystem Radar Hub</span>
+                        <span class="mockup-status"><span class="live-dot"></span> LIVE</span>
+                    </div>
+
+                    <!-- Mini Live Radar Demo Inside Mockup -->
+                    <div class="mini-radar-showcase">
+                        <div class="hero-radar-circle">
+                            <div class="hero-radar-wave"></div>
+                            <div class="hero-radar-wave wave-2"></div>
+                            <div class="hero-radar-sweep"></div>
+                            <div class="radar-center-blip">
+                                <span>KL-06</span>
+                            </div>
+                            <div class="radar-node node-mac" title="MacBook Pro (Active)">
+                                <span>💻 Mac</span>
+                            </div>
+                            <div class="radar-node node-android" title="Android Phone (Connected)">
+                                <span>📱 Android</span>
+                            </div>
+                            <div class="radar-node node-iphone" title="iPhone 14 Pro Max (Available)">
+                                <span>📱 iPhone</span>
+                            </div>
+                            <div class="radar-node node-win" title="Windows 11 (Ready)">
+                                <span>🪟 PC</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Interactive PIN Card Inside Hero -->
+                        <div class="hero-pin-card">
+                            <div class="pin-card-header">
+                                <span class="pin-title">🔒 6-Digit Mutual PIN</span>
+                                <span class="pin-badge" id="hero-pin-timer">Expires in 58s</span>
+                            </div>
+                            <div class="pin-display-boxes" id="hero-pin-boxes">
+                                <span>5</span><span>8</span><span>2</span><span>4</span><span>1</span><span>9</span>
+                            </div>
+                            <div class="pin-card-footer">
+                                <button class="btn-micro" id="btn-hero-gen-pin">Generate Fresh PIN</button>
+                                <span class="pin-secure-text">✅ Verified APK v2 Signature</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Download Section -->
-    <section id="download" class="download-section">
+    <!-- Restructured Mobile Navigation Priorities Section -->
+    <section id="priorities" class="section priorities-section">
         <div class="container">
-            <h2>Download KL-06 Manager</h2>
-            <p class="subtitle">Choose your platform and get started:</p>
-            
-            <div class="platform-grid" id="platform-grid">
-                <!-- Platform cards injected by JS -->
+            <div class="section-header text-center">
+                <span class="section-pill">V0.4.7-BETA MOBILE ARCHITECTURE</span>
+                <h2 class="section-title">Restructured Navigation Priorities</h2>
+                <p class="section-subtitle">
+                    KL-06 Manager reorganizes mobile controls around real-world workflows: instant wireless file sharing first, direct on-device hardware controls second, and desktop telemetry consolidated cleanly into Etc.
+                </p>
             </div>
-            
-            <div class="update-note">
-                <small>💡 App automatically checks for updates on startup. You'll get notified when a new version is available.</small>
+
+            <!-- 4 Priority Cards Grid -->
+            <div class="priority-grid">
+                <!-- Priority 1 Card -->
+                <div class="priority-card p1">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">1st Priority</span>
+                        <span class="badge-tag">Default Landing</span>
+                    </div>
+                    <div class="priority-icon-large">📁</div>
+                    <h3 class="priority-title">File Sharing (AirDrop / Quick Share)</h3>
+                    <p class="priority-desc">
+                        Instant wireless peer-to-peer file drop. Lands directly on radar discovery when opening the mobile app for immediate transfers.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>📡 Real-time UDP &amp; TLS port 8766 radar scanning</li>
+                        <li>🚀 High-speed chunked LAN streaming with SHA-256</li>
+                        <li>📂 WebChromeClient file chooser &amp; document picker</li>
+                        <li>🔄 Active transfer queue with pause &amp; auto-retry</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 2 Card -->
+                <div class="priority-card p2">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">2nd Priority</span>
+                        <span class="badge-tag">On-Device Tools</span>
+                    </div>
+                    <div class="priority-icon-large">📱</div>
+                    <h3 class="priority-title">Inbuilt Mobile Controls</h3>
+                    <p class="priority-desc">
+                        Immediate tactile control over your phone or tablet's local hardware without digging through deep operating system settings.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🔊 Direct in-app media volume scalar slider</li>
+                        <li>☀️ Window &amp; screen brightness tuning slider</li>
+                        <li>☕ Bounded Keep-Awake toggle for large transfers</li>
+                        <li>🔋 Live battery percentage &amp; power telemetry</li>
+                        <li>💾 Scoped MediaStore auto-save to Download/KL-06/logs</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 3 Card -->
+                <div class="priority-card p3">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">3rd Priority</span>
+                        <span class="badge-tag">Consolidated</span>
+                    </div>
+                    <div class="priority-icon-large">⚙️</div>
+                    <h3 class="priority-title">"Etc" PC &amp; Mac Companion</h3>
+                    <p class="priority-desc">
+                        Desktop and laptop features are cleanly organized into a dedicated "Etc" menu, keeping the mobile interface lightweight and responsive.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🌪️ Safe read-only Mac &amp; Windows fan RPM monitor</li>
+                        <li>📈 HWiNFO sensor CSV history parser &amp; canvas graph</li>
+                        <li>🎛️ Reversible Dock, Finder, and system tweaks</li>
+                        <li>💻 Remote PC lock, sleep, and master volume control</li>
+                    </ul>
+                </div>
+
+                <!-- Priority 4 Card -->
+                <div class="priority-card p4">
+                    <div class="priority-card-glow"></div>
+                    <div class="priority-badge-row">
+                        <span class="priority-num-badge">4th Priority</span>
+                        <span class="badge-tag">Verified Safety</span>
+                    </div>
+                    <div class="priority-icon-large">🛡️</div>
+                    <h3 class="priority-title">Safety, Invariants &amp; Privacy</h3>
+                    <p class="priority-desc">
+                        Zero compromise on system stability and user privacy. Strict cryptographic verification and sandboxed local execution.
+                    </p>
+                    <ul class="priority-feature-list">
+                        <li>🔒 Mutual 6-digit PIN pairing with 60s monotonic window</li>
+                        <li>🔕 100% offline local network (zero cloud telemetry)</li>
+                        <li>🛡️ 20 declared permissions; no mic, camera, or broad storage</li>
+                        <li>📦 Dual APK Signature Scheme v1 (JAR) + v2 signed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Navigation & Screen Showcase -->
+            <div class="nav-showcase-box">
+                <div class="showcase-header">
+                    <span class="section-pill">LIVE INTERACTIVE MOCKUP</span>
+                    <h3>Preview the v0.4.2-beta Mobile UI Flow</h3>
+                    <p>Switch between priorities below to experience how each tier renders inside the mobile companion app:</p>
+                </div>
+
+                <div class="priority-tab-switcher">
+                    <button class="p-tab-btn active" data-mockup="1" onclick="switchPriorityMockup(1)">
+                        <span>📁</span> 1st: File Sharing
+                    </button>
+                    <button class="p-tab-btn" data-mockup="2" onclick="switchPriorityMockup(2)">
+                        <span>📱</span> 2nd: Mobile Controls
+                    </button>
+                    <button class="p-tab-btn" data-mockup="3" onclick="switchPriorityMockup(3)">
+                        <span>⚙️</span> 3rd: Etc (PC Tools)
+                    </button>
+                    <button class="p-tab-btn" data-mockup="4" onclick="switchPriorityMockup(4)">
+                        <span>🛡️</span> 4th: Safety &amp; Invariants
+                    </button>
+                </div>
+
+                <div class="mockup-display-area">
+                    <!-- Left: Description and Capabilities -->
+                    <div class="mockup-details">
+                        <h4 id="mockup-detail-title">Priority 1: Instant File Sharing &amp; AirDrop Hub</h4>
+                        <p id="mockup-detail-desc">
+                            When you open KL-06 Manager on your phone, you land directly in the File Sharing workspace. Nearby laptops running the companion are visible on the radar blip circle. You can drag and drop photos, documents, or APKs for instant TLS-encrypted chunked transmission.
+                        </p>
+                        <div class="mockup-pill-tags" id="mockup-detail-tags">
+                            <span>UDP Port 8766</span>
+                            <span>Direct TLS P2P</span>
+                            <span>Document Picker</span>
+                            <span>SHA-256 Validation</span>
+                        </div>
+                        <ul class="prog-list" id="mockup-detail-list">
+                            <li>📡 Automatic discovery of nearby Mac and Windows companions on Wi-Fi or Hotspot</li>
+                            <li>📥 One-tap file receiving with consent dialog confirmation</li>
+                            <li>🔄 Multi-gigabit transfer rate with real-time ETA and byte progress indicator</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right: Glassmorphic Interactive Phone Container -->
+                    <div class="phone-screen-container">
+                        <div class="phone-top-bar">
+                            <span>KL-06 v0.4.7-beta</span>
+                            <span>🔋 88% • 📶 Wi-Fi 5GHz</span>
+                        </div>
+
+                        <!-- Dynamic Mockup Screen Content -->
+                        <div class="demo-interactive-content" id="mockup-screen-content">
+                            <!-- Populated dynamically via script.js -->
+                        </div>
+
+                        <!-- Phone Bottom Nav Bar -->
+                        <div class="phone-bottom-nav">
+                            <div class="phone-nav-item active" id="pnav-1" onclick="switchPriorityMockup(1)">📁 Share</div>
+                            <div class="phone-nav-item" id="pnav-2" onclick="switchPriorityMockup(2)">📱 Controls</div>
+                            <div class="phone-nav-item" id="pnav-3" onclick="switchPriorityMockup(3)">⚙️ Etc</div>
+                            <div class="phone-nav-item" id="pnav-4" onclick="switchPriorityMockup(4)">🛡️ Safety</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- One-Click Fix Section -->
-    <section id="fix-all" class="fix-section">
+    <!-- Downloads Section: Device-According Direct Downloads -->
+    <section id="download" class="section download-section">
         <div class="container">
-            <h2>🔧 One-Click Fix All</h2>
-            <p class="subtitle">Fix device connection, file transfer, fan RPM, HDR flicker, sleep/wake, and GPU stability with one click:</p>
-            
-            <div class="fix-grid">
-                <div class="fix-card" id="fix-card-device">
-                    <div class="fix-icon">📱</div>
-                    <h3>Device Connection & File Transfer</h3>
-                    <p>Fix LAN peer discovery, TLS connection, and cross-platform file transfer between Mac, Windows, Android, and iPhone.</p>
-                    <button class="fix-btn" onclick="fixDevice()">Fix Device Connection</button>
-                    <div class="fix-status" id="status-device">Waiting...</div>
+            <div class="section-header text-center">
+                <span class="section-pill">DIRECT ECOSYSTEM DOWNLOADS</span>
+                <h2 class="section-title">Download KL-06 Manager For Your Device</h2>
+                <p class="section-subtitle">
+                    Select your operating system below for instant direct downloads, cryptographic checksums, and verified installation bundles created by <strong>Kaushal Labana</strong>.
+                </p>
+
+                <!-- Release Version Selector Bar -->
+                <div class="version-selector-wrap" style="display:flex;justify-content:center;align-items:center;gap:12px;margin:20px 0 14px;flex-wrap:wrap">
+                    <span style="font-size:0.9rem;font-weight:600;color:var(--text-muted)">Release Channel:</span>
+                    <button class="tab-btn active" id="btn-ver-047" onclick="switchVersionDisplay('0.4.7')" style="font-size:0.88rem;padding:8px 18px;border-radius:9999px">
+                        ⚡ v0.4.7-beta (Latest Release)
+                    </button>
+                    <button class="tab-btn" id="btn-ver-041" onclick="switchVersionDisplay('0.4.1')" style="font-size:0.88rem;padding:8px 18px;border-radius:9999px">
+                        📦 v0.4.1-beta (Previous Stable Release)
+                    </button>
                 </div>
-                
-                <div class="fix-card" id="fix-card-hdr">
-                    <div class="fix-icon">🖥️</div>
-                    <h3>HDR / EDR Fix</h3>
-                    <p>Stop HDR flicker and faded colors. Locks EDR to stable 3.08-4.0 range on Tiger Lake Iris Xe OLED panels.</p>
-                    <button class="fix-btn" onclick="fixHDR()">Fix HDR Flicker</button>
-                    <div class="fix-status" id="status-hdr">Waiting...</div>
-                </div>
-                
-                <div class="fix-card" id="fix-card-sleep">
-                    <div class="fix-icon">💤</div>
-                    <h3>Sleep & Wake Fix</h3>
-                    <p>Fix black screen after sleep and wake failure after 30+ seconds. Adds darkwake=0 and proper link-training keep-alive.</p>
-                    <button class="fix-btn" onclick="fixSleep()">Fix Sleep/Wake</button>
-                    <div class="fix-status" id="status-sleep">Waiting...</div>
-                </div>
-                
-                <div class="fix-card" id="fix-card-gpu">
-                    <div class="fix-icon">🎮</div>
-                    <h3>GPU Stability</h3>
-                    <p>Fix WindowServer watchdog panics, GPU restarts, and shutdown stalls on Intel Iris Xe Tiger Lake.</p>
-                    <button class="fix-btn" onclick="fixGPU()">Fix GPU Stability</button>
-                    <div class="fix-status" id="status-gpu">Waiting...</div>
-                </div>
-                
-                <div class="fix-card" id="fix-card-fan">
-                    <div class="fix-icon">🌀</div>
-                    <h3>Fan RPM Control</h3>
-                    <p>Fix fan RPM reading and control. Resolves fan not spinning or stuck at max RPM.</p>
-                    <button class="fix-btn" onclick="fixFan()">Fix Fan RPM</button>
-                    <div class="fix-status" id="status-fan">Waiting...</div>
-                </div>
-                
-                <div class="fix-card" id="fix-card-all">
-                    <div class="fix-icon">⚡</div>
-                    <h3>Apply All Fixes</h3>
-                    <p>Apply all Hackintosh patches and device fixes in one click. Recommended for first-time setup.</p>
-                    <button class="fix-btn fix-all-btn" onclick="fixAll()">🚀 FIX EVERYTHING</button>
-                    <div class="fix-status" id="status-all">Waiting...</div>
+
+                <!-- Platform Filter Tabs -->
+                <div class="platform-tabs" id="platform-tabs">
+                    <button class="tab-btn active" data-filter="all">All Platforms</button>
+                    <button class="tab-btn" data-filter="android">🤖 Android</button>
+                    <button class="tab-btn" data-filter="mac">🍎 macOS</button>
+                    <button class="tab-btn" data-filter="windows">🪟 Windows</button>
+                    <button class="tab-btn" data-filter="ios">📱 iOS / iPhone</button>
+                    <button class="tab-btn" data-filter="source">📦 Source Code</button>
                 </div>
             </div>
-            
-            <div class="rollback-note">
-                <p><strong>⚠️ Safety:</strong> All changes are backed up automatically. Rollback available if anything goes wrong.</p>
-                <button class="rollback-btn" onclick="rollbackAll()">🔄 Rollback All Changes</button>
+
+            <!-- Platform Cards Grid: v0.4.7-beta (Latest) -->
+            <div class="platform-grid" id="latest-042-grid">
+
+                <!-- 1. Android Card -->
+                <div class="card platform-card android-card" data-platform="android">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top">Dual Signed: APK v1 (JAR) + v2</div>
+                    <div class="card-icon-wrap android-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 0 0-.1521-.5676.416.416 0 0 0-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.1218 12 8.1218s-3.5902.2898-5.1368.8279L4.8409 5.4467a.4161.4161 0 0 0-.5677-.1521.4157.4157 0 0 0-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Android Package</h3>
+                    <p class="platform-target">Android 8.0 Oreo to Android 17+ (API 26–34+)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.7-beta (Build 12)</span>
+                        <span class="spec-tag">1.08 MB</span>
+                        <span class="spec-tag">4-byte Aligned</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>🩺 <strong>Hardware Fan Diagnostics:</strong> Password-protected fan health &amp; sensor diagnostic sweep</li>
+                        <li>☁️ <strong>Inbuilt Private Drive Sync:</strong> Directly auto-uploads reports to <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>)</li>
+                        <li>📁 <strong>Priority 1 File Sharing:</strong> AirDrop &amp; Quick Share hub with UDP port 8766 radar scanning</li>
+                        <li>📱 <strong>Priority 2 Mobile Controls:</strong> Direct volume &amp; brightness sliders, bounded Keep-Awake toggle</li>
+                        <li>📶 <strong>Dual-Mode Connectivity:</strong> Seamless internet access over both Mobile Data &amp; Wi-Fi</li>
+                        <li>💾 <strong>Scoped MediaStore Auto-Save:</strong> Automatically writes diagnostic reports to <code>Download/KL-06/logs/</code></li>
+                        <li>⚙️ <strong>Priority 3 "Etc" PC Tools:</strong> Mac &amp; Win fan monitoring, HWiNFO sensor CSV graphs &amp; tweaks</li>
+                        <li>🚀 <strong>In-App Software Update:</strong> Inbuilt OTA updates directly inside the app with PackageInstaller handoff</li>
+                        <li>✅ <strong>Dual APK v1+v2 Signing:</strong> Persistent RSA-2048 lineage &amp; 4KB page alignment prevents update conflicts</li>
+                        <li>🔒 <strong>6-Digit Mutual PIN Pairing:</strong> Automatic pairing consent popup across same Wi-Fi / Hotspot</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Direct Download Package ZIP (1.08 MB)
+                        </a>
+                        <a href="https://drive.google.com/uc?id=1IqEQJneefBF9iXS8Zy8HI2DeTe6kAzMP&export=download" class="btn btn-outline btn-block" style="border-color:#10b981;color:#10b981">
+                            ⬇️ Direct Download APK (1.12 MB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-android">ea33a75776d954a7707f909b6e896720dfef3fb273a23b2bde3cc269fb81d060</code>
+                        <button class="btn-copy" onclick="copyText('ea33a75776d954a7707f909b6e896720dfef3fb273a23b2bde3cc269fb81d060', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 2. macOS Card -->
+                <div class="card platform-card mac-card" data-platform="mac">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top">Native AppKit / Metal</div>
+                    <div class="card-icon-wrap mac-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.64-.78 1.08-1.86.96-2.94-.93.04-2.06.62-2.73 1.4-.58.68-1.1 1.77-.96 2.83 1.04.08 2.09-.51 2.73-1.29z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">macOS App Bundle</h3>
+                    <p class="platform-target">macOS 13.0+ Ventura, Sonoma, Sequoia (x86_64 / Rosetta 2)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.7-beta (Build 12)</span>
+                        <span class="spec-tag">215 KB</span>
+                        <span class="spec-tag">Intel &amp; Apple Silicon</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Full native AppKit / Carbon / IOKit menu bar companion</li>
+                        <li>🛠️ <strong>Tiger Lake Fix Suite + Lilu C++ Kern:</strong> Metal GPU, HDR leaf2, Sleep/Wake, AWDL AirDrop</li>
+                        <li>🚀 <strong>Includes OPEN-KL06.command:</strong> 1-click double-click launcher automatically removes Gatekeeper quarantine lock!</li>
+                        <li>⌨️ Global F13 hotkey (PrtSc &rarr; toggle show/hide)</li>
+                        <li>🔆 Native OLED &amp; DPCD brightness slider</li>
+                        <li>🔊 CoreAudio default output volume scalar</li>
+                        <li>🛡️ Zero unsafe SMC/EC writes, automatic EFI backup</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Direct Download macOS Bundle (215 KB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                        <a href="fix-app.html" class="btn btn-outline btn-block" style="margin-top:6px;border-color:#38bdf8;color:#38bdf8">
+                            🛠️ Open Web Fix App &amp; Script (One-Click)
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-mac">d8783b07bf73165770439ceca71f8017f0a899a4b437ef64f09ca2eb25320748</code>
+                        <button class="btn-copy" onclick="copyText('d8783b07bf73165770439ceca71f8017f0a899a4b437ef64f09ca2eb25320748', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 3. Windows Card -->
+                <div class="card platform-card win-card" data-platform="windows">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top">x64 .NET 10 + WebView2</div>
+                    <div class="card-icon-wrap win-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Windows x64 Package</h3>
+                    <p class="platform-target">Windows 7 SP1, Windows 8, 8.1, 10, 11 (64-bit)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.7-beta (Build 12)</span>
+                        <span class="spec-tag">582 KB</span>
+                        <span class="spec-tag">WebView2 Engine</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ System tray companion and floating dashboard</li>
+                        <li>🔒 6-digit mutual PIN pairing with phone</li>
+                        <li>📡 Multi-device peer sharing over Wi-Fi / Hotspot</li>
+                        <li>🎛️ Windows volume, display &amp; system power telemetry</li>
+                        <li>🛡️ Zero telemetry, sandboxed local execution</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Direct Download Windows x64 (582 KB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-win">976d460cb75a4953186dfc710f69fdecdac655b4f510779ea2efeb00c8b9dbee</code>
+                        <button class="btn-copy" onclick="copyText('976d460cb75a4953186dfc710f69fdecdac655b4f510779ea2efeb00c8b9dbee', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 4. iOS Card -->
+                <div class="card platform-card ios-card" data-platform="ios">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top">Swift + WKWebView</div>
+                    <div class="card-icon-wrap ios-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M15.5 1h-8A2.5 2.5 0 0 0 5 3.5v17A2.5 2.5 0 0 0 7.5 23h8a2.5 2.5 0 0 0 2.5-2.5v-17A2.5 2.5 0 0 0 15.5 1zm-4 20.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5-3.5H7.5a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v14a.5.5 0 0 1-.5.5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">iOS Mobile Companion</h3>
+                    <p class="platform-target">iPhone &amp; iPad (iOS 16.0 to 18+)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.7-beta (Build 12)</span>
+                        <span class="spec-tag">Prebuilt IPA</span>
+                        <span class="spec-tag">Pinned TLS</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Native WKWebView bridge with pinned TLS certificate</li>
+                        <li>📲 AirDrop / Quick Share peer file receiver &amp; sender</li>
+                        <li>📂 UIDocumentPickerDelegate native file selection in Swift</li>
+                        <li>🔒 6-digit mutual PIN authentication with code normalization</li>
+                        <li>🛠️ Prebuilt IPA included for Sideloadly / AltStore / devicectl</li>
+                        <li>🛡️ Zero ATS bypass, zero broad privacy permissions</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Direct Download iOS IPA (263 KB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                        <a href="https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block" style="margin-top:6px">
+                            🛠️ View INSTALL-IOS.command
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-ios">69ea66799d1207a2b2395e8339fc6b2c2af2d473026dd475dc205b9ee9481fb3</code>
+                        <button class="btn-copy" onclick="copyText('69ea66799d1207a2b2395e8339fc6b2c2af2d473026dd475dc205b9ee9481fb3', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 5. Source Archive Card -->
+                <div class="card platform-card source-card" data-platform="source">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top">Build-Ready 100% Verified</div>
+                    <div class="card-icon-wrap source-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Complete Source Code</h3>
+                    <p class="platform-target">All Platforms (Mac, Win, Android, iOS)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.7-beta (Build 12)</span>
+                        <span class="spec-tag">2.08 MB</span>
+                        <span class="spec-tag">154 Files</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Complete clean repository snapshot with Tiger Lake Lilu C++ kernel patch</li>
+                        <li>🧪 100% passing portable test assertions (Node, Python, C)</li>
+                        <li>📋 Includes SOURCE-MANIFEST.json &amp; SHA256SUMS</li>
+                        <li>🔑 Android APK v2 signing &amp; zipalign scripts included</li>
+                        <li>📜 Full documentation, architecture &amp; ecosystem specs</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1Cr1CfdnSG5COgBHqu1A-csr85XszDowC&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Direct Download Source ZIP (2.08 MB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Cr1CfdnSG5COgBHqu1A-csr85XszDowC/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-source">0d215bddc6cf939dcb52562b575e6cccc1be6f820f4078fc0ce569e2dd992c9c</code>
+                        <button class="btn-copy" onclick="copyText('0d215bddc6cf939dcb52562b575e6cccc1be6f820f4078fc0ce569e2dd992c9c', this)">Copy</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Platform Cards Grid: v0.4.1-beta (Previous Stable Release Archive) -->
+            <div class="platform-grid" id="archive-041-section" style="display:none;margin-top:20px">
+
+                <!-- 1. Android Card v0.4.1 -->
+                <div class="card platform-card android-card" data-platform="android">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap android-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 0 0-.1521-.5676.416.416 0 0 0-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.1218 12 8.1218s-3.5902.2898-5.1368.8279L4.8409 5.4467a.4161.4161 0 0 0-.5677-.1521.4157.4157 0 0 0-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Android Package (v0.4.1)</h3>
+                    <p class="platform-target">Android 8.0 Oreo to Android 17+ (API 26–34+)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">1.07 MB</span>
+                        <span class="spec-tag">4-byte Aligned</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>📡 Real-time UDP &amp; TLS companion peer discovery on port 8766</li>
+                        <li>📥 Scoped MediaStore storage writing to Download/KL-06/logs/</li>
+                        <li>🔒 6-digit PIN pairing consent with dual APK v1+v2 signing</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 APK Package (1.07 MB)
+                        </a>
+                        <a href="https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-android-v041">9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c</code>
+                        <button class="btn-copy" onclick="copyText('9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 2. macOS Card v0.4.1 -->
+                <div class="card platform-card mac-card" data-platform="mac">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap mac-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.64-.78 1.08-1.86.96-2.94-.93.04-2.06.62-2.73 1.4-.58.68-1.1 1.77-.96 2.83 1.04.08 2.09-.51 2.73-1.29z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">macOS Bundle (v0.4.1)</h3>
+                    <p class="platform-target">macOS 13.0+ Ventura, Sonoma, Sequoia (x86_64)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">196 KB</span>
+                        <span class="spec-tag">Intel &amp; Apple Silicon</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Native menu bar companion with 6-digit PIN display</li>
+                        <li>🔊 CoreAudio volume scalar &amp; OLED brightness control</li>
+                        <li>🛡️ Signed catalog integrity validation</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 macOS Bundle
+                        </a>
+                        <a href="https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-mac-v041">8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0</code>
+                        <button class="btn-copy" onclick="copyText('8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 3. Windows Card v0.4.1 -->
+                <div class="card platform-card win-card" data-platform="windows">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap win-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.401H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Windows x64 (v0.4.1)</h3>
+                    <p class="platform-target">Windows 7 SP1, Windows 8, 8.1, 10, 11 (64-bit)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">553 KB</span>
+                        <span class="spec-tag">WebView2 Engine</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ System tray companion and floating dashboard</li>
+                        <li>🔒 6-digit mutual PIN pairing with phone</li>
+                        <li>🛡️ Zero telemetry, sandboxed local execution</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 Windows x64
+                        </a>
+                        <a href="https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-win-v041">3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c</code>
+                        <button class="btn-copy" onclick="copyText('3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c', this)">Copy</button>
+                    </div>
+                </div>
+
+                <!-- 4. Source Archive Card v0.4.1 -->
+                <div class="card platform-card source-card" data-platform="source">
+                    <div class="card-glow"></div>
+                    <div class="card-badge-top" style="background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)">Release Archive: v0.4.1-beta</div>
+                    <div class="card-icon-wrap source-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="platform-name">Complete Source Code (v0.4.1)</h3>
+                    <p class="platform-target">All Platforms (Mac, Win, Android, iOS)</p>
+                    <div class="card-specs">
+                        <span class="spec-tag">v0.4.1-beta (Build 8)</span>
+                        <span class="spec-tag">1.88 MB</span>
+                        <span class="spec-tag">143 Files</span>
+                    </div>
+                    <ul class="card-features">
+                        <li>⚡ Complete clean repository snapshot for v0.4.1-beta</li>
+                        <li>📋 Includes SOURCE-MANIFEST.json &amp; SHA256SUMS</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download" class="btn btn-primary btn-block">
+                            ⬇️ Download v0.4.1 Source ZIP
+                        </a>
+                        <a href="https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                            Google Drive Mirror
+                        </a>
+                    </div>
+
+                    <div class="hash-box">
+                        <span class="hash-label">SHA-256 Checksum:</span>
+                        <code class="hash-code" id="hash-source-v041">328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073</code>
+                        <button class="btn-copy" onclick="copyText('328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073', this)">Copy</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section">
+    <!-- Progressive OS Version & Feature Matrix Section -->
+    <section class="section progressive-section" id="progressive-features">
         <div class="container">
-            <h2>Why KL-06 Manager?</h2>
+            <div class="section-header text-center">
+                <span class="section-pill">ADAPTIVE ECOSYSTEM INTELLIGENCE</span>
+                <h2 class="section-title">Progressive Features Across OS Generations</h2>
+                <p class="section-subtitle">
+                    KL-06 Manager dynamically unlocks new capabilities as your operating system advances. Older versions enjoy rock-solid backward compatibility down to the baseline minimum, while modern systems leverage next-generation platform APIs.
+                </p>
+            </div>
+
+            <div class="version-explorer-wrap">
+                <div class="ver-category-header">
+                    <span class="ver-group-label">🤖 Android Range (Minimum: Android 8.0 Oreo):</span>
+                    <div class="ver-pills-row">
+                        <button class="ver-pill" data-ver="android-8-9" onclick="selectProgressiveVersion('android-8-9')">Android 8 &amp; 9</button>
+                        <button class="ver-pill" data-ver="android-10-11" onclick="selectProgressiveVersion('android-10-11')">Android 10 &amp; 11</button>
+                        <button class="ver-pill" data-ver="android-12" onclick="selectProgressiveVersion('android-12')">Android 12 / 12L</button>
+                        <button class="ver-pill active" data-ver="android-13" onclick="selectProgressiveVersion('android-13')">Android 13 (Fixed)</button>
+                        <button class="ver-pill" data-ver="android-14-15" onclick="selectProgressiveVersion('android-14-15')">Android 14 &amp; 15</button>
+                        <button class="ver-pill" data-ver="android-16-17" onclick="selectProgressiveVersion('android-16-17')">Android 16, 17+</button>
+                    </div>
+                </div>
+
+                <div class="ver-category-header">
+                    <span class="ver-group-label">🍎 Apple &amp; 🪟 Windows Ranges:</span>
+                    <div class="ver-pills-row">
+                        <button class="ver-pill" data-ver="ios-16" onclick="selectProgressiveVersion('ios-16')">iOS 16 (Min)</button>
+                        <button class="ver-pill" data-ver="ios-17-18" onclick="selectProgressiveVersion('ios-17-18')">iOS 17 &amp; 18+</button>
+                        <button class="ver-pill" data-ver="macos-13" onclick="selectProgressiveVersion('macos-13')">macOS 13 (Min)</button>
+                        <button class="ver-pill" data-ver="macos-14-15" onclick="selectProgressiveVersion('macos-14-15')">macOS 14 &amp; 15+</button>
+                        <button class="ver-pill" data-ver="win-7-8" onclick="selectProgressiveVersion('win-7-8')">Windows 7 / 8 / 8.1</button>
+                        <button class="ver-pill" data-ver="win-10-11" onclick="selectProgressiveVersion('win-10-11')">Windows 10 &amp; 11</button>
+                    </div>
+                </div>
+
+                <div class="card prog-display-card">
+                    <div class="prog-card-header">
+                        <div>
+                            <h3 class="prog-title" id="prog-title">Android 13 Tiramisu (API 33) — Tested &amp; Verified</h3>
+                            <p class="prog-subtitle">Progressive capability profile &amp; security posture</p>
+                        </div>
+                        <span class="prog-badge" id="prog-badge">Auto-Pair Consent Modal &amp; Dual v1/v2 Fixed</span>
+                    </div>
+                    <div class="prog-card-body">
+                        <ul class="prog-list" id="prog-list">
+                            <li>✅ PackageParser Installation Fix: Dual v1 (JAR) + v2 signing with REL release codename</li>
+                            <li>🔔 Runtime POST_NOTIFICATIONS transfer progress alerts</li>
+                            <li>💬 Auto-Pair incoming consent prompt dialog with Accept &amp; Connect</li>
+                            <li>🔒 6-digit mutual PIN confirmation with 60-second validity window</li>
+                            <li>🖼️ Granular photo and document picker integration without broad storage access</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Live Radar & PIN Demo Section -->
+    <section id="radar-demo" class="section radar-demo-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-pill">LIVE RADAR &amp; PROTOCOL ENGINE</span>
+                <h2 class="section-title">Seamless Multi-Device Auto-Discovery</h2>
+                <p class="section-subtitle">
+                    Experience how KL-06 Manager discovers nearby devices over Wi-Fi, Hotspot, Bluetooth Beacons, and NFC Beam.
+                </p>
+            </div>
+
+            <div class="radar-interactive-container">
+                <div class="radar-box">
+                    <div class="radar-canvas" id="interactive-radar">
+                        <div class="radar-grid-line h-line"></div>
+                        <div class="radar-grid-line v-line"></div>
+                        <div class="radar-ring r1"></div>
+                        <div class="radar-ring r2"></div>
+                        <div class="radar-ring r3"></div>
+                        <div class="radar-sweep-anim"></div>
+                        <div class="radar-center-hub">
+                            <span class="hub-label">THIS DEVICE</span>
+                        </div>
+
+                        <!-- Interactive Radar Nodes -->
+                        <div class="live-radar-peer peer-1" onclick="showPeerModal('Kaushal’s VivoBook (macOS)', 'Wi-Fi 5GHz', '192.168.1.100')">
+                            <span class="peer-dot"></span>
+                            <span class="peer-name">💻 VivoBook (Mac)</span>
+                        </div>
+                        <div class="live-radar-peer peer-2" onclick="showPeerModal('Kaushal’s Phone (Android)', 'Hotspot / BLE', '192.168.1.104')">
+                            <span class="peer-dot"></span>
+                            <span class="peer-name">📱 Android Phone</span>
+                        </div>
+                        <div class="live-radar-peer peer-3" onclick="showPeerModal('Kaushal’s iPhone 14 Pro Max', 'Wi-Fi / NFC', '192.168.1.105')">
+                            <span class="peer-dot"></span>
+                            <span class="peer-name">📱 iPhone 14 Pro</span>
+                        </div>
+                    </div>
+
+                    <div class="radar-controls-panel">
+                        <h4 class="panel-title">Discovery Protocol Controls</h4>
+                        <p class="panel-desc">Simulate live protocol scanning &amp; mutual pairing:</p>
+                        
+                        <div class="protocol-toggles">
+                            <button class="proto-btn active" id="btn-proto-wifi">📶 Wi-Fi LAN</button>
+                            <button class="proto-btn active" id="btn-proto-hotspot">🔥 Hotspot</button>
+                            <button class="proto-btn active" id="btn-proto-ble">📡 Bluetooth</button>
+                            <button class="proto-btn active" id="btn-proto-nfc">🏷️ NFC Beam</button>
+                        </div>
+
+                        <div class="pin-interactive-box">
+                            <div class="pin-label-row">
+                                <span>6-Digit Pairing Code:</span>
+                                <span class="badge-tag" id="demo-pin-timer">Active (59s)</span>
+                            </div>
+                            <div class="demo-pin-display" id="demo-pin-code">741 852</div>
+                            <div class="pin-actions-row">
+                                <button class="btn btn-primary btn-sm" id="btn-gen-demo-pin">Regenerate PIN</button>
+                                <button class="btn btn-outline btn-sm" onclick="copyText(document.getElementById('demo-pin-code').innerText, this)">Copy Code</button>
+                            </div>
+                        </div>
+
+                        <div class="consent-preview-box">
+                            <span class="preview-tag">Auto-Pair Consent Modal Preview</span>
+                            <p class="consent-desc">When 2+ devices are near each other on Wi-Fi, this modal asks permission before transferring:</p>
+                            <button class="btn btn-accent btn-sm" onclick="triggerConsentModalDemo()">🔔 Test Incoming Auto-Pair Alert</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Ecosystem Features -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-pill">POWERFUL CAPABILITIES</span>
+                <h2 class="section-title">Built for Performance, Speed &amp; Privacy</h2>
+                <p class="section-subtitle">Everything you need to orchestrate your Hackintosh laptop, PC, and mobile companion effortlessly.</p>
+            </div>
+
             <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Auto Updates</h3>
-                    <p>App automatically checks GitHub releases for new versions and notifies you.</p>
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-blue">🔄</div>
+                    <h3 class="feature-title">Universal AirDrop / Quick Share</h3>
+                    <p class="feature-text">Seamless two-way chunked file transfer between Android and macOS, Windows, and iPhone. Streamed with SHA-256 chunk validation.</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">📱</div>
-                    <h3>Cross-Platform</h3>
-                    <p>Same account and data across Mac, Windows, Android, and iPhone.</p>
+
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-purple">🔒</div>
+                    <h3 class="feature-title">6-Digit PIN Authentication</h3>
+                    <p class="feature-text">Devices never connect silently without consent. Generates a cryptographically strong 6-digit PIN with monotonic 60s expiration.</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Fast & Light</h3>
-                    <p>Optimized for performance on all devices.</p>
+
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-green">📱</div>
+                    <h3 class="feature-title">Single-Page Mobile Dashboard</h3>
+                    <p class="feature-text">All phone telemetry, live radar waves, hardware switches (brightness, volume, keep-awake), and laptop controls unified on one screen.</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Secure</h3>
-                    <p>Your data is encrypted and stays private.</p>
+
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-cyan">⌨️</div>
+                    <h3 class="feature-title">Global F13 Hotkey Support</h3>
+                    <p class="feature-text">Map Print Screen (PrtSc) key directly to macOS F13 with zero lag to instantly summon or dismiss the companion window.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-amber">🔆</div>
+                    <h3 class="feature-title">OLED &amp; DPCD Brightness Control</h3>
+                    <p class="feature-text">Native Intel Iris Xe OLED brightness slider without modifying system kexts or breaking WhateverXe 0.8.2 graphics acceleration.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-glow icon-red">🛡️</div>
+                    <h3 class="feature-title">Non-Invasive Safety Architecture</h3>
+                    <p class="feature-text">Zero SMC/EC writes, zero persistent pmset changes, strict allowlisted IPC endpoints, and offline local network operation.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Updates Section -->
-    <section id="updates" class="updates-section">
+    <!-- Verified Target Screenshots Showcase -->
+    <section id="screenshots" class="section screenshots-section">
         <div class="container">
-            <h2>Latest Updates</h2>
-            <div class="update-list" id="update-list">
-                <!-- Updates injected by JS -->
+            <div class="section-header text-center">
+                <span class="section-pill">TARGET-VERIFIED SCREENSHOTS</span>
+                <h2 class="section-title">Tested on ASUS VivoBook K15 OLED (K513EA)</h2>
+                <p class="section-subtitle">Real native execution on macOS Sequoia 15.8.3 with Tiger Lake-U Intel Core i5-1135G7.</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('docs/screenshots/overview.png', 'System Overview & Hardware Telemetry')">
+                    <div class="gallery-img-wrap">
+                        <img src="docs/screenshots/overview.png" alt="Overview Panel" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span>🔍 Click to View Full Resolution</span>
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>System Overview</h4>
+                        <p>Real-time CPU/GPU load, battery mAh, temperature &amp; fan speed.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox('docs/screenshots/display-and-sound.png', 'Display & Audio Controls')">
+                    <div class="gallery-img-wrap">
+                        <img src="docs/screenshots/display-and-sound.png" alt="Display & Sound Panel" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span>🔍 Click to View Full Resolution</span>
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>Display &amp; Sound</h4>
+                        <p>OLED display slider, CoreAudio volume scalar, and Fn key integration.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox('docs/screenshots/performance.png', 'Performance & Thermal Telemetry')">
+                    <div class="gallery-img-wrap">
+                        <img src="docs/screenshots/performance.png" alt="Performance Panel" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span>🔍 Click to View Full Resolution</span>
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>Performance &amp; Fans</h4>
+                        <p>HWiNFO log import, real-time fan RPM monitoring, and safe presets.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox('docs/screenshots/about.png', 'About & System Capabilities')">
+                    <div class="gallery-img-wrap">
+                        <img src="docs/screenshots/about.png" alt="About Panel" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span>🔍 Click to View Full Resolution</span>
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>About &amp; Security</h4>
+                        <p>Build metadata, verified target hardware report, and license terms.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
+    <!-- Community & Social Section: Discord & YouTube -->
+    <section id="community" class="section community-section">
         <div class="container">
-            <h2>Contact Us</h2>
-            <p>Need help? Reach out to us:</p>
-            <div class="contact-info">
-                <p>📧 support@kl06manager.com</p>
-                <p>🌐 github.com/Kaushal-snap/KL-06-Manager</p>
+            <div class="section-header text-center">
+                <span class="section-pill">JOIN THE COMMUNITY</span>
+                <h2 class="section-title">Connect with Kaushal Labana</h2>
+                <p class="section-subtitle">
+                    Get instant help, talk directly with the developer, suggest new features, and watch installation tutorials.
+                </p>
+            </div>
+
+            <div class="community-grid">
+
+                <!-- Discord Card -->
+                <div class="comm-card discord-card">
+                    <div class="comm-card-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </div>
+                    <div class="comm-badge">Official Discord</div>
+                    <h3 class="comm-title">Discord Community</h3>
+                    <p class="comm-desc">
+                        Connect directly with <strong>Kaushal Labana</strong> on Discord. Get troubleshooting support, report bugs, share Hackintosh EFIs, and test new builds first.
+                    </p>
+                    <div class="comm-user-box">
+                        <span>Discord Username:</span>
+                        <code class="user-code">labanayt5301</code>
+                    </div>
+                    <a href="https://discord.gg/Z4my8c2ZH" target="_blank" rel="noopener noreferrer" class="btn btn-discord btn-block">
+                        Join Discord Server (discord.gg/Z4my8c2ZH)
+                    </a>
+                </div>
+
+                <!-- Email Support Card -->
+                <div class="comm-card email-card">
+                    <div class="comm-card-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                    </div>
+                    <div class="comm-badge">Direct Support</div>
+                    <h3 class="comm-title">Official Support Email</h3>
+                    <p class="comm-desc">
+                        Need help with APK installation, macOS native builds, or Windows setup? Email developer <strong>Kaushal Labana</strong> directly for 24/7 technical support.
+                    </p>
+                    <div class="comm-user-box">
+                        <span>Email Address:</span>
+                        <code class="user-code">labanayt@gmail.com</code>
+                    </div>
+                    <a href="mailto:labanayt@gmail.com" class="btn btn-primary btn-block">
+                        ✉️ Send Email to labanayt@gmail.com
+                    </a>
+                </div>
+
+                <!-- YouTube Card -->
+                <div class="comm-card youtube-card">
+                    <div class="comm-card-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </div>
+                    <div class="comm-badge">YouTube Channel</div>
+                    <h3 class="comm-title">@labanayt Channel</h3>
+                    <p class="comm-desc">
+                        Subscribe to Kaushal’s official YouTube channel for deep dives, installation tutorials, Hackintosh setups, demo videos, and live feature showcases.
+                    </p>
+                    <div class="comm-user-box">
+                        <span>YouTube Channel:</span>
+                        <code class="user-code">@labanayt</code>
+                    </div>
+                    <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM" target="_blank" rel="noopener noreferrer" class="btn btn-youtube btn-block">
+                        Subscribe on YouTube (@labanayt)
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>
+
+    <!-- About Creator: Kaushal Labana -->
+    <section id="about-creator" class="section creator-section">
+        <div class="container">
+            <div class="creator-card">
+                <div class="creator-avatar-wrap">
+                    <div class="creator-avatar-glow"></div>
+                    <div class="creator-avatar">
+                        <span>KL</span>
+                    </div>
+                </div>
+                <div class="creator-content">
+                    <span class="creator-role">Lead Architect &amp; Developer</span>
+                    <h2 class="creator-name">Kaushal Labana</h2>
+                    <p class="creator-bio">
+                        Creator and lead engineer of <strong>KL-06 Manager</strong>. Specialized in Hackintosh kernel configurations, Intel Iris Xe graphics optimization, low-level macOS system programming, cross-platform Android/Windows companion frameworks, and secure multi-protocol networking.
+                    </p>
+                    <div class="creator-links">
+                        <a href="mailto:labanayt@gmail.com" class="creator-btn">
+                            ✉️ Email: <strong>labanayt@gmail.com</strong>
+                        </a>
+                        <a href="https://discord.gg/Z4my8c2ZH" target="_blank" rel="noopener noreferrer" class="creator-btn">
+                            💬 Discord: <strong>labanayt5301</strong>
+                        </a>
+                        <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM" target="_blank" rel="noopener noreferrer" class="creator-btn">
+                            ▶️ YouTube: <strong>@labanayt</strong>
+                        </a>
+                        <a href="https://github.com/Kaushal-snap" target="_blank" rel="noopener noreferrer" class="creator-btn">
+                            🐙 GitHub: <strong>Kaushal-snap</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consent Alert Modal Simulation (Interactive) -->
+    <div class="modal-backdrop" id="consent-modal">
+        <div class="consent-dialog">
+            <div class="consent-header">
+                <div class="consent-radar-pulse"></div>
+                <span class="consent-title">Incoming Pairing Request</span>
+            </div>
+            <div class="consent-device-box">
+                <div class="device-icon-large">📱</div>
+                <div class="device-meta-col">
+                    <h4 id="consent-peer-name">Kaushal’s Phone (Android)</h4>
+                    <span class="device-sub" id="consent-peer-sub">Nearby on Same Wi-Fi (192.168.1.104)</span>
+                    <span class="device-code-label">Pairing Code: <strong id="consent-pin-display">741 852</strong></span>
+                </div>
+            </div>
+            <p class="consent-prompt">Do you want to accept this connection and enable seamless file sharing?</p>
+            <div class="consent-buttons">
+                <button class="btn btn-outline" onclick="closeConsentModal(false)">Decline</button>
+                <button class="btn btn-primary" onclick="closeConsentModal(true)">Accept &amp; Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal for Screenshots -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="Screenshot">
+        <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; <span id="year">2026</span> KL-06 Manager. All rights reserved.</p>
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="footer-title">KL-06 <span class="gradient-text">Manager</span></span>
+                    <p class="footer-desc">
+                        Universal multi-device ecosystem companion engineered by <strong>Kaushal Labana</strong>.
+                    </p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Ecosystem Downloads (v0.4.7)</h4>
+                    <ul>
+                        <li><a href="https://drive.google.com/uc?id=1CivkD7fE-cYzsB3QoR-_U_Ch3-X_8Phe&export=download">Android Package (v0.4.7)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1fW9rrtgdcmDmAB2KYtYcuPiPCA6wR8-E&export=download">macOS App Bundle (v0.4.7)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1d9u33kbZU2XQM5a_8lnDBakwsorfrcsn&export=download">Windows x64 Package (v0.4.7)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1bBhrwNg8DDq50P-mFWXYqa4toWZWZSV2&export=download">iOS Mobile IPA (v0.4.7)</a></li>
+                        <li><a href="fix-app.html">macOS Fix Dashboard (Web App)</a></li>
+                        <li><a href="https://github.com/Kaushal-snap/KL-06-Manager/blob/main/macos/KL-06-Fix-All.sh">Terminal Fix Script (KL-06-Fix-All.sh)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1Cr1CfdnSG5COgBHqu1A-csr85XszDowC&export=download" id="footer-source-link">Full Source Code (v0.4.7)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Archive Downloads (v0.4.1)</h4>
+                    <ul>
+                        <li><a href="https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download">Android Package (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download">macOS App Bundle (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download">Windows x64 (v0.4.1)</a></li>
+                        <li><a href="https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download">Source ZIP (v0.4.1)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Connect with Kaushal</h4>
+                    <ul>
+                        <li><a href="mailto:labanayt@gmail.com">Email: labanayt@gmail.com</a></li>
+                        <li><a href="https://discord.gg/Z4my8c2ZH" target="_blank" rel="noopener noreferrer">Discord: labanayt5301</a></li>
+                        <li><a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM" target="_blank" rel="noopener noreferrer">YouTube: @labanayt</a></li>
+                        <li><a href="https://github.com/Kaushal-snap/KL-06-Manager" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                        <li><a href="https://github.com/Kaushal-snap/KL-06-Manager/releases" target="_blank" rel="noopener noreferrer">Release History</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year">2026</span> <strong>Kaushal Labana</strong>. All Rights Reserved.</p>
+                <p class="footer-security-note">Target-verified on ASUS VivoBook K15 OLED (Tiger Lake-U Core i5-1135G7). No SMC writes • Zero telemetry.</p>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
