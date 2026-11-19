@@ -746,10 +746,10 @@
       "sha256": "1f259b902c840dd80cda7348a3978fd41b8b9a23960b91788edd27d50a8079c9"
     },
     {
-      "bytes": 89220,
+      "bytes": 89206,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "a50d8e04d771abde8a7098d469f12d63ebbd3707e0dbd064a6f08fb0a616b972"
+      "sha256": "591352a9d25daa2418384772d9c594c2f6da11271074a16d7f541f5696a3f499"
     },
     {
       "bytes": 5483,
