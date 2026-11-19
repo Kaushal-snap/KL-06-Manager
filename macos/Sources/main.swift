@@ -271,20 +271,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 UserDefaults.standard.set(mode, forKey: "KL06_FanMode")
                 reply(id, "ASUS cooling fan profile set to \(mode).")
             case "scanPeers":
-                reply(id, [
-                    ["id": "peer-iphone", "name": "Kaushal’s iPhone", "platform": "ios", "model": "iPhone 14 Pro Max", "status": "Available on LAN", "ip": "192.168.1.105"],
-                    ["id": "peer-android", "name": "Android Device", "platform": "android", "model": "Quick Share Ready", "status": "Available on LAN", "ip": "192.168.1.112"],
-                    ["id": "peer-mac", "name": "mac’s MacBook Pro", "platform": "macos", "model": "ASUS KL-06 Host", "status": "Current Host", "ip": "192.168.1.101"],
-                    ["id": "peer-win", "name": "Windows Laptop", "platform": "windows", "model": "WinForms Client", "status": "Companion Active", "ip": "192.168.1.120"]
-                ])
+                // No discovery implementation exists in this macOS candidate. Never return synthetic peers.
+                reply(id, [])
             case "sendPeerFile":
-                guard let peerId = params["peerId"] as? String else { throw ControlError(message: "Peer not selected.") }
-                let panel = NSOpenPanel()
-                panel.allowsMultipleSelection = false
-                panel.canChooseDirectories = false
-                panel.message = "Choose a file to transfer via AirDrop / Quick Share"
-                guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "File selection cancelled.") }
-                reply(id, "File \(url.lastPathComponent) staged and sending to \(peerId) via TLS LAN stream.")
+                throw ControlError(message: "File sending is not implemented in this macOS candidate. No file was selected, staged or sent.")
             case "keepAwake":
                 if awakeTask?.isRunning == true { awakeTask?.terminate(); awakeTask = nil; reply(id, "Temporary idle-sleep assertion stopped."); return }
                 guard confirm("Keep awake for up to 15 minutes?", "This temporarily prevents idle SYSTEM sleep while KL-06 is running. It may increase battery drain. Lid/forced sleep is not overridden. No pmset preference is changed. Stop here or quit the app to release it.") else { throw ControlError(message: "Cancelled.") }
