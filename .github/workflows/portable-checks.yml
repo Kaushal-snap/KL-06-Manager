@@ -55,6 +55,8 @@ jobs:
             -d "{\"state\":\"$STATE\",\"context\":\"KL-06 portable source checks\",\"description\":\"$DESCRIPTION\"}"
 
   apple-native-builds:
+    permissions:
+      contents: read
     runs-on: macos-15-intel
     timeout-minutes: 45
     steps:
@@ -72,6 +74,8 @@ jobs:
         run: /bin/bash ios/BUILD-IOS.command --simulator
 
   android-native-build:
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
