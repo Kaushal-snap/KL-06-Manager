@@ -229,23 +229,18 @@
   }
   function companion(){
     const up=state.updateInfo;
-    const peers = [
-      { id: 'peer-iphone', name: 'Kaushal’s iPhone', platform: 'ios', model: 'iPhone 14 Pro Max', status: 'Available on Wi-Fi', ip: '192.168.1.105' },
-      { id: 'peer-android', name: 'Android Device', platform: 'android', model: 'Quick Share Ready', status: 'Available on Wi-Fi', ip: '192.168.1.112' },
-      { id: 'peer-mac', name: 'mac’s MacBook Pro', platform: 'macos', model: 'ASUS KL-06 Host', status: 'Current Host', ip: '192.168.1.101' },
-      { id: 'peer-win', name: 'Windows Laptop', platform: 'windows', model: 'WinForms Client', status: 'Companion Active', ip: '192.168.1.120' }
-    ];
+    const peers = [];
     return title('Ecosystem Companion & AirDrop / Quick Share','Local Wi-Fi discovery, cross-platform file transfer, and signed OTA updates.')+
       `<div class="two-col"><section class="panel panel-padding"><h2>${state.companion?.running?'Session active · at most 30 minutes':'Companion is off'}</h2><p class="body-copy">Connect your Android or iPhone over local Wi-Fi. View real-time telemetry, send files via AirDrop/Quick Share, and safely control volume or keep-awake with local laptop confirmation.</p><div class="inline-actions">${button('Enable temporary session','companion-start','','secondary',state.companion?.running)}${button('Show pairing details','companion-details','','ghost',!state.companion?.running)}${button('Stop and revoke devices','companion-stop','','ghost',!state.companion?.running)}</div><div class="notice blue"><strong>Security Invariant:</strong> Private TLS pinning, 32-character random pair code, and explicit desktop confirmation for all changes. No cloud relays, root helpers, firewall changes, or silent background daemons.</div></section>
-      <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">High-speed, chunked local file transfer across Mac, iPhone, Android, and Windows. Direct TLS streaming with SHA-256 integrity and explicit receiver consent.</p><div class="chip-row" style="margin:12px 0"><span class="chip">iPhone ↔ Android</span><span class="chip">Mac ↔ iPhone</span><span class="chip">Mac ↔ Android</span><span class="chip">Windows ↔ Mobile</span></div><div class="notice">Incoming transfers require explicit laptop approval dialog with file name and size verification.</div></section></div>
+      <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">The desktop broker exposes a private TLS receive endpoint. Android has a native sender; iOS, macOS and Windows transfer directions are not yet end-to-end verified. Bluetooth and cellular relay are not implemented KL-06 transports.</p><div class="chip-row" style="margin:12px 0"><span class="chip">iPhone ↔ Android</span><span class="chip">Mac ↔ iPhone</span><span class="chip">Mac ↔ Android</span><span class="chip">Windows ↔ Mobile</span></div><div class="notice">Incoming transfers require explicit laptop approval dialog with file name and size verification.</div></section></div>
       <section class="panel panel-padding" style="margin-top:20px">
-        <div class="panel-head"><div><h2>Nearby Discovered Devices & PIN Pairing</h2><p>Devices running KL-06 on your trusted Wi-Fi automatically announce and connect.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
+        <div class="panel-head"><div><h2>Nearby Devices (Discovery not enabled in this macOS build)</h2><p>No automatic discovery is enabled in this macOS build. Use the desktop-generated TLS details on the mobile app.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
         <div class="pin-card">
           <div class="pin-code-wrap">
-            <div><small style="display:block;color:var(--muted);margin-bottom:4px">MY 6-DIGIT PAIRING PIN</small><div class="pin-digits">742-910</div></div>
+            <div><small style="display:block;color:var(--muted);margin-bottom:4px">TLS PAIRING DETAILS</small><div class="pin-digits">Not a 6-digit PIN</div></div>
             <div>${button('Copy PIN','copy-pin','','secondary')}</div>
           </div>
-          <div class="pin-meta">Expires in <b>4:45</b><br>Give this PIN to an iPhone or Android phone to auto-authenticate pairing.</div>
+          <div class="pin-meta">Use the HTTPS URL, full certificate SHA-256 fingerprint and 32-character session code displayed by “Show pairing details”.</div>
         </div>
         <div class="detail-grid" style="margin-top:16px">
           ${peers.map(p => `
@@ -302,19 +297,19 @@
     root.innerHTML=`<div class="modal-overlay"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-title">${icon('laptop')}<h2 id="demo-title">Meet the native Mac app.</h2><p>This is a visual preview with illustrative data. It cannot read or change your Mac.</p><p>Build <strong>KL-06 Manager.app</strong> on your Mac using the included <strong>BUILD-MAC.command</strong>, then open it to use supported controls. Firmware controls remain unavailable, not simulated.</p><button class="button" data-action="dismiss">Got it</button></section></div>`;
     root.querySelector('button').focus();
   }
-  async function refresh(){
+  async function refresh(updateUI=false){
     if(document.hidden||busy||refreshInFlight||document.querySelector('#volume:active')||document.querySelector('#brightness:active'))return;
     refreshInFlight=true;
     try{
       const fresh=await provider.request('state');
-      if(fresh?.suspended){stale=true;render();return;}
+      if(fresh?.suspended){stale=true;if(updateUI)render();return;}
       state=fresh;receivedAt=window.performance.now();stale=false;
       const sample=M.cpuSample(state);
       if(isNative&&sample&&(!history.length||sample.uptime>history.at(-1).uptime)){history.push(sample);history=history.slice(-35);}
-      render();
+      if(updateUI)render();
     }catch{
       stale=true;
-      if(!state)render();
+      if(!state&&updateUI)render();
       else{
         const staleWrap=document.getElementById('stale-banner-wrap');
         if(staleWrap)staleWrap.innerHTML='<div class="stale-banner">Local counters are refreshing or temporarily stale.</div>';
@@ -323,7 +318,8 @@
   }
   async function act(method,params={}){
     if(!isNative){demoDialog();return;}
-    if(busy)return;busy=true;render();
+    if(busy)return;busy=true;
+    const busyBadge=document.querySelector('.mode-badge');if(busyBadge)busyBadge.classList.add('busy');
     try{
       const result=await provider.request(method,params);
       if(method==='pickHistoryCSV'){importedHistory=window.KLHistory.parse(result.csvText);historyChannel=0;page='history';toast('Historical Windows numeric channels imported locally. No upload or hardware change.');}
@@ -331,11 +327,11 @@
       else if(method==='setPowerProfile'){state.powerProfile=params.profile;render();toast(typeof result==='string'?result:'Power profile updated.');}
       else if(method==='setBatteryLimit'){state.batteryLimit=params.limit;render();toast(typeof result==='string'?result:'Battery threshold updated.');}
       else if(method==='setFanMode'){state.fanMode=params.mode;render();toast(typeof result==='string'?result:'Fan cooling mode updated.');}
-      else if(method==='scanPeers'){toast('Discovered 4 nearby devices on Wi-Fi: Ready for AirDrop / Quick Share.');}
-      else if(method==='sendPeerFile'){toast(typeof result==='string'?result:'File transfer initiated via TLS.');}
+      else if(method==='scanPeers'){toast(Array.isArray(result)&&result.length?'Peers discovered. Review the real peer list.':'No KL-06 peers discovered. Use direct TLS pairing details instead.');}
+      else if(method==='sendPeerFile'){toast(typeof result==='string'?result:'This macOS build has no file-sending implementation; no file was sent.');}
       else toast(typeof result==='string'?result:'Done.');
     }catch(error){toast(error.message);}
-    finally{busy=false;await refresh();}
+    finally{busy=false;await refresh(true);}
   }
   document.addEventListener('click',ev=>{
     const el=ev.target.closest('button');if(!el||el.disabled)return;
@@ -346,7 +342,7 @@
     switch(el.dataset.action){
       case 'dismiss':document.getElementById('dialog-root').replaceChildren();return;
       case 'theme':light=!light;document.documentElement.classList.toggle('light',light);render();return;
-      case 'refresh':refresh();toast(isNative?'Refreshing local counters.':'Preview data only. No hardware is connected.');return;
+      case 'refresh':refresh(true);toast(isNative?'Refreshing local counters.':'Preview data only. No hardware is connected.');return;
       case 'setting':act('openSetting',{id});return;
       case 'tweak':act('applyTweak',{id});return;
       case 'restore':act('restoreTweak',{id});return;
@@ -394,8 +390,8 @@
     }
   },{passive:true});
   document.addEventListener('keydown',ev=>{if(ev.key==='Escape')document.getElementById('dialog-root').replaceChildren();});
-  document.addEventListener('visibilitychange',()=>{if(isNative&&!document.hidden)refresh();});
-  render();if(isNative){refresh();setInterval(refresh,2000);}
+  document.addEventListener('visibilitychange',()=>{if(isNative&&!document.hidden)refresh(false);});
+  render();if(isNative){refresh(true);setInterval(()=>refresh(false),5000);}
 
   // ============================================================================
   // KL-06 MANAGER — HARDWARE OPTIMIZATION & ARENA AI SUITE
