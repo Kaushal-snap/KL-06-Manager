@@ -364,14 +364,14 @@
         <div class="progress-box" style="margin-top:14px;padding:12px;background:#0d232c;border:1px solid #285463;border-radius:8px">
           <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mint,#34d399);font-weight:bold">
             <span>⚡ Streaming: ${e(transferFileName)}</span>
-            <span>${transferProgress}%</span>
+            <span id="transfer-progress-percent">${transferProgress}%</span>
           </div>
           <div class="progress-meter" style="margin-top:8px;height:8px;background:#15303c;border-radius:4px;overflow:hidden">
-            <div class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
+            <div id="transfer-progress-fill" class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:11px;color:#8ab1bf;margin-top:6px">
             <span>Target: <b>${e(pairedDevice?.name || 'No peer paired')}</b> (${e(transferSpeed)})</span>
-            <span>SHA-256 Verified Stream</span>
+            <span>Waiting for receiver checksum confirmation</span>
           </div>
         </div>
       ` : `
@@ -407,7 +407,7 @@
       <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered LAN companions (not automatically paired)</h3>
       ${isScanning ? `
         <div style="background:#0c1e28;border:1px solid #234b5c;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
-          <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning local Wi-Fi &amp; Hotspot for active KL-06 companions on port 8766...</p>
+          <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning the local Wi-Fi subnet for KL-06 desktop companions on port 8766...</p>
         </div>
       ` : discoveredPeers.length > 0 ? `
         <div class="peer-grid">
@@ -449,7 +449,7 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
           <div>
             <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Companion HTTPS URL</label>
-            <input id="direct-host" type="text" placeholder="https://192.168.1.X:8766" style="width:100%;font-size:12px;font-family:ui-monospace,monospace" value="https://192.168.1.">
+            <input id="direct-host" type="text" placeholder="https://192.168.1.X:8766" style="width:100%;font-size:12px;font-family:ui-monospace,monospace" value="">
           </div>
           <div>
             <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Full Certificate SHA-256 (64 hex)</label>
@@ -515,7 +515,7 @@
         </div>
         <div class="conn-card">
           <strong>📡 Online Network Transports</strong>
-          <small>Mobile Data (${state?.network?.cellular ? 'Active' : 'Standby'}) &amp; Wi-Fi (${state?.network?.wifi ? 'Connected' : 'Active'})</small>
+          <small>KL-06 peer transport: private Wi-Fi LAN only. Bluetooth and cellular relay are not implemented.</small>
         </div>
         <div class="conn-card">
           <strong>☁️ Private Drive Auto-Sync</strong>
@@ -558,7 +558,7 @@
           </a>
         </div>
       </div>
-      <p>Targeted hardware fixes for ASUS VivoBook K15 (Tiger Lake i5-1135G7, Intel Iris Xe 0x9A49, macOS Sequoia 15.8.3, WhateverXe 0.8.2). Resolves AirDrop AWDL dropouts, HDR/EDR flicker, sleep/wake black screens, GPU watchdog panics, and restores fan RPM readings.</p>
+      <p>Read-only diagnostics and platform capability checks for the ASUS VivoBook K15. This page does not install drivers, repair Wi-Fi/Bluetooth, change EFI boot arguments, or restore fan RPM. Unsupported hardware remains unavailable until a tested platform-specific fix exists.</p>
 
       <div class="conn-status-grid" style="margin:12px 0 16px">
         <div class="conn-card">
@@ -985,7 +985,8 @@
   async function act(method, p = {}){
     if (busy) return;
     busy = true;
-    render();
+    const busyBadge = document.getElementById('header-badge');
+    if (busyBadge) busyBadge.textContent = 'WORKING…';
     try {
       const res = await request(method, p);
       if (method === 'pairLaptop') {
@@ -1743,6 +1744,16 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
     } catch(e) {
       addLog('NFC', 'warn', `NFC beam payload: ${payload}`);
     }
+  };
+
+  window.KLTransferProgress = value => {
+    const pct = Number(value);
+    if (!Number.isFinite(pct)) return;
+    transferProgress = Math.max(0, Math.min(100, Math.round(pct)));
+    const label = document.getElementById('transfer-progress-percent');
+    const fill = document.getElementById('transfer-progress-fill');
+    if (label) label.textContent = transferProgress + '%';
+    if (fill) fill.style.width = transferProgress + '%';
   };
 
   window.KLPermissionGranted = function() {
