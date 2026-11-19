@@ -335,6 +335,7 @@ public final class MainActivity extends Activity {
                     String sha256=hex.toString();
 
                     JSONObject init=laptop.transferInit(fileName,fileSize,sha256);
+                    if(!"approved".equals(init.optString("status")))throw new IOException("Desktop did not approve the transfer session.");
                     String transferId=init.getString("transferId");
 
                     try(InputStream in=getContentResolver().openInputStream(u)){
@@ -342,8 +343,9 @@ public final class MainActivity extends Activity {
                         while((n=in.read(b))!=-1){
                             byte[] chunk=n==b.length?b:java.util.Arrays.copyOf(b,n);
                             String b64=android.util.Base64.encodeToString(chunk,android.util.Base64.NO_WRAP);
-                            laptop.transferChunk(transferId,offset,b64);
+                            JSONObject chunkReply=laptop.transferChunk(transferId,offset,b64);
                             offset+=n;
+                            if(offset==fileSize && !"complete".equals(chunkReply.optString("state")))throw new IOException("Desktop did not confirm final SHA-256 verification.");
                             final int pct=(int)((offset*100)/Math.max(1,fileSize));
                             main.post(()->{
                                 if(web!=null)web.evaluateJavascript("if(window.KLTransferProgress)window.KLTransferProgress("+pct+");",null);
