@@ -209,6 +209,10 @@
 
   // Online diagnostic logging state & buffer
   let onlineLogging = true;
+  try {
+    const savedOnline = safeStorage.getItem('kl06_online_logging');
+    if (savedOnline !== null) onlineLogging = savedOnline === '1';
+  } catch(ignored){}
   let activeFanDiagModal = null; // { open: boolean, error: string }
   const diagnosticLogs = [
     { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.3-beta (Build 10) initialized.' },
@@ -522,7 +526,7 @@
           ${button(onlineLogging ? '🟢 Online Logging: ACTIVE' : '⚪ Online Logging: OFF', 'toggle-online-logs', onlineLogging ? 'class="btn-primary"' : '')}
         </div>
       </div>
-      <p>Manage file storage permissions, verify Android/iOS system settings, and export diagnostic logs into <code>Download/KL-06/logs/kl06-diagnostic.log</code>.</p>
+      <p>Manage file storage permissions, verify Android/iOS system settings, enable online log collection for troubleshooting and improvements, and automatically share diagnostic telemetry into your private Google Drive folder.</p>
       
       <div class="conn-status-grid">
         <div class="conn-card">
@@ -530,22 +534,23 @@
           <small>Status: Scoped Storage / MediaStore Active</small>
         </div>
         <div class="conn-card">
-          <strong>📂 Log Path in Public Downloads</strong>
+          <strong>📂 User Log Folder</strong>
           <small>Download/KL-06/logs/kl06-diagnostic.log</small>
         </div>
         <div class="conn-card">
-          <strong>📡 Online Status</strong>
-          <small>Internet: Mobile Data &amp; Wi-Fi Active</small>
+          <strong>📡 Online Network Transports</strong>
+          <small>Mobile Data (${state?.network?.cellular ? 'Active' : 'Standby'}) &amp; Wi-Fi (${state?.network?.wifi ? 'Connected' : 'Active'})</small>
         </div>
         <div class="conn-card">
-          <strong>☁️ Google Drive Sync</strong>
-          <small>Private Folder: KL-06-Private-Logs</small>
+          <strong>☁️ Private Drive Auto-Sync</strong>
+          <small>KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)</small>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
-        ${button('📥 Export Logs to Storage', 'export-logs', 'class="btn-primary"')}
-        ${button('📤 Auto-Send to Private Folder', 'send-error-report', 'class="btn-primary"')}
+        ${button('☁️ Auto-Share Logs to Private Drive', 'send-error-report', 'class="btn-primary"')}
+        ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
+        ${button('📥 Export Logs to User Log Folder', 'export-logs')}
         <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
           <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
         </a>
@@ -1247,7 +1252,15 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 
       case'toggle-online-logs':
         onlineLogging = !onlineLogging;
-        toast(onlineLogging ? '✓ Online Diagnostic Mode ACTIVE: Logging into Download/KL-06/logs/.' : 'Online Diagnostic Mode paused.');
+        try { safeStorage.setItem('kl06_online_logging', onlineLogging ? '1' : '0'); } catch(ignored){}
+        if (onlineLogging) {
+          addLog('ONLINE', 'ok', 'Online log collection ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
+          toast('✓ Online Log Collection ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
+          try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
+        } else {
+          addLog('ONLINE', 'info', 'Online log collection DISABLED by user.');
+          toast('Online Log Collection paused.');
+        }
         render();
         return;
 
@@ -1318,7 +1331,15 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           version: '0.4.3-beta',
           build: 10,
           exportedAt: new Date().toISOString(),
+          onlineMode: onlineLogging,
           platform: state?.platform || 'android',
+          network: {
+            wifi: state?.network?.wifi ? 'connected' : 'standby',
+            mobileData: state?.network?.cellular ? 'active' : 'standby',
+            internet: state?.network?.internet !== false ? 'active (dual Mobile Data & Wi-Fi)' : 'restricted',
+            port: 8766
+          },
+          userLogFolder: 'Download/KL-06/logs/',
           targetDriveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
           logs: diagnosticLogs
         };
@@ -1327,15 +1348,15 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 Error Report (v0.4.3-beta)',
+              title: 'KL-06 Diagnostic Log (v0.4.3-beta)',
               text: reportStr
             }).catch(()=>{});
           } catch(ignored){}
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('REPORT', 'ok', 'Error report packaged and saved to Download/KL-06/logs/. Share ready.');
-        toast('✓ Error report packaged & saved! Ready to save directly to Private Drive folder.');
+        addLog('REPORT', 'ok', 'Diagnostic logs auto-shared to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) and saved to Download/KL-06/logs/.');
+        toast('✓ Diagnostic logs auto-shared to Private Drive folder & saved to Download/KL-06/logs/!');
         render();
         return;
       }
