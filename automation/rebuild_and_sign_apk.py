@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 BASE_APK_CANDIDATES = [
     Path("/tmp/orig_apk/KL-06-Manager.apk"),
     Path("/tmp/v3_apk/KL-06-Manager.apk"),
+    ROOT / "google_drive" / "KL-06-Manager.apk",
     ROOT / "build" / "base_apk" / "KL-06-Manager.apk"
 ]
 WEB_DIR = ROOT / "shared" / "web"

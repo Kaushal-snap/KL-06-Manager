@@ -59,7 +59,7 @@
       "bytes": 20120,
       "executable": false,
       "path": "README.md",
-      "sha256": "98d09c789417476cb31bbe7e31b9d32f2346a64d908320d8d09b1b3448236391"
+      "sha256": "cfaf2ad8ad7630e3176a671dfb7eac22032a479b845570658e576f5c649658e0"
     },
     {
       "bytes": 1599,
@@ -104,10 +104,10 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 38426,
+      "bytes": 42644,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "99e287b3a18476ef4e0b76b15522816155468c5c707131654ceaffd6de1430a7"
+      "sha256": "1d01fb34d62579439bd6ef4c1a39f99aae017f8b5ded1ecdcb765895fff2acab"
     },
     {
       "bytes": 6707,
@@ -200,10 +200,10 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 28498,
+      "bytes": 28547,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "a325f74714135a2fc8319bba9c87ec0ca07ea332cb4b65bcddbe05f18403acce"
+      "sha256": "af63bf23fff69418077636c0afa11601d66290e3e8f5955c1a1eccdc3b9331f2"
     },
     {
       "bytes": 4107,
@@ -257,7 +257,7 @@
       "bytes": 66531,
       "executable": false,
       "path": "index.html",
-      "sha256": "0a46758011f60d8cdfe267e86c6e4659f78e02ebd122e556e3b3b5c948723c7f"
+      "sha256": "e4e86aeb4d968c5af007099fb5f72a214ff1fc74fe31d282dc61c822d63b3458"
     },
     {
       "bytes": 5659,
@@ -659,13 +659,13 @@
       "bytes": 32842,
       "executable": false,
       "path": "script.js",
-      "sha256": "78992c8659c0a42678439b6745db64337f45eab1b3fac124c1b4b2eb6aa2c1d0"
+      "sha256": "584710773d2f6c57a97db08cf3a5bd1d1d6fa05a5c54104ffc9fa278b3f6b746"
     },
     {
-      "bytes": 67471,
+      "bytes": 71780,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "432dfd46c627fa488e67a4c22e8cf33f9a1171c7031afe5120d7c677e7c904f1"
+      "sha256": "660e61a35dd85bd0cd941a6e524f6f52c813469c168472c2c7dbe77baeab7c47"
     },
     {
       "bytes": 5483,
@@ -764,10 +764,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 4342,
+      "bytes": 4374,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "364eadd8ed6be31da0de9fdfc88025a635e2e5cb8751ae2811594ebe4451892e"
+      "sha256": "8e0fedd7613912bcdc4efedd83003b0f43bdac578e28fc192ce41b616dc22026"
     },
     {
       "bytes": 1614,
