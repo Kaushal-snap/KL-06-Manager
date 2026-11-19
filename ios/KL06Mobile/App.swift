@@ -25,6 +25,8 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
     private var originalIdle: Bool?, awake = false
     private var awakeTimer: Timer?, background: NSObjectProtocol?
     private var pickerID: String?
+    private var selectedShareURL: URL?
+    private var selectedShareSize: Int64 = 0
     override func viewDidLoad() {
         super.viewDidLoad(); view.backgroundColor = UIColor(red: 0.03, green: 0.06, blue: 0.08, alpha: 1)
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -126,6 +128,21 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         case "startNfcBeam":
             guard NFCNDEFReaderSession.readingAvailable else { reply(id, error: "NFC is not supported on this iOS device model."); return }
             reply(id, result: ["status": "active", "message": "NFC beam ready."])
+        case "streamFileToPeer":
+            guard Set(p.keys) == ["uri"], let raw = p["uri"] as? String, let url = selectedShareURL, raw == url.absoluteString, selectedShareSize > 0 else { reply(id, error: "Select a regular file first. No file was sent."); return }
+            let size = selectedShareSize
+            Task { [weak self] in
+                guard let self = self else { return }
+                do {
+                    let result = try await self.laptop.transferFile(url: url, fileName: url.lastPathComponent, expectedSize: size) { [weak self] percent in
+                        DispatchQueue.main.async { self?.web.evaluateJavaScript("if(window.KLTransferProgress)window.KLTransferProgress(\\(percent));", completionHandler: nil) }
+                    }
+                    self.selectedShareURL = nil; self.selectedShareSize = 0
+                    self.reply(id, result: result)
+                } catch {
+                    self.reply(id, error: "iOS TLS file transfer failed. No delivery is reported unless the desktop verifies the final SHA-256. Check the desktop receiver and retry.")
+                }
+            }
         case "pairLaptop", "finishPairing", "remoteState", "remoteCommand", "remoteResult", "disconnectLaptop":
             Task { [weak self] in
                 guard let self = self else { return }
@@ -147,14 +164,16 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
     }
     private func restoreIdle() { awakeTimer?.invalidate(); awakeTimer = nil; if awake, UIApplication.shared.isIdleTimerDisabled, let original = originalIdle { UIApplication.shared.isIdleTimerDisabled = original }; originalIdle = nil; awake = false }
     private func restore() { restoreIdle(); if let original = originalBrightness, let applied = appliedBrightness, abs(UIScreen.main.brightness - applied) < 0.005 { UIScreen.main.brightness = original }; originalBrightness = nil; appliedBrightness = nil }
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { if let id = pickerID { reply(id, error: "Import cancelled.") }; pickerID = nil }
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { if let id = pickerID { reply(id, error: "Import cancelled.") }; pickerID = nil; selectedShareURL = nil; selectedShareSize = 0 }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let id = pickerID else { return }; pickerID = nil
         guard urls.count == 1 else { reply(id, error: "Choose one file."); return }; let url = urls[0]
         let scoped = url.startAccessingSecurityScopedResource(); defer { if scoped { url.stopAccessingSecurityScopedResource() } }
         do {
             let a = try FileManager.default.attributesOfItem(atPath: url.path)
-            guard (a[.type] as? FileAttributeType) == .typeRegular, let size = a[.size] as? NSNumber else { throw LANError.invalid }
+            guard (a[.type] as? FileAttributeType) == .typeRegular, let size = a[.size] as? NSNumber, size.int64Value <= 2 * 1024 * 1024 * 1024 else { throw LANError.invalid }
+            selectedShareURL = url
+            selectedShareSize = size.int64Value
             if url.pathExtension.lowercased() == "csv" && size.intValue <= 5 * 1024 * 1024 {
                 let handle = try FileHandle(forReadingFrom: url); defer { try? handle.close() }
                 let data = try handle.read(upToCount: 5 * 1024 * 1024 + 1) ?? Data()
@@ -167,9 +186,10 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
                 "status": "selected",
                 "fileName": url.lastPathComponent,
                 "fileSize": size.intValue,
-                "mimeType": "application/octet-stream"
+                "mimeType": "application/octet-stream",
+                "uri": url.absoluteString
             ])
-        } catch { reply(id, error: "Choose a regular file no larger than 5 MiB. No path was uploaded.") }
+        } catch { selectedShareURL = nil; selectedShareSize = 0; reply(id, error: "Choose a regular file no larger than 2 GiB. No file was uploaded.") }
     }
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) { decisionHandler(navigationAction.request.url?.standardizedFileURL == page?.standardizedFileURL ? .allow : .cancel) }
     deinit { awakeTimer?.invalidate(); if let background = background { NotificationCenter.default.removeObserver(background) } }
