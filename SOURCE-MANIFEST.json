@@ -482,6 +482,12 @@
       "sha256": "558e35048cfafae2c6eb1a87af58e1481f1245d1a5e75b8d1c94bcb67c36219f"
     },
     {
+      "bytes": 1794,
+      "executable": false,
+      "path": "macos/DIAGNOSE-ASUS-FAN-PATH.command",
+      "sha256": "99fc740a24e03dcaa1c724c76182871a412d74f81afa1c10dcd473e0705a22cf"
+    },
+    {
       "bytes": 431,
       "executable": false,
       "path": "macos/HARDWARE-REPORTS.md",
@@ -536,10 +542,10 @@
       "sha256": "cb8ef679da62dc61cc560de7975727ccc1813b79bf97f765cb926aeaf3d6263a"
     },
     {
-      "bytes": 6519,
+      "bytes": 7089,
       "executable": false,
       "path": "macos/README.md",
-      "sha256": "c5d3e69d3fbb99d5701512f4903bf83043a8548a9e7a88b1eb05cdbdae556e9b"
+      "sha256": "0c108df908bc7a4101560b9ebb039105abef1c42276b540dd162c8dec698658c"
     },
     {
       "bytes": 15499,
