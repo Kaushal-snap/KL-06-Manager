@@ -327,7 +327,7 @@ public final class MainActivity extends Activity {
                     String transferId=init.getString("transferId");
 
                     try(InputStream in=getContentResolver().openInputStream(u)){
-                        byte[] b=new byte[65536];int n;long offset=0;
+                        byte[] b=new byte[8192];int n;long offset=0;
                         while((n=in.read(b))!=-1){
                             byte[] chunk=n==b.length?b:java.util.Arrays.copyOf(b,n);
                             String b64=android.util.Base64.encodeToString(chunk,android.util.Base64.NO_WRAP);
