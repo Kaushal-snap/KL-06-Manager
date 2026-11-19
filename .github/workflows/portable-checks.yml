@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  statuses: write
 concurrency:
   group: kl06-portable-${{ github.ref }}
   cancel-in-progress: false
@@ -18,8 +19,6 @@ jobs:
         with:
           persist-credentials: true
       - name: Regenerate source-only hashes after reviewed changes
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           python3 automation/source_manifest.py --write
           if ! git diff --quiet -- SOURCE-MANIFEST.json SHA256SUMS; then
@@ -28,17 +27,29 @@ jobs:
             git add SOURCE-MANIFEST.json SHA256SUMS
             git commit -m "chore: refresh reviewed source integrity manifest"
             git push origin "HEAD:${GITHUB_REF_NAME}"
-            if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
-              curl --fail-with-body --silent --show-error -X POST \
-                -H "Authorization: Bearer ${GH_TOKEN}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/portable-checks.yml/dispatches" \
-                -d '{"ref":"fix/real-connectivity-transfer-logs"}'
-            fi
           fi
       - name: Check JavaScript syntax
         run: |
           node --check shared/web/app.js
           node --check macos/Resources/app.js
       - name: Run isolated portable tests
+        id: portable
         run: /bin/bash TEST-PORTABLE.sh
+      - name: Report portable test result on the final branch commit
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_OUTCOME: ${{ steps.portable.outcome }}
+        run: |
+          STATE=success
+          DESCRIPTION="Portable source tests passed; no native/device approval implied."
+          if [ "$TEST_OUTCOME" != "success" ]; then
+            STATE=failure
+            DESCRIPTION="Portable source tests failed; inspect the workflow log."
+          fi
+          HEAD_SHA="$(git rev-parse HEAD)"
+          curl --fail-with-body --silent --show-error -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}" \
+            -d "{\"state\":\"$STATE\",\"context\":\"KL-06 portable source checks\",\"description\":\"$DESCRIPTION\"}"
