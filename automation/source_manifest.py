@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 EXCLUDE={'SOURCE-MANIFEST.json','SHA256SUMS'}
-GENERATED={'.git','.gradle','.idea','node_modules','bin','obj','build','Local-build','Local-approvals','__pycache__','test-results','playwright-report','.arena','logs','google_drive'}
+GENERATED={'.git','.gradle','.idea','node_modules','bin','obj','build','Local-build','Local-approvals','__pycache__','test-results','playwright-report','.arena','logs','google_drive','diagnostics'}
 PRIVATE_PARTS={'efi','opencore','uploads','reports','raw-reports','private-backups','.ssh','__macosx'}
 PRIVATE_NAMES={'.env','id_rsa','id_ed25519','owner-ed25519','session.json','restore-v1.json','restore-v1.plist','kl06-release-approval.json','kl06-release-approval.json.sig','kl06-owner-results.json','upload-receipt.json'}
 BINARY_OR_PRIVATE={'.apk','.ipa','.exe','.dll','.pdb','.so','.dylib','.a','.o','.class','.jks','.keystore','.p12','.pfx','.mobileprovision','.csv','.log','.zip','.pyc','.key','.pem','.efi','.aml','.dmp'}

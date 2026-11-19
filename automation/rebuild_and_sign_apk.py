@@ -41,7 +41,7 @@ BASE_APK_CANDIDATES = [
 WEB_DIR = ROOT / "shared" / "web"
 OUTPUT_DIR = ROOT / "build" / "deliverables"
 OUTPUT_APK = OUTPUT_DIR / "KL-06-Manager.apk"
-OUTPUT_ZIP = OUTPUT_DIR / "KL-06-0.4.2-beta-android-debug-UNTESTED.zip"
+OUTPUT_ZIP = OUTPUT_DIR / "KL-06-0.4.3-beta-android-debug-UNTESTED.zip"
 
 KEY_DIR = Path("/tmp/android_signing")
 KEY_PATH = KEY_DIR / "android_debug_key.pem"
@@ -138,8 +138,8 @@ def patch_manifest_axml(raw_axml_bytes):
         strings.append(s)
 
     # Patch version string (17) and codename string (18)
-    if len(strings) > 17 and strings[17] in ['0.3.0-beta.2', '0.4.0-beta.1', '0.4.0-beta.2', '0.4.1-beta', '0.4.2-beta']:
-        strings[17] = '0.4.2-beta'
+    if len(strings) > 17 and strings[17] in ['0.3.0-beta.2', '0.4.0-beta.1', '0.4.0-beta.2', '0.4.1-beta', '0.4.2-beta', '0.4.3-beta']:
+        strings[17] = '0.4.3-beta'
     if len(strings) > 18 and strings[18] in ['16', 'REL']:
         strings[18] = 'REL'
 
@@ -262,7 +262,7 @@ def patch_manifest_axml(raw_axml_bytes):
                 elif aname == 'platformBuildVersionName':
                     struct.pack_into('<i', new_axml, attr_pos+16, 14)
                 elif aname == 'versionCode':
-                    struct.pack_into('<i', new_axml, attr_pos+16, 9)
+                    struct.pack_into('<i', new_axml, attr_pos+16, 10)
                 elif aname == 'usesCleartextTraffic':
                     struct.pack_into('<i', new_axml, attr_pos+16, -1)  # True
                 attr_pos += 20
@@ -575,8 +575,8 @@ def verify_rebuilt_apk(apk_bytes, sf_bytes, rsa_bytes):
             a = APK(tf_name)
             assert a.is_valid_APK(), "Androguard reported APK invalid"
             assert a.get_package() == "app.klasus.controlcenter", f"Wrong package: {a.get_package()}"
-            assert str(a.get_androidversion_code()) == "9", f"Wrong version code: {a.get_androidversion_code()}"
-            assert a.get_androidversion_name() == "0.4.2-beta", f"Wrong version name: {a.get_androidversion_name()}"
+            assert str(a.get_androidversion_code()) == "10", f"Wrong version code: {a.get_androidversion_code()}"
+            assert a.get_androidversion_name() == "0.4.3-beta", f"Wrong version name: {a.get_androidversion_name()}"
             assert a.get_min_sdk_version() == "26", f"Wrong min SDK: {a.get_min_sdk_version()}"
             assert a.get_target_sdk_version() == "34", f"Wrong target SDK: {a.get_target_sdk_version()}"
             assert a.is_signed_v1(), "v1 signature missing or unparsed"
@@ -687,12 +687,12 @@ def main():
     if info_file.exists():
         import json
         info_data = json.loads(info_file.read_text())
-        info_data["current_version"] = "0.4.2-beta"
-        info_data["build"] = 9
+        info_data["current_version"] = "0.4.3-beta"
+        info_data["build"] = 10
         info_data["release_date"] = "2026-11-19"
         if "platforms" in info_data and "android" in info_data["platforms"]:
-            info_data["platforms"]["android"]["version"] = "0.4.2-beta"
-            info_data["platforms"]["android"]["build"] = 9
+            info_data["platforms"]["android"]["version"] = "0.4.3-beta"
+            info_data["platforms"]["android"]["build"] = 10
             info_data["platforms"]["android"]["filename"] = OUTPUT_ZIP.name
             info_data["platforms"]["android"]["sha256"] = zip_sha256
             info_file.write_text(json.dumps(info_data, indent=4) + "\n")

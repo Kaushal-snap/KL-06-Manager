@@ -15,7 +15,7 @@
     if(!object(p))return false;
     if(['state','pickHistoryCSV','pickShareFile','openAppSettings','openAccessibilitySettings','promptPermissionDialog','restoreAll','keepAwake','showNativeVolume','finishPairing','remoteState','remoteResult','disconnectLaptop','startCompanion','stopCompanion','companionDetails','discoverPeers','requestPermissions','checkUpdate','nfcStatus','startNfcScan','shareViaSystem'].includes(method))return exact(p);
     if(['shareViaSystem','streamFileToPeer'].includes(method))return exact(p,['uri'])&&typeof p.uri==='string';
-    if(['exportLogs','saveErrorReport','shareLogs'].includes(method))return exact(p)||(exact(p,['logs'])&&Array.isArray(p.logs));
+    if(['exportLogs','saveErrorReport','shareLogs','saveFanDiagnosticReport'].includes(method))return exact(p)||(exact(p,['logs'])&&Array.isArray(p.logs))||(exact(p,['reportText'])&&typeof p.reportText==='string');
     if(method==='installUpdate')return exact(p)||(exact(p,['downloadUrl'])&&typeof p.downloadUrl==='string');
     if(method==='startNfcBeam')return exact(p)||(exact(p,['payload'])&&object(p.payload));
     if(['setVolume','setBrightness'].includes(method))return exact(p,['value'])&&numeric(p.value,method==='setBrightness'?1:0,100);
