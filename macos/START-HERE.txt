@@ -1,0 +1,34 @@
+KL-06 Manager 0.3.0-beta.2 / Cirrus / build 5 — MAC SOURCE
+No precompiled Mac app / Apple-SDK compile / physical-device pass is supplied.
+
+1. DOWNLOAD the source ZIP as a file. Preview is not download.
+2. Extract the WHOLE KL-06-0.3.0-beta.2 folder, not macos/ alone:
+   this builder also needs sibling companion/server.py.
+3. Keep your old working app/restore journal. Quit old KL with Command-Q.
+4. Installed Xcode, Intel Mac, normal user, no sudo. If in Downloads:
+
+/bin/bash "$HOME/Downloads/KL-06-0.3.0-beta.2/macos/UPDATE-KL-06.command"
+
+Else type /bin/bash + space, drag this UPDATE-KL-06.command into Terminal,
+then Return. It tests with fake preferences, compiles/ad-hoc-signs/verifies a
+NEW macos/Local-build app and reveals it. Open it yourself; no auto-install,
+auto-replacement or auto-launch. Stop on a compiler/security error.
+
+13 pages / 12 user-level reversible tweaks; real native counters where exposed;
+read-only fixed SMC fan query; historical Windows HWiNFO CSV kept separate.
+Unavailable RPM is not zero. No fan/firmware/charge-limit control or driver install.
+Optional COLLECT-MAC-FANS.command is targeted/minimized, no sudo. Review output.
+
+Optional phone companion: installed Python 3.9+, explicitly enabled private LAN
+TLS session, full certificate pin + random 5-minute code + laptop pair approval.
+EVERY remote write needs a new exact-action laptop confirmation; no remote shell.
+Stop session or Command-Q to revoke. Network session is not enabled at launch.
+
+F13 alone / physical PrtSc shows/hides ONLY while running; not a launcher/remap.
+Preserve legacy journal ~/Library/Application Support/KL-Asus/Restore-v1.plist.
+Do not disable security or alter EFI/Windows/graphics/OLED/Fn/audio/USB.
+Keep Mac HDR OFF. macOS 26 untested, 27+ blocked; no privileged helper.
+
+Read ../START-HERE.txt, ../BUILD-STATUS.json and ../docs/OWNER-TEST-CHECKLIST.md.
+Drive->GitHub exact-tested beta workflow is implemented but not configured/live.
+No source-only/UNTESTED ZIP or false owner template is release approval.

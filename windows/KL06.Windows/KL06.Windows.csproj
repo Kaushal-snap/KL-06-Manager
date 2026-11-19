@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms><EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <GenerateSupportedOSPlatformAttribute>false</GenerateSupportedOSPlatformAttribute>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers><SelfContained>false</SelfContained>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <AssemblyName>KL-06 Manager</AssemblyName><RootNamespace>KL06</RootNamespace>
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType><DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <Version>0.4.3-beta</Version><FileVersion>0.4.3.10</FileVersion><ApplicationManifest>app.manifest</ApplicationManifest><ApplicationIcon>Assets/KL06.ico</ApplicationIcon>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile><NuGetAudit>true</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup><PackageReference Include="Microsoft.Web.WebView2" Version="[1.0.4314.35]" /></ItemGroup>
+  <ItemGroup>
+    <Content Include="../../shared/web/**/*" Link="web/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="../../LICENSE" Link="LICENSE-KL06.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="../../docs/third-party/DotNET-AppHost-*.txt" Link="licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="../../docs/third-party/WebView2-*.txt" Link="licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="../../companion/server.py" Link="companion/server.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+  </ItemGroup>
+  <!-- The SDK adds an unused WPF assembly even to WinForms; remove it, not its warnings. -->
+  <Target Name="RemoveUnusedWebViewWpf" BeforeTargets="ResolveAssemblyReferences"><ItemGroup><Reference Remove="@(Reference)" Condition="%(Reference.Filename) == 'Microsoft.Web.WebView2.Wpf'" /></ItemGroup></Target>
+</Project>

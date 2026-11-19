@@ -1,0 +1,6 @@
+# This is NOT an active trust file and contains no signing key.
+# After creating your offline Ed25519 owner key, commit ONLY its public half as:
+# automation/owner-release-signers
+# One line: kl06-owner <the complete ssh-ed25519 public key, optional harmless comment>
+# Never copy the PRIVATE key, an identity/EFI/report, or a Drive token here.
+# Missing/empty/example-only key deliberately blocks every transfer.

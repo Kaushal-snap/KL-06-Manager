@@ -1,0 +1,76 @@
+{
+    "app": "KL-06 Manager",
+    "current_version": "0.4.3-beta",
+    "build": 10,
+    "release_date": "2026-11-19",
+    "platforms": {
+        "mac": {
+            "version": "0.4.3-beta",
+            "build": 10,
+            "min_os": "macOS 13.0 Ventura",
+            "supported_os": "macOS 13, 14, 15+",
+            "filename": "KL-06 Manager 4.3 beta.zip",
+            "sha256": "b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.3-beta/KL-06-Manager-4.3-beta.zip",
+            "drive_download_url": "https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download",
+            "notes": "Native macOS 13+ (Ventura, Sonoma, Sequoia) companion with HDR fix, sleep/wake fix, GPU stability, fan RPM control, and device connection fixes."
+        },
+        "windows": {
+            "version": "0.4.3-beta",
+            "build": 10,
+            "min_os": "Windows 7 SP1",
+            "supported_os": "Windows 7, 8, 8.1, 10, 11",
+            "filename": "KL-06-0.4.3-beta-windows-x64.zip",
+            "sha256": "6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.3-beta/KL-06-0.4.3-beta-windows-x64.zip",
+            "drive_download_url": "https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download",
+            "notes": "Windows 7 SP1, 8, 8.1, 10, 11 x64 app with WebView2 integration, device connection fixes, and OTA updates."
+        },
+        "android": {
+            "version": "0.4.3-beta",
+            "build": 10,
+            "min_os": "Android 8.0 (API 26)",
+            "supported_os": "Android 8, 9, 10, 11, 12, 13, 14, 15, 16, 17+",
+            "filename": "KL-06-0.4.3-beta-android-debug.apk",
+            "sha256": "163a9806c806c5602255b68e18b3b93c54ce5e72571c70cd0adc1db1b16f7417",
+            "download_url": "https://github.com/Kaushal-snap/KL-06-Manager/releases/download/v0.4.3-beta/KL-06-0.4.3-beta-android-debug.apk",
+            "drive_download_url": "https://drive.google.com/uc?id=1ahcqo7n7ROvtJib3Yb654BJUOp2SqdDW&export=download",
+            "notes": "Android 8.0+ with device connection fixes, file transfer, and HDR controls."
+        },
+        "ios": {
+            "version": "0.4.3-beta",
+            "build": 10,
+            "min_os": "iOS 16.0",
+            "supported_os": "iOS 16, 17, 18+",
+            "filename": "KL-06-0.4.3-beta-ios.ipa",
+            "sha256": "",
+            "download_url": "https://apps.apple.com/app/kl-06-manager/id000000000",
+            "notes": "iOS 16.0+ companion with WKWebView and OTA update support."
+        }
+    },
+    "previous_releases": {
+        "0.4.2-beta": {
+            "version": "0.4.2-beta",
+            "build": 9,
+            "release_date": "2026-11-19"
+        },
+        "0.4.1-beta": {
+            "version": "0.4.1-beta",
+            "build": 8,
+            "release_date": "2026-11-18"
+        }
+    },
+    "hacks_applied": {
+        "wex_hdr_leaf2": true,
+        "wex_hdr_adapt": true,
+        "wex_tgl_edp_keep": true,
+        "wex_tgl_edp_softsleep": true,
+        "wex_tgl_dpcd_bl": true,
+        "wex_tgl_hdr_render_wake": true,
+        "darkwake": "0",
+        "edr_value": "3.08-4.0",
+        "gpu_stability": true,
+        "sleep_wake_fix": true,
+        "fan_rpm_control": true
+    }
+}
