@@ -59,7 +59,7 @@
       "bytes": 21601,
       "executable": false,
       "path": "README.md",
-      "sha256": "6517223bcb1b4e91814417b0dd99d120e0235f9889e6ae5f7ae8b43969ea1c02"
+      "sha256": "5e8f6556a00657a97373f8d7b966962df6b672322ca82b9fba126b67f49fca89"
     },
     {
       "bytes": 1599,
@@ -104,16 +104,16 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 40584,
+      "bytes": 48090,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "cfd30d0be5a161e36637d2aa6e490ee323d4e7f7967b4f20f36ccecb9b9670f1"
+      "sha256": "dcd0190f7850d5fa8e738281936e86f1a8f7efd67bce76faf3fd86e137e5b39c"
     },
     {
-      "bytes": 6707,
+      "bytes": 7231,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/PinnedLaptop.java",
-      "sha256": "10b56da8f36969d9951d485fb8ebeaa500b8e934c0c13502051a37e7dc847e64"
+      "sha256": "87be0fcc24bcebb01b250340a5ce57358f2bcc2f4dd90ce20f2e102e4604f438"
     },
     {
       "bytes": 633,
@@ -218,10 +218,10 @@
       "sha256": "c6fd7a8edc92544112d8ecc1936090e3f766c003b05d0fb58e58041f6c51ec74"
     },
     {
-      "bytes": 26673,
+      "bytes": 30374,
       "executable": false,
       "path": "companion/server.py",
-      "sha256": "35dac0f817e6310c1ef42a29c71e71f508dcdbd222a33436f21016d34a219e6c"
+      "sha256": "80c666c3fdcc48f69cd038723d908dabc36125ae00e0747068a0f439ffccd7e9"
     },
     {
       "bytes": 13315,
@@ -257,7 +257,7 @@
       "bytes": 79355,
       "executable": false,
       "path": "index.html",
-      "sha256": "22fb9e47ad48300be3db8970ea7996698276154d6b29b7269ca0087d29782614"
+      "sha256": "32870e3b72b4e527f29760b61fe544d31a743db5b1e27a8a9f974db8b3cb7d48"
     },
     {
       "bytes": 5659,
@@ -659,13 +659,13 @@
       "bytes": 36897,
       "executable": false,
       "path": "script.js",
-      "sha256": "63c3efdf89f8f9b92bf393afedb743932a997da79828af6e6e0f9eacb2846c34"
+      "sha256": "83cfe049885835a16ac8cf5ec6eae420228056b04e3da057e9b2a80e3805f16a"
     },
     {
-      "bytes": 73785,
+      "bytes": 74641,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "b9873531db4a1a0232e44ed3fe58fd2c84ceedd424e7c986fee4d289dc68172c"
+      "sha256": "39915e74a96ab337c183c39ccd0dd1eaa9c67ad1de15da0e95945820a3aeba61"
     },
     {
       "bytes": 5483,
@@ -692,10 +692,10 @@
       "sha256": "a7214d4209b5484395944a6c3cfa82ec26d769f0f141c9f0459c33baade2b9d3"
     },
     {
-      "bytes": 3782,
+      "bytes": 3964,
       "executable": false,
       "path": "shared/web/model.js",
-      "sha256": "5ddb086d113bafe314d9f66553e5a8ad81b3739bcd50a3747718bf2a00677889"
+      "sha256": "a94ae70dc05add0e7184f383f6b9450ac57788df7ad6f865a2859545b2913101"
     },
     {
       "bytes": 13931,
@@ -767,7 +767,7 @@
       "bytes": 6558,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "a5d384a0ac59b5091f1957caca95950fb641c0e205ca65808354e4aa4db43e09"
+      "sha256": "4d7de0a651389b0adfb86b9b016d12caa35916bd9fe01ede8af0226d9ef61e6b"
     },
     {
       "bytes": 1614,

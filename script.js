@@ -9,10 +9,10 @@ const PLATFORM_DATA = {
         name: 'Android Package (Dual v1 + v2 Signed)',
         fileName: 'KL-06-0.4.2-beta-android-debug-UNTESTED.zip',
         fileMeta: 'v0.4.2-beta Build 9 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1lEMM_7txavWiqCXoEUo4o7xO9FO1Dgd6&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1lEMM_7txavWiqCXoEUo4o7xO9FO1Dgd6/view?usp=sharing',
-        apkDirectUrl: 'https://drive.google.com/uc?id=1Y5gbDAHU3gz-THBZ7RiunMec8YQnufaM&export=download',
-        sha256: 'a3a8a853990c4cd3fd86e05a07a56c84ff451243c0ec795137bd09888b8ae804',
+        directUrl: 'https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj/view?usp=sharing',
+        apkDirectUrl: 'https://drive.google.com/uc?id=1rdyT6UrMW5asQ0IckIJGMFkzrIGsE5j1&export=download',
+        sha256: 'fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da',
         btnText: '⬇️ Download for Android (1.07 MB)'
     },
     mac: {
@@ -46,9 +46,9 @@ const PLATFORM_DATA = {
         name: 'Complete Source Code Archive',
         fileName: 'KL-06-0.4.2-beta-source-BUILD-READY.zip',
         fileMeta: 'v0.4.2-beta Build 9 • 2.02 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1jN4lcRmBxIJJFsxi-mnu0QCyyWw7XL8O&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1jN4lcRmBxIJJFsxi-mnu0QCyyWw7XL8O/view?usp=sharing',
-        sha256: 'e99917bb624d6557a4757760b1a53985e1d5ab32c2f2cb3c4bc6546ec552cf27',
+        directUrl: 'https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD/view?usp=sharing',
+        sha256: 'f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };

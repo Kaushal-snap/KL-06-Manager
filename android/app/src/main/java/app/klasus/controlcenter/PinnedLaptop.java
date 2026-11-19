@@ -40,6 +40,8 @@ final class PinnedLaptop {
     }catch(Exception e){return false;}}
     synchronized JSONObject command(JSONObject body)throws Exception {if(!validCommand(body))throw new IOException("Remote operation refused.");JSONObject reply=send("/v1/command",body,true);last=reply.getString("id");return new JSONObject().put("status","Request queued; approve it on the laptop within 90 seconds.");}
     synchronized JSONObject result()throws Exception {if(last==null)throw new IOException("No requested action.");return send("/v1/result",new JSONObject().put("id",last),true);}
+    synchronized JSONObject transferInit(String fileName,long fileSize,String sha256)throws Exception {return send("/v1/transfer/init",new JSONObject().put("fileName",fileName).put("fileSize",fileSize).put("expectedSha256",sha256).put("senderPlatform","android"),true);}
+    synchronized JSONObject transferChunk(String transferId,long offset,String chunkBase64)throws Exception {return send("/v1/transfer/chunk",new JSONObject().put("transferId",transferId).put("chunkOffset",offset).put("chunkBase64",chunkBase64),true);}
     synchronized void disconnect(){try{if(paired())send("/v1/disconnect",new JSONObject(),true);}catch(Exception ignored){}finally{clear();}}
     void invalidate(){token=null;expires=0;}
     synchronized void clear(){base=null;fingerprint=null;code=null;ticket=null;token=null;last=null;expires=0;}

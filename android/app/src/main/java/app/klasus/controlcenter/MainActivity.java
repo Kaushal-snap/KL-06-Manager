@@ -27,6 +27,7 @@ public final class MainActivity extends Activity {
     private Integer originalVolume,appliedVolume;private Float originalBrightness,appliedBrightness;private boolean awake=false;private String pickerID;
     private android.net.wifi.WifiManager.MulticastLock multicastLock;
     private NfcAdapter nfcAdapter;
+    private Uri lastSelectedUri;
     private final Runnable stopAwake=()->{awake=false;getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);};
     @Override public void onCreate(Bundle saved){super.onCreate(saved);audio=(AudioManager)getSystemService(AUDIO_SERVICE);web=new WebView(this);setContentView(web);
         try{nfcAdapter=NfcAdapter.getDefaultAdapter(this);}catch(Exception ignored){}
@@ -278,6 +279,75 @@ public final class MainActivity extends Activity {
             startActivityForResult(Intent.createChooser(intent,"Select File to Share (AirDrop / Quick Share)"),38);
             return;
         }
+        case "shareViaSystem":{
+            String uriStr=p.optString("uri");
+            Uri u=!uriStr.isEmpty()?Uri.parse(uriStr):lastSelectedUri;
+            if(u!=null){
+                Intent share=new Intent(Intent.ACTION_SEND);
+                String mime=getContentResolver().getType(u);
+                share.setType(mime!=null?mime:"*/*");
+                share.putExtra(Intent.EXTRA_STREAM,u);
+                share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Intent chooser=Intent.createChooser(share,"Quick Share / AirDrop / Nearby File Transfer");
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(chooser);
+                reply(id,new JSONObject().put("status","opened_chooser"),null);
+            }else{
+                reply(id,null,"No file selected to share. Please select a file first.");
+            }
+            return;
+        }
+        case "streamFileToPeer":{
+            String uriStr=p.optString("uri");
+            Uri u=!uriStr.isEmpty()?Uri.parse(uriStr):lastSelectedUri;
+            if(u==null){reply(id,null,"No file selected to stream.");return;}
+            if(!laptop.paired()){reply(id,null,"Companion not paired. Pair with laptop first.");return;}
+            io.execute(()->{
+                try{
+                    String fileName="shared_file";long fileSize=0;
+                    try(android.database.Cursor cursor=getContentResolver().query(u,null,null,null,null)){
+                        if(cursor!=null&&cursor.moveToFirst()){
+                            int nameIdx=cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                            int sizeIdx=cursor.getColumnIndex(android.provider.OpenableColumns.SIZE);
+                            if(nameIdx!=-1)fileName=cursor.getString(nameIdx);
+                            if(sizeIdx!=-1)fileSize=cursor.getLong(sizeIdx);
+                        }
+                    }
+                    MessageDigest digest=MessageDigest.getInstance("SHA-256");
+                    try(InputStream in=getContentResolver().openInputStream(u)){
+                        byte[] b=new byte[65536];int n;
+                        while((n=in.read(b))!=-1){digest.update(b,0,n);}
+                    }
+                    byte[] hashBytes=digest.digest();
+                    StringBuilder hex=new StringBuilder();
+                    for(byte b:hashBytes)hex.append(String.format("%02x",b));
+                    String sha256=hex.toString();
+
+                    JSONObject init=laptop.transferInit(fileName,fileSize,sha256);
+                    String transferId=init.getString("transferId");
+
+                    try(InputStream in=getContentResolver().openInputStream(u)){
+                        byte[] b=new byte[65536];int n;long offset=0;
+                        while((n=in.read(b))!=-1){
+                            byte[] chunk=n==b.length?b:java.util.Arrays.copyOf(b,n);
+                            String b64=android.util.Base64.encodeToString(chunk,android.util.Base64.NO_WRAP);
+                            laptop.transferChunk(transferId,offset,b64);
+                            offset+=n;
+                            final int pct=(int)((offset*100)/Math.max(1,fileSize));
+                            main.post(()->{
+                                if(web!=null)web.evaluateJavascript("if(window.KLTransferProgress)window.KLTransferProgress("+pct+");",null);
+                            });
+                        }
+                    }
+                    writeLog("TRANSFER","File "+fileName+" successfully streamed over TLS to laptop ("+fileSize+" bytes)");
+                    reply(id,new JSONObject().put("status","complete").put("fileName",fileName).put("bytesTransferred",fileSize).put("sha256",sha256),null);
+                }catch(Exception e){
+                    writeLog("TRANSFER","Stream failed: "+e.getMessage());
+                    reply(id,null,"File transfer failed: "+e.getMessage());
+                }
+            });
+            return;
+        }
         case "checkUpdate":{
             writeLog("OTA","Checked for in-app software updates from native bridge");
             JSONObject res=new JSONObject()
@@ -362,6 +432,19 @@ public final class MainActivity extends Activity {
                     byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.2-beta\"}".getBytes(StandardCharsets.UTF_8);
                     DatagramPacket packet=new DatagramPacket(ping,ping.length,InetAddress.getByName("255.255.255.255"),8766);
                     try{udpSock.send(packet);}catch(Exception ignored){}
+                    try{
+                        Enumeration<NetworkInterface> ifaces=NetworkInterface.getNetworkInterfaces();
+                        while(ifaces!=null&&ifaces.hasMoreElements()){
+                            NetworkInterface ni=ifaces.nextElement();
+                            if(!ni.isUp()||ni.isLoopback())continue;
+                            for(InterfaceAddress ia:ni.getInterfaceAddresses()){
+                                InetAddress bcast=ia.getBroadcast();
+                                if(bcast!=null){
+                                    try{udpSock.send(new DatagramPacket(ping,ping.length,bcast,8766));}catch(Exception ignored){}
+                                }
+                            }
+                        }
+                    }catch(Exception ignored){}
                     byte[] buf=new byte[2048];
                     long end=System.currentTimeMillis()+1000;
                     while(System.currentTimeMillis()<end){
@@ -392,36 +475,80 @@ public final class MainActivity extends Activity {
                     if(udpSock!=null)udpSock.close();
                 }
 
-                if(peers.length()==0){
-                    try{
-                        String localIP=null;
-                        if(wm!=null&&wm.getConnectionInfo()!=null){
-                            int ipInt=wm.getConnectionInfo().getIpAddress();
-                            if(ipInt!=0){
-                                localIP=String.format(Locale.US,"%d.%d.%d.%d",(ipInt&0xff),(ipInt>>8&0xff),(ipInt>>16&0xff),(ipInt>>24&0xff));
+                try{
+                    List<String> probeCandidates=new ArrayList<>();
+                    probeCandidates.add("127.0.0.1");
+                    if(wm!=null&&wm.getDhcpInfo()!=null){
+                        int gw=wm.getDhcpInfo().gateway;
+                        if(gw!=0){
+                            String gwIp=String.format(Locale.US,"%d.%d.%d.%d",(gw&0xff),(gw>>8&0xff),(gw>>16&0xff),(gw>>24&0xff));
+                            if(!probeCandidates.contains(gwIp))probeCandidates.add(gwIp);
+                        }
+                    }
+                    Enumeration<NetworkInterface> ifaces=NetworkInterface.getNetworkInterfaces();
+                    while(ifaces!=null&&ifaces.hasMoreElements()){
+                        NetworkInterface ni=ifaces.nextElement();
+                        if(!ni.isUp()||ni.isLoopback())continue;
+                        for(InterfaceAddress ia:ni.getInterfaceAddresses()){
+                            InetAddress addr=ia.getAddress();
+                            if(addr instanceof Inet4Address){
+                                String ipStr=addr.getHostAddress();
+                                int lastDot=ipStr.lastIndexOf('.');
+                                if(lastDot>0){
+                                    String prefix=ipStr.substring(0,lastDot+1);
+                                    for(String endStr:new String[]{"1","2","100","101","102","105","108","112","120"}){
+                                        String c=prefix+endStr;
+                                        if(!probeCandidates.contains(c))probeCandidates.add(c);
+                                    }
+                                }
                             }
                         }
-                        if(localIP!=null&&localIP.startsWith("192.168.")){
-                            String subnet=localIP.substring(0,localIP.lastIndexOf('.')+1);
-                            String[] candidates=new String[]{subnet+"1",subnet+"2","127.0.0.1"};
-                            for(String candidate:candidates){
-                                try(Socket s=new Socket()){
-                                    s.connect(new InetSocketAddress(candidate,8766),150);
-                                    JSONObject pObj=new JSONObject()
-                                        .put("id","peer-"+candidate.replace('.','-'))
-                                        .put("name","Active Companion ("+candidate+")")
-                                        .put("ip",candidate)
-                                        .put("host","https://"+candidate+":8766")
-                                        .put("type","Laptop / Desktop Companion")
-                                        .put("route","Direct LAN Probe :8766")
-                                        .put("signal","95% (LAN)")
-                                        .put("online",true);
-                                    peers.put(pObj);
-                                }catch(Exception ignored){}
+                    }
+                    for(String candidate:probeCandidates){
+                        try(Socket s=new Socket()){
+                            s.connect(new InetSocketAddress(candidate,8766),120);
+                            boolean exists=false;
+                            for(int i=0;i<peers.length();i++){
+                                if(candidate.equals(peers.getJSONObject(i).optString("ip"))){exists=true;break;}
+                            }
+                            if(!exists){
+                                JSONObject pObj=new JSONObject()
+                                    .put("id","peer-"+candidate.replace('.','-'))
+                                    .put("name","Active Companion ("+candidate+")")
+                                    .put("ip",candidate)
+                                    .put("host","https://"+candidate+":8766")
+                                    .put("type","Laptop / Desktop Companion")
+                                    .put("route","Direct LAN Probe :8766")
+                                    .put("signal","95% (LAN)")
+                                    .put("online",true);
+                                peers.put(pObj);
+                            }
+                        }catch(Exception ignored){}
+                    }
+                }catch(Exception ignored){}
+
+                try{
+                    android.bluetooth.BluetoothAdapter bt=android.bluetooth.BluetoothAdapter.getDefaultAdapter();
+                    if(bt!=null&&bt.isEnabled()){
+                        Set<android.bluetooth.BluetoothDevice> bonded=bt.getBondedDevices();
+                        if(bonded!=null){
+                            for(android.bluetooth.BluetoothDevice dev:bonded){
+                                String name=dev.getName()!=null?dev.getName():"Bluetooth Device";
+                                String addr=dev.getAddress();
+                                JSONObject pObj=new JSONObject()
+                                    .put("id","bt-"+addr.replace(':','-'))
+                                    .put("name",name)
+                                    .put("ip",addr)
+                                    .put("host","")
+                                    .put("type","Paired Bluetooth Hardware")
+                                    .put("route","Bluetooth RFCOMM / LE")
+                                    .put("signal","100% (Bonded)")
+                                    .put("online",true);
+                                peers.put(pObj);
                             }
                         }
-                    }catch(Exception ignored){}
-                }
+                    }
+                }catch(Exception ignored){}
 
                 writeLog("DISCOVER","LAN peer discovery completed. Found "+peers.length()+" active peers.");
                 reply(id,new JSONObject().put("peers",peers).put("count",peers.length()).put("scannedAt",Instant.now().toString()),null);
@@ -531,6 +658,7 @@ public final class MainActivity extends Activity {
                         results=new Uri[]{Uri.parse(dataString)};
                     }
                 }
+                if(results!=null&&results.length>0)lastSelectedUri=results[0];
                 mFilePathCallback.onReceiveValue(results);
                 mFilePathCallback=null;
             }
@@ -541,6 +669,7 @@ public final class MainActivity extends Activity {
             if(id==null)return;
             if(result!=RESULT_OK||data==null||data.getData()==null){reply(id,null,"File selection cancelled.");return;}
             Uri uri=data.getData();
+            lastSelectedUri=uri;
             io.execute(()->{
                 try{
                     String fileName="shared_file";long fileSize=0;

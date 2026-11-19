@@ -51,12 +51,12 @@ Connect directly with the developer **Kaushal Labana**:
 
 | Platform | Deliverable Package | Compatibility / Min OS | Size | SHA-256 Checksum | Direct Download Mirror |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| 🤖 **Android (Zip)** | `KL-06-0.4.2-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `a3a8a853990c4cd3fd86e05a07a56c84ff451243c0ec795137bd09888b8ae804` | [Direct Download (Drive)](https://drive.google.com/uc?id=1lEMM_7txavWiqCXoEUo4o7xO9FO1Dgd6&export=download) |
-| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `b99756d85d3e63f2fd9abc7db5a03d240ee1ecb507b16b891b5208162a7fd522` | [Direct APK (Drive)](https://drive.google.com/uc?id=1Y5gbDAHU3gz-THBZ7RiunMec8YQnufaM&export=download) |
+| 🤖 **Android (Zip)** | `KL-06-0.4.2-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `fc80895d9e48cd903e1534bfdb2aac64906b88aa89d7823179d8fcf7d1b842da` | [Direct Download (Drive)](https://drive.google.com/uc?id=1piT3rtrUjzvTcH1UnrSw2NmnUQicf6Tj&export=download) |
+| 🤖 **Android (APK)** | `KL-06-Manager.apk` | **Android 8.0+** (Dual v1+v2 Signed) | 1.07 MB | `496e9a549eda285046a21fc010396a110414908c5d7a875aa26c70d134c1ccc1` | [Direct APK (Drive)](https://drive.google.com/uc?id=1rdyT6UrMW5asQ0IckIJGMFkzrIGsE5j1&export=download) |
 | 🍎 **macOS** | `KL-06 Manager 4.2 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
 | 🪟 **Windows** | `KL-06-0.4.2-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
 | 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.2-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `e99917bb624d6557a4757760b1a53985e1d5ab32c2f2cb3c4bc6546ec552cf27` | [Direct Download (Drive)](https://drive.google.com/uc?id=1jN4lcRmBxIJJFsxi-mnu0QCyyWw7XL8O&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.2-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `f74fbc9da5e9578dada5462dddfffcdb28c8d506ebbb209ccbb58f20f7d03369` | [Direct Download (Drive)](https://drive.google.com/uc?id=1_fAiTQi8dNaBoYdd6O176-gPRwJFWmBD&export=download) |
 
 <br/>
 

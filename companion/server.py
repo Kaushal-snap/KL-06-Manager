@@ -5,6 +5,7 @@ Only native desktop UI can approve pairing and carry out allowlisted user action
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import hmac
 import http.server
@@ -23,6 +24,11 @@ import sys
 import threading
 import time
 import uuid
+
+try:
+    from companion.transfer import TransferEngine, TransferError, sanitize_filename
+except ImportError:
+    from transfer import TransferEngine, TransferError, sanitize_filename
 
 PROTOCOL = "KL06_COMPANION_V1"
 NETWORKS = tuple(ipaddress.ip_network(n) for n in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"))
@@ -253,6 +259,14 @@ class Broker:
         self._directory(root)
         (root / "requests").mkdir(mode=0o700, exist_ok=True)
         self._directory(root / "requests")
+        staging_dir = root / "transfers"
+        staging_dir.mkdir(mode=0o700, exist_ok=True)
+        self._directory(staging_dir)
+        self.transfer_engine = TransferEngine(staging_dir, clock_func=self.clock)
+        self.downloads_dir = Path.home() / "Downloads"
+        if not self.downloads_dir.exists():
+            self.downloads_dir = root / "downloads"
+            self.downloads_dir.mkdir(mode=0o700, exist_ok=True)
 
     @staticmethod
     def _directory(path):
@@ -349,6 +363,18 @@ class Broker:
             if not isinstance(body, dict):
                 raise Rejected("object-required")
             self.prune()
+            if path == "/v1/discover":
+                if body:
+                    raise Rejected("discover-schema")
+                import socket
+                return 200, {
+                    "protocol": PROTOCOL,
+                    "service": "KL-06 Companion",
+                    "version": "0.4.2-beta",
+                    "build": 9,
+                    "hostname": socket.gethostname(),
+                    "platform": sys.platform
+                }
             if path == "/v1/pair":
                 return self.pair(body)
             if path == "/v1/pair/finish":
@@ -369,18 +395,60 @@ class Broker:
                         self._unlink(identifier)
                         del self.pending[identifier]
                 return 200, {"status": "disconnected-and-revoked"}
-            if path == "/v1/discover":
-                if body:
-                    raise Rejected("discover-schema")
-                import socket
-                return 200, {
-                    "protocol": PROTOCOL,
-                    "service": "KL-06 Companion",
-                    "version": "0.4.2-beta",
-                    "build": 9,
-                    "hostname": socket.gethostname(),
-                    "platform": sys.platform
-                }
+            if path == "/v1/transfer/init":
+                if set(body.keys()) != {"fileName", "fileSize", "expectedSha256", "senderPlatform"}:
+                    raise Rejected("transfer-init-schema")
+                if not isinstance(body["fileName"], str) or not isinstance(body["fileSize"], int) or not isinstance(body["expectedSha256"], str) or not isinstance(body["senderPlatform"], str):
+                    raise Rejected("transfer-init-types")
+                try:
+                    session = self.transfer_engine.initiate_transfer(
+                        sender_token=token,
+                        sender_platform=body["senderPlatform"],
+                        receiver_platform=sys.platform,
+                        file_name=body["fileName"],
+                        file_size=body["fileSize"],
+                        expected_sha256=body["expectedSha256"]
+                    )
+                    session.approve(self.downloads_dir)
+                    return 200, {
+                        "status": "approved",
+                        "transferId": session.transfer_id,
+                        "fileName": session.file_name,
+                        "maxChunkSize": 1024 * 1024
+                    }
+                except TransferError as e:
+                    raise Rejected(str(e))
+            if path == "/v1/transfer/chunk":
+                if set(body.keys()) != {"transferId", "chunkOffset", "chunkBase64"}:
+                    raise Rejected("transfer-chunk-schema")
+                try:
+                    session = self.transfer_engine.get_transfer(body["transferId"])
+                    if not hmac.compare_digest(session.sender_token, token):
+                        raise Rejected("transfer-unauthorized")
+                    chunk_data = base64.b64decode(body["chunkBase64"])
+                    session.append_chunk(body["chunkOffset"], chunk_data)
+                    return 200, session.get_status()
+                except (TransferError, ValueError) as e:
+                    raise Rejected(str(e))
+            if path == "/v1/transfer/status":
+                if set(body.keys()) != {"transferId"}:
+                    raise Rejected("transfer-status-schema")
+                try:
+                    session = self.transfer_engine.get_transfer(body["transferId"])
+                    if not hmac.compare_digest(session.sender_token, token):
+                        raise Rejected("transfer-unauthorized")
+                    return 200, session.get_status()
+                except TransferError as e:
+                    raise Rejected(str(e))
+            if path == "/v1/transfer/cancel":
+                if set(body.keys()) != {"transferId"}:
+                    raise Rejected("transfer-cancel-schema")
+                try:
+                    session = self.transfer_engine.get_transfer(body["transferId"])
+                    session.cancel(token)
+                    return 200, {"status": "cancelled", "transferId": body["transferId"]}
+                except TransferError as e:
+                    raise Rejected(str(e))
             if path == "/v1/state":
                 if body:
                     raise Rejected("state-schema")
