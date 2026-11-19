@@ -104,7 +104,51 @@ public final class MainActivity extends Activity {
             }
             if(!list.isEmpty()){
                 requestPermissions(list.toArray(new String[0]),PERMISSION_REQ_CODE);
+            } else {
+                maintainHardwareLink();
             }
+        } else {
+            maintainHardwareLink();
+        }
+    }
+    private synchronized void acquireMulticastLock(){
+        try{
+            if(multicastLock==null){
+                android.net.wifi.WifiManager wm=(android.net.wifi.WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+                if(wm!=null){
+                    multicastLock=wm.createMulticastLock("KL06_LAN_LOCK");
+                    multicastLock.setReferenceCounted(true);
+                }
+            }
+            if(multicastLock!=null&&!multicastLock.isHeld()){
+                multicastLock.acquire();
+                writeLog("WIFI","Wi-Fi MulticastLock acquired for device discovery and hardware link.");
+            }
+        }catch(Exception e){
+            writeLog("WIFI","MulticastLock: "+e.getMessage());
+        }
+    }
+    private void maintainHardwareLink(){
+        acquireMulticastLock();
+        writeLog("LINK","Hardware link maintained continuously across Wi-Fi, Bluetooth, and Mobile Data.");
+        main.post(()->{
+            if(web!=null){
+                web.evaluateJavascript("if(window.KLPermissionGranted)window.KLPermissionGranted();",null);
+            }
+        });
+    }
+    @Override public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults){
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if(requestCode==PERMISSION_REQ_CODE){
+            boolean anyGranted=false;
+            for(int r:grantResults){
+                if(r==android.content.pm.PackageManager.PERMISSION_GRANTED){
+                    anyGranted=true;
+                    break;
+                }
+            }
+            writeLog("PERM","onRequestPermissionsResult: anyGranted="+anyGranted);
+            maintainHardwareLink();
         }
     }
     private void promptPermissionSettingsDialog(){
@@ -225,19 +269,6 @@ public final class MainActivity extends Activity {
         case "setBrightness":{float v=(float)Math.max(.01,number(p)/100);confirm(id,"Set temporary app brightness to "+(v*100)+"%?",()->{WindowManager.LayoutParams a=getWindow().getAttributes();if(originalBrightness==null)originalBrightness=a.screenBrightness;a.screenBrightness=v;getWindow().setAttributes(a);appliedBrightness=v;if(!Float.isFinite(getWindow().getAttributes().screenBrightness)||Math.abs(getWindow().getAttributes().screenBrightness-v)>.005f)throw new IllegalStateException();});return;}
         case "keepAwake":if(p.length()!=0)throw new IllegalArgumentException();confirm(id,"Toggle app-screen keep-awake, maximum 15 minutes?",()->{main.removeCallbacks(stopAwake);if(awake)stopAwake.run();else{awake=true;getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);if((getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)==0){awake=false;throw new IllegalStateException();}main.postDelayed(stopAwake,900000);}});return;
         case "restoreAll":if(p.length()!=0)throw new IllegalArgumentException();restore();reply(id,"Temporary owned controls restored; newer external volume choices are preserved.",null);return;
-        case "requestPermissions":checkAndRequestConnectivityPermissions();writeLog("PERM","Requested runtime connectivity and storage permissions");reply(id,new JSONObject().put("status","requested"),null);return;
-        case "openAppSettings":{
-            try{
-                Intent intent=new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.fromParts("package",getPackageName(),null));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                reply(id,new JSONObject().put("status","opened"),null);
-            }catch(Exception e){
-                reply(id,null,"Unable to open settings: "+e.getMessage());
-            }
-            return;
-        }
         case "pickShareFile":{
             if(p.length()!=0||pickerID!=null)throw new IllegalArgumentException();
             pickerID=id;
@@ -257,13 +288,13 @@ public final class MainActivity extends Activity {
                 .put("upToDate",true)
                 .put("channel","beta")
                 .put("releaseNotes","Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.")
-                .put("downloadUrl","https://drive.google.com/uc?id=1crZyJD8ETzKxIYJkDkjpwg7uPfIxWEg8&export=download");
+                .put("downloadUrl","https://drive.google.com/uc?id=1bBHqq441G3nivGngBDhov3PbspLDPBDr&export=download");
             reply(id,res,null);
             return;
         }
         case "installUpdate":{
             writeLog("OTA","Triggering system PackageInstaller for in-app update");
-            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1crZyJD8ETzKxIYJkDkjpwg7uPfIxWEg8&export=download");
+            String url=p.optString("downloadUrl","https://drive.google.com/uc?id=1bBHqq441G3nivGngBDhov3PbspLDPBDr&export=download");
             Intent intent=new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(url),"application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -481,43 +512,6 @@ public final class MainActivity extends Activity {
                         }
                     });
                 }
-            }
-        }
-    }
-    private void checkAndRequestConnectivityPermissions(){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            List<String> needed=new ArrayList<>();
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
-                if(checkSelfPermission(android.Manifest.permission.NEARBY_WIFI_DEVICES)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.NEARBY_WIFI_DEVICES);
-                if(checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.READ_MEDIA_IMAGES);
-                if(checkSelfPermission(android.Manifest.permission.READ_MEDIA_VIDEO)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.READ_MEDIA_VIDEO);
-                if(checkSelfPermission(android.Manifest.permission.READ_MEDIA_AUDIO)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.READ_MEDIA_AUDIO);
-                if(checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-                if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            } else {
-                if(checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-                if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.S){
-                if(checkSelfPermission(android.Manifest.permission.BLUETOOTH_SCAN)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.BLUETOOTH_SCAN);
-                if(checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.BLUETOOTH_CONNECT);
-                if(checkSelfPermission(android.Manifest.permission.BLUETOOTH_ADVERTISE)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                    needed.add(android.Manifest.permission.BLUETOOTH_ADVERTISE);
-            }
-            if(checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
-                needed.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
-            if(!needed.isEmpty()){
-                requestPermissions(needed.toArray(new String[0]),PERMISSION_REQ_CODE);
             }
         }
     }

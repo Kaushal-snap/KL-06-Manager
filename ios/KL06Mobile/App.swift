@@ -48,7 +48,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         if device.batteryState != .unknown { battery["onAC"] = device.batteryState == .charging || device.batteryState == .full }
         var storage: [String: Any] = [:]
         if let a = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()), let free = a[.systemFreeSize] as? NSNumber, let total = a[.systemSize] as? NSNumber { storage = ["freeGB": free.doubleValue / 1073741824, "totalGB": total.doubleValue / 1073741824] }
-        return ["platform": "ios", "version": "0.4.1-beta", "build": 8, "sampledAt": ISO8601DateFormatter().string(from: Date()),
+        return ["platform": "ios", "version": "0.4.2-beta", "build": 9, "sampledAt": ISO8601DateFormatter().string(from: Date()),
                 "battery": battery, "memory": ["totalGB": Double(ProcessInfo.processInfo.physicalMemory) / 1073741824, "source": "iOS system-used RAM unavailable through this app"],
                 "storage": storage, "volume": Double(AVAudioSession.sharedInstance().outputVolume) * 100, "brightness": Double(UIScreen.main.brightness) * 100, "awake": awake,
                 "capabilities": ["volume": false, "nativeVolume": true, "brightness": true, "brightnessScope": "Temporary screen brightness; restores on background if unchanged; not physical nits", "awake": true] as [String: Any],
@@ -94,13 +94,24 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
             let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item, .content, .data], asCopy: false); picker.allowsMultipleSelection = false; picker.delegate = self; present(picker, animated: true)
         case "exportLogs", "saveErrorReport", "shareLogs":
             let logs = p["logs"] as? [[String: Any]] ?? []
-            var text = "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.1-beta (Build 8)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
+            var text = "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.2-beta (Build 9)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
             for log in logs {
                 text += "[\(log["ts"] as? String ?? "")] [\(log["tag"] as? String ?? "LOG")] \(log["msg"] as? String ?? "")\n"
             }
             let shareSheet = UIActivityViewController(activityItems: [text], applicationActivities: nil)
             present(shareSheet, animated: true)
             reply(id, result: ["status": "saved", "message": "Diagnostic report opened in iOS Share Sheet."])
+        case "checkUpdate":
+            reply(id, result: [
+                "currentVersion": "0.4.2-beta",
+                "currentBuild": 9,
+                "latestVersion": "0.4.2-beta",
+                "latestBuild": 9,
+                "upToDate": true,
+                "channel": "beta",
+                "releaseNotes": "Dual Mobile Data & Wi-Fi internet access, auto-send diagnostic reports to private Drive folder, zero-blink log saving, and v0.4.2 beta ecosystem update.",
+                "downloadUrl": "https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command"
+            ])
         case "discoverPeers":
             reply(id, result: [
                 "peers": [
