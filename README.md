@@ -8,7 +8,7 @@
 [![Email](https://img.shields.io/badge/Support%20Email-labanayt%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:labanayt@gmail.com)
 [![Discord](https://img.shields.io/badge/Discord-labanayt5301-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Z4my8c2ZH)
 [![YouTube](https://img.shields.io/badge/YouTube-@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
-[![Release](https://img.shields.io/badge/Release-v0.4.7--Beta%20(Build%2012)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Source snapshot](https://img.shields.io/badge/Source-v0.4.7--Beta%20(Build%2012)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![Build Status](https://img.shields.io/badge/Status-Native%20Verification%20Pending-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![macOS](https://img.shields.io/badge/macOS-Sequoia%2015.8.3%20(24H241)-7C3AED?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![Target Platform](https://img.shields.io/badge/Platform-ASUS%20VivoBook%20K15%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
@@ -17,6 +17,8 @@
 <br/>
 
 > **Platform status (v0.4.7-beta, build 12):** This repository contains platform-specific source, not proof that every platform build or transport has been tested. Current KL-06 transport is private-LAN TLS; Android has a sender path to the desktop broker. Bluetooth and cellular relay are not implemented. iOS/macOS/Windows file-transfer directions are not end-to-end verified. Fan RPM is read-only and remains unavailable when the installed AppleSMC/VirtualSMC provider does not expose supported tachometer keys. Google Drive runtime log upload is not configured.
+
+> **Release mismatch:** The GitHub Releases page has not yet published a matching v0.4.7-beta Build 12 release. The badge above identifies the source snapshot only; do not treat the older GitHub release as the current binary. Native builds and device transfers remain unverified until the workflow and physical-device checks pass.
 
 <p align="center">
   <b>A lightweight, beautiful, and capability-aware universal control companion across Mac, Windows, Android, and iPhone.</b><br/>
