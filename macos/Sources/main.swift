@@ -240,16 +240,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 reply(id, "Local app caches cleaned safely.")
             case "checkUpdates":
                 reply(id, [
-                    "currentVersion": "0.4.3-beta",
-                    "currentBuild": 10,
+                    "currentVersion": "0.4.5-beta",
+                    "currentBuild": 11,
                     "channel": "beta",
                     "status": "up_to_date",
-                    "latestVersion": "0.4.3-beta",
-                    "latestBuild": 10,
+                    "latestVersion": "0.4.5-beta",
+                    "latestBuild": 11,
                     "releaseDate": "2026-11-19",
                     "catalogVerified": true,
-                    "downloadUrl": "https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download",
-                    "notice": "You are running the latest v0.4.3-beta candidate (Build 10). Dual signed with SHA-256 verified release catalog."
+                    "downloadUrl": "https://drive.google.com/uc?id=1jfB-a7WobMvncb4RW9dNt1ipINB3khe9&export=download",
+                    "notice": "You are running the latest v0.4.5-beta candidate (Build 11). Dual signed with SHA-256 verified release catalog."
                 ])
             case "setPowerProfile":
                 guard let profile = params["profile"] as? String else { throw ControlError(message: "Invalid power profile.") }

@@ -1,5 +1,5 @@
 {
-  "build": 10,
+  "build": 11,
   "files": [
     {
       "bytes": 2666,
@@ -59,13 +59,13 @@
       "bytes": 22929,
       "executable": false,
       "path": "KL-06-Manager-App.html",
-      "sha256": "a870d36fc96038ea420c2e93f2c47ac296c9618b32bcce28a526f713deb3a13b"
+      "sha256": "76399da39ee3a73424a972ca7bbc7ce23e4fce37430aa3bd2424c5057d888f71"
     },
     {
-      "bytes": 22802,
+      "bytes": 22800,
       "executable": false,
       "path": "README.md",
-      "sha256": "242b7ac21b3dad3fbe00a54ccdae60e9da0296208829c02fa868a02cc4404c0f"
+      "sha256": "14b85183dd813bdfc77a6fcc545c9f6fea867ff6eca233cd15218421ee765d9a"
     },
     {
       "bytes": 1599,
@@ -77,7 +77,7 @@
       "bytes": 271,
       "executable": false,
       "path": "VERSION.json",
-      "sha256": "80390e7e3347c5650bf40dae88e3aaac4da679df74ed02a9cf0cb8b530e5c6a0"
+      "sha256": "9fcd3099e6b2b547038a88220a205b9481ae1786d920d86fc30d4e47fa13b2d0"
     },
     {
       "bytes": 687,
@@ -89,7 +89,7 @@
       "bytes": 576,
       "executable": false,
       "path": "android/app/build.gradle",
-      "sha256": "9d7c2d61812d9f019654eb3b5cd46852907931b464af5d1f4c792ec2619e718f"
+      "sha256": "955484a46cc26a0631e8e2a3a211335e48d713492bd97a1d69640efda64ff84d"
     },
     {
       "bytes": 4624,
@@ -110,10 +110,10 @@
       "sha256": "4011e89ac992d4de299b3abe84dbf1aa5c4e15042e4c2780b87cea0901e4e49c"
     },
     {
-      "bytes": 49648,
+      "bytes": 49651,
       "executable": false,
       "path": "android/app/src/main/java/app/klasus/controlcenter/MainActivity.java",
-      "sha256": "0746f1876575fd3754d75267af89caf5376e08a910529b1f8bc2de1e6ab90e77"
+      "sha256": "be8875f91fbd3d8cd73d963d1265c38c3f9db436145b8edf57a75cf15d3bf97a"
     },
     {
       "bytes": 7231,
@@ -206,10 +206,10 @@
       "sha256": "932b4c76db498f25a941115622ded0ef5c501cc0a95c4cdbcd64c14ebf6b4810"
     },
     {
-      "bytes": 28565,
+      "bytes": 28579,
       "executable": true,
       "path": "automation/rebuild_and_sign_apk.py",
-      "sha256": "a7655165faa04217616f14d33dd2400121b99434d500bed03123008b76d725fc"
+      "sha256": "6fded8390f986c4a9da49ef4538fd5d7b0323843256a8b626b5c81fa6d500d27"
     },
     {
       "bytes": 4121,
@@ -227,7 +227,7 @@
       "bytes": 30376,
       "executable": false,
       "path": "companion/server.py",
-      "sha256": "b6b5f361cb5a0e473d0d974d4f985817ca950acd7a5ceded3f9093d0b64ff1d3"
+      "sha256": "fb50b3dff179d6d43b7d90e6d65e3bbae4bad4738db3d072e5b9a31194e87e59"
     },
     {
       "bytes": 13315,
@@ -239,13 +239,13 @@
       "bytes": 20278,
       "executable": false,
       "path": "docs/KL-06-Complete-Guide.md",
-      "sha256": "689439464156843510e6625b6561fdded3c3c5d8c3cd332c3e8b85711ec068ff"
+      "sha256": "10e89b230d9aac75b732ba2adeb5ad1b93de3a398713015743665ca8e8c98a17"
     },
     {
       "bytes": 20278,
       "executable": false,
       "path": "docs/KL-06-Complete-Guide.txt",
-      "sha256": "689439464156843510e6625b6561fdded3c3c5d8c3cd332c3e8b85711ec068ff"
+      "sha256": "10e89b230d9aac75b732ba2adeb5ad1b93de3a398713015743665ca8e8c98a17"
     },
     {
       "bytes": 204015,
@@ -275,13 +275,13 @@
       "bytes": 22929,
       "executable": false,
       "path": "fix-app.html",
-      "sha256": "a870d36fc96038ea420c2e93f2c47ac296c9618b32bcce28a526f713deb3a13b"
+      "sha256": "76399da39ee3a73424a972ca7bbc7ce23e4fce37430aa3bd2424c5057d888f71"
     },
     {
-      "bytes": 80202,
+      "bytes": 80519,
       "executable": false,
       "path": "index.html",
-      "sha256": "fc468e482cc651e553bd2a8c011b908a4c14008c3c95c6b829982ed41d985f98"
+      "sha256": "2c38d7557e528f98c2a42ae9f38bf3eb6aa588a11d20d5c1150ac96f7529439a"
     },
     {
       "bytes": 5659,
@@ -302,10 +302,10 @@
       "sha256": "1cd39f53e9aa89802563cd26f19370cdccc65ddf6fdb2b4871056ae5eba4cb6d"
     },
     {
-      "bytes": 16536,
+      "bytes": 16539,
       "executable": false,
       "path": "ios/KL06Mobile/App.swift",
-      "sha256": "99b337764ba9473602a8e76866ac1dd6c7cfb6522f3ff17a3369fad4b9cf818d"
+      "sha256": "8cb7aa0aa45894b485b55f82ee49a2b68d5e1cfe2ae755ac24ba1b2be85f066b"
     },
     {
       "bytes": 2134,
@@ -467,7 +467,7 @@
       "bytes": 1033,
       "executable": false,
       "path": "macos/Info.plist",
-      "sha256": "752c1fc50f1df7c50699613e269879549e8cec5cd62da4412a2b8c3df49c8977"
+      "sha256": "8cafdd9cb907857ef581247d5fc8aebd60b80bcfdc39d3aaa2abc3c47097d658"
     },
     {
       "bytes": 198,
@@ -527,7 +527,7 @@
       "bytes": 64556,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "a32ffff851ee890bb2ead1a6ed72a68cf5dbea99fc0567969c474fcdecf2c86a"
+      "sha256": "77ede299e731d253aeff0541dc49670965e8f49617ac70d54c6e56e8e43f37f6"
     },
     {
       "bytes": 5483,
@@ -551,7 +551,7 @@
       "bytes": 8178,
       "executable": false,
       "path": "macos/Resources/model.js",
-      "sha256": "ffe7842eed4b03761ea039cb307f39fa50aa7febef1a7bcf51ed4837e407cbec"
+      "sha256": "7a966dbc790afd35ac05594ecc3fc96acd99d4c8b6175b2c20e4086e2b2ad243"
     },
     {
       "bytes": 29636,
@@ -611,7 +611,7 @@
       "bytes": 32613,
       "executable": false,
       "path": "macos/Sources/main.swift",
-      "sha256": "cd71885b95f13d2d1278e85be15eacd03e62a887bc81a8f57c45078371b1f792"
+      "sha256": "957d993e60242bde29ca61dcb288e19fb041dea414e47dd167bd0324e188e5c9"
     },
     {
       "bytes": 2090,
@@ -668,10 +668,10 @@
       "sha256": "a21d82a38ddbcbb2c1a3450bdaa90d236786bfe30f46e6cf96b02cc8fd54df03"
     },
     {
-      "bytes": 3198,
+      "bytes": 3211,
       "executable": false,
       "path": "macos/tests/package.test.py",
-      "sha256": "cb7bead3438242bfaa8afc6c8d6afb690e41f64cca62cdde4c662e7595ca6450"
+      "sha256": "bab74df141831434f5dc04b7c8bd82833c0c0f14216278a3547f3582ca578445"
     },
     {
       "bytes": 3803,
@@ -692,16 +692,16 @@
       "sha256": "329d580cc5fbe0aadbdfaa952b9fc614ddb867e7f02ae31d5bfbff2cfdf9a1a1"
     },
     {
-      "bytes": 36929,
+      "bytes": 36971,
       "executable": false,
       "path": "script.js",
-      "sha256": "5719f1cf397e82eb6bc22501bb4a0ef089b48caee7febc9ab6885821a83febc0"
+      "sha256": "2c239b1ab84c0cb4764b7b29c02021fda48b211f253bbfa1c6c8160aa5cd2f72"
     },
     {
-      "bytes": 99708,
+      "bytes": 99711,
       "executable": false,
       "path": "shared/web/app.js",
-      "sha256": "0522c3c99927b846d538bad15411fa56cf5cd8a8983730c59913550663965c07"
+      "sha256": "8aa6cba6f1891b7392bd6304a9543f393d564a4f718ee86d87c813990991fcf4"
     },
     {
       "bytes": 5483,
@@ -800,10 +800,10 @@
       "sha256": "25a4df1b4778cfe516a7498d8c9e5e0a4ebb4db6c01dec86467cea59e402d635"
     },
     {
-      "bytes": 8600,
+      "bytes": 8653,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "d28ab7515ec2b6161011884e2d0c9dd8a62c63c32eb918cf57265cd144332f7e"
+      "sha256": "828d5461b064f4230e2b825bcf35b67187dc491ced1a1f6b7a3a667b33bb1948"
     },
     {
       "bytes": 1614,
@@ -833,7 +833,7 @@
       "bytes": 2316,
       "executable": false,
       "path": "windows/KL06.Windows/KL06.Windows.csproj",
-      "sha256": "b2d3fbf187ea0a9ee8ea5a4267867a7b1161be8a242275e3990eab5fd7e990bf"
+      "sha256": "2ea3de712cec6760bfae2003e5d686d8d25b611945be4c2913431b1cd41b6e51"
     },
     {
       "bytes": 11249,
@@ -845,7 +845,7 @@
       "bytes": 6863,
       "executable": false,
       "path": "windows/KL06.Windows/NativeDevice.cs",
-      "sha256": "0eefca8dc89bed4bf1d13e45c23296be8b5938f7d30c02fb0e6a9744812314ff"
+      "sha256": "77b526747c2de09397037810f5c8d4279e2bf429fd280ce36b86ff6dd4067a11"
     },
     {
       "bytes": 184,
@@ -898,5 +898,5 @@
   ],
   "schema": "KL06_SOURCE_MANIFEST_V1",
   "scope": "source-only-not-native-build-or-owner-approval",
-  "version": "0.4.3-beta"
+  "version": "0.4.5-beta"
 }

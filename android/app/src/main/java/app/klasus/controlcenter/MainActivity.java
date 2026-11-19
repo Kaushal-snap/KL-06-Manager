@@ -185,7 +185,7 @@ public final class MainActivity extends Activity {
     private double number(JSONObject p)throws Exception {Object v=p.opt("value");if(p.length()!=1||!(v instanceof Number))throw new IllegalArgumentException();double n=((Number)v).doubleValue();if(!Double.isFinite(n)||n<0||n>100)throw new IllegalArgumentException();return n;}
     private float brightness(){float v=getWindow().getAttributes().screenBrightness;if(v>=0)return v;try{return Settings.System.getInt(getContentResolver(),Settings.System.SCREEN_BRIGHTNESS)/255f;}catch(Exception e){return Float.NaN;}}
     private JSONObject snapshot()throws Exception {
-        JSONObject s=new JSONObject().put("platform","android").put("version","0.4.3-beta").put("build",10).put("sampledAt",Instant.now().toString());
+        JSONObject s=new JSONObject().put("platform","android").put("version","0.4.5-beta").put("build",11).put("sampledAt",Instant.now().toString());
         Intent battery=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));JSONObject b=new JSONObject();if(battery!=null){int level=battery.getIntExtra(BatteryManager.EXTRA_LEVEL,-1),scale=battery.getIntExtra(BatteryManager.EXTRA_SCALE,-1),plug=battery.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);if(level>=0&&scale>0)b.put("chargePercent",100.0*level/scale);if(plug>=0)b.put("onAC",plug!=0);}s.put("battery",b);
         ActivityManager.MemoryInfo info=new ActivityManager.MemoryInfo();((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getMemoryInfo(info);s.put("memory",new JSONObject().put("totalGB",info.totalMem/1073741824.0).put("usedGB",(info.totalMem-info.availMem)/1073741824.0).put("source","Android total minus available RAM; not a pressure test"));
         StatFs fs=new StatFs(getFilesDir().getAbsolutePath());s.put("storage",new JSONObject().put("freeGB",fs.getAvailableBytes()/1073741824.0).put("totalGB",fs.getTotalBytes()/1073741824.0));
@@ -351,14 +351,14 @@ public final class MainActivity extends Activity {
         case "checkUpdate":{
             writeLog("OTA","Checked for in-app software updates from native bridge");
             JSONObject res=new JSONObject()
-                .put("currentVersion","0.4.3-beta")
-                .put("currentBuild",10)
-                .put("latestVersion","0.4.3-beta")
-                .put("latestBuild",10)
+                .put("currentVersion","0.4.5-beta")
+                .put("currentBuild",11)
+                .put("latestVersion","0.4.5-beta")
+                .put("latestBuild",11)
                 .put("upToDate",true)
                 .put("channel","beta")
-                .put("releaseNotes","Hardware fan diagnostics with password protection, auto-sync to private Drive folder KL-06-Private-Logs, and v0.4.3 beta ecosystem update.")
-                .put("downloadUrl","https://drive.google.com/uc?id=1bBHqq441G3nivGngBDhov3PbspLDPBDr&export=download");
+                .put("releaseNotes","Tiger Lake hardware optimization suite (HDR, Sleep/Wake, AirDrop AWDL, GPU stability, Fan RPM), OTA engine, and v0.4.5 beta ecosystem update.")
+                .put("downloadUrl","https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download");
             reply(id,res,null);
             return;
         }
@@ -384,7 +384,7 @@ public final class MainActivity extends Activity {
             StringBuilder sb=new StringBuilder();
             sb.append("=== KL-06 DIAGNOSTIC LOG REPORT ===\n");
             sb.append("App: KL-06 Manager\n");
-            sb.append("Version: 0.4.3-beta (Build 10)\n");
+            sb.append("Version: 0.4.5-beta (Build 11)\n");
             sb.append("Generated At: ").append(Instant.now().toString()).append("\n");
             sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n");
             sb.append("Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n\n");
@@ -407,7 +407,7 @@ public final class MainActivity extends Activity {
                 try{
                     Intent sendIntent=new Intent(Intent.ACTION_SEND);
                     sendIntent.setType("text/plain");
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.3-beta Build 10)");
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.5-beta Build 11)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
                     Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Log to Private Drive / Share");
                     startActivity(chooser);
@@ -422,7 +422,7 @@ public final class MainActivity extends Activity {
         case "saveFanDiagnosticReport":{
             String reportText=p.optString("reportText","");
             if(reportText.isEmpty()){
-                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.3-beta (Build 10)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
+                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.5-beta (Build 11)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
             }
             writeLog("FAN_DIAG","Fan diagnostic report generated with security password validation.");
             String savedPath="Download/KL-06/logs/kl06-fan-diagnostic.log";
@@ -432,7 +432,7 @@ public final class MainActivity extends Activity {
                 try{
                     Intent sendIntent=new Intent(Intent.ACTION_SEND);
                     sendIntent.setType("text/plain");
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.4.3-beta Build 10)");
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.4.5-beta Build 11)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,finalReport);
                     Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Fan Diagnostic to Private Drive / Share");
                     startActivity(chooser);
@@ -453,7 +453,7 @@ public final class MainActivity extends Activity {
                     udpSock=new DatagramSocket();
                     udpSock.setBroadcast(true);
                     udpSock.setSoTimeout(1200);
-                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.3-beta\"}".getBytes(StandardCharsets.UTF_8);
+                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.5-beta\"}".getBytes(StandardCharsets.UTF_8);
                     DatagramPacket packet=new DatagramPacket(ping,ping.length,InetAddress.getByName("255.255.255.255"),8766);
                     try{udpSock.send(packet);}catch(Exception ignored){}
                     try{
