@@ -135,7 +135,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
                 guard let self = self else { return }
                 do {
                     let result = try await self.laptop.transferFile(url: url, fileName: url.lastPathComponent, expectedSize: size) { [weak self] percent in
-                        DispatchQueue.main.async { self?.web.evaluateJavaScript("if(window.KLTransferProgress)window.KLTransferProgress(\\(percent));", completionHandler: nil) }
+                        DispatchQueue.main.async { self?.web.evaluateJavaScript("if(window.KLTransferProgress)window.KLTransferProgress(\(percent));", completionHandler: nil) }
                     }
                     self.selectedShareURL = nil; self.selectedShareSize = 0
                     self.reply(id, result: result)
