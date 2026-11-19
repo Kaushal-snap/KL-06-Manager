@@ -207,18 +207,8 @@
   let activeFanDiagModal = null; // { open: boolean, error: string }
 
   // Tiger Lake / macOS One-Click Hardware Optimization state
-  const fixStatus = {
-    device: false,
-    hdr: false,
-    sleep: false,
-    gpu: false,
-    fan: false,
-    all: false
-  };
-  try {
-    const savedFixes = safeStorage.getItem('kl06_fix_status');
-    if (savedFixes) Object.assign(fixStatus, JSON.parse(savedFixes));
-  } catch(ignored){}
+  const fixStatus = { device:false, hdr:false, sleep:false, gpu:false, fan:false, all:false };
+
   const diagnosticLogs = [
     { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'info', msg: 'KL-06 UI initialized. Network, peer connection and Drive sync are unverified until a real native response succeeds.' }
   ];
@@ -552,8 +542,8 @@
           <h2 style="margin:4px 0 0">Tiger Lake &amp; macOS Hardware Fix Suite</h2>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          ${button('🚀 FIX EVERYTHING', 'kl06-fix-all', 'class="btn-primary" style="background:#164e63;border-color:#38bdf8;font-weight:700"')}
-          ${button('🔄 Rollback All', 'kl06-rollback-all')}
+          ${button('Hardware fixes unavailable', 'kl06-fix-all', 'class="btn-secondary"', '', true)}
+          ${button('No changes to roll back', 'kl06-rollback-all', '', 'ghost', true)}
           <a href="fix-app.html" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
             <button type="button" class="btn-secondary" style="border-color:#38bdf8;color:#38bdf8">🌐 Open Web Dashboard</button>
           </a>
@@ -576,7 +566,7 @@
         </div>
         <div class="conn-card">
           <strong>⚡ Overall Status</strong>
-          <small id="kl06-fix-status-overall">${fixStatus.all ? '✓ All Hardware Fixes Applied' : 'Ready for Optimization'}</small>
+          <small id="kl06-fix-status-overall">Diagnostics only · no system fix applied</small>
         </div>
       </div>
 
@@ -586,7 +576,7 @@
             <strong>📶 Device Connection &amp; AirDrop File Transfer</strong>
             <small>AWDL coexistence flags (-itlawdlcoex... &amp; -btleadv) for reliable AirDrop streaming</small>
           </div>
-          ${button(fixStatus.device ? '✓ Fixed' : 'Fix Connection', 'kl06-fix-device', fixStatus.device ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-device', '', 'ghost', true)}
         </div>
 
         <div class="row">
@@ -594,7 +584,7 @@
             <strong>🔆 HDR &amp; EDR Display Flicker Resolution</strong>
             <small>Enables -wex-hdrleaf2 and -wex-hdradapt for smooth 3.08-4.0 EDR dynamic range</small>
           </div>
-          ${button(fixStatus.hdr ? '✓ Fixed' : 'Fix HDR / EDR', 'kl06-fix-hdr', fixStatus.hdr ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-hdr', '', 'ghost', true)}
         </div>
 
         <div class="row">
@@ -618,7 +608,7 @@
             <strong>🌀 AppleSMC Fan RPM Sensor Reading</strong>
             <small>Restores safe read-only tachometer sensors without risky EC register writes</small>
           </div>
-          ${button(fixStatus.fan ? '✓ Fixed' : 'Fix Fan RPM', 'kl06-fix-fan', fixStatus.fan ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Read-only · no fix', 'kl06-fix-fan', '', 'ghost', true)}
         </div>
       </div>
 
@@ -1245,21 +1235,16 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'ping-hardware':
-        toast('🟢 Hardware link active: Wi-Fi, Bluetooth & Mobile Data synched.');
-        addLog('LINK', 'ok', 'Hardware link ping: telemetry and companion socket active.');
-        if (native) {
-          try { request('state').catch(()=>{}); } catch(e){}
-        }
+        toast('No KL-06 peer is connected. Pair with a desktop companion over the private LAN first.');
+        addLog('LINK', 'warn', 'Connection status checked: no paired peer session is active.');
         return;
 
       case'request-permissions':
         if (native) {
           try { request('requestPermissions').catch(()=>{}); } catch(ignored){}
         }
-        toast('✓ Requesting OS hardware, network & storage permissions…');
-        hardwareConnected = true;
-        try { localStorage.setItem('kl06_hardware_permission_granted', 'true'); } catch(e){}
-        startHardwareKeepAlive();
+        toast('Requesting OS permissions. This does not connect another device.');
+        hardwareConnected = false;
         activePermissionModal = false;
         render();
         return;
@@ -1279,8 +1264,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'hotspot-mode':
-        toast('📲 Personal Hotspot mode: connect peer device to this phone\'s hotspot, then stream files directly!');
-        addLog('RADAR', 'info', 'Personal Hotspot direct link ready. Subnet IP 192.168.43.1 / 192.168.x.x active.');
+        toast('Hotspot routing is only supported when both devices share a private LAN subnet; KL-06 has no cellular relay.');
         return;
 
       case'check-app-update': {
@@ -1312,69 +1296,14 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'kl06-fix-device':
-        fixStatus.device = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ Device Connection & AirDrop AWDL coexistence fix applied (-btleadv, -itlawdlcoex...).');
-        toast('✓ Device connection & AirDrop fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-hdr':
-        fixStatus.hdr = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ HDR/EDR display flicker fix applied (-wex-hdrleaf2, -wex-hdradapt, Target EDR: 3.08-4.0).');
-        toast('✓ HDR / EDR display fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-sleep':
-        fixStatus.sleep = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ Sleep/wake black screen fix applied (-wex-tgl-hold-render-wake, darkwake=0).');
-        toast('✓ Sleep/wake fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-gpu':
-        fixStatus.gpu = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ GPU stability fix applied (-disablegfxfirmware, -wex-tgl-dpcd-bl).');
-        toast('✓ GPU stability fix applied! WindowServer panics mitigated.');
-        render();
-        return;
-
       case'kl06-fix-fan':
-        fixStatus.fan = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ AppleSMC Fan RPM sensor reading validated and restored.');
-        toast('✓ Fan RPM fix applied! Tachometer reading restored.');
-        render();
-        return;
-
       case'kl06-fix-all':
-        fixStatus.device = true;
-        fixStatus.hdr = true;
-        fixStatus.sleep = true;
-        fixStatus.gpu = true;
-        fixStatus.fan = true;
-        fixStatus.all = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '🚀 ALL HARDWARE FIXES APPLIED (Device, HDR, Sleep, GPU, Fan).');
-        toast('🚀 All fixes applied successfully! Reboot with your 1401 EFI pendrive for full effect.');
-        render();
-        return;
-
       case'kl06-rollback-all':
-        fixStatus.device = false;
-        fixStatus.hdr = false;
-        fixStatus.sleep = false;
-        fixStatus.gpu = false;
-        fixStatus.fan = false;
-        fixStatus.all = false;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'info', '🔄 Rollback initiated: restore config.plist from backup.');
-        toast('Rollback initiated. Restore from EFI backup config.');
-        render();
+        addLog('TGL', 'warn', 'Requested hardware fix is not implemented in this build. No EFI, driver, Wi-Fi, Bluetooth, fan or firmware setting was changed.');
+        toast('This build has diagnostics only. No system fix was applied.');
         return;
 
       case'kl06-download-fix-script':
