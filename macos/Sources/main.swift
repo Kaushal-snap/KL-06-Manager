@@ -138,8 +138,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["version"] = "0.4.7-beta"
         value["build"] = 12
         value["powerProfile"] = powerProfile
-        value["batteryLimit"] = batteryLimit
-        value["fanMode"] = fanMode
+        value.removeValue(forKey: "batteryLimit")
+        value.removeValue(forKey: "fanMode")
         return value
     }
     private func reply(_ id: String, _ result: Any? = nil, error: String? = nil) {
@@ -261,15 +261,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 }
                 reply(id, "Power profile switched to \(profile).")
             case "setBatteryLimit":
-                guard let limit = (params["limit"] as? NSNumber)?.intValue, [60, 80, 100].contains(limit) else { throw ControlError(message: "Invalid battery limit.") }
-                self.batteryLimit = limit
-                UserDefaults.standard.set(limit, forKey: "KL06_BatteryLimit")
-                reply(id, "Battery charging threshold configured to \(limit)%.")
+                throw ControlError(message: "Battery charge limiting is not implemented on this Mac. No charging threshold was changed.")
             case "setFanMode":
-                guard let mode = params["mode"] as? String else { throw ControlError(message: "Invalid fan mode.") }
-                self.fanMode = mode
-                UserDefaults.standard.set(mode, forKey: "KL06_FanMode")
-                reply(id, "ASUS cooling fan profile set to \(mode).")
+                throw ControlError(message: "Manual fan control is not implemented. KL-06 only reads supported AppleSMC tachometer keys; no fan profile or firmware setting was changed.")
             case "scanPeers":
                 // No discovery implementation exists in this macOS candidate. Never return synthetic peers.
                 reply(id, [])
