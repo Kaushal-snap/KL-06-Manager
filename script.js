@@ -7,35 +7,35 @@
 const PLATFORM_DATA = {
     android: {
         name: 'Android Package (Dual v1 + v2 Signed)',
-        fileName: 'KL-06-0.4.1-beta-android-debug-UNTESTED.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing',
-        sha256: '9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c',
+        fileName: 'KL-06-0.4.2-beta-android-debug-UNTESTED.zip',
+        fileMeta: 'v0.4.2-beta Build 9 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
+        directUrl: 'https://drive.google.com/uc?id=1N9C0--kbnpqhSY9gg3sSF8tQN5oYeBNv&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1N9C0--kbnpqhSY9gg3sSF8tQN5oYeBNv/view?usp=sharing',
+        sha256: 'd510a4c71f620224339ad29aa55f14a7559ab6fb642f2d62126a46489214f0c0',
         btnText: '⬇️ Download for Android (1.07 MB)'
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
-        fileName: 'KL-06 Manager 4.1 beta.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 196 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
-        directUrl: 'https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download',
-        viewUrl: 'https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing',
-        sha256: '8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0',
+        fileName: 'KL-06 Manager 4.2 beta.zip',
+        fileMeta: 'v0.4.2-beta Build 9 • 196 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        directUrl: 'https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT/view?usp=sharing',
+        sha256: 'b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240',
         btnText: '⬇️ Download for macOS (196 KB)'
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
-        fileName: 'KL-06-0.4.1-beta-windows-x64-UNTESTED.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 561 KB • Windows 7 SP1, 8, 8.1, 10, 11',
-        directUrl: 'https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing',
-        sha256: '3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c',
+        fileName: 'KL-06-0.4.2-beta-windows-x64-UNTESTED.zip',
+        fileMeta: 'v0.4.2-beta Build 9 • 561 KB • Windows 7 SP1, 8, 8.1, 10, 11',
+        directUrl: 'https://drive.google.com/uc?id=1vCVx-j0zeXVbx94orP987BOzoSrX1SzI&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1vCVx-j0zeXVbx94orP987BOzoSrX1SzI/view?usp=sharing',
+        sha256: '383f47e43d4f878a22a43776732a47bebf63c056bdf0074f114bed83cb10d457',
         btnText: '⬇️ Download for Windows x64 (561 KB)'
     },
     ios: {
         name: 'iOS Mobile Companion (Swift / devicectl)',
         fileName: 'INSTALL-IOS.command & Xcode Project',
-        fileMeta: 'v0.4.1-beta Build 8 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
+        fileMeta: 'v0.4.2-beta Build 9 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
         directUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command',
         viewUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios',
         sha256: 'Build via devicectl / AltStore / Xcode',
@@ -43,11 +43,11 @@ const PLATFORM_DATA = {
     },
     source: {
         name: 'Complete Source Code Archive',
-        fileName: 'KL-06-0.4.1-beta-source-BUILD-READY.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 1.94 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing',
-        sha256: '328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073',
+        fileName: 'KL-06-0.4.2-beta-source-BUILD-READY.zip',
+        fileMeta: 'v0.4.2-beta Build 9 • 2.02 MB • 143 Clean Files',
+        directUrl: 'https://drive.google.com/uc?id=1wx3ScGO7FhVyhex9eoRlwrcRScnV9ioh&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1wx3ScGO7FhVyhex9eoRlwrcRScnV9ioh/view?usp=sharing',
+        sha256: '2fafca48947d022ba36b315fa91a5d0fa17f6669892b902b79868fb577c02261',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };
@@ -469,7 +469,7 @@ function selectProgressiveVersion(key) {
 }
 
 /**
- * Priority Mockup Interactive Switcher (v0.4.1-beta)
+ * Priority Mockup Interactive Switcher (v0.4.2-beta)
  */
 const PRIORITY_MOCKUP_DATA = {
     1: {
