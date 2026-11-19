@@ -340,7 +340,7 @@
       <div>
         <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.7-beta)</strong>
         <div style="color:#8ab4be;font-size:11px;margin-top:2px">
-          ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">🟢 Hardware Link Active (Wi-Fi, Bluetooth &amp; Mobile Data Connected)</span>' : 'Mobile Data &amp; Wi-Fi Active • Auto-Send Private Drive Sync Ready'}
+          ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">Permissions granted; no peer connection established</span>' : 'No peer connected · Google Drive sync not configured'}
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -353,14 +353,12 @@
 
     <div class="drop-card" data-action="pick-share-file" id="share-drop-card" style="cursor:pointer">
       <span class="drop-icon">📤</span>
-      <h3>Direct File Drop &amp; AirDrop Sharing</h3>
-      <p style="margin:6px 0 12px;color:#9ec2ce">Tap here to choose any photo, video, or document to send, or drag &amp; drop files directly.</p>
+      <h3>Send a file over a paired LAN connection</h3>
+      <p style="margin:6px 0 12px;color:#9ec2ce">Choose a file after direct TLS pairing. Android is currently the only native sender path.</p>
       
       <div style="display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap">
         ${button('📁 Select File to Share', 'pick-share-file', 'class="btn-primary"')}
-        ${button('📸 Quick Share Photo (3.4 MB)', 'quick-send-photo')}
-        ${button('📄 Quick Share Doc (120 KB)', 'quick-send-doc')}
-      </div>
+       </div>
 
       ${transferActive ? `
         <div class="progress-box" style="margin-top:14px;padding:12px;background:#0d232c;border:1px solid #285463;border-radius:8px">
@@ -372,14 +370,14 @@
             <div class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:11px;color:#8ab1bf;margin-top:6px">
-            <span>Target: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b> (${e(transferSpeed)})</span>
+            <span>Target: <b>${e(pairedDevice?.name || 'No peer paired')}</b> (${e(transferSpeed)})</span>
             <span>SHA-256 Verified Stream</span>
           </div>
         </div>
       ` : `
         <div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#8ab4be;background:rgba(0,0,0,0.25);padding:4px 12px;border-radius:12px">
           <span class="live-dot" style="background:#34d399"></span>
-          Ready to transmit to: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b>
+          No active peer connection
         </div>
       `}
     </div>
@@ -387,16 +385,15 @@
     <section class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
         <div>
-          <span class="live-pill"><span class="live-dot"></span> AIRDROP / QUICK SHARE RADAR</span>
-          <h2 style="margin:4px 0 0">Nearby Devices &amp; Instant Pairing</h2>
+          <span class="live-pill"><span class="live-dot"></span> PRIVATE-LAN DISCOVERY</span>
+          <h2 style="margin:4px 0 0">Nearby KL-06 desktop companions</h2>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           ${button(isScanning ? '⏳ Scanning…' : '📡 Scan Nearby Devices', 'scan-peers', isScanning ? 'disabled' : '')}
-          ${button('📲 Hotspot Direct Link', 'hotspot-mode')}
-          ${button('🏷️ NFC Beam Tap', 'nfc-tap')}
+          
         </div>
       </div>
-      <p>Discover phones, laptops, and PCs over local Wi-Fi, Personal Hotspot (Xender style), or Bluetooth/NFC. Tap <b>Connect &amp; Share</b> to link instantly without typing passwords.</p>
+      <p>Discovery is limited to KL-06 desktop brokers on the same private LAN. A discovered device is not paired until its certificate fingerprint and session code are verified.</p>
 
       <div class="radar-wrapper ${isScanning ? 'radar-scanning' : ''}">
         <div class="radar-ring"></div>
@@ -405,29 +402,9 @@
         <div class="radar-hub">📡</div>
       </div>
 
-      <div class="pin-card">
-        <div class="pin-code-wrap">
-          <div>
-            <small style="display:block;color:#8ab4be;margin-bottom:4px">MY PAIRING CODE (SHARE WITH PEER)</small>
-            <div class="pin-digits">${e(currentPin)}</div>
-          </div>
-          <div>
-            ${button('📋 Copy PIN', 'copy-pin')}
-            ${button('🔄 Refresh PIN', 'refresh-pin')}
-          </div>
-        </div>
-        <div class="pin-meta">
-          Expires in <b>${e(getPinTimeRemaining())}</b><br>
-          One-time 6-digit mutual authentication code.
-        </div>
-      </div>
+      <div class="notice">The old 6-digit PIN was never connected to this TLS protocol. Use the Direct TLS Pairing form below: HTTPS URL, full certificate fingerprint, and 32-character session code.</div>
 
-      <div class="pin-input-group">
-        <input id="peer-pin-input" type="text" placeholder="Enter peer PIN (e.g. 742-910)" maxlength="7" autocomplete="off" spellcheck="false">
-        ${button('Pair with PIN', 'pair-by-pin')}
-      </div>
-
-      <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered Nearby Devices (Auto-Pair Ready)</h3>
+      <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered LAN companions (not automatically paired)</h3>
       ${isScanning ? `
         <div style="background:#0c1e28;border:1px solid #234b5c;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
           <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning local Wi-Fi &amp; Hotspot for active KL-06 companions on port 8766...</p>
@@ -449,7 +426,7 @@
         </div>
       ` : `
         <div style="background:#09161e;border:1px dashed #24414f;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
-          <p style="margin:0;font-size:12px;color:#8ab4be">No active KL-06 companions discovered on this subnet yet. Ensure KL-06 is running on port 8766, tap <b>Scan Nearby Devices</b> above, or link directly by IP below.</p>
+          <p style="margin:0;font-size:12px;color:#8ab4be">No KL-06 desktop broker discovered. Start the temporary desktop companion and scan again, or enter its pairing details below.</p>
         </div>
       `}
 
@@ -467,8 +444,8 @@
       </div>
 
       <div style="background:#0c1922;border:1px solid #244352;border-radius:14px;padding:16px;margin:20px 0 0">
-        <h4 style="margin:0 0 8px;font-size:13px;color:#e8f7f5">🔗 Direct IP Pairing &amp; Physical Hardware Link</h4>
-        <p style="font-size:11px;color:#8ab4be;margin:0 0 12px">If your network has router/client isolation, enter your companion's IP directly to pair and stream files.</p>
+        <h4 style="margin:0 0 8px;font-size:13px;color:#e8f7f5">🔗 Direct TLS Pairing</h4>
+        <p style="font-size:11px;color:#8ab4be;margin:0 0 12px">Enter the HTTPS URL, full 64-character certificate SHA-256 fingerprint and 32-character session code shown by the desktop. Both devices must be on the same reachable private LAN.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
           <div>
             <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Companion HTTPS URL</label>
@@ -1601,9 +1578,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
             ndef.scan().then(() => {
               ndef.onreading = event => {
                 addLog('NFC', 'ok', `✓ Hardware NFC tag detected: serial ${event.serialNumber || 'NFC-Tag'}`);
-                incomingPair = { name: 'Hardware NFC Peer', type: 'Instant NFC Contact', pin: currentPin, host: 'https://192.168.1.42:8766' };
-                toast('✓ Hardware NFC connection detected!');
-                render();
+                toast('NFC tag detected. KL-06 NFC pairing is not implemented; no device was connected.');
               };
             }).catch(() => {});
           } catch(e) {}
@@ -1636,10 +1611,9 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'accept-auto-pair':
-        pairedDevice = incomingPair ? { ...incomingPair } : { name: 'ASUS VivoBook K15', type: 'Laptop' };
         incomingPair = null;
-        addLog('NET', 'ok', `✓ Paired with ${pairedDevice.name} via TLS handshake.`);
-        toast(`✓ Connected to ${pairedDevice.name}! Instant AirDrop & Hardware Link active.`);
+        addLog('NET', 'warn', 'Automatic pairing is not implemented by the current TLS protocol.');
+        toast('Use Direct TLS Pairing. No device was connected.');
         render();
         return;
 
