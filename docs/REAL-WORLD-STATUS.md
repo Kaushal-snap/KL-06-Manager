@@ -7,7 +7,7 @@ This file distinguishes implemented source paths from tested device behaviour. A
 | Path | Source status | Honest status |
 |---|---|---|
 | Android -> macOS/Windows desktop broker | Android native sender and shared TLS broker exist; chunks are 8 KiB to stay below the broker's 16 KiB JSON request limit | End-to-end device test still required |
-| iOS -> desktop | iOS pairing/state client exists; no native file sender | Not implemented |
+| iOS -> desktop | iOS document-picker sender source added; pinned TLS init/chunk/status + SHA-256 verification | Compile and end-to-end device test still required |
 | macOS -> phone/PC | macOS desktop candidate has no file sender | Not implemented |
 | Windows -> phone/Mac | Windows desktop candidate has no file sender | Not implemented |
 | Android/iOS/macOS/Windows discovery | Android UDP scan + desktop UDP responder exist; macOS and iOS no longer return fabricated peers | Partial; Windows/iOS/macOS discovery is not implemented |
@@ -29,7 +29,7 @@ The old 6-digit PIN UI was not connected to this protocol and has been marked un
 - Android's native streamFileToPeer path hashes the selected file, initiates a transfer, and sends chunks to the desktop broker.
 - The broker enforces a 16 KiB maximum JSON request body; Android chunks were reduced from 64 KiB to 8 KiB to fit the base64-encoded payload.
 - The broker currently auto-approves a transfer from an already-paired token into the desktop Downloads folder. Per-file receiver confirmation is not yet implemented and is a remaining security/product requirement.
-- iOS, macOS and Windows sender paths are not implemented end-to-end. A system share sheet is only an OS handoff; it does not confirm KL-06 delivery.
+- iOS and Android sender source paths now exist for a paired desktop broker; neither has been physically tested by this patch. macOS and Windows sender paths are not implemented. A system share sheet is only an OS handoff; it does not confirm KL-06 delivery.
 - No device-to-device transfer has been physically tested by this patch. Do not label the path verified until sender and receiver builds are installed and a checksum-matched file is received.
 
 ## Fan RPM on macOS
