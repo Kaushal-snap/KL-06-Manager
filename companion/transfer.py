@@ -252,7 +252,7 @@ class TransferSession:
                 "receiverPlatform": self.receiver_platform,
                 "routeType": route["type"],
                 "desktopHubRelay": route["relay"],
-                "finalPath": str(self.destination_path) if self.state == "complete" else None,
+                "destinationName": self.destination_path.name if self.state == "complete" else None,
                 "expiresAt": self.expires_at,
             }
 
