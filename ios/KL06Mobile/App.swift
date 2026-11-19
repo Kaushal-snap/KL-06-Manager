@@ -113,13 +113,8 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
                 "downloadUrl": "https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command"
             ])
         case "discoverPeers":
-            reply(id, result: [
-                "peers": [
-                    ["id": "peer-companion", "name": "ASUS VivoBook / Desktop Host", "platform": "desktop", "type": "Laptop Companion", "route": "Wi-Fi LAN :8766", "signal": "98%", "online": true]
-                ],
-                "count": 1,
-                "scannedAt": ISO8601DateFormatter().string(from: Date())
-            ])
+            // Bonjour/UDP discovery is not implemented in this iOS build. Do not invent an online peer.
+            reply(id, result: ["peers": [], "count": 0, "scannedAt": ISO8601DateFormatter().string(from: Date()), "status": "discovery-unavailable-use-direct-tls-pairing"])
         case "nfcStatus":
             guard p.isEmpty else { reply(id, error: "Invalid nfc request."); return }
             let supported = NFCNDEFReaderSession.readingAvailable
