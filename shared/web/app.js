@@ -1011,6 +1011,15 @@
     render();
     try {
       const res = await request(method, p);
+      if (method === 'pairLaptop') {
+        pairingTarget = { host: p.host, name: 'Desktop companion' };
+      } else if (method === 'finishPairing') {
+        const pairingStatus = typeof res === 'string' ? res : res?.status;
+        if (typeof pairingStatus === 'string' && /^Paired\./i.test(pairingStatus)) {
+          pairedDevice = { id: 'paired-desktop', name: pairingTarget?.name || 'Desktop companion', host: pairingTarget?.host || document.getElementById('direct-host')?.value || document.getElementById('host')?.value || '' };
+          addLog('NET', 'ok', 'Desktop companion pairing completed with the native TLS session.');
+        }
+      }
       if (method === 'state' && res) {
         state = res;
         receivedAt = now();
