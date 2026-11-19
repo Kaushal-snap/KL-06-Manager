@@ -13,7 +13,7 @@
   }
   function action(method,p={}){
     if(!object(p))return false;
-    if(['state','pickHistoryCSV','restoreAll','keepAwake','showNativeVolume','finishPairing','remoteState','remoteResult','disconnectLaptop','startCompanion','stopCompanion','companionDetails','discoverPeers','requestPermissions','checkUpdate','nfcStatus','startNfcScan'].includes(method))return exact(p);
+    if(['state','pickHistoryCSV','pickShareFile','openAppSettings','restoreAll','keepAwake','showNativeVolume','finishPairing','remoteState','remoteResult','disconnectLaptop','startCompanion','stopCompanion','companionDetails','discoverPeers','requestPermissions','checkUpdate','nfcStatus','startNfcScan'].includes(method))return exact(p);
     if(['exportLogs','saveErrorReport','shareLogs'].includes(method))return exact(p)||(exact(p,['logs'])&&Array.isArray(p.logs));
     if(method==='installUpdate')return exact(p)||(exact(p,['downloadUrl'])&&typeof p.downloadUrl==='string');
     if(method==='startNfcBeam')return exact(p)||(exact(p,['payload'])&&object(p.payload));

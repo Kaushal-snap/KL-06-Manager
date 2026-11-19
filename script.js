@@ -7,17 +7,17 @@
 const PLATFORM_DATA = {
     android: {
         name: 'Android Package (Dual v1 + v2 Signed)',
-        fileName: 'KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 1.02 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
-        directUrl: 'https://drive.google.com/uc?id=1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd/view?usp=sharing',
-        sha256: 'fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7',
-        btnText: '⬇️ Download for Android (1.02 MB)'
+        fileName: 'KL-06-0.4.1-beta-android-debug-UNTESTED.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 1.07 MB • Dual Signed (v1 JAR + v2 APK Scheme) • Android 8 to 17+',
+        directUrl: 'https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2/view?usp=sharing',
+        sha256: '9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c',
+        btnText: '⬇️ Download for Android (1.07 MB)'
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
         fileName: 'KL-06 Manager 4.0 beta.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 195 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        fileMeta: 'v0.4.1-beta Build 8 • 195 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
         directUrl: 'https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download',
         viewUrl: 'https://drive.google.com/file/d/16SE_Z25itABzXg8p0aUrITkLr-2E-DVB/view?usp=sharing',
         sha256: '88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941',
@@ -25,8 +25,8 @@ const PLATFORM_DATA = {
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
-        fileName: 'KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 553 KB • Windows 7 SP1, 8, 8.1, 10, 11',
+        fileName: 'KL-06-0.4.1-beta-windows-x64-UNTESTED.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 553 KB • Windows 7 SP1, 8, 8.1, 10, 11',
         directUrl: 'https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download',
         viewUrl: 'https://drive.google.com/file/d/1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM/view?usp=sharing',
         sha256: '9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f',
@@ -35,7 +35,7 @@ const PLATFORM_DATA = {
     ios: {
         name: 'iOS Mobile Companion (Swift / devicectl)',
         fileName: 'INSTALL-IOS.command & Xcode Project',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
+        fileMeta: 'v0.4.1-beta Build 8 • iOS 16.0+ (iOS 16, 17, 18+) • Pure Swift',
         directUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/blob/main/INSTALL-IOS.command',
         viewUrl: 'https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios',
         sha256: 'Build via devicectl / AltStore / Xcode',
@@ -43,8 +43,8 @@ const PLATFORM_DATA = {
     },
     source: {
         name: 'Complete Source Code Archive',
-        fileName: 'KL-06-0.4.0-beta.1-source-BUILD-READY.zip',
-        fileMeta: 'v0.4.0-beta.1 Build 6 • 1.88 MB • 143 Clean Files',
+        fileName: 'KL-06-0.4.1-beta-source-BUILD-READY.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 1.88 MB • 143 Clean Files',
         directUrl: 'https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download',
         viewUrl: 'https://drive.google.com/file/d/1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW/view?usp=sharing',
         sha256: 'd4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029',

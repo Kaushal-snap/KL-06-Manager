@@ -25,6 +25,30 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 <br/>
 
+## 🌐 [0.4.1-beta] — Build 8 (Universal File Sharing Priority, Scoped Storage Fix, iOS/Mac/Windows Cross-Pairing & Reorganized Mobile UX)
+
+### 🚀 Priority 1: Universal File Sharing & Hardware Link
+- **Reorganized Mobile App Navigation:** Restructured mobile UI hierarchy to prioritize user workflows:
+  1. **Priority 1 (Default):** 🚀 **File Sharing & Hardware Link** — Direct AirDrop / Quick Share drop card, real-time chunked transfer animation, nearby device radar, and 1-tap instant pairing.
+  2. **Priority 2:** 📱 **Inbuilt Mobile Controls** — Native volume, display brightness, screen keep-awake assertion, battery monitoring, and storage settings.
+  3. **Priority 3:** 💻 **Etc (PC & Mac Tools)** — Windows and Mac fan controls/sensors, Windows HWiNFO CSV history & chart, OS system tweaks, and remote companion PC link.
+  4. **Priority 4:** 🛡️ **Safety & Privacy** — Offline guarantee, zero cloud telemetry, MIT licenses, and OTA update engine.
+- **Fixed File Sharing Page Reload / Refresh:** Resolved issue where selecting or dropping files triggered unwanted page reload on Android/iOS due to `visibilitychange` focus events interrupting ongoing transfers.
+- **Native Document / File Picker Bridge (`pickShareFile`):** Added native bridge method on Android (using `Intent.ACTION_GET_CONTENT` with SAF chooser) and iOS (using `UIDocumentPickerViewController`), enabling real document and media selection with automatic SHA-256 integrity hashing and live transfer progress.
+- **1-Tap Nearby Device Pairing:** Tapping `⚡ Connect & Share` on any discovered peer (ASUS VivoBook, MacBook Pro, iPhone, Android) instantly establishes pairing and launches the file picker without manual code entry.
+
+### 📱 Storage Permission & Diagnostic Log Auto-Save on Android 13+ (Realme UI / Scoped Storage)
+- **Resolved Missing Storage Permission in OS Settings:** Removed `maxSdkVersion` constraints on `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` in `AndroidManifest.xml`, ensuring Android 13+ (API 33+) Package Manager exposes full storage and media permission controls in Android OS Settings.
+- **Resolved Log Save Error via Scoped Storage MediaStore API:** Replaced direct file system writes with Android 10+ standard `MediaStore.Downloads` API (`RELATIVE_PATH = "Download/KL-06/logs"`), enabling 100% reliable log saving to public `Download/KL-06/logs/kl06-diagnostic.log` without requiring broad storage permissions or failing with Scoped Storage permission errors.
+- **Direct App Settings Launcher (`openAppSettings`):** Added native bridge and UI button `⚙️ App Permissions in Settings` to immediately open the system Application Details Settings screen for direct permission management.
+
+### 🍎 iOS, macOS & Windows Cross-Platform Pairing Enhancements
+- **iOS File Sharing & AirDrop Integration:** Added native `pickShareFile` and iOS Share Sheet (`UIActivityViewController`) export in `App.swift` to allow seamless AirDrop and Files app integration.
+- **Cross-Platform Platform Pairing:** Expanded Companion Server (`companion/server.py`) and TLS pairing broker to allow pairing requests from `macos` and `windows` clients in addition to `android` and `ios`.
+- **Case-Insensitive Pairing:** Added automatic case normalization on 64-hex SHA-256 certificate fingerprints and 32-hex pairing codes across iOS, Android, and desktop brokers.
+
+<br/>
+
 ## 🌐 [0.4.0-beta.1] — Build 6 (Mac UI Optimization, Universal AirDrop / Quick Share, Hardware Controls, Single-Page Mobile & Official Site)
 
 ### 👤 Author & Leadership

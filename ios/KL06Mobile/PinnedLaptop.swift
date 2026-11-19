@@ -90,7 +90,7 @@ actor PinnedLaptop {
     }
     func pair(_ p: [String: Any]) async throws -> [String: Any] {
         guard !busy, Set(p.keys) == ["host", "pin", "code"], let host = p["host"] as? String, let url = LANHTTP.privateURL(host), let fingerprint = (p["pin"] as? String)?.lowercased(), fingerprint.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil,
-              let secret = p["code"] as? String, secret.range(of: "^[a-f0-9]{32}\\z", options: .regularExpression) != nil else { throw LANError.invalid }
+              let secret = (p["code"] as? String)?.lowercased(), secret.range(of: "^[a-f0-9]{32}\\z", options: .regularExpression) != nil else { throw LANError.invalid }
         base = url; pin = fingerprint; code = secret; token = nil; expiry = 0; ticket = nil; last = nil
         let result = try await send("/v1/pair", ["code": secret, "platform": "ios"], auth: false)
         guard let identifier = result["ticket"] as? String else { throw LANError.refused }; ticket = identifier

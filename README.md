@@ -8,7 +8,7 @@
 [![Email](https://img.shields.io/badge/Support%20Email-labanayt%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:labanayt@gmail.com)
 [![Discord](https://img.shields.io/badge/Discord-labanayt5301-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Z4my8c2ZH)
 [![YouTube](https://img.shields.io/badge/YouTube-@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM)
-[![Release](https://img.shields.io/badge/Release-v0.4.0--Beta.1%20(Build%206)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
+[![Release](https://img.shields.io/badge/Release-v0.4.1--Beta%20(Build%208)-2563EB?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![Build Status](https://img.shields.io/badge/Status-Verified%20Native-059669?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager/releases)
 [![macOS](https://img.shields.io/badge/macOS-Sequoia%2015.8.3%20(24H241)-7C3AED?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
 [![Target Platform](https://img.shields.io/badge/Platform-ASUS%20VivoBook%20K15%20OLED-EA580C?style=for-the-badge&logo=asus&logoColor=white)](https://github.com/Kaushal-snap/KL-06-Manager)
@@ -23,11 +23,11 @@
 </p>
 
 <p align="center">
-  <a href="#-device-downloads-matrix-v040-beta1-build-6"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Ecosystem-v0.4.0--Beta.1-2563EB?style=for-the-badge" alt="Download Release" /></a>
+  <a href="#-device-downloads-matrix-v040-beta1-build-6"><img src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_Download_Ecosystem-v0.4.1--Beta-2563EB?style=for-the-badge" alt="Download Release" /></a>
   <a href="mailto:labanayt@gmail.com"><img src="https://img.shields.io/badge/Email-labanayt%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email Support" /></a>
   <a href="https://discord.gg/Z4my8c2ZH"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
   <a href="https://youtube.com/@labanayt?si=jWfcVFG23xmSP9WM"><img src="https://img.shields.io/badge/YouTube-Subscribe%20@labanayt-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.4.0--Beta.1-059669?style=for-the-badge" alt="Changelog" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/%F0%9F%93%8B_View_Changelog-v0.4.1--Beta-059669?style=for-the-badge" alt="Changelog" /></a>
   <a href="ECOSYSTEM.md"><img src="https://img.shields.io/badge/%F0%9F%8C%90_Ecosystem_%26_OTA-Specs_%26_Matrix-0284C7?style=for-the-badge" alt="Ecosystem Specs" /></a>
 </p>
 
@@ -47,15 +47,15 @@ Connect directly with the developer **Kaushal Labana**:
 
 <br/>
 
-## 📱 Device Downloads Matrix (v0.4.0-beta.1 Build 6)
+## 📱 Device Downloads Matrix (v0.4.1-beta Build 8)
 
 | Platform | Deliverable Package | Compatibility / Min OS | Size | SHA-256 Checksum | Direct Download Mirror |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| 🤖 **Android** | `KL-06-0.4.0-beta.1-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.02 MB | `fcfbfa14b08506b4dd829dfb0941e0ba00442dbd98e4e50e01a6c9534ef66fd7` | [Direct Download (Drive)](https://drive.google.com/uc?id=1Q_4-UuD-Pz9SzUancXJAj466g6XBLhFd&export=download) |
+| 🤖 **Android** | `KL-06-0.4.1-beta-android-debug-UNTESTED.zip` | **Android 8.0+** (API 26 to Android 17+) | 1.07 MB | `9f6f8e1bdb38109a53e5056629f9a567ba0e584b4e296e20af2b66a5e545b56c` | [Direct Download (Drive)](https://drive.google.com/uc?id=1zRWT9XC2CaTBxv5As041ZyBxCeyJ9Zg2&export=download) |
 | 🍎 **macOS** | `KL-06 Manager 4.0 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 195 KB | `88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941` | [Direct Download (Drive)](https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download) |
-| 🪟 **Windows** | `KL-06-0.4.0-beta.1-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 553 KB | `9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f` | [Direct Download (Drive)](https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download) |
+| 🪟 **Windows** | `KL-06-0.4.1-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 553 KB | `9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f` | [Direct Download (Drive)](https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download) |
 | 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.0-beta.1-source-BUILD-READY.zip` | Cross-Platform Build | 1.88 MB | `d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.1-beta-source-BUILD-READY.zip` | Cross-Platform Build | 1.88 MB | `d4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download) |
 
 <br/>
 
