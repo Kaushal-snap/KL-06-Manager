@@ -1820,102 +1820,32 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   }
 
   function kl06ApplyHDRFix() {
-    fixStatus.hdr = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 HDR/EDR display fix applied: -wex-hdrleaf2 -wex-hdradapt (Target EDR: 3.08-4.0).');
-    return {
-      success: true,
-      message: 'HDR fix applied. Reboot required.',
-      edr: '3.08-4.0',
-      flags: ['-wex-hdrleaf2', '-wex-hdradapt']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no macOS boot-argument or display-driver changes were made.' };
   }
 
   function kl06ApplySleepFix() {
-    fixStatus.sleep = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 Sleep/wake fix applied: darkwake=0 -wex-tgl-hold-render-wake.');
-    return {
-      success: true,
-      message: 'Sleep/wake fix applied. Reboot required.',
-      flags: ['darkwake=0', '-wex-tgl-hold-render-wake', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no sleep/wake or EFI settings were changed.' };
   }
 
   function kl06ApplyGPUFix() {
-    fixStatus.gpu = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 GPU stability fix applied: -disablegfxfirmware -wex-tgl-dpcd-bl.');
-    return {
-      success: true,
-      message: 'GPU stability fix applied. Watchdog panics reduced.',
-      flags: ['-disablegfxfirmware', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep', '-wex-tgl-dpcd-bl']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no GPU driver, firmware or boot configuration was changed.' };
   }
 
   function kl06CheckFanRPM() {
-    fixStatus.fan = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🌀 AppleSMC Fan RPM sensor reader validated (read-only tachometer).');
-    return {
-      success: true,
-      message: 'Fan RPM reader active (read-only)',
-      status: 'provider-reported-not-calibrated',
-      manualControl: false,
-      note: 'Run: /Volumes/1401 or macos/KL-06-Fix-All.sh'
-    };
+    const fans = M.fanValues(state);
+    return { success: fans.length > 0, status: fans.length > 0 ? 'provider-reported-not-calibrated' : 'unavailable', fans, manualControl: false, message: fans.length > 0 ? 'Live native provider readings returned.' : 'No valid fan tachometer reading is available from the native provider.' };
   }
 
   function kl06FixDeviceConnection() {
-    fixStatus.device = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 Device connection & AirDrop AWDL fix applied (-btleadv, -itlawdlcoex...).');
-    return {
-      success: true,
-      message: 'Device connection fix applied. Reboot required.',
-      flags: [
-        '-btleadv', '-itlawdliface', '-itlawdlnativeup',
-        'itlawdlintcoal=4', 'itlawdltxqueue=4096',
-        '-itlawdlcoexprobe', '-itlawdlcoexrx', '-itlawdlcoextx',
-        '-itlawdlcoexmulti', '-itlawdlcoexdata',
-        '-itlawdlcoexbatx', '-itlawdlcoexpeerpause', '-itlawdlcoexbatrace',
-        '-itlawdlmitx', '-itlawdlelicit', '-itlawdlcaps',
-        '-itlawdlsvcmerge', '-itlawdlawsync'
-      ]
-    };
+    return { success: false, applied: false, message: 'Not implemented: this function does not repair Wi-Fi, Bluetooth, AirDrop, mobile data or network drivers.' };
   }
 
   async function kl06FixAll() {
-    const results = {
-      device: kl06FixDeviceConnection(),
-      hdr: kl06ApplyHDRFix(),
-      sleep: kl06ApplySleepFix(),
-      gpu: kl06ApplyGPUFix(),
-      fan: kl06CheckFanRPM()
-    };
-    fixStatus.all = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🚀 ALL HARDWARE FIXES APPLIED SUCCESSFULLY!');
-    return {
-      success: true,
-      message: 'All fixes applied. Reboot required.',
-      results: results
-    };
+    return { success: false, applied: false, message: 'No system fixes were applied. The available functions are diagnostics only; platform-specific repairs require separate tested implementations.' };
   }
 
   function kl06RollbackAll() {
-    fixStatus.device = false;
-    fixStatus.hdr = false;
-    fixStatus.sleep = false;
-    fixStatus.gpu = false;
-    fixStatus.fan = false;
-    fixStatus.all = false;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'info', '🔄 Rollback initiated. Restore from backup config.plist.');
-    return {
-      success: true,
-      message: 'Rollback initiated. Restore from backup file.'
-    };
+    return { success: false, rolledBack: false, message: 'No changes were made by the placeholder fix functions, so there is nothing to roll back.' };
   }
 
   async function kl06CheckInternet() {
