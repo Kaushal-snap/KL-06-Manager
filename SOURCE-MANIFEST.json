@@ -14,10 +14,10 @@
       "sha256": "7e86a5fb265944b381ef3763747330ec72ce7ec861d369f51804d83637f19091"
     },
     {
-      "bytes": 4277,
+      "bytes": 4789,
       "executable": false,
       "path": ".github/workflows/portable-checks.yml",
-      "sha256": "7f68e4d8554f5582177d7a27c7b734ce668210395f7806438248583af1fcea9e"
+      "sha256": "cc42e3a89cd17bf225a3c204aff5d5e1bab93fd0cd9ef98d0e4dad2bd86b72a1"
     },
     {
       "bytes": 573,
@@ -452,10 +452,10 @@
       "sha256": "e32e3f2029af2bca6386aca9bc8602a683528732d2c9fe3972065adf4843f80d"
     },
     {
-      "bytes": 3553,
+      "bytes": 3614,
       "executable": true,
       "path": "macos/BUILD-MAC.command",
-      "sha256": "837e44ed37f8b1d8f74bd673fea1bef44b018ffb36d8bf4429c979d906cda260"
+      "sha256": "fb741f7b3416e536618e280b53d06b4642286f567a99ad0918f63d9773669644"
     },
     {
       "bytes": 1556,
@@ -542,10 +542,10 @@
       "sha256": "cb8ef679da62dc61cc560de7975727ccc1813b79bf97f765cb926aeaf3d6263a"
     },
     {
-      "bytes": 7089,
+      "bytes": 8315,
       "executable": false,
       "path": "macos/README.md",
-      "sha256": "0c108df908bc7a4101560b9ebb039105abef1c42276b540dd162c8dec698658c"
+      "sha256": "bb79d85b93d10df20a40c1b447816020641ebcc05246ba808abb5e52f210b7ff"
     },
     {
       "bytes": 15499,
@@ -554,10 +554,10 @@
       "sha256": "cd3289e1c9c9bdd7b4e43970fa9046560e56c00b278267effd0e15f6824bc952"
     },
     {
-      "bytes": 64284,
+      "bytes": 64399,
       "executable": false,
       "path": "macos/Resources/app.js",
-      "sha256": "6d8a083c6d02a5c59812c01eba12ca7334d543e9983d441217e33d6c927c96d5"
+      "sha256": "17c408c42a77a53b188973a516624e4b66521bbb107cc36dd300fbf9d5f49f44"
     },
     {
       "bytes": 5483,
@@ -608,16 +608,22 @@
       "sha256": "2ad2dc8925a6e88ba62f678994631e8d435404a892ac9dabf4777d255eb11971"
     },
     {
-      "bytes": 11258,
+      "bytes": 11280,
       "executable": false,
       "path": "macos/Sources/DesktopCompanion.swift",
-      "sha256": "4e7cf66f2be119f88d8338091307fb00b52b670aaea1f6751bae98516779ece3"
+      "sha256": "250d1df83f0b88d78d461253278ab4504e7b5c7bd65d8d7c145fbbb51c3a6508"
     },
     {
       "bytes": 4041,
       "executable": false,
       "path": "macos/Sources/FanMonitor.swift",
       "sha256": "a1bd31ad2cc1644904cddee628cfe1922e7097af261e4e617215e47fc3af2435"
+    },
+    {
+      "bytes": 15044,
+      "executable": false,
+      "path": "macos/Sources/GoogleDriveUploader.swift",
+      "sha256": "1468ae1877c2e19b849ae5d8d646292a8fc8c58c33ca2c06a022c6fc1d9fc75c"
     },
     {
       "bytes": 4524,
@@ -656,16 +662,16 @@
       "sha256": "ce6e0cf45494cda34f09cd7148b2b6befcbef4da01e035a64632652494868a13"
     },
     {
-      "bytes": 34141,
+      "bytes": 36291,
       "executable": false,
       "path": "macos/Sources/main.swift",
-      "sha256": "37d60df680c97b1d7165f29e56f66c95b04c734affa38ece663309e7176441e8"
+      "sha256": "187409b5440e65046e9b6e83c71b132811e6eaadd2f9f3f0b023151747a65c56"
     },
     {
-      "bytes": 2090,
+      "bytes": 2151,
       "executable": true,
       "path": "macos/TEST-MAC.command",
-      "sha256": "3548c5ce2f6306bf72a9c1c36edd1645ab6bddca8f2106210546010a26d8ffc0"
+      "sha256": "3245a6f21081b7995975014dbd2ad6b7afc16259e8320a79fdba9acd5a8837d2"
     },
     {
       "bytes": 707,
