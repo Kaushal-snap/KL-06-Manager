@@ -56,7 +56,7 @@ Connect directly with the developer **Kaushal Labana**:
 | 🍎 **macOS** | `KL-06 Manager 4.3 beta.zip` | **macOS 13.0+** (Ventura, Sonoma, Sequoia) | 196 KB | `b7bf54bbe9d7eaf320864d1231681868a1628c851a57d2fbf187a349cbec8240` | [Direct Download (Drive)](https://drive.google.com/uc?id=1x88mqV6Z2bhgceUB-zRrHn3YOyhpH7bT&export=download) |
 | 🪟 **Windows** | `KL-06-0.4.3-beta-windows-x64-UNTESTED.zip` | **Windows 7 SP1+** (7, 8, 8.1, 10, 11) | 561 KB | `6cf5a99dcd3832b452a969d296ce9d28709898874424058d03a9f4eb188d7a9b` | [Direct Download (Drive)](https://drive.google.com/uc?id=1u3iLwHS-_bTWk1SuEFDy9YiIpZH-8l50&export=download) |
 | 📱 **iOS** | `ios/KL06Mobile` Xcode / `INSTALL-IOS.command` | **iOS 16.0+** (iOS 16, 17, 18+) | Source | Pure Swift / WKWebView / TLS Pinning | [Browse iOS Source](https://github.com/Kaushal-snap/KL-06-Manager/tree/main/ios) |
-| 📦 **Source Archive** | `KL-06-0.4.3-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `3f5815b6867abf28b509596dc70ea544dcc5f6747ca8dc270c422d3bf33188de` | [Direct Download (Drive)](https://drive.google.com/uc?id=1C0AIwrX6Cq5btTI04w8bj_b8hXwaC4oi&export=download) |
+| 📦 **Source Archive** | `KL-06-0.4.3-beta-source-BUILD-READY.zip` | Cross-Platform Build | 2.02 MB | `a5cb4f3b0124db1106b01c146ce1782fd2cfec19d19faffc47ffb0e02bf1ddf4` | [Direct Download (Drive)](https://drive.google.com/uc?id=1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv&export=download) |
 
 <br/>
 
