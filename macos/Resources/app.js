@@ -232,7 +232,7 @@
     const peers = [];
     return title('Ecosystem Companion & AirDrop / Quick Share','Local Wi-Fi discovery, cross-platform file transfer, and signed OTA updates.')+
       `<div class="two-col"><section class="panel panel-padding"><h2>${state.companion?.running?'Session active · at most 30 minutes':'Companion is off'}</h2><p class="body-copy">Connect your Android or iPhone over local Wi-Fi. View real-time telemetry, send files via AirDrop/Quick Share, and safely control volume or keep-awake with local laptop confirmation.</p><div class="inline-actions">${button('Enable temporary session','companion-start','','secondary',state.companion?.running)}${button('Show pairing details','companion-details','','ghost',!state.companion?.running)}${button('Stop and revoke devices','companion-stop','','ghost',!state.companion?.running)}</div><div class="notice blue"><strong>Security Invariant:</strong> Private TLS pinning, 32-character random pair code, and explicit desktop confirmation for all changes. No cloud relays, root helpers, firewall changes, or silent background daemons.</div></section>
-      <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">The desktop broker exposes a private TLS receive endpoint. Android has a native sender; iOS, macOS and Windows transfer directions are not yet end-to-end verified. Bluetooth and cellular relay are not implemented KL-06 transports.</p><div class="chip-row" style="margin:12px 0"><span class="chip">iPhone ↔ Android</span><span class="chip">Mac ↔ iPhone</span><span class="chip">Mac ↔ Android</span><span class="chip">Windows ↔ Mobile</span></div><div class="notice">Incoming transfers require explicit laptop approval dialog with file name and size verification.</div></section></div>
+      <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">The desktop broker exposes a private TLS receive endpoint. Android has a native sender; iOS, macOS and Windows transfer directions are not yet end-to-end verified. Bluetooth and cellular relay are not implemented KL-06 transports.</p><div class="notice">Current verified-in-source direction: Android sender to a running desktop receiver over the same private LAN. Other platform directions, Bluetooth and cellular relay are not implemented or verified. The desktop receiver currently auto-accepts an already-paired sender; per-file approval is a remaining requirement.</div></section></div>
       <section class="panel panel-padding" style="margin-top:20px">
         <div class="panel-head"><div><h2>Nearby Devices (Discovery not enabled in this macOS build)</h2><p>No automatic discovery is enabled in this macOS build. Use the desktop-generated TLS details on the mobile app.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
         <div class="pin-card">
@@ -399,7 +399,7 @@
   const KL06_CONFIG = {
     repo: 'Kaushal-snap/KL-06-Manager',
     currentVersion: '0.4.7-beta',
-    build: 11,
+    build: 12,
     platform: 'mac'
   };
 
