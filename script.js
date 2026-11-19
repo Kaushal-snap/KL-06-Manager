@@ -16,21 +16,21 @@ const PLATFORM_DATA = {
     },
     mac: {
         name: 'macOS App Bundle (x86_64 / Rosetta 2)',
-        fileName: 'KL-06 Manager 4.0 beta.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 195 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
-        directUrl: 'https://drive.google.com/uc?id=16SE_Z25itABzXg8p0aUrITkLr-2E-DVB&export=download',
-        viewUrl: 'https://drive.google.com/file/d/16SE_Z25itABzXg8p0aUrITkLr-2E-DVB/view?usp=sharing',
-        sha256: '88c721b11a660fe72cabfe72950085508b98e336fa8b62cbe21b2aab87c38941',
-        btnText: '⬇️ Download for macOS (195 KB)'
+        fileName: 'KL-06 Manager 4.1 beta.zip',
+        fileMeta: 'v0.4.1-beta Build 8 • 196 KB • macOS 13.0+ (Ventura, Sonoma, Sequoia)',
+        directUrl: 'https://drive.google.com/uc?id=10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X&export=download',
+        viewUrl: 'https://drive.google.com/file/d/10NRu1ai2W0TTvjEgbM0wNqPhsFqFBq5X/view?usp=sharing',
+        sha256: '8b92e8da62dfebbbcfb8b34ab4b81006e0406a9b28377629fc38e2bd02db13e0',
+        btnText: '⬇️ Download for macOS (196 KB)'
     },
     windows: {
         name: 'Windows x64 Companion (.NET 10 + WebView2)',
         fileName: 'KL-06-0.4.1-beta-windows-x64-UNTESTED.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 553 KB • Windows 7 SP1, 8, 8.1, 10, 11',
-        directUrl: 'https://drive.google.com/uc?id=1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1legDzsIwv8oS00Ai3xHjCVu1-3wpWqsM/view?usp=sharing',
-        sha256: '9cf98f9ef1ced9761a2156c026154f51b3330b68babe1eb68c2965290797e55f',
-        btnText: '⬇️ Download for Windows x64 (553 KB)'
+        fileMeta: 'v0.4.1-beta Build 8 • 561 KB • Windows 7 SP1, 8, 8.1, 10, 11',
+        directUrl: 'https://drive.google.com/uc?id=1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1DAufzzBph0snQ3mDZ3c3Z1ulRTmvExxR/view?usp=sharing',
+        sha256: '3df20f1489ee61bb9e500db640e35ad333bfef2e0c66276f3766c897eff9474c',
+        btnText: '⬇️ Download for Windows x64 (561 KB)'
     },
     ios: {
         name: 'iOS Mobile Companion (Swift / devicectl)',
@@ -44,10 +44,10 @@ const PLATFORM_DATA = {
     source: {
         name: 'Complete Source Code Archive',
         fileName: 'KL-06-0.4.1-beta-source-BUILD-READY.zip',
-        fileMeta: 'v0.4.1-beta Build 8 • 1.88 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1x_vQzspex16UQ7vJrxYdnC4nKhUEU-SW/view?usp=sharing',
-        sha256: 'd4d406699e22718f97441bd80e8e80b3191e8e3f8271c031228031a792579029',
+        fileMeta: 'v0.4.1-beta Build 8 • 1.94 MB • 143 Clean Files',
+        directUrl: 'https://drive.google.com/uc?id=1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1DCYi-5CN7OrMYgMZ5bPY8PaNNu6pUcPC/view?usp=sharing',
+        sha256: '328662e100a59f027de8c778738cee88fc0416f95510a9d663a85bb3f7be3073',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };
