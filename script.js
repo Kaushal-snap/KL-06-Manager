@@ -46,9 +46,9 @@ const PLATFORM_DATA = {
         name: 'Complete Source Code Archive',
         fileName: 'KL-06-0.4.3-beta-source-BUILD-READY.zip',
         fileMeta: 'v0.4.3-beta Build 10 • 2.02 MB • 143 Clean Files',
-        directUrl: 'https://drive.google.com/uc?id=1C0AIwrX6Cq5btTI04w8bj_b8hXwaC4oi&export=download',
-        viewUrl: 'https://drive.google.com/file/d/1C0AIwrX6Cq5btTI04w8bj_b8hXwaC4oi/view',
-        sha256: '3f5815b6867abf28b509596dc70ea544dcc5f6747ca8dc270c422d3bf33188de',
+        directUrl: 'https://drive.google.com/uc?id=1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv&export=download',
+        viewUrl: 'https://drive.google.com/file/d/1UGSzKpdJq4AgWmKBmX5hZLExTw7uYbTv/view',
+        sha256: 'a5cb4f3b0124db1106b01c146ce1782fd2cfec19d19faffc47ffb0e02bf1ddf4',
         btnText: '⬇️ Download Full Source ZIP'
     }
 };

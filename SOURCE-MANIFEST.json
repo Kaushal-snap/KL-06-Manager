@@ -59,7 +59,7 @@
       "bytes": 22805,
       "executable": false,
       "path": "README.md",
-      "sha256": "53ce4547716c32137cd9af441e6a81c6b9a960d186f6bc88539f48b6e62ecc04"
+      "sha256": "ce189c36ff57ab42b89cc19e3243852b2ff8e441b85d52dc8b26da11f5810575"
     },
     {
       "bytes": 1599,
@@ -257,7 +257,7 @@
       "bytes": 79537,
       "executable": false,
       "path": "index.html",
-      "sha256": "598ad067e603dd4388f8f5b2da1d159704a55fc2f486db0070ae4a72c86fcc04"
+      "sha256": "36c01035d94a9ff0dd0eaff1348e927bee96c60e3e7adc9b04d5fa8697f7a554"
     },
     {
       "bytes": 5659,
@@ -404,10 +404,10 @@
       "sha256": "e32e3f2029af2bca6386aca9bc8602a683528732d2c9fe3972065adf4843f80d"
     },
     {
-      "bytes": 3370,
+      "bytes": 3522,
       "executable": true,
       "path": "macos/BUILD-MAC.command",
-      "sha256": "8ed291b51ddab299aa08241f6b021f6f426af595ce33b1eb0b1a49be7e929e2c"
+      "sha256": "b96ccee7f742da38bf28b486af6e5ba73eb9638e7dbd598f8769427b42d29ee5"
     },
     {
       "bytes": 1412,
@@ -632,10 +632,10 @@
       "sha256": "a21d82a38ddbcbb2c1a3450bdaa90d236786bfe30f46e6cf96b02cc8fd54df03"
     },
     {
-      "bytes": 3185,
+      "bytes": 3198,
       "executable": false,
       "path": "macos/tests/package.test.py",
-      "sha256": "22c7cf3d45e1c37408fdf5da507f33a27694ade9bb9db09b243b8d2b57a45ba8"
+      "sha256": "cb7bead3438242bfaa8afc6c8d6afb690e41f64cca62cdde4c662e7595ca6450"
     },
     {
       "bytes": 3803,
@@ -659,7 +659,7 @@
       "bytes": 36932,
       "executable": false,
       "path": "script.js",
-      "sha256": "859143cf8d815966c0d4152d75b8b614ac0297ca404afdc0d06bfc854d9b9e95"
+      "sha256": "7618821f660305bfd64c9a51fcdd46308254d6960f4f2969fa2cc70e56d53453"
     },
     {
       "bytes": 84414,
@@ -767,7 +767,7 @@
       "bytes": 8578,
       "executable": false,
       "path": "update-info.json",
-      "sha256": "e18e7f10a7f85e318eeef0d849d8581a1e10ad857147d1011ac899e6e71d3bf4"
+      "sha256": "1425eb4fec186ae6851ef7c426584bbf897f3034877b9f4c2636a85194c6c78e"
     },
     {
       "bytes": 1614,
