@@ -84,6 +84,24 @@ jobs:
           /bin/bash macos/BUILD-MAC.command
       - name: Compile iOS simulator app without signing
         run: /bin/bash ios/BUILD-IOS.command --simulator
+      - name: Package Intel Mac app for owner review
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$(find macos/Local-build -type d -name 'KL-06 Manager.app' -print -quit)"
+          test -n "$APP"
+          mkdir -p dist
+          ditto -c -k --sequesterRsrc --keepParent "$APP" dist/KL-06-Manager-macOS-Intel-UNVERIFIED.zip
+          shasum -a 256 dist/KL-06-Manager-macOS-Intel-UNVERIFIED.zip | tee dist/SHA256SUMS.txt
+      - name: Upload Mac candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KL-06-Manager-macOS-Intel-UNVERIFIED
+          path: |
+            dist/KL-06-Manager-macOS-Intel-UNVERIFIED.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
 
   android-native-build:
     permissions:
