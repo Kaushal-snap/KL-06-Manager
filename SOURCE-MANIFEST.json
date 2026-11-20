@@ -248,10 +248,10 @@
       "sha256": "b713fa17fcdafe7b370e6e82d8a707d0fa85476df0dbf71034a847970ce66cbe"
     },
     {
-      "bytes": 3459,
+      "bytes": 4500,
       "executable": false,
       "path": "docs/FAN-CONTROL-ROADMAP.md",
-      "sha256": "ec2af05fde03f6ad75e53ffe13e2524c5c60416d2a3cf09dce55724ac620ee2c"
+      "sha256": "657704bde57431bd0f66466b56e304a994629361048a5d4cc3f2d05144cb88cb"
     },
     {
       "bytes": 20278,
@@ -876,6 +876,12 @@
       "executable": false,
       "path": "windows/BUILD-WINDOWS.ps1",
       "sha256": "64c97d10133621eb8755fea6084afc3b9eab52ad24f40a776c21cc661fe87047"
+    },
+    {
+      "bytes": 3516,
+      "executable": false,
+      "path": "windows/DIAGNOSE-ASUS-FAN-PATH.ps1",
+      "sha256": "e986e781bfccc57632ac55108e98ac59167155d0e469746daada6f9adb4cd446"
     },
     {
       "bytes": 25385,
