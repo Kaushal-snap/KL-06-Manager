@@ -46,7 +46,7 @@ foreach ($ns in @('root/wmi','root/ASUS','root/ATK')) {
 if ($classes.Count) { $classes | Sort-Object -Unique | ForEach-Object { $lines.Add($_) } }
 else { $lines.Add("No matching WMI class names found in checked namespaces.") }
 Add-Section "MyASUS package presence"
-$apps = Get-AppxPackage -AllUsers -Name '*MyASUS*' | Select-Object -ExpandProperty Name -Unique
+$apps = Get-AppxPackage -Name '*MyASUS*' | Select-Object -ExpandProperty Name -Unique
 if ($apps) { foreach ($app in $apps) { $lines.Add($app) } } else { $lines.Add("MyASUS AppX package not found or not visible to this user.") }
 Add-Section "Safety / interpretation"
 $lines.Add("This inventory does not prove that a writable fan API exists.")
