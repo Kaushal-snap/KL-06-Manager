@@ -21,6 +21,7 @@ public final class CameraManager: NSObject, ObservableObject {
     private let sessionQueue = DispatchQueue(label: "com.cinelog.sessionQueue", qos: .userInteractive)
     private let videoDataOutput = AVCaptureVideoDataOutput()
     private let audioDataOutput = AVCaptureAudioDataOutput()
+    public let photoOutput = AVCapturePhotoOutput()
     
     public var activeCamera: AVCaptureDevice?
     public let metalPipeline: MetalLogPipeline
@@ -35,6 +36,8 @@ public final class CameraManager: NSObject, ObservableObject {
     @Published public var currentFrameRate: FrameRate = .fps24
     @Published public var currentResolution: VideoResolution = .uhd4K
     @Published public var isManualLocked: Bool = true
+    @Published public var statusMessage: String = ""
+    @Published public var supportedFrameRates: [FrameRate] = []
     
     // Delegate hooks for video & audio recording
     public var onVideoFrame: ((CVPixelBuffer, CMTime) -> Void)?
@@ -82,7 +85,7 @@ public final class CameraManager: NSObject, ObservableObject {
             }
             
             // Configure 10-bit uncompressed pipeline bypass output
-            self.videoDataOutput.alwaysDiscardsLateVideoFrames = false
+            self.videoDataOutput.alwaysDiscardsLateVideoFrames = true
             self.videoDataOutput.videoSettings = [
                 kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
             ]
@@ -92,6 +95,7 @@ public final class CameraManager: NSObject, ObservableObject {
                 self.captureSession.addOutput(self.videoDataOutput)
             }
             
+            if self.captureSession.canAddOutput(self.photoOutput) { self.captureSession.addOutput(self.photoOutput) }
             self.audioDataOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
             if self.captureSession.canAddOutput(self.audioDataOutput) {
                 self.captureSession.addOutput(self.audioDataOutput)
@@ -110,50 +114,68 @@ public final class CameraManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Format Selection & Pipeline Bypass Configuration
+    // MARK: - Format selection: 10-bit HLG (Dolby Vision-capable) format, resolution/fps from the UI
     private func applyBest10BitFormat(for device: AVCaptureDevice, targetFPS: Int) {
+        let wantW: Int32 = currentResolution == .uhd4K ? 3840 : 1920
+        let wantH: Int32 = currentResolution == .uhd4K ? 2160 : 1080
+        func fpsOK(_ f: AVCaptureDevice.Format) -> Bool {
+            f.videoSupportedFrameRateRanges.contains { $0.minFrameRate <= Double(targetFPS) && $0.maxFrameRate >= Double(targetFPS) }
+        }
+        let tenBit = device.formats.filter {
+            $0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
+                && $0.supportedColorSpaces.contains(.HLG_BT2020)
+        }
+        var rates = Set<FrameRate>()
+        for f in tenBit {
+            let d = CMVideoFormatDescriptionGetDimensions(f.formatDescription)
+            guard d.width == wantW && d.height == wantH else { continue }
+            for r in FrameRate.allCases where f.videoSupportedFrameRateRanges.contains(where: { $0.minFrameRate <= Double(r.rawValue) && $0.maxFrameRate >= Double(r.rawValue) }) { rates.insert(r) }
+        }
+        let chosen = tenBit.first { f in
+            let d = CMVideoFormatDescriptionGetDimensions(f.formatDescription)
+            return d.width == wantW && d.height == wantH && fpsOK(f)
+        }
+        DispatchQueue.main.async {
+            self.supportedFrameRates = FrameRate.allCases.filter { rates.contains($0) }
+            if chosen == nil { self.statusMessage = "\(self.currentResolution.rawValue) \(targetFPS) fps 10-bit HLG is not supported on this iPhone." }
+            else { self.statusMessage = "" }
+        }
+        guard let format = chosen else { return }
         do {
             try device.lockForConfiguration()
-            
-            // Search for 4K 10-bit format with BT.2020 wide color gamut
-            var selectedFormat: AVCaptureDevice.Format?
-            for format in device.formats {
-                let dims = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-                let is4K = dims.width == 3840 && dims.height == 2160
-                let is10Bit = format.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
-                
-                if is4K && is10Bit {
-                    for range in format.videoSupportedFrameRateRanges {
-                        if range.maxFrameRate >= Double(targetFPS) && range.minFrameRate <= Double(targetFPS) {
-                            selectedFormat = format
-                            break
-                        }
-                    }
-                }
-                if selectedFormat != nil { break }
+            captureSession.sessionPreset = .inputPriority
+            device.activeFormat = format
+            let duration = CMTime(value: 1, timescale: CMTimeScale(targetFPS))
+            device.activeVideoMinFrameDuration = duration
+            device.activeVideoMaxFrameDuration = duration
+            // Real 10-bit HLG capture (Apple's HDR video path). The Log look is computed from it in Metal.
+            device.activeColorSpace = .HLG_BT2020
+            if device.activeFormat.isVideoHDRSupported {
+                device.automaticallyAdjustsVideoHDREnabled = false
+                device.isVideoHDREnabled = true
             }
-            
-            if let format = selectedFormat {
-                device.activeFormat = format
-                let duration = CMTime(value: 1, timescale: CMTimeScale(targetFPS))
-                device.activeVideoMinFrameDuration = duration
-                device.activeVideoMaxFrameDuration = duration
-                print("[CameraManager] Successfully selected 4K 10-bit HDR bypass format at \(targetFPS) fps.")
+            if let conn = videoDataOutput.connection(with: .video), conn.isVideoStabilizationSupported {
+                conn.preferredVideoStabilizationMode = .off
             }
-            
-            // Turn OFF digital EIS / stabilization warping that destroys sensor sharpness
-            if let conn = self.videoDataOutput.connection(with: .video) {
-                if conn.isVideoStabilizationSupported {
-                    conn.preferredVideoStabilizationMode = .off
-                }
-            }
-            
             device.unlockForConfiguration()
         } catch {
             print("[CameraManager] Could not lock camera for configuration: \(error)")
         }
     }
-    
+
+    /// Re-apply resolution / frame-rate chosen in the UI.
+    public func reconfigureFormat() {
+        sessionQueue.async { [weak self] in
+            guard let self = self, let device = self.activeCamera else { return }
+            self.captureSession.beginConfiguration()
+            self.applyBest10BitFormat(for: device, targetFPS: self.currentFrameRate.rawValue)
+            self.captureSession.commitConfiguration()
+            self.lockCinemaManualControls()
+        }
+    }
+    public func setFrameRate(_ fps: FrameRate) { currentFrameRate = fps; reconfigureFormat() }
+    public func setResolution(_ res: VideoResolution) { currentResolution = res; reconfigureFormat() }
+
     // MARK: - Full Manual Lock (Disables Apple's Dynamic Smart HDR & Local Tone Mapping)
     public func lockCinemaManualControls() {
         guard let device = activeCamera else { return }
@@ -220,17 +242,15 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
             let pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             
-            // Process 10-bit frame through Metal pipeline to get Apple Log & preview
-            let (logTexture, previewTexture) = metalPipeline.processFrame(pixelBuffer: pixelBuffer)
-            
-            if let preview = previewTexture {
-                DispatchQueue.main.async { [weak self] in
-                    self?.onPreviewTextureUpdated?(preview)
+            // 10-bit HLG frame -> Apple-Log-style 10-bit frame (recorded) + monitoring texture (preview)
+            metalPipeline.processFrame(pixelBuffer: pixelBuffer) { [weak self] logBuffer, preview in
+                guard let self = self else { return }
+                if let preview = preview {
+                    DispatchQueue.main.async { self.onPreviewTextureUpdated?(preview) }
                 }
+                // If the Log pass failed, record the untouched camera frame (HLG) instead of dropping it.
+                self.onVideoFrame?(logBuffer ?? pixelBuffer, pts)
             }
-            
-            // Forward frame to video recorder
-            onVideoFrame?(pixelBuffer, pts)
         } else if output == audioDataOutput {
             onAudioSample?(sampleBuffer)
         }

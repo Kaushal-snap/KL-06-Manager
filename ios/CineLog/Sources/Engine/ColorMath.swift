@@ -4,14 +4,10 @@ import simd
 /// Mathematical color space models and transfer functions for Apple Log, Rec.2020, and Cinema RAW.
 public struct ColorMath {
     
-    // MARK: - Official Apple Log Transfer Function Parameters
-    // Defined according to Apple Log Profile White Paper (ISO 12646 / ITU-R BT.2020)
-    public static let appleLogC: Float = 0.1856326002
-    public static let appleLogD: Float = 0.6133036136
-    public static let appleLogE: Float = 0.0384214013
-    public static let appleLogF: Float = 4.2000000000
-    public static let appleLogCutoff: Float = 0.0100000000
-    
+    // Apple Log parameters (Apple Log Profile white paper; verify against the PDF).
+    public static let alR0: Float = -0.05641088, alRt: Float = 0.01, alC: Float = 47.28711236
+    public static let alB: Float = 0.00964052, alG: Float = 0.08550479, alD: Float = 0.69336945
+
     // MARK: - ARIB STD-B67 (HLG) Parameters
     // Used to unpack 10-bit HDR sensor buffer into pure scene-linear light
     public static let hlgA: Float = 0.17883277
@@ -28,34 +24,26 @@ public struct ColorMath {
         }
     }
     
-    /// Converts Scene Linear Light (normalized to 18% gray = 0.18) into official Apple Log encoding
+    /// Scene-linear reflectance (18% gray = 0.18) -> Apple Log code value.
     @inline(__always)
     public static func sceneLinearToAppleLog(_ r: Float) -> Float {
-        if r < appleLogCutoff {
-            return max(0.0, appleLogF * r)
-        } else {
-            return appleLogC * log(r + appleLogE) + appleLogD
-        }
+        if r >= alRt { return alG * log2(r + alB) + alD }
+        if r >= alR0 { return alC * (r - alR0) * (r - alR0) }
+        return 0
     }
-    
-    /// Complete pipeline conversion: Takes 10-bit sensor input and maps directly to Apple Log
+    /// Apple Log code value -> scene-linear reflectance.
     @inline(__always)
-    public static func sensorToAppleLog(_ v: Float) -> Float {
-        let linear = hlgToSceneLinear(v)
-        return sceneLinearToAppleLog(linear)
+    public static func appleLogToSceneLinear(_ p: Float) -> Float {
+        let pt = alC * (alRt - alR0) * (alRt - alR0)
+        if p >= pt { return exp2((p - alD) / alG) - alB }
+        return (Swift.max(p, 0) / alC).squareRoot() + alR0
     }
-    
-    /// Converts Apple Log back to scene linear (Inverse OETF) for monitoring or LUT transforms
+    /// HLG signal -> reflectance where 100% diffuse white = 1.0 (HLG 75% signal = 0.265 scene linear).
     @inline(__always)
-    public static func appleLogToSceneLinear(_ logVal: Float) -> Float {
-        let cutLog = appleLogF * appleLogCutoff
-        if logVal < cutLog {
-            return max(0.0, logVal / appleLogF)
-        } else {
-            return exp((logVal - appleLogD) / appleLogC) - appleLogE
-        }
-    }
-    
+    public static func hlgToReflectance(_ v: Float) -> Float { hlgToSceneLinear(v) / 0.265 }
+    @inline(__always)
+    public static func sensorToAppleLog(_ v: Float) -> Float { sceneLinearToAppleLog(hlgToReflectance(v)) }
+
     /// Monitoring Preview Curve: Evaluates Apple Log to Rec.709 display transform
     @inline(__always)
     public static func appleLogToRec709Preview(_ logVal: Float) -> Float {

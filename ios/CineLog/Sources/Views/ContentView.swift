@@ -3,12 +3,11 @@ import SwiftUI
 public struct ContentView: View {
     @StateObject private var cameraManager: CameraManager
     @StateObject private var videoWriter = VideoWriter()
-    @StateObject private var rawWriter = CinemaDNGWriter()
+    @StateObject private var rawCapture = ProRawCapture()
     
     @State private var selectedTab: Int = 0
     @State private var showCinemaGuide: Bool = true
     @State private var showGrid: Bool = false
-    @State private var isRawMode: Bool = false
     @State private var lastRecordedURL: URL?
     @State private var showSaveAlert: Bool = false
     
@@ -43,8 +42,9 @@ public struct ContentView: View {
                     // CinemaScope Guide Toggle
                     guideToggleButton
                     
-                    // RAW Sequence Mode Toggle
+                    // ProRAW still + storage/proxy menu
                     rawModeToggleButton
+                    storageMenu
                     
                     Spacer()
                     
@@ -69,6 +69,10 @@ public struct ContentView: View {
                 .padding(.bottom, 20)
             }
         }
+        .overlay(alignment: .top) {
+            let msg = [cameraManager.statusMessage, videoWriter.lastMessage, rawCapture.message].first { !$0.isEmpty } ?? ""
+            if !msg.isEmpty { Text(msg).font(.caption).padding(8).background(Color.black.opacity(0.75)).foregroundColor(.yellow).cornerRadius(8).padding(.top, 50) }
+        }
         .onAppear {
             setupCallbacks()
             cameraManager.configureSession()
@@ -76,24 +80,18 @@ public struct ContentView: View {
         .alert(isPresented: $showSaveAlert) {
             Alert(
                 title: Text("Clip Saved Successfully!"),
-                message: Text("Recorded in 10-bit Apple Log format.\nSaved to Photos & Files: \(lastRecordedURL?.lastPathComponent ?? "")"),
+                message: Text("10-bit Apple-Log-style clip (grade with Apple Log CST; derived from HLG).\nSaved to Photos & Files: \(lastRecordedURL?.lastPathComponent ?? "")"),
                 dismissButton: .default(Text("OK"))
             )
         }
     }
     
     private func setupCallbacks() {
-        cameraManager.onVideoFrame = { [weak videoWriter, weak rawWriter] pixelBuffer, pts in
-            if self.isRawMode {
-                rawWriter?.appendRawFrame(pixelBuffer: pixelBuffer, presentationTime: pts)
-            } else {
-                videoWriter?.appendVideoFrame(pixelBuffer: pixelBuffer, presentationTime: pts)
-            }
+        cameraManager.onVideoFrame = { [weak videoWriter] pixelBuffer, pts in
+            videoWriter?.appendVideoFrame(pixelBuffer: pixelBuffer, presentationTime: pts)
         }
         cameraManager.onAudioSample = { [weak videoWriter] sampleBuffer in
-            if !self.isRawMode {
-                videoWriter?.appendAudioSample(sampleBuffer: sampleBuffer)
-            }
+            videoWriter?.appendAudioSample(sampleBuffer: sampleBuffer)
         }
     }
     
@@ -105,7 +103,7 @@ public struct ContentView: View {
                     .stroke(Color.white, lineWidth: 4)
                     .frame(width: 72, height: 72)
                 
-                if videoWriter.isRecording || rawWriter.isRawRecording {
+                if videoWriter.isRecording {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color.red)
                         .frame(width: 32, height: 32)
@@ -119,28 +117,18 @@ public struct ContentView: View {
     }
     
     private func toggleRecording() {
-        if isRawMode {
-            if rawWriter.isRawRecording {
-                rawWriter.stopRawSequence { url in
-                    self.lastRecordedURL = url
-                    self.showSaveAlert = true
-                }
-            } else {
-                rawWriter.startRawSequence()
+        if videoWriter.isRecording {
+            videoWriter.stopRecording { url in
+                self.lastRecordedURL = url
+                self.showSaveAlert = true
             }
         } else {
-            if videoWriter.isRecording {
-                videoWriter.stopRecording { url in
-                    self.lastRecordedURL = url
-                    self.showSaveAlert = true
-                }
-            } else {
-                videoWriter.startRecording(
-                    width: 3840,
-                    height: 2160,
-                    fps: cameraManager.currentFrameRate.rawValue
-                )
-            }
+            let is4K = cameraManager.currentResolution == .uhd4K
+            videoWriter.startRecording(
+                width: is4K ? 3840 : 1920,
+                height: is4K ? 2160 : 1080,
+                fps: cameraManager.currentFrameRate.rawValue
+            )
         }
     }
     
@@ -206,14 +194,40 @@ public struct ContentView: View {
     }
     
     private var rawModeToggleButton: some View {
-        Button(action: { isRawMode.toggle() }) {
+        Button(action: { rawCapture.capture(using: cameraManager.photoOutput) }) {
             VStack(spacing: 2) {
                 Image(systemName: "camera.aperture")
                     .font(.system(size: 16))
-                Text(isRawMode ? "cDNG RAW" : "PRORES")
+                Text("PRORAW")
                     .font(.system(size: 7, weight: .black))
             }
-            .foregroundColor(isRawMode ? .orange : .white)
+            .foregroundColor(.orange)
+            .frame(width: 50, height: 50)
+            .background(Color.black.opacity(0.7))
+            .clipShape(Circle())
+        }
+    }
+
+    /// Storage: full file, full + small proxy, or proxy only; codec choice; live size estimate.
+    private var storageMenu: some View {
+        let is4K = cameraManager.currentResolution == .uhd4K
+        let mb = videoWriter.estimatedMBPerMinute(width: is4K ? 3840 : 1920, height: is4K ? 2160 : 1080,
+                                                  fps: cameraManager.currentFrameRate.rawValue)
+        return Menu {
+            Picker("Storage", selection: $videoWriter.storageMode) {
+                ForEach(StorageMode.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+            }
+            Picker("Codec", selection: $videoWriter.currentCodec) {
+                ForEach(RecordingCodec.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+            }
+        } label: {
+            VStack(spacing: 2) {
+                Image(systemName: "externaldrive")
+                    .font(.system(size: 16))
+                Text(String(format: "%.1f GB/m", mb / 1024.0))
+                    .font(.system(size: 7, weight: .black))
+            }
+            .foregroundColor(.green)
             .frame(width: 50, height: 50)
             .background(Color.black.opacity(0.7))
             .clipShape(Circle())
