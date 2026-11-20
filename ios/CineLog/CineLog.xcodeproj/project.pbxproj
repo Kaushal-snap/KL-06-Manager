@@ -1,0 +1,299 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C0010001 /* CineLogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020001 /* CineLogApp.swift */; };
+		C0010002 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020002 /* CameraManager.swift */; };
+		C0010003 /* MetalLogPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020003 /* MetalLogPipeline.swift */; };
+		C0010004 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C0020004 /* Shaders.metal */; };
+		C0010005 /* VideoWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020005 /* VideoWriter.swift */; };
+		C0010006 /* CinemaDNGWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020006 /* CinemaDNGWriter.swift */; };
+		C0010007 /* ColorMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020007 /* ColorMath.swift */; };
+		C0010008 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020008 /* CameraPreviewView.swift */; };
+		C0010009 /* CinemaControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020009 /* CinemaControlsView.swift */; };
+		C0010010 /* ScopeOverlaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020010 /* ScopeOverlaysView.swift */; };
+		C0010011 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020011 /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C0020001 /* CineLogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/CineLogApp.swift; sourceTree = SOURCE_ROOT; };
+		C0020002 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/CameraManager.swift; sourceTree = SOURCE_ROOT; };
+		C0020003 /* MetalLogPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/MetalLogPipeline.swift; sourceTree = SOURCE_ROOT; };
+		C0020004 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Sources/Engine/Shaders.metal; sourceTree = SOURCE_ROOT; };
+		C0020005 /* VideoWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/VideoWriter.swift; sourceTree = SOURCE_ROOT; };
+		C0020006 /* CinemaDNGWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/CinemaDNGWriter.swift; sourceTree = SOURCE_ROOT; };
+		C0020007 /* ColorMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/ColorMath.swift; sourceTree = SOURCE_ROOT; };
+		C0020008 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/CameraPreviewView.swift; sourceTree = SOURCE_ROOT; };
+		C0020009 /* CinemaControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/CinemaControlsView.swift; sourceTree = SOURCE_ROOT; };
+		C0020010 /* ScopeOverlaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/ScopeOverlaysView.swift; sourceTree = SOURCE_ROOT; };
+		C0020011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		C0020012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Sources/App/Info.plist; sourceTree = SOURCE_ROOT; };
+		C0020020 /* CineLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0030001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C0040001 = {
+			isa = PBXGroup;
+			children = (
+				C0040002 /* Sources */,
+				C0040003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0040002 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C0020001 /* CineLogApp.swift */,
+				C0020012 /* Info.plist */,
+				C0020002 /* CameraManager.swift */,
+				C0020003 /* MetalLogPipeline.swift */,
+				C0020004 /* Shaders.metal */,
+				C0020005 /* VideoWriter.swift */,
+				C0020006 /* CinemaDNGWriter.swift */,
+				C0020007 /* ColorMath.swift */,
+				C0020008 /* CameraPreviewView.swift */,
+				C0020009 /* CinemaControlsView.swift */,
+				C0020010 /* ScopeOverlaysView.swift */,
+				C0020011 /* ContentView.swift */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		C0040003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0020020 /* CineLog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C0050001 /* CineLog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0060001 /* Build configuration list for PBXNativeTarget "CineLog" */;
+			buildPhases = (
+				C0070001 /* Sources */,
+				C0030001 /* Frameworks */,
+				C0080001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CineLog;
+			productName = CineLog;
+			productReference = C0020020 /* CineLog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C0090001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					C0050001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = C0060002 /* Build configuration list for PBXProject "CineLog" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C0040001;
+			productRefGroup = C0040003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C0050001 /* CineLog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C0080001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C0070001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0010001 /* CineLogApp.swift in Sources */,
+				C0010002 /* CameraManager.swift in Sources */,
+				C0010003 /* MetalLogPipeline.swift in Sources */,
+				C0010004 /* Shaders.metal in Sources */,
+				C0010005 /* VideoWriter.swift in Sources */,
+				C0010006 /* CinemaDNGWriter.swift in Sources */,
+				C0010007 /* ColorMath.swift in Sources */,
+				C0010008 /* CameraPreviewView.swift in Sources */,
+				C0010009 /* CinemaControlsView.swift in Sources */,
+				C0010010 /* ScopeOverlaysView.swift in Sources */,
+				C0010011 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C0100001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C0100002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C0100003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CineLog Pro";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "CineLog requires camera access for 10-bit Apple Log and Cinema RAW video recording.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "CineLog requires microphone access for uncompressed 48kHz cinema audio.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CineLog needs photo library access to export your ProRes 422HQ clips.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kaushal.cinelog;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C0100004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CineLog Pro";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "CineLog requires camera access for 10-bit Apple Log and Cinema RAW video recording.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "CineLog requires microphone access for uncompressed 48kHz cinema audio.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CineLog needs photo library access to export your ProRes 422HQ clips.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kaushal.cinelog;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0060001 /* Build configuration list for PBXNativeTarget "CineLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0100003 /* Debug */,
+				C0100004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0060002 /* Build configuration list for PBXProject "CineLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0100001 /* Debug */,
+				C0100002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C0090001 /* Project object */;
+}

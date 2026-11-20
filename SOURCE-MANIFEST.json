@@ -296,6 +296,96 @@
       "sha256": "ffa4580b4402528267d84e1c239b1b941b9c96037db598118c0b23f3a5f814f1"
     },
     {
+      "bytes": 2862,
+      "executable": true,
+      "path": "ios/CineLog/BUILD-CINELOG.command",
+      "sha256": "24fc858a15ef144000db3652cd47142612e4f09d018ecf01191b9e509cb4578a"
+    },
+    {
+      "bytes": 11916,
+      "executable": false,
+      "path": "ios/CineLog/CineLog.xcodeproj/project.pbxproj",
+      "sha256": "b582c891688bc660c0f61ebd65b28b197b5ea02303625396d1642cb569314506"
+    },
+    {
+      "bytes": 6026,
+      "executable": false,
+      "path": "ios/CineLog/README.md",
+      "sha256": "95540702ff207446503155f0aeaec386d359db2b83b9c9f45c137589baf9cb2c"
+    },
+    {
+      "bytes": 232,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/CineLogApp.swift",
+      "sha256": "e6acdc87b9676e34b999d6357a079bf8c3e6b7e0d516e391b5a2c0cc7c257a7f"
+    },
+    {
+      "bytes": 1746,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Info.plist",
+      "sha256": "20043e0ca430a9edbc5543117741f065891ff58096a468d935288ac1dfbbebf0"
+    },
+    {
+      "bytes": 10266,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/CameraManager.swift",
+      "sha256": "6022edfdd72fa81957f43f3008ea8229042dcf0bd3f96ee40c366538908852af"
+    },
+    {
+      "bytes": 3928,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/CinemaDNGWriter.swift",
+      "sha256": "70fd69acd9918a315c5e6df7d5272c5fc18872c0ab77187445dd25b8684d50f6"
+    },
+    {
+      "bytes": 2926,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/ColorMath.swift",
+      "sha256": "cf4295063a567a55ac2b817024152f7310c7a68b707510020739256376e7b020"
+    },
+    {
+      "bytes": 12512,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/MetalLogPipeline.swift",
+      "sha256": "9e633448a99a38998a45046f839937b04c82e2e4fed79755f5fb339e99b15605"
+    },
+    {
+      "bytes": 6340,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/Shaders.metal",
+      "sha256": "8bbbfa47439d075d4f5d2d54ad7c1eeb212ca771743af5374ec66422239705f7"
+    },
+    {
+      "bytes": 8893,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Engine/VideoWriter.swift",
+      "sha256": "f90745dd2ffe555b6cc4ba727f0d56e8c041fad2b4c3dcc41a309a915b96ad00"
+    },
+    {
+      "bytes": 2574,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Views/CameraPreviewView.swift",
+      "sha256": "a69505ac698c457d2a4a74018309a6f46555451eac384d24e2c160a535811a60"
+    },
+    {
+      "bytes": 8795,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Views/CinemaControlsView.swift",
+      "sha256": "4ad017ee9ea9125f1d1f8e92e59d8a43ccdd88dcf7622f4d35c4d0d69261a1ac"
+    },
+    {
+      "bytes": 7796,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Views/ContentView.swift",
+      "sha256": "09e17c5043ff9ad79a9bb7035bb130a4783e934eb45d200c1d345fffe88b68e3"
+    },
+    {
+      "bytes": 4320,
+      "executable": false,
+      "path": "ios/CineLog/Sources/Views/ScopeOverlaysView.swift",
+      "sha256": "a1683e631ab6a9501c4e9b616abc9592d79ffb958f4e2477e839f766c4e3302b"
+    },
+    {
       "bytes": 9676,
       "executable": false,
       "path": "ios/KL06Mobile.xcodeproj/project.pbxproj",
