@@ -284,10 +284,10 @@
       "sha256": "6dfc4f63e7aff52f285c9cc925005c36daffc933221d8aa50b6afb76f7178c03"
     },
     {
-      "bytes": 81353,
+      "bytes": 82666,
       "executable": false,
       "path": "index.html",
-      "sha256": "b77fcc594594fef834fb33724cc5e4498487f2587d7b293989d94d59d6c4b997"
+      "sha256": "b33d1503cbb6128a0b950ed82f229db46e9abd9674698267f3f3710424cdc54b"
     },
     {
       "bytes": 5659,
@@ -312,6 +312,90 @@
       "executable": false,
       "path": "ios/CineLog/README.md",
       "sha256": "95540702ff207446503155f0aeaec386d359db2b83b9c9f45c137589baf9cb2c"
+    },
+    {
+      "bytes": 2134,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "8d7dc6f60bb2c12485e819a14b207f1c33e6ed8db5f820e16755998ecdf027bc"
+    },
+    {
+      "bytes": 9910,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-1024.png",
+      "sha256": "b7d1d6216a87e291dffac993fa667a09d3afb86284c24ffa6e003afdc314b193"
+    },
+    {
+      "bytes": 5801,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-120.png",
+      "sha256": "f24af193e1edcf433b8d701f21e1217609e8d44de1f2dc1b516f6c0f4f46fab8"
+    },
+    {
+      "bytes": 7433,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-152.png",
+      "sha256": "22bc1395f40a8b7960d68e0b7a12949db4f61843798b75ab15f1fb648ef77e6f"
+    },
+    {
+      "bytes": 8293,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-167.png",
+      "sha256": "ecdcf8fc7b794db388c6ceab25d88e45c485af3e0ce5092eb477955d9ae7856b"
+    },
+    {
+      "bytes": 8828,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-180.png",
+      "sha256": "7e820ceac94fc86b817e7eea3a5518c555ac4d7083643c9fdfae8809c6b52071"
+    },
+    {
+      "bytes": 825,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-20.png",
+      "sha256": "3b84badddce97c84080e141cd4541314c2e22e9116a0ddfebbb048711b198f49"
+    },
+    {
+      "bytes": 1292,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-29.png",
+      "sha256": "2c1caf2af993fdf5cebba62f8f45885e7765df8dd22622f986d112d4ef8a3974"
+    },
+    {
+      "bytes": 1822,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-40.png",
+      "sha256": "3d9336e43530b06caba2a2051c9d788b6a1f2b27fdfff94593830d009b77306c"
+    },
+    {
+      "bytes": 2700,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-58.png",
+      "sha256": "ceb2801f0426e85643fa3a4dc8abf0fb53c39d750085325514be44b4dff96db9"
+    },
+    {
+      "bytes": 2751,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-60.png",
+      "sha256": "9527bc617bf19884e03e714940f374fef7892555e56213cc2eea6303344b38ad"
+    },
+    {
+      "bytes": 3611,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-76.png",
+      "sha256": "80f4c90dc90fa483410f66070fdaf67eb917b16396cf862dcc8a97a7fcced02e"
+    },
+    {
+      "bytes": 3874,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-80.png",
+      "sha256": "9a2fc932c1474ed0dde120bc9a56babc4668e75320961ed18a2a02c97adf58dd"
+    },
+    {
+      "bytes": 4120,
+      "executable": false,
+      "path": "ios/CineLog/Sources/App/Assets.xcassets/AppIcon.appiconset/Icon-87.png",
+      "sha256": "76cccdfea67c60a84e3e08daf3eb1b67d60215c6777b29038afde26589c6f03b"
     },
     {
       "bytes": 232,
