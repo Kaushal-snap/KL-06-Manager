@@ -17,8 +17,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private var globalHotKey: F13HotKey?
     private var shortcutStatus = "F13 has not been registered."
     private var powerProfile: String = "Balanced"
-    private var batteryLimit: Int = 100
-    private var fanMode: String = "Standard"
     private let settings: [String: String] = [
         "display": "com.apple.Displays-Settings.extension", "audio": "com.apple.Sound-Settings.extension",
         "keyboard": "com.apple.Keyboard-Settings.extension", "trackpad": "com.apple.Trackpad-Settings.extension",
@@ -84,6 +82,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             self?.showWindow()
             return self?.confirm("Pair this \(platform) companion?", "Only approve the phone you just paired using the code and certificate fingerprint shown on this laptop. It may view minimized live telemetry and request allowlisted actions. Every write still requires confirmation here. Session ends within 30 minutes or when stopped/quit.") == true
         }
+        companion.approveTransfer = { [weak self] platform, name, size in
+            self?.showWindow()
+            let formatter = ByteCountFormatter(); formatter.countStyle = .file
+            return self?.confirm("Receive a file from your \(platform) device?", "File: \(name)\nSize: \(formatter.string(fromByteCount: size))\n\nIt is saved to your Downloads folder only after the SHA-256 check passes, never overwrites an existing file, and is discarded if you decline. Accept only if you just sent it yourself.") ?? false
+        }
         companion.perform = { [weak self] operation, params, expires, uptimeDeadline in self?.remoteAction(operation, params, expires, uptimeDeadline) ?? (false, "Desktop unavailable.") }
         showWindow()
         if !shortcutReady {
@@ -135,11 +138,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["powerSampleInfo"] = ["source": "Fixed five-sample powermetrics read", "sampledAt": latestPowerAt.map { $0 as Any } ?? NSNull(), "mode": "point-in-time-not-live"] as [String: Any]
         value["hotkey"] = ["keyCode": F13HotKey.keyCode, "modifiers": F13HotKey.modifiers, "registered": globalHotKey?.isRegistered == true] as [String: Any]
         value["companion"] = ["running": companion.isRunning, "requiresLocalConfirmation": true]
-        value["version"] = "0.4.7-beta"
+        value["version"] = "0.5.0-beta.1"
         value["build"] = 12
         value["powerProfile"] = powerProfile
-        value["batteryLimit"] = batteryLimit
-        value["fanMode"] = fanMode
         return value
     }
     private func reply(_ id: String, _ result: Any? = nil, error: String? = nil) {
@@ -260,31 +261,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                     _ = try? Process.run(URL(fileURLWithPath: "/usr/bin/pmset"), arguments: ["-a", "lowpowermode", "0"])
                 }
                 reply(id, "Power profile switched to \(profile).")
-            case "setBatteryLimit":
-                guard let limit = (params["limit"] as? NSNumber)?.intValue, [60, 80, 100].contains(limit) else { throw ControlError(message: "Invalid battery limit.") }
-                self.batteryLimit = limit
-                UserDefaults.standard.set(limit, forKey: "KL06_BatteryLimit")
-                reply(id, "Battery charging threshold configured to \(limit)%.")
-            case "setFanMode":
-                guard let mode = params["mode"] as? String else { throw ControlError(message: "Invalid fan mode.") }
-                self.fanMode = mode
-                UserDefaults.standard.set(mode, forKey: "KL06_FanMode")
-                reply(id, "ASUS cooling fan profile set to \(mode).")
             case "scanPeers":
-                reply(id, [
-                    ["id": "peer-iphone", "name": "Kaushal’s iPhone", "platform": "ios", "model": "iPhone 14 Pro Max", "status": "Available on LAN", "ip": "192.168.1.105"],
-                    ["id": "peer-android", "name": "Android Device", "platform": "android", "model": "Quick Share Ready", "status": "Available on LAN", "ip": "192.168.1.112"],
-                    ["id": "peer-mac", "name": "mac’s MacBook Pro", "platform": "macos", "model": "ASUS KL-06 Host", "status": "Current Host", "ip": "192.168.1.101"],
-                    ["id": "peer-win", "name": "Windows Laptop", "platform": "windows", "model": "WinForms Client", "status": "Companion Active", "ip": "192.168.1.120"]
-                ])
+                // Truthful: only phones that really paired with this Mac in the running session. No placeholder devices.
+                guard companion.isRunning else { reply(id, ["running": false, "peers": [] as [Any], "outbox": [] as [Any]] as [String: Any]); return }
+                var result = companion.peers(); result["running"] = true
+                reply(id, result)
             case "sendPeerFile":
-                guard let peerId = params["peerId"] as? String else { throw ControlError(message: "Peer not selected.") }
+                guard companion.isRunning else { throw ControlError(message: "Start the temporary companion session and pair a phone first.") }
+                guard let peers = companion.peers()["peers"] as? [[String: Any]], peers.contains(where: { ($0["id"] as? String) == params["peerId"] as? String }) else { throw ControlError(message: "That phone is not paired in this session. Scan again.") }
                 let panel = NSOpenPanel()
                 panel.allowsMultipleSelection = false
                 panel.canChooseDirectories = false
-                panel.message = "Choose a file to transfer via AirDrop / Quick Share"
+                panel.message = "Choose the file to offer to your paired phone"
                 guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "File selection cancelled.") }
-                reply(id, "File \(url.lastPathComponent) staged and sending to \(peerId) via TLS LAN stream.")
+                try companion.queueOutbox(path: url.resolvingSymlinksInPath().path)
+                reply(id, "Offered \(url.lastPathComponent). Open KL-06 on the phone, tap Receive from laptop and accept. The offer expires in 10 minutes.")
             case "keepAwake":
                 if awakeTask?.isRunning == true { awakeTask?.terminate(); awakeTask = nil; reply(id, "Temporary idle-sleep assertion stopped."); return }
                 guard confirm("Keep awake for up to 15 minutes?", "This temporarily prevents idle SYSTEM sleep while KL-06 is running. It may increase battery drain. Lid/forced sleep is not overridden. No pmset preference is changed. Stop here or quit the app to release it.") else { throw ControlError(message: "Cancelled.") }

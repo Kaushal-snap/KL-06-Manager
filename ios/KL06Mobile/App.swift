@@ -48,7 +48,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
         if device.batteryState != .unknown { battery["onAC"] = device.batteryState == .charging || device.batteryState == .full }
         var storage: [String: Any] = [:]
         if let a = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()), let free = a[.systemFreeSize] as? NSNumber, let total = a[.systemSize] as? NSNumber { storage = ["freeGB": free.doubleValue / 1073741824, "totalGB": total.doubleValue / 1073741824] }
-        return ["platform": "ios", "version": "0.4.7-beta", "build": 12, "sampledAt": ISO8601DateFormatter().string(from: Date()),
+        return ["platform": "ios", "version": "0.5.0-beta.1", "build": 13, "sampledAt": ISO8601DateFormatter().string(from: Date()),
                 "battery": battery, "memory": ["totalGB": Double(ProcessInfo.processInfo.physicalMemory) / 1073741824, "source": "iOS system-used RAM unavailable through this app"],
                 "storage": storage, "volume": Double(AVAudioSession.sharedInstance().outputVolume) * 100, "brightness": Double(UIScreen.main.brightness) * 100, "awake": awake,
                 "capabilities": ["volume": false, "nativeVolume": true, "brightness": true, "brightnessScope": "Temporary screen brightness; restores on background if unchanged; not physical nits", "awake": true] as [String: Any],

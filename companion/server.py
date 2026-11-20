@@ -38,6 +38,13 @@ TWEAKS = frozenset((
     "natural-scroll", "win-extensions", "win-hidden", "win-theme-dark",
 ))
 ID = re.compile(r"[a-f0-9]{32}")
+# Most endpoints take tiny JSON. Only the chunk upload carries base64 file data: a 1 MiB chunk is
+# 1,398,104 base64 bytes, so it gets its own bounded limit (the old global 16 KiB cap refused every
+# real chunk, which is why files bigger than about 12 KB never transferred).
+DEFAULT_BODY_LIMIT = 16384
+MAX_CHUNK_BODY = 1_500_000
+BODY_LIMITS = {"/v1/transfer/chunk": MAX_CHUNK_BODY}
+OUTBOX_CHUNK = 262144
 
 
 class Rejected(Exception):
@@ -254,6 +261,7 @@ class Broker:
         self.expires, self.deadline = self.started + lifetime, self.started_mono + lifetime
         self.pair_code = secrets.token_hex(16)
         self.tokens, self.pending, self.owners, self.rates = {}, {}, {}, {}
+        self.token_info, self.transfer_requests, self.outbox_state = {}, {}, {}
         self.lock = threading.RLock()
         root.mkdir(mode=0o700, exist_ok=True)
         self._directory(root)
@@ -262,6 +270,8 @@ class Broker:
         staging_dir = root / "transfers"
         staging_dir.mkdir(mode=0o700, exist_ok=True)
         self._directory(staging_dir)
+        (root / "outbox").mkdir(mode=0o700, exist_ok=True)
+        self._directory(root / "outbox")
         self.transfer_engine = TransferEngine(staging_dir, clock_func=self.clock)
         self.downloads_dir = Path.home() / "Downloads"
         if not self.downloads_dir.exists():
@@ -297,6 +307,10 @@ class Broker:
             if now >= expiry or self.monotonic() >= deadline:
                 self._unlink(identifier)
                 del self.owners[identifier]
+        for identifier, (expiry, _, deadline) in list(self.transfer_requests.items()):
+            if now >= expiry or self.monotonic() >= deadline:
+                self._unlink(identifier)
+                del self.transfer_requests[identifier]
 
     def rate(self, key, cap):
         now = self.monotonic()
@@ -355,7 +369,102 @@ class Broker:
                 raise Rejected("pair-limit")
             item["token"] = secrets.token_hex(32)
             self.tokens[item["token"]] = self.expires
+            self.token_info[item["token"]] = {"platform": item["platform"], "pairedAt": self.clock(), "lastSeen": self.clock()}
+            self.write_peers()
         return 200, {"status": "paired", "token": item["token"], "expiresAt": self.expires, "protocol": PROTOCOL}
+
+    def peer_id(self, token):
+        return hashlib.sha256(token.encode()).hexdigest()[:16]
+
+    def write_peers(self):
+        """Truthful list of really paired devices for the desktop UI (no secrets, no tokens)."""
+        peers = []
+        for token, info in self.token_info.items():
+            if token in self.tokens:
+                peers.append({"id": self.peer_id(token), "platform": info["platform"], "pairedAt": info["pairedAt"], "lastSeen": info["lastSeen"]})
+        outbox = [{"id": i, "name": v.get("name"), "size": v.get("size"), "state": v.get("state")} for i, v in self.outbox_state.items()]
+        try:
+            atomic_json(self.root / "peers.json", {"schema": "KL06_PEERS_V1", "writtenAt": self.clock(), "peers": peers, "outbox": outbox})
+        except OSError:
+            pass
+
+    def transfer_decision(self, session):
+        """Apply the laptop owner's answer to a pending incoming transfer. Returns True once approved."""
+        identifier = session.transfer_id
+        if session.state != "awaiting_approval":
+            return True
+        try:
+            result = read_json(self.root / "requests" / f"{identifier}.result.json", 4096)
+        except FileNotFoundError:
+            return False
+        if not isinstance(result, dict) or result.get("approved") is not True:
+            try:
+                session.decline()
+            except TransferError:
+                pass
+            self.transfer_requests.pop(identifier, None)
+            self._unlink(identifier)
+            raise Rejected("transfer-denied-by-laptop")
+        session.approve(self.downloads_dir)
+        self.transfer_requests.pop(identifier, None)
+        self._unlink(identifier)
+        return True
+
+    def outbox_items(self):
+        """Files the laptop owner chose to send to a paired phone. The path comes only from a record
+        written by the desktop app; it must be a regular, single-link, own, non-symlink file."""
+        directory = self.root / "outbox"
+        now = self.clock()
+        for entry in sorted(directory.glob("*.json")):
+            name = entry.name
+            if name.endswith(".result.json") or not re.fullmatch(r"[a-f0-9]{32}\.json", name):
+                continue
+            identifier = name[:-5]
+            state = self.outbox_state.get(identifier)
+            if state is None:
+                try:
+                    record = read_json(entry, 8192)
+                    if (record.get("schema") != "KL06_OUTBOX_V1" or record.get("id") != identifier
+                            or not isinstance(record.get("path"), str) or not os.path.isabs(record["path"])
+                            or not isinstance(record.get("expiresAt"), (int, float)) or record["expiresAt"] <= now):
+                        raise Rejected("outbox-record")
+                    info = os.lstat(record["path"])
+                    regular(info, 2 * 1024 * 1024 * 1024)
+                    display = sanitize_filename(os.path.basename(record["path"]))
+                except (Rejected, TransferError, OSError, ValueError, UnicodeError, RecursionError):
+                    entry.unlink(missing_ok=True)
+                    continue
+                state = {"path": record["path"], "name": display, "size": info.st_size, "stat": (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns),
+                         "expiresAt": record["expiresAt"], "sha256": None, "state": "preparing"}
+                self.outbox_state[identifier] = state
+                threading.Thread(target=self._outbox_hash, args=(identifier,), daemon=True).start()
+                self.write_peers()
+            elif state["expiresAt"] <= now and state["state"] != "sending":
+                self.outbox_state.pop(identifier, None)
+                entry.unlink(missing_ok=True)
+        return self.outbox_state
+
+    def _outbox_hash(self, identifier):
+        state = self.outbox_state.get(identifier)
+        if not state:
+            return
+        digest = hashlib.sha256()
+        try:
+            descriptor = os.open(state["path"], os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+            with os.fdopen(descriptor, "rb") as stream:
+                info = os.fstat(stream.fileno())
+                if (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns) != state["stat"]:
+                    raise OSError("changed")
+                while True:
+                    block = stream.read(1024 * 1024)
+                    if not block:
+                        break
+                    digest.update(block)
+        except OSError:
+            state["state"] = "failed"
+            return
+        state["sha256"], state["state"] = digest.hexdigest(), "ready"
+        self.write_peers()
 
     def handle(self, path, body, authorization=None):
         with self.lock:
@@ -370,7 +479,7 @@ class Broker:
                 return 200, {
                     "protocol": PROTOCOL,
                     "service": "KL-06 Companion",
-                    "version": "0.4.7-beta",
+                    "version": "0.5.0-beta.1",
                     "build": 12,
                     "hostname": socket.gethostname(),
                     "platform": sys.platform
@@ -380,12 +489,15 @@ class Broker:
             if path == "/v1/pair/finish":
                 return self.finish(body)
             token = self.auth(authorization)
-            self.rate(token, 100)
+            self.rate(token, 100 if not path.startswith("/v1/transfer/chunk") and not path.startswith("/v1/outbox/chunk") else 6000)
+            if token in self.token_info:
+                self.token_info[token]["lastSeen"] = self.clock()
             if path == "/v1/disconnect":
                 if body:
                     raise Rejected("disconnect-schema")
                 del self.tokens[token]
                 self.rates.pop(token, None)
+                self.write_peers()
                 for identifier, (_, owner, _) in list(self.owners.items()):
                     if hmac.compare_digest(owner, token):
                         self._unlink(identifier)
@@ -398,8 +510,10 @@ class Broker:
             if path == "/v1/transfer/init":
                 if set(body.keys()) != {"fileName", "fileSize", "expectedSha256", "senderPlatform"}:
                     raise Rejected("transfer-init-schema")
-                if not isinstance(body["fileName"], str) or not isinstance(body["fileSize"], int) or not isinstance(body["expectedSha256"], str) or not isinstance(body["senderPlatform"], str):
+                if not isinstance(body["fileName"], str) or type(body["fileSize"]) is not int or not isinstance(body["expectedSha256"], str) or not isinstance(body["senderPlatform"], str):
                     raise Rejected("transfer-init-types")
+                if len(self.transfer_requests) >= 4:
+                    raise Rejected("transfer-queue-full")
                 try:
                     session = self.transfer_engine.initiate_transfer(
                         sender_token=token,
@@ -409,15 +523,17 @@ class Broker:
                         file_size=body["fileSize"],
                         expected_sha256=body["expectedSha256"]
                     )
-                    session.approve(self.downloads_dir)
-                    return 200, {
-                        "status": "approved",
-                        "transferId": session.transfer_id,
-                        "fileName": session.file_name,
-                        "maxChunkSize": 1024 * 1024
-                    }
                 except TransferError as e:
                     raise Rejected(str(e))
+                # Explicit receiver consent: nothing is written until the laptop owner accepts.
+                identifier = session.transfer_id
+                expiry = min(self.expires, self.clock() + 90)
+                deadline = min(self.deadline, self.monotonic() + 90)
+                self.transfer_requests[identifier] = (expiry, token, deadline)
+                atomic_json(self.root / "requests" / f"{identifier}.json", {"schema": PROTOCOL, "id": identifier, "kind": "transfer", "createdAt": self.clock(), "expiresAt": expiry,
+                            "createdMonotonic": self.monotonic(), "expiresMonotonic": deadline, "fileName": session.file_name, "fileSize": session.file_size,
+                            "platform": body["senderPlatform"] if body["senderPlatform"] in ("android", "ios", "macos", "windows") else "unknown"})
+                return 202, {"status": "awaiting-laptop-confirmation", "transferId": identifier, "fileName": session.file_name, "maxChunkSize": 1024 * 1024}
             if path == "/v1/transfer/chunk":
                 if set(body.keys()) != {"transferId", "chunkOffset", "chunkBase64"}:
                     raise Rejected("transfer-chunk-schema")
@@ -425,7 +541,11 @@ class Broker:
                     session = self.transfer_engine.get_transfer(body["transferId"])
                     if not hmac.compare_digest(session.sender_token, token):
                         raise Rejected("transfer-unauthorized")
-                    chunk_data = base64.b64decode(body["chunkBase64"])
+                    if not self.transfer_decision(session):
+                        return 202, {"status": "awaiting-laptop-confirmation", "transferId": session.transfer_id}
+                    if type(body["chunkOffset"]) is not int or not isinstance(body["chunkBase64"], str):
+                        raise Rejected("transfer-chunk-types")
+                    chunk_data = base64.b64decode(body["chunkBase64"], validate=True)
                     session.append_chunk(body["chunkOffset"], chunk_data)
                     return 200, session.get_status()
                 except (TransferError, ValueError) as e:
@@ -437,7 +557,11 @@ class Broker:
                     session = self.transfer_engine.get_transfer(body["transferId"])
                     if not hmac.compare_digest(session.sender_token, token):
                         raise Rejected("transfer-unauthorized")
-                    return 200, session.get_status()
+                    self.transfer_decision(session)
+                    status = session.get_status()
+                    if status["state"] == "awaiting_approval":
+                        status["status"] = "awaiting-laptop-confirmation"
+                    return 200, status
                 except TransferError as e:
                     raise Rejected(str(e))
             if path == "/v1/transfer/cancel":
@@ -449,6 +573,48 @@ class Broker:
                     return 200, {"status": "cancelled", "transferId": body["transferId"]}
                 except TransferError as e:
                     raise Rejected(str(e))
+            if path == "/v1/outbox/list":
+                if body:
+                    raise Rejected("outbox-schema")
+                items = self.outbox_items()
+                return 200, {"items": [{"id": i, "fileName": v["name"], "fileSize": v["size"], "sha256": v["sha256"], "state": v["state"]}
+                                       for i, v in items.items() if v["state"] in ("preparing", "ready", "sending")]}
+            if path == "/v1/outbox/chunk":
+                if set(body) != {"id", "offset", "length"} or not isinstance(body["id"], str) or not ID.fullmatch(body["id"]):
+                    raise Rejected("outbox-chunk-schema")
+                if type(body["offset"]) is not int or type(body["length"]) is not int or body["offset"] < 0 or not 0 < body["length"] <= OUTBOX_CHUNK:
+                    raise Rejected("outbox-chunk-range")
+                state = self.outbox_items().get(body["id"])
+                if not state or state["state"] not in ("ready", "sending"):
+                    raise Rejected("outbox-not-ready")
+                try:
+                    descriptor = os.open(state["path"], os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+                    with os.fdopen(descriptor, "rb") as stream:
+                        info = os.fstat(stream.fileno())
+                        if (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns) != state["stat"]:
+                            state["state"] = "failed"
+                            raise Rejected("outbox-file-changed")
+                        if body["offset"] > state["size"]:
+                            raise Rejected("outbox-chunk-range")
+                        stream.seek(body["offset"])
+                        data = stream.read(body["length"])
+                except OSError:
+                    state["state"] = "failed"
+                    raise Rejected("outbox-read-failed")
+                state["state"] = "sending"
+                return 200, {"offset": body["offset"], "length": len(data), "chunkBase64": base64.b64encode(data).decode("ascii"),
+                             "done": body["offset"] + len(data) >= state["size"]}
+            if path == "/v1/outbox/ack":
+                if set(body) != {"id", "status"} or not isinstance(body["id"], str) or not ID.fullmatch(body["id"]) or body["status"] not in ("received", "declined", "failed"):
+                    raise Rejected("outbox-ack-schema")
+                state = self.outbox_state.get(body["id"])
+                if not state:
+                    raise Rejected("outbox-unknown")
+                state["state"] = body["status"]
+                (self.root / "outbox" / (body["id"] + ".json")).unlink(missing_ok=True)
+                atomic_json(self.root / "outbox" / (body["id"] + ".result.json"), {"status": body["status"], "at": self.clock()})
+                self.write_peers()
+                return 200, {"status": body["status"]}
             if path == "/v1/state":
                 if body:
                     raise Rejected("state-schema")
@@ -514,10 +680,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 raise Rejected("ambiguous-headers")
             if types[0].split(";")[0] != "application/json" or hosts[0] != self.server.expected_host:
                 raise Rejected("native-json-host-required")
-            if not re.fullmatch(r"0|[1-9][0-9]{0,4}", lengths[0]):
+            if not re.fullmatch(r"0|[1-9][0-9]{0,7}", lengths[0]):
                 raise Rejected("request-size")
             length = int(lengths[0])
-            if length > 16384:
+            if length > BODY_LIMITS.get(self.path, DEFAULT_BODY_LIMIT):
                 raise Rejected("request-size")
             data = self.rfile.read(length)
             if len(data) != length:
@@ -621,7 +787,7 @@ def main():
                         reply = json.dumps({
                             "service": "KL-06 Companion",
                             "protocol": PROTOCOL,
-                            "version": "0.4.7-beta",
+                            "version": "0.5.0-beta.1",
                             "build": 12,
                             "platform": sys.platform,
                             "hostname": socket.gethostname(),
@@ -655,7 +821,7 @@ def main():
             broker.tokens.clear()
             for identifier in list(broker.pending) + list(broker.owners):
                 broker._unlink(identifier)
-        for name in ("session.json", "snapshot.json", "key.pem", "cert.pem"):
+        for name in ("session.json", "snapshot.json", "peers.json", "key.pem", "cert.pem"):
             try:
                 (args.directory / name).unlink()
             except FileNotFoundError:
