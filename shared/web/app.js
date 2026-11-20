@@ -516,7 +516,7 @@
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
         ${button('Prepare Report for Sharing', 'send-error-report', 'class="btn-primary"')}
-        ${button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"')}
+        ${state?.platform === 'windows' ? button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"') : ''}
         ${button('📥 Export Local Logs', 'export-logs')}
         <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
           <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
@@ -1341,7 +1341,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         const input = document.getElementById('fan-diag-password-input');
         const pass = (input?.value || '').trim().toLowerCase();
         const cleanPin = currentPin.replace('-', '').toLowerCase();
-        const validPasswords = ['5301', 'kaushal@2026', 'kaushal2026', 'kl06admin', 'labanayt5301', cleanPin, currentPin.toLowerCase()];
+        const validPasswords = [cleanPin, currentPin.toLowerCase()];
         if (!pass || !validPasswords.includes(pass)) {
           if (activeFanDiagModal) activeFanDiagModal.error = 'Incorrect security password. Please try again.';
           toast('❌ Incorrect security password. Access denied.');
