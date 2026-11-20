@@ -19,9 +19,10 @@ struct LANHTTP {
     }
     static func post(base: URL, pin: String, path: String, body: [String: Any], token: String?) async throws -> [String: Any] {
         guard let host = base.host, privateURL(base.absoluteString) != nil, pin.range(of: "^[a-f0-9]{64}\\z", options: .regularExpression) != nil,
-              ["/v1/pair", "/v1/pair/finish", "/v1/state", "/v1/command", "/v1/result", "/v1/disconnect"].contains(path) else { throw LANError.invalid }
+              ["/v1/pair", "/v1/pair/finish", "/v1/state", "/v1/command", "/v1/result", "/v1/disconnect",
+               "/v1/transfer/init", "/v1/transfer/chunk", "/v1/transfer/status", "/v1/outbox/list", "/v1/outbox/chunk", "/v1/outbox/ack"].contains(path) else { throw LANError.invalid }
         let raw = try JSONSerialization.data(withJSONObject: body, options: [.sortedKeys])
-        guard raw.count <= 16384 else { throw LANError.invalid }
+        guard raw.count <= (path == "/v1/transfer/chunk" ? 1_500_000 : 16384) else { throw LANError.invalid }
         return try await withCheckedThrowingContinuation { continuation in
             let queue = DispatchQueue(label: "app.kl06.pinned-lan")
             let tls = NWProtocolTLS.Options()
@@ -104,6 +105,11 @@ actor PinnedLaptop {
             self.token = token; expiry = expires; self.ticket = nil; self.code = nil
         }
         return ["status": paired() ? "Paired. Every write still requires laptop confirmation." : "Awaiting laptop confirmation."]
+    }
+    /// File-transfer endpoints (laptop asks its owner for consent on /transfer/init).
+    func transfer(_ path: String, _ body: [String: Any]) async throws -> [String: Any] {
+        guard path.hasPrefix("/v1/transfer/") || path.hasPrefix("/v1/outbox/") else { throw LANError.invalid }
+        return try await send(path, body, auth: true)
     }
     func state() async throws -> [String: Any] { try await send("/v1/state", [:], auth: true) }
     private func allowed(_ operation: String, _ p: [String: Any]) -> Bool {

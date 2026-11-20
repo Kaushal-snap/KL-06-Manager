@@ -10,7 +10,6 @@ enum NativeBridgePolicy {
         if operation == "openSetting" { return Set(params.keys) == ["id"] && settingIDs.contains(params["id"] as? String ?? "") }
         if operation == "setPowerProfile" { return Set(params.keys) == ["profile"] && ["High Performance", "Balanced", "Battery Saver"].contains(params["profile"] as? String ?? "") }
         if operation == "setBatteryLimit" { return Set(params.keys) == ["limit"] && [60, 80, 100].contains((params["limit"] as? NSNumber)?.intValue ?? -1) }
-        if operation == "setFanMode" { return Set(params.keys) == ["mode"] && ["Whisper", "Standard", "Turbo"].contains(params["mode"] as? String ?? "") }
         if operation == "sendPeerFile" { return Set(params.keys) == ["peerId"] && (params["peerId"] as? String)?.isEmpty == false }
         return CompanionPolicy.allowed(operation, params)
     }
@@ -52,6 +51,8 @@ final class DesktopCompanion {
     var snapshot: (() -> [String: Any])?
     var readyToPrompt: (() -> Bool)?
     var approvePair: ((String) -> Bool)?
+    /// (platform, sanitized file name, size in bytes) -> the laptop owner's decision for an incoming file.
+    var approveTransfer: ((String, String, Int64) -> Bool)?
     var perform: ((String, [String: Any], TimeInterval, TimeInterval) -> (Bool, String))?
     var isRunning: Bool { task?.isRunning == true }
     private func write(_ value: [String: Any], to url: URL) throws {
@@ -120,6 +121,15 @@ final class DesktopCompanion {
             var reply: [String: Any] = ["ok": false, "approved": false, "message": "Refused or expired."]
             if message["kind"] as? String == "pair", let platform = message["platform"] as? String, ["android", "ios"].contains(platform) {
                 reply["approved"] = approvePair?(platform) == true && expires > Date().timeIntervalSince1970 && uptimeDeadline > DesktopCompanion.uptime && isRunning
+            } else if message["kind"] as? String == "transfer", let platform = message["platform"] as? String,
+                      ["android", "ios", "macos", "windows", "unknown"].contains(platform),
+                      let name = message["fileName"] as? String, !name.isEmpty, name.utf8.count <= 255,
+                      !name.contains("/"), !name.contains("\\"), !name.contains("\0"),
+                      let sizeNumber = message["fileSize"] as? NSNumber, CFGetTypeID(sizeNumber) != CFBooleanGetTypeID(),
+                      sizeNumber.int64Value >= 0, sizeNumber.int64Value <= 2 * 1024 * 1024 * 1024 {
+                let approved = approveTransfer?(platform, name, sizeNumber.int64Value) == true && expires > Date().timeIntervalSince1970 && uptimeDeadline > DesktopCompanion.uptime && isRunning
+                reply["approved"] = approved; reply["ok"] = approved
+                reply["message"] = approved ? "Accepted on the laptop." : "Declined or expired on the laptop."
             } else if message["kind"] as? String == "command", let operation = message["operation"] as? String,
                       let params = message["params"] as? [String: Any], CompanionPolicy.allowed(operation, params) {
                 activeRequest = url
@@ -129,6 +139,22 @@ final class DesktopCompanion {
             }
             try? write(reply, to: requests.appendingPathComponent(id + ".result.json"))
         }
+    }
+    /// Really paired phones (written by the broker; never contains tokens). Empty when nothing is paired.
+    func peers() -> [String: Any] {
+        guard isRunning, let folder = folder, let value = try? read(folder.appendingPathComponent("peers.json"), max: 65536) else { return ["peers": [], "outbox": []] }
+        return ["peers": value["peers"] as? [[String: Any]] ?? [], "outbox": value["outbox"] as? [[String: Any]] ?? []]
+    }
+    /// Queue a file the owner picked in the native open panel for download by a paired phone.
+    /// Only the path is written (0600, private temp folder); the broker re-validates it and hashes it itself.
+    func queueOutbox(path: String) throws {
+        guard isRunning, let folder = folder else { throw ControlError(message: "Start the temporary companion session and pair a phone first.") }
+        var info = stat()
+        guard path.hasPrefix("/"), lstat(path, &info) == 0, (info.st_mode & S_IFMT) == S_IFREG, info.st_nlink == 1, info.st_uid == getuid(),
+              info.st_size <= 2 * 1024 * 1024 * 1024 else { throw ControlError(message: "Choose one of your own regular files up to 2 GB (no folders, links or aliases).") }
+        let id = UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased()
+        let now = Date().timeIntervalSince1970
+        try write(["schema": "KL06_OUTBOX_V1", "id": id, "path": path, "createdAt": now, "expiresAt": now + 600], to: folder.appendingPathComponent("outbox", isDirectory: true).appendingPathComponent(id + ".json"))
     }
     func stop() {
         timer?.invalidate(); timer = nil; activeRequest = nil

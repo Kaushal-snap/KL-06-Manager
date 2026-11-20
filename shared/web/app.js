@@ -171,11 +171,11 @@
   let currentPin = String(Math.floor(100000 + Math.random() * 900000)).replace(/(\d{3})(\d{3})/, '$1-$2');
   let pinCreated = Date.now();
   let incomingPair = null;
-  let pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
+  let pairedDevice = null;
   let transferActive = false;
   let transferProgress = 0;
   let transferFileName = '';
-  let transferSpeed = '42.5 MB/s';
+  let transferSpeed = '—';
   let recentTransfers = [
     { id: 'tf-1', name: 'IMG_20261118_142010.jpg', size: '3.4 MB', time: 'Just now', peer: 'ASUS VivoBook K15', status: 'Delivered (SHA-256 verified)' },
     { id: 'tf-2', name: 'kl06-diagnostic.log', size: '124 KB', time: '5m ago', peer: 'ASUS VivoBook K15', status: 'Saved in Downloads' }
@@ -373,8 +373,7 @@
       
       <div style="display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap">
         ${button('📁 Select File to Share', 'pick-share-file', 'class="btn-primary"')}
-        ${button('📸 Quick Share Photo (3.4 MB)', 'quick-send-photo')}
-        ${button('📄 Quick Share Doc (120 KB)', 'quick-send-doc')}
+        ${button('📥 Receive from laptop', 'receive-from-laptop')}
       </div>
 
       ${transferActive ? `
@@ -387,14 +386,14 @@
             <div class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:11px;color:#8ab1bf;margin-top:6px">
-            <span>Target: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b> (${e(transferSpeed)})</span>
+            <span>Target: <b>${e(pairedDevice?.name || 'paired laptop')}</b> (${e(transferSpeed)})</span>
             <span>SHA-256 Verified Stream</span>
           </div>
         </div>
       ` : `
         <div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#8ab4be;background:rgba(0,0,0,0.25);padding:4px 12px;border-radius:12px">
           <span class="live-dot" style="background:#34d399"></span>
-          Ready to transmit to: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b>
+          Ready to transmit to: <b>${e(pairedDevice?.name || 'paired laptop')}</b>
         </div>
       `}
     </div>
@@ -1065,68 +1064,81 @@
     }
   }
 
+  function fmtSpeed(bytes, ms){
+    if (!(ms > 0) || !(bytes > 0)) return '—';
+    const mbps = bytes / 1048576 / (ms / 1000);
+    return mbps.toFixed(1) + ' MB/s';
+  }
+
+  function recordTransfer(name, size, status){
+    recentTransfers.unshift({
+      id: 'tf-' + Date.now(), name,
+      size: (size / 1024).toFixed(1) + ' KB',
+      time: new Date().toLocaleTimeString(),
+      peer: pairedDevice?.name || 'Laptop', status
+    });
+    if (recentTransfers.length > 8) recentTransfers.pop();
+  }
+
+  window.KLTransferProgress = function(pct){
+    transferProgress = Math.max(0, Math.min(100, Number(pct) || 0));
+    render();
+  };
+
   async function executeFileTransfer(fileName, fileSize, mimeType = 'application/octet-stream', uri = ''){
     if (!fileName || transferActive) return;
+    if (!native || !uri) {
+      toast('Real file needed: pick a file to send.');
+      return;
+    }
+    if (!remote && !pairedDevice?.host) {
+      toast('Pair with the laptop first.');
+      return;
+    }
     transferActive = true;
     transferFileName = fileName;
-    transferProgress = 5;
-    transferSpeed = '45.2 MB/s';
-    addLog('TRANSFER', 'info', `Initiating transfer for "${fileName}" (${(fileSize / 1024).toFixed(1)} KB)...`);
+    transferProgress = 0;
+    transferSpeed = '—';
+    const t0 = Date.now();
+    addLog('TRANSFER', 'info', `Sending "${fileName}" - waiting for laptop approval (up to 90 s)...`);
     render();
-
-    if (native) {
-      if (pairedDevice?.host && pairedDevice.host.includes(':8766')) {
-        try {
-          addLog('TRANSFER', 'info', `Streaming "${fileName}" over TLS directly to ${pairedDevice.name}...`);
-          const res = await request('streamFileToPeer', { uri });
-          transferProgress = 100;
-          transferActive = false;
-          const rec = {
-            id: 'tf-' + Date.now(),
-            name: fileName,
-            size: (fileSize / 1024).toFixed(1) + ' KB',
-            time: new Date().toLocaleTimeString(),
-            peer: pairedDevice.name,
-            status: 'Delivered (SHA-256 verified)'
-          };
-          recentTransfers.unshift(rec);
-          if (recentTransfers.length > 8) recentTransfers.pop();
-          addLog('TRANSFER', 'ok', `✓ Streamed "${fileName}" to ${pairedDevice.name} over TLS.`);
-          toast(`✓ File "${fileName}" transferred to ${pairedDevice.name}!`);
-          render();
-          return;
-        } catch(err) {
-          addLog('TRANSFER', 'warn', `Direct companion stream: ${err.message}. Opening system Quick Share...`);
-        }
-      }
-      try {
-        await request('shareViaSystem', { uri });
-        transferActive = false;
-        transferProgress = 0;
-        addLog('TRANSFER', 'ok', `✓ Opened system Quick Share / Bluetooth for "${fileName}".`);
-        toast(`✓ System Quick Share dialog opened for "${fileName}".`);
-        render();
-        return;
-      } catch(err) {
-        addLog('TRANSFER', 'warn', `System share: ${err.message}`);
-      }
+    try {
+      const res = await request('streamFileToPeer', { uri });
+      if (!res || res.verifiedByLaptop !== true) throw new Error('Laptop did not confirm the SHA-256');
+      transferProgress = 100;
+      transferSpeed = fmtSpeed(fileSize, Date.now() - t0);
+      recordTransfer(fileName, fileSize, 'Delivered (laptop verified SHA-256)');
+      addLog('TRANSFER', 'ok', `✓ "${fileName}" delivered and verified by the laptop.`);
+      toast(`✓ "${fileName}" delivered.`);
+    } catch(err) {
+      transferProgress = 0;
+      recordTransfer(fileName, fileSize, 'Failed: ' + (err?.message || 'error'));
+      addLog('TRANSFER', 'warn', `Transfer failed: ${err?.message || err}`);
+      toast('Transfer failed: ' + (err?.message || 'error'));
+    } finally {
+      transferActive = false;
+      render();
     }
+  }
 
-    transferProgress = 100;
-    transferActive = false;
-    const rec = {
-      id: 'tf-' + Date.now(),
-      name: fileName,
-      size: (fileSize / 1024).toFixed(1) + ' KB',
-      time: new Date().toLocaleTimeString(),
-      peer: pairedDevice?.name || 'Local Device',
-      status: 'Staged (SHA-256 computed)'
-    };
-    recentTransfers.unshift(rec);
-    if (recentTransfers.length > 8) recentTransfers.pop();
-    addLog('TRANSFER', 'ok', `✓ Prepared "${fileName}" for transfer.`);
-    toast(`✓ File "${fileName}" ready for transfer.`);
-    render();
+  async function receiveFromLaptop(){
+    if (!native || transferActive) return;
+    try {
+      const list = await request('receiveFromLaptop', {});
+      const items = (list && list.items) || [];
+      if (!items.length) { toast('Nothing queued on the laptop.'); return; }
+      transferActive = true; transferFileName = items[0].name || 'file'; transferProgress = 0; render();
+      const t0 = Date.now();
+      const r = await request('receiveFromLaptop', { id: items[0].id });
+      transferProgress = 100;
+      transferSpeed = fmtSpeed(Number(items[0].size) || 0, Date.now() - t0);
+      recordTransfer(items[0].name || 'file', Number(items[0].size) || 0, r && r.declined ? 'Declined' : 'Received (SHA-256 verified)');
+      toast(r && r.declined ? 'Declined.' : '✓ File received.');
+    } catch(err) {
+      toast('Receive failed: ' + (err?.message || 'error'));
+    } finally {
+      transferActive = false; render();
+    }
   }
 
   async function handleRealFileTransfer(file){
@@ -1565,12 +1577,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         const input=document.getElementById('peer-pin-input');
         const pinVal=(input?.value||'').trim();
         if(!pinVal||pinVal.length<6){toast('Enter a valid 6-digit PIN (e.g. 742-910)');return;}
-        toast(`Authenticating PIN ${pinVal} over local Wi-Fi / Bluetooth…`);
-        setTimeout(()=>{
-          pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          toast('✓ Successfully paired with ASUS VivoBook K15 via 6-digit PIN!');
-          render();
-        }, 600);
+        toast('Use the pairing code shown by the laptop companion (Pair section).');
         return;
       }
 
@@ -1673,21 +1680,13 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         render();
         return;
 
-      case'quick-send-photo':
-        await executeFileTransfer('Camera_Capture_2026.jpg', 3.4 * 1024 * 1024, 'image/jpeg');
-        return;
-
-      case'quick-send-doc':
-        await executeFileTransfer('Diagnostic_Audit_Report.pdf', 124 * 1024, 'application/pdf');
+      case'receive-from-laptop':
+        await receiveFromLaptop();
         return;
 
       case'pick-share-file': {
         if (transferActive || busy) return;
-        if (!pairedDevice) {
-          pairedDevice = discoveredPeers[0] || { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          addLog('RADAR', 'ok', `✓ Auto-connected to ${pairedDevice.name} for file sharing.`);
-          toast(`✓ Connected to ${pairedDevice.name}! Choose file to send.`);
-        }
+        if (!remote && !pairedDevice) { toast('Pair with the laptop first.'); return; }
         if (native) {
           try {
             const res = await request('pickShareFile');
@@ -1810,9 +1809,6 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
     addLog('PERM', 'ok', '✓ Hardware permissions granted: Wi-Fi, Bluetooth & Mobile Data active.');
     addLog('LINK', 'ok', '✓ Hardware link connected continuously across Wi-Fi, Bluetooth & Mobile Data.');
     toast('✓ Permissions granted! Hardware & companion connected.');
-    if (!pairedDevice) {
-      pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-    }
     startHardwareKeepAlive();
     render();
   };

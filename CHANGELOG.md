@@ -232,3 +232,11 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - Renamed visible application to KL-06 with MyASUS-inspired design.
 - Implemented 9 reversible desktop preferences with atomic restore journaling.
 - Real read-only CPU/memory usage counters.
+
+## Unreleased - claude/real-transfer-fan-fixes
+- Fix: file transfer failed because the broker capped every body at 16 KiB; chunk endpoint now allows 1.5 MB and a higher rate limit (tested).
+- Transfers now need laptop-owner approval; sender waits for it; laptop verifies SHA-256. Added laptop->phone outbox (Android receive, SHA-256 verified).
+- Removed fake peer scan, fake PIN pairing, fake speeds and fake "staged" success; fan-mode control removed (RPM is read-only).
+- Added macos/fixes (HiDPI, pmset safe fixes/report, K513EA-guarded ForbiddenItlwm update) and macos/fan-kext (untested sketch).
+- iOS: transfer/outbox paths allowed in PinnedLaptop.swift; iOS UI bridge for transfer NOT done yet.
+- Swift/Java/kext changes are NOT compiled here; Python/JS tests pass.

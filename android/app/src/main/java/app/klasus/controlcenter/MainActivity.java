@@ -325,13 +325,24 @@ public final class MainActivity extends Activity {
 
                     JSONObject init=laptop.transferInit(fileName,fileSize,sha256);
                     String transferId=init.getString("transferId");
+                    // The laptop owner must accept first; nothing is sent before that.
+                    main.post(()->{if(web!=null)web.evaluateJavascript("if(window.KLTransferProgress)window.KLTransferProgress(0);",null);});
+                    long approvalDeadline=System.currentTimeMillis()+95000;
+                    while(true){
+                        JSONObject st=laptop.transferStatus(transferId);
+                        if("transferring".equals(st.optString("state")))break;
+                        if(System.currentTimeMillis()>approvalDeadline)throw new IOException("The laptop did not accept the file in time.");
+                        Thread.sleep(1000);
+                        if(destroyed)return;
+                    }
+                    JSONObject last=null;
 
                     try(InputStream in=getContentResolver().openInputStream(u)){
                         byte[] b=new byte[65536];int n;long offset=0;
                         while((n=in.read(b))!=-1){
                             byte[] chunk=n==b.length?b:java.util.Arrays.copyOf(b,n);
                             String b64=android.util.Base64.encodeToString(chunk,android.util.Base64.NO_WRAP);
-                            laptop.transferChunk(transferId,offset,b64);
+                            last=laptop.transferChunk(transferId,offset,b64);
                             offset+=n;
                             final int pct=(int)((offset*100)/Math.max(1,fileSize));
                             main.post(()->{
@@ -339,11 +350,59 @@ public final class MainActivity extends Activity {
                             });
                         }
                     }
-                    writeLog("TRANSFER","File "+fileName+" successfully streamed over TLS to laptop ("+fileSize+" bytes)");
-                    reply(id,new JSONObject().put("status","complete").put("fileName",fileName).put("bytesTransferred",fileSize).put("sha256",sha256),null);
+                    if(last==null&&fileSize==0)last=laptop.transferChunk(transferId,0,"");
+                    if(last==null||!"complete".equals(last.optString("state")))throw new IOException("The laptop did not confirm a verified file.");
+                    writeLog("TRANSFER","File "+fileName+" streamed over TLS and verified by the laptop ("+fileSize+" bytes)");
+                    reply(id,new JSONObject().put("status","complete").put("fileName",fileName).put("bytesTransferred",fileSize).put("sha256",sha256).put("verifiedByLaptop",true),null);
                 }catch(Exception e){
                     writeLog("TRANSFER","Stream failed: "+e.getMessage());
                     reply(id,null,"File transfer failed: "+e.getMessage());
+                }
+            });
+            return;
+        }
+        case "receiveFromLaptop":{
+            // List (no params) or download one offered file (params: id). The phone owner must accept every file.
+            final String wanted=p.optString("id","");
+            if(p.length()>1||(p.length()==1&&!wanted.matches("[a-f0-9]{32}")))throw new IllegalArgumentException();
+            io.execute(()->{
+                if(destroyed)return;
+                try{
+                    if(wanted.isEmpty()){reply(id,laptop.outboxList(),null);return;}
+                    JSONObject listing=laptop.outboxList();JSONArray items=listing.getJSONArray("items");JSONObject item=null;
+                    for(int i=0;i<items.length();i++)if(wanted.equals(items.getJSONObject(i).getString("id")))item=items.getJSONObject(i);
+                    if(item==null||!"ready".equals(item.optString("state")))throw new IOException("The laptop is still preparing that file or the offer expired.");
+                    final String name=item.getString("fileName");final long size=item.getLong("fileSize");final String expectedSha=item.getString("sha256");
+                    final java.util.concurrent.CountDownLatch latch=new java.util.concurrent.CountDownLatch(1);final boolean[] accepted={false};
+                    main.post(()->new AlertDialog.Builder(this).setTitle("Receive a file from your laptop?").setMessage("File: "+name+"\nSize: "+(size/1024)+" KB\n\nIt is saved only inside this app's Downloads folder after the SHA-256 check passes. Accept only if you just sent it yourself.")
+                        .setPositiveButton("Accept",(d,w)->{accepted[0]=true;latch.countDown();}).setNegativeButton("Decline",(d,w)->latch.countDown()).setOnCancelListener(d->latch.countDown()).show());
+                    latch.await(90,java.util.concurrent.TimeUnit.SECONDS);
+                    if(!accepted[0]){try{laptop.outboxAck(wanted,"declined");}catch(Exception ignored){}throw new IOException("Declined on the phone. Nothing was saved.");}
+                    java.io.File dir=getExternalFilesDir(android.os.Environment.DIRECTORY_DOWNLOADS);if(dir==null)dir=getFilesDir();
+                    String safe=name.replaceAll("[^A-Za-z0-9._ -]","_");if(safe.isEmpty()||safe.startsWith("."))safe="file_"+safe;
+                    java.io.File target=new java.io.File(dir,safe);for(int n=1;target.exists()&&n<1000;n++)target=new java.io.File(dir,"("+n+") "+safe);
+                    java.io.File part=new java.io.File(dir,target.getName()+".part");
+                    java.security.MessageDigest md=java.security.MessageDigest.getInstance("SHA-256");long offset=0;boolean ok=false;
+                    try(java.io.FileOutputStream out=new java.io.FileOutputStream(part)){
+                        while(offset<size||size==0){
+                            JSONObject c=laptop.outboxChunk(wanted,offset,131072);byte[] data=android.util.Base64.decode(c.getString("chunkBase64"),android.util.Base64.DEFAULT);
+                            out.write(data);md.update(data);offset+=data.length;final int pct=(int)((offset*100)/Math.max(1,size));
+                            main.post(()->{if(web!=null)web.evaluateJavascript("if(window.KLTransferProgress)window.KLTransferProgress("+pct+");",null);});
+                            if(c.optBoolean("done")||data.length==0)break;
+                            if(destroyed)return;
+                        }
+                        out.getFD().sync();
+                    }
+                    StringBuilder hex=new StringBuilder();for(byte b:md.digest())hex.append(String.format(java.util.Locale.ROOT,"%02x",b));
+                    ok=offset==size&&hex.toString().equals(expectedSha);
+                    if(!ok){part.delete();try{laptop.outboxAck(wanted,"failed");}catch(Exception ignored){}throw new IOException("The file failed its integrity check and was deleted.");}
+                    if(!part.renameTo(target)){part.delete();throw new IOException("Could not save the file.");}
+                    laptop.outboxAck(wanted,"received");
+                    writeLog("TRANSFER","Received "+target.getName()+" from laptop ("+size+" bytes, SHA-256 verified)");
+                    reply(id,new JSONObject().put("status","saved").put("fileName",target.getName()).put("savedTo",target.getAbsolutePath()).put("bytes",size),null);
+                }catch(Exception e){
+                    writeLog("TRANSFER","Receive failed: "+e.getMessage());
+                    reply(id,null,"Receive failed: "+e.getMessage());
                 }
             });
             return;

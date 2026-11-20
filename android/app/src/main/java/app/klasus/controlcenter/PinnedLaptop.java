@@ -41,6 +41,10 @@ final class PinnedLaptop {
     synchronized JSONObject command(JSONObject body)throws Exception {if(!validCommand(body))throw new IOException("Remote operation refused.");JSONObject reply=send("/v1/command",body,true);last=reply.getString("id");return new JSONObject().put("status","Request queued; approve it on the laptop within 90 seconds.");}
     synchronized JSONObject result()throws Exception {if(last==null)throw new IOException("No requested action.");return send("/v1/result",new JSONObject().put("id",last),true);}
     synchronized JSONObject transferInit(String fileName,long fileSize,String sha256)throws Exception {return send("/v1/transfer/init",new JSONObject().put("fileName",fileName).put("fileSize",fileSize).put("expectedSha256",sha256).put("senderPlatform","android"),true);}
+    synchronized JSONObject transferStatus(String transferId)throws Exception {return send("/v1/transfer/status",new JSONObject().put("transferId",transferId),true);}
+    synchronized JSONObject outboxList()throws Exception {return send("/v1/outbox/list",new JSONObject(),true);}
+    synchronized JSONObject outboxChunk(String id,long offset,int length)throws Exception {return send("/v1/outbox/chunk",new JSONObject().put("id",id).put("offset",offset).put("length",length),true);}
+    synchronized JSONObject outboxAck(String id,String status)throws Exception {return send("/v1/outbox/ack",new JSONObject().put("id",id).put("status",status),true);}
     synchronized JSONObject transferChunk(String transferId,long offset,String chunkBase64)throws Exception {return send("/v1/transfer/chunk",new JSONObject().put("transferId",transferId).put("chunkOffset",offset).put("chunkBase64",chunkBase64),true);}
     synchronized void disconnect(){try{if(paired())send("/v1/disconnect",new JSONObject(),true);}catch(Exception ignored){}finally{clear();}}
     void invalidate(){token=null;expires=0;}

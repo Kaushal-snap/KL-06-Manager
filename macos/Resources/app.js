@@ -86,10 +86,10 @@
   function overview(){
     const c=state.cpu||{},m=state.memory||{},b=state.battery||{},s=state.storage||{},health=M.capacityHealth(b),memPercent=m.usedGB/m.totalGB*100;
     const perfMode = state.powerProfile || 'Balanced';
-    const fanMode = state.fanMode || 'Standard';
+    
     const batLimit = state.batteryLimit || 100;
     return title('Your Mac. Clearly connected.','A clear view of your hardware. Full control over power, cooling, and battery life.','<span class="quiet-label">YOUR EVERYDAY WORKSPACE</span>')+
-      `<section class="hero"><div><span class="eyebrow">CIRRUS · A FRESH PERSPECTIVE</span><h2>Clarity for your Mac.<br>Room for your work.</h2><p>Real-time telemetry and full hardware controls for Governor, Fan cooling, and Battery thresholds.</p><div class="chip-row"><span class="chip">Governor: ${e(perfMode)}</span><span class="chip">Cooling: ${e(fanMode)}</span><span class="chip">Battery Threshold: ${e(batLimit)}%</span><span class="chip">AirDrop / Quick Share Ready</span></div></div><div class="hero-art">${heroArt()}<span class="hero-device"><span class="dot"></span>MONITOR · UNDERSTAND · PERSONALIZE</span></div></section>
+      `<section class="hero"><div><span class="eyebrow">CIRRUS · A FRESH PERSPECTIVE</span><h2>Clarity for your Mac.<br>Room for your work.</h2><p>Real-time telemetry, read-only fan speed and the controls this Mac really supports.</p><div class="chip-row"><span class="chip">Governor: ${e(perfMode)}</span><span class="chip">Battery Threshold: ${e(batLimit)}%</span><span class="chip">Paired-phone file transfer</span></div></div><div class="hero-art">${heroArt()}<span class="hero-device"><span class="dot"></span>MONITOR · UNDERSTAND · PERSONALIZE</span></div></section>
       <div class="metric-grid">
         <section class="metric metric-cpu" style="--usage:${M.usageColor(c.loadPercent)}"><div class="metric-top">${icon('cpu')}CPU utilization<button class="arrow" data-page="performance" aria-label="Open performance">${icon('northeast')}</button></div><div class="metric-value">${num(c.loadPercent)}<small>%</small></div><div class="metric-note">${e(c.logicalCores??'—')} logical cores · aggregate load</div>${miniSpark()}</section>
         <section class="metric metric-memory" style="--usage:${M.usageColor(memPercent)}"><div class="metric-top">${icon('memory')}Memory<button class="arrow" data-page="performance" aria-label="Open memory details">${icon('northeast')}</button></div><div class="metric-value">${num(m.usedGB,1)}<small>/ ${num(m.totalGB,0)} GiB</small></div><div class="metric-track"><span style="width:${M.boundedNumber(memPercent,0,100)??0}%;background:${M.usageColor(memPercent)}"></span></div><div class="metric-note">Active + wired + compressed</div></section>
@@ -104,8 +104,8 @@
   function performance(){
     const c=state.cpu||{},m=state.memory||{},gpu=state.gpu?.[0],samples=state.powerSample||[];
     const perfMode = state.powerProfile || 'Balanced';
-    const fanMode = state.fanMode || 'Standard';
-    return title('Performance & Hardware Tuning','Control CPU/GPU power profiles, ASUS fan modes, and system energy scaling.')+
+    
+    return title('Performance & Hardware Tuning','CPU/GPU load, power profile and read-only fan speed.')+
       `<div class="detail-grid"><section class="detail-card">${icon('cpu')}<h3>CPU utilization</h3><div class="large-value">${num(c.loadPercent)}<small> %</small></div><p>${e(c.name||'Intel Core i5-12500H')}<br>${e(c.logicalCores??'16')} logical cores · Governor: <strong>${e(perfMode)}</strong></p>${pill('XCPM Governor Active','info')}</section><section class="detail-card">${icon('memory')}<h3>Memory in use</h3><div class="large-value">${num(m.usedGB,1)}<small> / ${num(m.totalGB)} GiB</small></div><p>Compression ${num(m.compressedGB,2)} GiB<br>Swap currently used ${num(m.swapMB)} MiB.</p>${setting('login','Review login items','ghost')}</section><section class="detail-card gpu-accent">${icon('display')}<h3>Graphics device</h3><p style="margin-top:22px;color:var(--text)">${e(gpu?.name||'Intel Iris Xe Graphics (96 EU)')}</p><p>Metal 2 Hardware Acceleration · HDR Locked OFF. Safe OLED DPCD backlight brightness.</p>${pill('Metal 2 Active','info')}</section></div>
       <div class="two-col">
         <section class="panel panel-padding">
@@ -119,14 +119,10 @@
           <p class="footnote"><span>Current active profile: <strong>${e(perfMode)}</strong></span></p>
         </section>
         <section class="panel panel-padding">
-          <h2>🌪️ ASUS Fan Cooling Profile</h2>
-          <p class="body-copy">Select hardware thermal dissipation curve. Whisper sets low RPM limit; Turbo ramps dual cooling fans for heavy multi-threaded builds and graphics workloads.</p>
-          <div class="inline-actions" style="margin:14px 0">
-            ${button('🤫 Whisper (Mode 0)','set-fan-mode','data-mode="Whisper"',fanMode==='Whisper'?'secondary':'ghost')}
-            ${button('💨 Standard (Mode 1)','set-fan-mode','data-mode="Standard"',fanMode==='Standard'?'secondary':'ghost')}
-            ${button('🔥 Turbo (Mode 2)','set-fan-mode','data-mode="Turbo"',fanMode==='Turbo'?'secondary':'ghost')}
-          </div>
-          <p class="footnote"><span>Current cooling mode: <strong>${e(fanMode)}</strong></span></p>
+          <h2>🌪️ Fan speed (read-only)</h2>
+          ${(()=>{const f=state.fan||{};const rows=(f.fans||[]).filter(x=>typeof x.rpm==='number');
+            if(rows.length) return '<p class="body-copy">Read from the Mac\'s SMC. KL-06 never changes fan speed.</p><div class="large-value">'+rows.map(x=>num(x.rpm,0)).join(' / ')+'<small> RPM</small></div>';
+            return '<p class="body-copy">No fan reading is available: status <strong>'+e(f.status||'not-sampled')+'</strong>. On a Hackintosh a small SMC plugin kext (see macos/fan-kext) must publish the fan sensor. KL-06 does not fake a value and cannot change fan profiles.</p>';})()}
         </section>
       </div>
       <section class="panel"><div class="panel-head"><div><h2>CPU activity</h2><p>Real-time telemetry sampled from macOS system performance counters.</p></div></div><div class="chart-wrap">${chart()}</div></section>
@@ -229,33 +225,29 @@
   }
   function companion(){
     const up=state.updateInfo;
-    const peers = [
-      { id: 'peer-iphone', name: 'Kaushal’s iPhone', platform: 'ios', model: 'iPhone 14 Pro Max', status: 'Available on Wi-Fi', ip: '192.168.1.105' },
-      { id: 'peer-android', name: 'Android Device', platform: 'android', model: 'Quick Share Ready', status: 'Available on Wi-Fi', ip: '192.168.1.112' },
-      { id: 'peer-mac', name: 'mac’s MacBook Pro', platform: 'macos', model: 'ASUS KL-06 Host', status: 'Current Host', ip: '192.168.1.101' },
-      { id: 'peer-win', name: 'Windows Laptop', platform: 'windows', model: 'WinForms Client', status: 'Companion Active', ip: '192.168.1.120' }
-    ];
+    const scan = state.peerScan || {};
+    const peers = Array.isArray(scan.peers) ? scan.peers : [];
+    const outbox = Array.isArray(scan.outbox) ? scan.outbox : [];
     return title('Ecosystem Companion & AirDrop / Quick Share','Local Wi-Fi discovery, cross-platform file transfer, and signed OTA updates.')+
       `<div class="two-col"><section class="panel panel-padding"><h2>${state.companion?.running?'Session active · at most 30 minutes':'Companion is off'}</h2><p class="body-copy">Connect your Android or iPhone over local Wi-Fi. View real-time telemetry, send files via AirDrop/Quick Share, and safely control volume or keep-awake with local laptop confirmation.</p><div class="inline-actions">${button('Enable temporary session','companion-start','','secondary',state.companion?.running)}${button('Show pairing details','companion-details','','ghost',!state.companion?.running)}${button('Stop and revoke devices','companion-stop','','ghost',!state.companion?.running)}</div><div class="notice blue"><strong>Security Invariant:</strong> Private TLS pinning, 32-character random pair code, and explicit desktop confirmation for all changes. No cloud relays, root helpers, firewall changes, or silent background daemons.</div></section>
       <section class="panel panel-padding"><h2>AirDrop & Quick Share (Cross-Platform Drop)</h2><p class="body-copy">High-speed, chunked local file transfer across Mac, iPhone, Android, and Windows. Direct TLS streaming with SHA-256 integrity and explicit receiver consent.</p><div class="chip-row" style="margin:12px 0"><span class="chip">iPhone ↔ Android</span><span class="chip">Mac ↔ iPhone</span><span class="chip">Mac ↔ Android</span><span class="chip">Windows ↔ Mobile</span></div><div class="notice">Incoming transfers require explicit laptop approval dialog with file name and size verification.</div></section></div>
       <section class="panel panel-padding" style="margin-top:20px">
-        <div class="panel-head"><div><h2>Nearby Discovered Devices & PIN Pairing</h2><p>Devices running KL-06 on your trusted Wi-Fi automatically announce and connect.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
+        <div class="panel-head"><div><h2>Paired phones</h2><p>Only phones you paired and approved in this session are listed. File transfer needs your approval on both ends.</p></div><div class="inline-actions">${button('Scan Wi-Fi Devices','scan-peers','','secondary')}${button('Refresh PIN','refresh-pin','','ghost')}</div></div>
         <div class="pin-card">
-          <div class="pin-code-wrap">
-            <div><small style="display:block;color:var(--muted);margin-bottom:4px">MY 6-DIGIT PAIRING PIN</small><div class="pin-digits">742-910</div></div>
-            <div>${button('Copy PIN','copy-pin','','secondary')}</div>
-          </div>
-          <div class="pin-meta">Expires in <b>4:45</b><br>Give this PIN to an iPhone or Android phone to auto-authenticate pairing.</div>
+          <div class="pin-meta"><b>How to connect a phone</b><br>1. Tap <b>Start companion</b> and enter this Mac's Wi-Fi IPv4 address.<br>2. Tap <b>Show pairing details</b> and type the URL, certificate fingerprint and 32-character code into KL-06 on the phone.<br>3. Approve the phone here. Only then it appears below.</div>
         </div>
         <div class="detail-grid" style="margin-top:16px">
+          ${scan.running===false?'<section class="detail-card"><h3>Companion is off</h3><p>Start the companion session first. No device is shown unless it really paired.</p></section>':''}
+          ${scan.running!==false&&peers.length===0&&scan.running===true?'<section class="detail-card"><h3>No paired phone yet</h3><p>Pair a phone with the code above. Nothing is listed until it really connects.</p></section>':''}
           ${peers.map(p => `
-            <section class="detail-card ${p.status.includes('Current') ? 'gpu-accent' : ''}">
-              <h3>${p.platform === 'ios' ? '📱' : p.platform === 'android' ? '🤖' : p.platform === 'macos' ? '💻' : '🖥️'} ${e(p.name)}</h3>
-              <div class="large-value" style="font-size:18px">${e(p.model)}</div>
-              <p>LAN IP: ${e(p.ip)} · ${e(p.status)}</p>
-              ${!p.status.includes('Current') ? button('Send File via Drop', 'send-peer', `data-peer="${e(p.id)}"`, 'secondary') : pill('Current Host', 'info')}
+            <section class="detail-card">
+              <h3>${p.platform === 'ios' ? '📱 iPhone / iPad' : p.platform === 'android' ? '🤖 Android phone' : p.platform === 'macos' ? '💻 Mac' : '🖥️ Windows PC'}</h3>
+              <div class="large-value" style="font-size:18px">Paired · ID ${e(String(p.id).slice(0,6))}</div>
+              <p>Last seen ${e(new Date((p.lastSeen||0)*1000).toLocaleTimeString())}</p>
+              ${button('Send file to this phone', 'send-peer', `data-peer="${e(p.id)}"`, 'secondary')}
             </section>
           `).join('')}
+          ${outbox.map(o => `<section class="detail-card"><h3>📤 ${e(o.name||'file')}</h3><p>Offered to phone: <strong>${e(o.state||'queued')}</strong></p></section>`).join('')}
         </div>
       </section>
       <section class="panel panel-padding" style="margin-top:20px"><div class="panel-head"><div><h2>OTA Updates & Integrity</h2><p>Signed release catalog verification with downgrade defense.</p></div>${button('Check for Updates','check-updates','','secondary')}</div><div class="detail-grid" style="margin-top:16px"><section class="detail-card"><h3>Current Version</h3><div class="large-value" style="font-size:24px">v0.4.7-beta <small>Build 12</small></div><p>Architecture: x86_64 macOS 13+ · Intel Iris Xe safe build</p></section><section class="detail-card"><h3>Update Channel</h3><div class="large-value" style="font-size:24px">Beta Channel</div><p>${up?e(up.notice):'Click Check for Updates to validate with signed catalog.'}</p></section><section class="detail-card"><h3>Integrity Status</h3><div class="large-value" style="font-size:24px;color:var(--emerald,'#00e676')}">${up?.catalogVerified?'Verified':'Signed Ready'}</div><p>SHA-256 catalog signed; manual review required before installation.</p></section></div></section>`+footer();
@@ -330,9 +322,8 @@
       else if(method==='checkUpdates'){state.updateInfo=result;render();toast(result.notice||'Update check complete.');}
       else if(method==='setPowerProfile'){state.powerProfile=params.profile;render();toast(typeof result==='string'?result:'Power profile updated.');}
       else if(method==='setBatteryLimit'){state.batteryLimit=params.limit;render();toast(typeof result==='string'?result:'Battery threshold updated.');}
-      else if(method==='setFanMode'){state.fanMode=params.mode;render();toast(typeof result==='string'?result:'Fan cooling mode updated.');}
-      else if(method==='scanPeers'){toast('Discovered 4 nearby devices on Wi-Fi: Ready for AirDrop / Quick Share.');}
-      else if(method==='sendPeerFile'){toast(typeof result==='string'?result:'File transfer initiated via TLS.');}
+      else if(method==='scanPeers'){state.peerScan=result||{};const n=(state.peerScan.peers||[]).length;toast(state.peerScan.running===false?'Companion is off. Start it first.':(n?`${n} paired phone${n>1?'s':''} found.`:'No paired phone yet.'));render();}
+      else if(method==='sendPeerFile'){toast(typeof result==='string'?result:'File offered to the phone.');act('scanPeers');}
       else toast(typeof result==='string'?result:'Done.');
     }catch(error){toast(error.message);}
     finally{busy=false;await refresh();}
@@ -365,7 +356,6 @@
       case 'check-updates':act('checkUpdates');return;
       case 'set-profile':act('setPowerProfile',{profile:el.dataset.profile});return;
       case 'set-bat-limit':act('setBatteryLimit',{limit:Number(el.dataset.limit)});return;
-      case 'set-fan-mode':act('setFanMode',{mode:el.dataset.mode});return;
       case 'scan-peers':act('scanPeers');return;
       case 'send-peer':act('sendPeerFile',{peerId:el.dataset.peer});return;
     }
