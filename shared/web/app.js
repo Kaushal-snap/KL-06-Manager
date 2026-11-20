@@ -751,7 +751,7 @@
           <h2 style="margin:4px 0 0">${e(state?.fan?.status||'Unsupported on this device')}</h2>
         </div>
         <div>
-          ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
+          ${state?.platform === 'windows' ? button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"') : ''}
         </div>
       </div>
       <p>Windows: explicitly import a HWiNFO sensor CSV on History; no HWiNFO driver/shared-memory reader is silently installed. Android/iOS: no public fan sensor/control exposed. Live Mac RPM is queried by the native Mac build from an already-present standard SMC provider, then may be shared via an authenticated laptop session.</p>
