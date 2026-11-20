@@ -131,7 +131,7 @@ public final class MainActivity extends Activity {
     }
     private void maintainHardwareLink(){
         acquireMulticastLock();
-        writeLog("LINK","Hardware link maintained continuously across Wi-Fi, Bluetooth, and Mobile Data.");
+        writeLog("LINK","Wi-Fi multicast discovery lock acquired. No peer connection, Bluetooth transport or cellular relay is implied.");
         main.post(()->{
             if(web!=null){
                 web.evaluateJavascript("if(window.KLPermissionGranted)window.KLPermissionGranted();",null);
@@ -313,6 +313,17 @@ public final class MainActivity extends Activity {
                             if(sizeIdx!=-1)fileSize=cursor.getLong(sizeIdx);
                         }
                     }
+                    if(fileSize<=0){
+                        long measured=0;
+                        try(InputStream sizeStream=getContentResolver().openInputStream(u)){
+                            if(sizeStream==null)throw new IOException("Cannot read selected file.");
+                            byte[] sizeBuffer=new byte[65536];int sizeRead;
+                            while((sizeRead=sizeStream.read(sizeBuffer))!=-1){measured+=sizeRead;if(measured>2L*1024L*1024L*1024L)throw new IOException("File exceeds the 2 GiB transfer limit.");}
+                        }
+                        fileSize=measured;
+                    }
+                    if(fileSize<=0)throw new IOException("Zero-byte or unreadable file; choose a non-empty regular file.");
+                    if(fileSize>2L*1024L*1024L*1024L)throw new IOException("File exceeds the 2 GiB transfer limit.");
                     MessageDigest digest=MessageDigest.getInstance("SHA-256");
                     try(InputStream in=getContentResolver().openInputStream(u)){
                         byte[] b=new byte[65536];int n;
@@ -324,15 +335,17 @@ public final class MainActivity extends Activity {
                     String sha256=hex.toString();
 
                     JSONObject init=laptop.transferInit(fileName,fileSize,sha256);
+                    if(!"approved".equals(init.optString("status")))throw new IOException("Desktop did not approve the transfer session.");
                     String transferId=init.getString("transferId");
 
                     try(InputStream in=getContentResolver().openInputStream(u)){
-                        byte[] b=new byte[65536];int n;long offset=0;
+                        byte[] b=new byte[8192];int n;long offset=0;
                         while((n=in.read(b))!=-1){
                             byte[] chunk=n==b.length?b:java.util.Arrays.copyOf(b,n);
                             String b64=android.util.Base64.encodeToString(chunk,android.util.Base64.NO_WRAP);
-                            laptop.transferChunk(transferId,offset,b64);
+                            JSONObject chunkReply=laptop.transferChunk(transferId,offset,b64);
                             offset+=n;
+                            if(offset==fileSize && !"complete".equals(chunkReply.optString("state")))throw new IOException("Desktop did not confirm final SHA-256 verification.");
                             final int pct=(int)((offset*100)/Math.max(1,fileSize));
                             main.post(()->{
                                 if(web!=null)web.evaluateJavascript("if(window.KLTransferProgress)window.KLTransferProgress("+pct+");",null);
@@ -387,7 +400,7 @@ public final class MainActivity extends Activity {
             sb.append("Version: 0.4.7-beta (Build 12)\n");
             sb.append("Generated At: ").append(Instant.now().toString()).append("\n");
             sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n");
-            sb.append("Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n\n");
+            sb.append("Google Drive Sync: NOT CONFIGURED; this report is saved locally only.\n\n");
             if(arr!=null){
                 for(int idx=0;idx<arr.length();idx++){
                     JSONObject obj=arr.optJSONObject(idx);
@@ -409,22 +422,22 @@ public final class MainActivity extends Activity {
                     sendIntent.setType("text/plain");
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.7-beta Build 12)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
-                    Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Log to Private Drive / Share");
+                    Intent chooser=Intent.createChooser(sendIntent,"Export KL-06 diagnostic report");
                     startActivity(chooser);
                 }catch(Exception e){
                     writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
                 }
             });
 
-            reply(id,new JSONObject().put("status","saved").put("logPath",savedPath).put("message","Logs saved to "+savedPath+" and ready for Google Drive upload"),null);
+            reply(id,new JSONObject().put("status","saved-locally").put("logPath",savedPath).put("message","Logs saved locally to "+savedPath+". Google Drive upload is not configured."),null);
             return;
         }
         case "saveFanDiagnosticReport":{
             String reportText=p.optString("reportText","");
             if(reportText.isEmpty()){
-                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.7-beta (Build 12)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
+                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.7-beta (Build 12)\nTimestamp: "+Instant.now().toString()+"\nGoogle Drive Sync: NOT CONFIGURED; local export only.\n";
             }
-            writeLog("FAN_DIAG","Fan diagnostic report generated with security password validation.");
+            writeLog("FAN_DIAG","Fan diagnostic report requested. Values are not independently validated; Drive sync is not configured.");
             String savedPath="Download/KL-06/logs/kl06-fan-diagnostic.log";
             savePublicLog("kl06-fan-diagnostic.log",reportText);
             final String finalReport=reportText;
@@ -434,13 +447,13 @@ public final class MainActivity extends Activity {
                     sendIntent.setType("text/plain");
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.4.7-beta Build 12)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,finalReport);
-                    Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Fan Diagnostic to Private Drive / Share");
+                    Intent chooser=Intent.createChooser(sendIntent,"Export KL-06 fan diagnostic report");
                     startActivity(chooser);
                 }catch(Exception e){
                     writeLog("WARN","Share chooser launch fallback: "+e.getMessage());
                 }
             });
-            reply(id,new JSONObject().put("status","saved").put("logPath",savedPath).put("message","Fan diagnostic saved to "+savedPath+" and auto-synced to private Drive folder"),null);
+            reply(id,new JSONObject().put("status","saved-locally").put("logPath",savedPath).put("message","Fan diagnostic saved locally. Google Drive upload is not configured; use the share sheet to export it."),null);
             return;
         }
         case "discoverPeers":{

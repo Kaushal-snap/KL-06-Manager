@@ -171,22 +171,17 @@
   let currentPin = String(Math.floor(100000 + Math.random() * 900000)).replace(/(\d{3})(\d{3})/, '$1-$2');
   let pinCreated = Date.now();
   let incomingPair = null;
-  let pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
+  let pairedDevice = null;
+  let pairingTarget = null;
   let transferActive = false;
   let transferProgress = 0;
   let transferFileName = '';
-  let transferSpeed = '42.5 MB/s';
-  let recentTransfers = [
-    { id: 'tf-1', name: 'IMG_20261118_142010.jpg', size: '3.4 MB', time: 'Just now', peer: 'ASUS VivoBook K15', status: 'Delivered (SHA-256 verified)' },
-    { id: 'tf-2', name: 'kl06-diagnostic.log', size: '124 KB', time: '5m ago', peer: 'ASUS VivoBook K15', status: 'Saved in Downloads' }
-  ];
+  let transferSpeed = '—';
+  let recentTransfers = [];
 
   // Real-time peer discovery state
   let isScanning = false;
-  let hardwareConnected = false;
-  try {
-    hardwareConnected = localStorage.getItem('kl06_hardware_permission_granted') === 'true';
-  } catch(e){}
+  let hardwareConnected = false; // Permission grant is not a device connection.
 
   let keepAliveTimer = null;
   function startHardwareKeepAlive(){
@@ -200,11 +195,7 @@
   if (hardwareConnected) {
     startHardwareKeepAlive();
   }
-  let discoveredPeers = [
-    { id: 'peer-vivobook', name: 'ASUS VivoBook K15', ip: '192.168.1.42', host: 'https://192.168.1.42:8766', type: 'Laptop · Windows 11', route: 'Wi-Fi LAN :8766', signal: '98% (Ultra-fast)', pin: 'a'.repeat(64), online: true },
-    { id: 'peer-macbook', name: 'MacBook Pro 16"', ip: '192.168.1.108', host: 'https://192.168.1.108:8766', type: 'Mac · macOS Sonoma', route: 'Wi-Fi LAN :8766', signal: '95% (AirDrop)', pin: 'b'.repeat(64), online: true },
-    { id: 'peer-iphone', name: 'iPhone 15 Pro', ip: '192.168.1.115', host: 'https://192.168.1.115:8766', type: 'iOS · Direct AirDrop', route: 'Hotspot / LAN', signal: '92% (AirDrop)', pin: 'c'.repeat(64), online: true }
-  ];
+  let discoveredPeers = [];
   let activeLogModal = null;
 
   // Online diagnostic logging state & buffer
@@ -216,26 +207,10 @@
   let activeFanDiagModal = null; // { open: boolean, error: string }
 
   // Tiger Lake / macOS One-Click Hardware Optimization state
-  const fixStatus = {
-    device: false,
-    hdr: false,
-    sleep: false,
-    gpu: false,
-    fan: false,
-    all: false
-  };
-  try {
-    const savedFixes = safeStorage.getItem('kl06_fix_status');
-    if (savedFixes) Object.assign(fixStatus, JSON.parse(savedFixes));
-  } catch(ignored){}
+  const fixStatus = { device:false, hdr:false, sleep:false, gpu:false, fan:false, all:false };
+
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.7-beta (Build 12) initialized.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'ok', msg: 'Network active: Mobile Data & Wi-Fi internet access enabled. Companion listener at port 8766.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'DRIVE', level: 'ok', msg: 'Private Drive Sync: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) connected.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework & Scoped MediaStore.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active across local subnets and cellular hotspot.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 12).' },
-    { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Auto-saved to Download/KL-06/logs/kl06-diagnostic.log and private Drive.' }
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'info', msg: 'KL-06 UI initialized. Network, peer connection and Drive sync are unverified until a real native response succeeds.' }
   ];
 
   try {
@@ -243,8 +218,9 @@
     if (savedLogs) {
       const parsed = JSON.parse(savedLogs);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        const truthful = parsed.filter(item => !/private drive sync.*connected|auto.?sent to private drive|auto.?synced to private drive|mobile data.*active|bluetooth.*active|hardware link connected continuously/i.test(String(item?.msg || '')));
         diagnosticLogs.length = 0;
-        parsed.forEach(item => diagnosticLogs.push(item));
+        truthful.forEach(item => diagnosticLogs.push(item));
       }
     }
   } catch(ignored){}
@@ -355,7 +331,7 @@
       <div>
         <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.7-beta)</strong>
         <div style="color:#8ab4be;font-size:11px;margin-top:2px">
-          ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">🟢 Hardware Link Active (Wi-Fi, Bluetooth &amp; Mobile Data Connected)</span>' : 'Mobile Data &amp; Wi-Fi Active • Auto-Send Private Drive Sync Ready'}
+          ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">Permissions granted; no peer connection established</span>' : 'No peer connected · Google Drive sync not configured'}
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -368,33 +344,31 @@
 
     <div class="drop-card" data-action="pick-share-file" id="share-drop-card" style="cursor:pointer">
       <span class="drop-icon">📤</span>
-      <h3>Direct File Drop &amp; AirDrop Sharing</h3>
-      <p style="margin:6px 0 12px;color:#9ec2ce">Tap here to choose any photo, video, or document to send, or drag &amp; drop files directly.</p>
+      <h3>Send a file over a paired LAN connection</h3>
+      <p style="margin:6px 0 12px;color:#9ec2ce">Choose a file after direct TLS pairing. Android is currently the only native sender path.</p>
       
       <div style="display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap">
         ${button('📁 Select File to Share', 'pick-share-file', 'class="btn-primary"')}
-        ${button('📸 Quick Share Photo (3.4 MB)', 'quick-send-photo')}
-        ${button('📄 Quick Share Doc (120 KB)', 'quick-send-doc')}
-      </div>
+       </div>
 
       ${transferActive ? `
         <div class="progress-box" style="margin-top:14px;padding:12px;background:#0d232c;border:1px solid #285463;border-radius:8px">
           <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mint,#34d399);font-weight:bold">
             <span>⚡ Streaming: ${e(transferFileName)}</span>
-            <span>${transferProgress}%</span>
+            <span id="transfer-progress-percent">${transferProgress}%</span>
           </div>
           <div class="progress-meter" style="margin-top:8px;height:8px;background:#15303c;border-radius:4px;overflow:hidden">
-            <div class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
+            <div id="transfer-progress-fill" class="progress-fill" style="width:${transferProgress}%;height:100%;background:#34d399;transition:width 0.2s ease"></div>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:11px;color:#8ab1bf;margin-top:6px">
-            <span>Target: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b> (${e(transferSpeed)})</span>
-            <span>SHA-256 Verified Stream</span>
+            <span>Target: <b>${e(pairedDevice?.name || 'No peer paired')}</b> (${e(transferSpeed)})</span>
+            <span>Waiting for receiver checksum confirmation</span>
           </div>
         </div>
       ` : `
         <div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#8ab4be;background:rgba(0,0,0,0.25);padding:4px 12px;border-radius:12px">
           <span class="live-dot" style="background:#34d399"></span>
-          Ready to transmit to: <b>${e(pairedDevice?.name || 'ASUS VivoBook K15')}</b>
+          No active peer connection
         </div>
       `}
     </div>
@@ -402,16 +376,15 @@
     <section class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
         <div>
-          <span class="live-pill"><span class="live-dot"></span> AIRDROP / QUICK SHARE RADAR</span>
-          <h2 style="margin:4px 0 0">Nearby Devices &amp; Instant Pairing</h2>
+          <span class="live-pill"><span class="live-dot"></span> PRIVATE-LAN DISCOVERY</span>
+          <h2 style="margin:4px 0 0">Nearby KL-06 desktop companions</h2>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           ${button(isScanning ? '⏳ Scanning…' : '📡 Scan Nearby Devices', 'scan-peers', isScanning ? 'disabled' : '')}
-          ${button('📲 Hotspot Direct Link', 'hotspot-mode')}
-          ${button('🏷️ NFC Beam Tap', 'nfc-tap')}
+          
         </div>
       </div>
-      <p>Discover phones, laptops, and PCs over local Wi-Fi, Personal Hotspot (Xender style), or Bluetooth/NFC. Tap <b>Connect &amp; Share</b> to link instantly without typing passwords.</p>
+      <p>Discovery is limited to KL-06 desktop brokers on the same private LAN. A discovered device is not paired until its certificate fingerprint and session code are verified.</p>
 
       <div class="radar-wrapper ${isScanning ? 'radar-scanning' : ''}">
         <div class="radar-ring"></div>
@@ -420,32 +393,12 @@
         <div class="radar-hub">📡</div>
       </div>
 
-      <div class="pin-card">
-        <div class="pin-code-wrap">
-          <div>
-            <small style="display:block;color:#8ab4be;margin-bottom:4px">MY PAIRING CODE (SHARE WITH PEER)</small>
-            <div class="pin-digits">${e(currentPin)}</div>
-          </div>
-          <div>
-            ${button('📋 Copy PIN', 'copy-pin')}
-            ${button('🔄 Refresh PIN', 'refresh-pin')}
-          </div>
-        </div>
-        <div class="pin-meta">
-          Expires in <b>${e(getPinTimeRemaining())}</b><br>
-          One-time 6-digit mutual authentication code.
-        </div>
-      </div>
+      <div class="notice">The old 6-digit PIN was never connected to this TLS protocol. Use the Direct TLS Pairing form below: HTTPS URL, full certificate fingerprint, and 32-character session code.</div>
 
-      <div class="pin-input-group">
-        <input id="peer-pin-input" type="text" placeholder="Enter peer PIN (e.g. 742-910)" maxlength="7" autocomplete="off" spellcheck="false">
-        ${button('Pair with PIN', 'pair-by-pin')}
-      </div>
-
-      <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered Nearby Devices (Auto-Pair Ready)</h3>
+      <h3 style="margin:20px 0 10px;font-size:14px;color:#d8f4ee">Discovered LAN companions (not automatically paired)</h3>
       ${isScanning ? `
         <div style="background:#0c1e28;border:1px solid #234b5c;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
-          <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning local Wi-Fi &amp; Hotspot for active KL-06 companions on port 8766...</p>
+          <p style="margin:0;font-size:12px;color:var(--mint)">🛰️ Scanning the local Wi-Fi subnet for KL-06 desktop companions on port 8766...</p>
         </div>
       ` : discoveredPeers.length > 0 ? `
         <div class="peer-grid">
@@ -464,7 +417,7 @@
         </div>
       ` : `
         <div style="background:#09161e;border:1px dashed #24414f;border-radius:12px;padding:16px;text-align:center;margin:12px 0">
-          <p style="margin:0;font-size:12px;color:#8ab4be">No active KL-06 companions discovered on this subnet yet. Ensure KL-06 is running on port 8766, tap <b>Scan Nearby Devices</b> above, or link directly by IP below.</p>
+          <p style="margin:0;font-size:12px;color:#8ab4be">No KL-06 desktop broker discovered. Start the temporary desktop companion and scan again, or enter its pairing details below.</p>
         </div>
       `}
 
@@ -482,12 +435,12 @@
       </div>
 
       <div style="background:#0c1922;border:1px solid #244352;border-radius:14px;padding:16px;margin:20px 0 0">
-        <h4 style="margin:0 0 8px;font-size:13px;color:#e8f7f5">🔗 Direct IP Pairing &amp; Physical Hardware Link</h4>
-        <p style="font-size:11px;color:#8ab4be;margin:0 0 12px">If your network has router/client isolation, enter your companion's IP directly to pair and stream files.</p>
+        <h4 style="margin:0 0 8px;font-size:13px;color:#e8f7f5">🔗 Direct TLS Pairing</h4>
+        <p style="font-size:11px;color:#8ab4be;margin:0 0 12px">Enter the HTTPS URL, full 64-character certificate SHA-256 fingerprint and 32-character session code shown by the desktop. Both devices must be on the same reachable private LAN.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
           <div>
             <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Companion HTTPS URL</label>
-            <input id="direct-host" type="text" placeholder="https://192.168.1.X:8766" style="width:100%;font-size:12px;font-family:ui-monospace,monospace" value="https://192.168.1.">
+            <input id="direct-host" type="text" placeholder="https://192.168.1.X:8766" style="width:100%;font-size:12px;font-family:ui-monospace,monospace" value="">
           </div>
           <div>
             <label style="font-size:11px;color:#8ab4be;display:block;margin-bottom:4px">Full Certificate SHA-256 (64 hex)</label>
@@ -540,7 +493,7 @@
           ${button(onlineLogging ? '🟢 Online Logging: ACTIVE' : '⚪ Online Logging: OFF', 'toggle-online-logs', onlineLogging ? 'class="btn-primary"' : '')}
         </div>
       </div>
-      <p>Manage file storage permissions, verify Android/iOS system settings, enable online log collection for troubleshooting and improvements, and automatically share diagnostic telemetry into your private Google Drive folder.</p>
+      <p>Manage platform permissions and local diagnostic exports. Runtime Google Drive authentication and automatic private-folder upload are not configured.</p>
       
       <div class="conn-status-grid">
         <div class="conn-card">
@@ -553,18 +506,18 @@
         </div>
         <div class="conn-card">
           <strong>📡 Online Network Transports</strong>
-          <small>Mobile Data (${state?.network?.cellular ? 'Active' : 'Standby'}) &amp; Wi-Fi (${state?.network?.wifi ? 'Connected' : 'Active'})</small>
+          <small>KL-06 peer transport: private Wi-Fi LAN only. Bluetooth and cellular relay are not implemented.</small>
         </div>
         <div class="conn-card">
-          <strong>☁️ Private Drive Auto-Sync</strong>
-          <small>KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)</small>
+          <strong>☁️ Private Drive Status</strong>
+          <small>Not configured · Google OAuth authorization required</small>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
-        ${button('☁️ Auto-Share Logs to Private Drive', 'send-error-report', 'class="btn-primary"')}
-        ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
-        ${button('📥 Export Logs to User Log Folder', 'export-logs')}
+        ${button('Prepare Report for Sharing', 'send-error-report', 'class="btn-primary"')}
+        ${state?.platform === 'windows' ? button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"') : ''}
+        ${button('📥 Export Local Logs', 'export-logs')}
         <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
           <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
         </a>
@@ -589,14 +542,14 @@
           <h2 style="margin:4px 0 0">Tiger Lake &amp; macOS Hardware Fix Suite</h2>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          ${button('🚀 FIX EVERYTHING', 'kl06-fix-all', 'class="btn-primary" style="background:#164e63;border-color:#38bdf8;font-weight:700"')}
-          ${button('🔄 Rollback All', 'kl06-rollback-all')}
+          ${button('Hardware fixes unavailable', 'kl06-fix-all', 'class="btn-secondary"', '', true)}
+          ${button('No changes to roll back', 'kl06-rollback-all', '', 'ghost', true)}
           <a href="fix-app.html" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
             <button type="button" class="btn-secondary" style="border-color:#38bdf8;color:#38bdf8">🌐 Open Web Dashboard</button>
           </a>
         </div>
       </div>
-      <p>Targeted hardware fixes for ASUS VivoBook K15 (Tiger Lake i5-1135G7, Intel Iris Xe 0x9A49, macOS Sequoia 15.8.3, WhateverXe 0.8.2). Resolves AirDrop AWDL dropouts, HDR/EDR flicker, sleep/wake black screens, GPU watchdog panics, and restores fan RPM readings.</p>
+      <p>Read-only diagnostics and platform capability checks for the ASUS VivoBook K15. This page does not install drivers, repair Wi-Fi/Bluetooth, change EFI boot arguments, or restore fan RPM. Unsupported hardware remains unavailable until a tested platform-specific fix exists.</p>
 
       <div class="conn-status-grid" style="margin:12px 0 16px">
         <div class="conn-card">
@@ -605,15 +558,15 @@
         </div>
         <div class="conn-card">
           <strong>🍎 macOS Target</strong>
-          <small>Sequoia 15.8.3 (24H241) · /Volumes/1401</small>
+          <small>Detected at runtime; no fixed OS version is assumed</small>
         </div>
         <div class="conn-card">
           <strong>✨ WhateverXe Driver</strong>
-          <small>v0.8.2 Active · EDR 3.08-4.0 Capable</small>
+          <small>Existing driver state is not independently verified by KL-06</small>
         </div>
         <div class="conn-card">
           <strong>⚡ Overall Status</strong>
-          <small id="kl06-fix-status-overall">${fixStatus.all ? '✓ All Hardware Fixes Applied' : 'Ready for Optimization'}</small>
+          <small id="kl06-fix-status-overall">Diagnostics only · no system fix applied</small>
         </div>
       </div>
 
@@ -621,9 +574,9 @@
         <div class="row">
           <div>
             <strong>📶 Device Connection &amp; AirDrop File Transfer</strong>
-            <small>AWDL coexistence flags (-itlawdlcoex... &amp; -btleadv) for reliable AirDrop streaming</small>
+            <small>Network-driver repair is not implemented; use existing OS Wi-Fi/Bluetooth settings.</small>
           </div>
-          ${button(fixStatus.device ? '✓ Fixed' : 'Fix Connection', 'kl06-fix-device', fixStatus.device ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-device', '', 'ghost', true)}
         </div>
 
         <div class="row">
@@ -631,23 +584,23 @@
             <strong>🔆 HDR &amp; EDR Display Flicker Resolution</strong>
             <small>Enables -wex-hdrleaf2 and -wex-hdradapt for smooth 3.08-4.0 EDR dynamic range</small>
           </div>
-          ${button(fixStatus.hdr ? '✓ Fixed' : 'Fix HDR / EDR', 'kl06-fix-hdr', fixStatus.hdr ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-hdr', '', 'ghost', true)}
         </div>
 
         <div class="row">
           <div>
             <strong>🌙 Sleep &amp; Wake Black Screen Recovery</strong>
-            <small>Applies -wex-tgl-hold-render-wake and darkwake=0 to eliminate 30s wake freeze</small>
+            <small>Sleep/wake boot-argument changes are not implemented by this app.</small>
           </div>
-          ${button(fixStatus.sleep ? '✓ Fixed' : 'Fix Sleep/Wake', 'kl06-fix-sleep', fixStatus.sleep ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-sleep', '', 'ghost', true)}
         </div>
 
         <div class="row">
           <div>
             <strong>⚡ GPU Stability &amp; WindowServer Watchdog</strong>
-            <small>Guards against graphics panics with -disablegfxfirmware, -softsleep, -dpcd-bl</small>
+            <small>GPU boot-argument and driver changes are not implemented by this app.</small>
           </div>
-          ${button(fixStatus.gpu ? '✓ Fixed' : 'Fix GPU Stability', 'kl06-fix-gpu', fixStatus.gpu ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Not implemented', 'kl06-fix-gpu', '', 'ghost', true)}
         </div>
 
         <div class="row">
@@ -655,12 +608,12 @@
             <strong>🌀 AppleSMC Fan RPM Sensor Reading</strong>
             <small>Restores safe read-only tachometer sensors without risky EC register writes</small>
           </div>
-          ${button(fixStatus.fan ? '✓ Fixed' : 'Fix Fan RPM', 'kl06-fix-fan', fixStatus.fan ? 'class="btn-primary" style="background:#10b981;border-color:#10b981"' : 'class="btn-primary"')}
+          ${button('Read-only · no fix', 'kl06-fix-fan', '', 'ghost', true)}
         </div>
       </div>
 
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        ${button('📥 Download Terminal Fix Script (KL-06-Fix-All.sh)', 'kl06-download-fix-script', 'class="btn-secondary"')}
+        ${button('Fix script unavailable', 'kl06-download-fix-script', '', 'ghost', true)}
       </div>
     </section>
 
@@ -672,14 +625,14 @@
           <h2 style="margin:4px 0 0">Fans &amp; Thermal Sensors (Windows &amp; Mac)</h2>
         </div>
         <div>
-          ${button('🩺 Fan Diagnostics (Auto-Sync to Drive)', 'open-fan-diag-modal', 'class="btn-primary"')}
+          ${button('🩺 Export Fan Diagnostic', 'open-fan-diag-modal', 'class="btn-primary"')}
         </div>
       </div>
       <p>Live read-only fan RPM queried from Mac SMC or imported from Windows HWiNFO sensors. No risky firmware fan curves or charge cap overwrites.</p>
       
       <div class="metrics" data-reading-group="local">
-        ${metric('Current Fan RPM', rows.length ? rows.map(x=>n(x.rpm)).join(' / ') : 'Unavailable', state?.fan?.source || 'HWiNFO / Mac SMC Sensor Provider', 'violet')}
-        ${metric('Sensor Quality', state?.fan?.status || 'Active / Verified', 'Firmware is preserved in control', 'mint')}
+        ${metric('Current Fan RPM', rows.length ? rows.map(x=>n(x.rpm)).join(' / ') : 'Unavailable', state?.fan?.source || 'No sensor provider reported', 'violet')}
+        ${metric('Sensor Quality', state?.fan?.status || 'not-sampled', 'Firmware is preserved in control', 'mint')}
       </div>
     </section>
 
@@ -798,11 +751,17 @@
           <h2 style="margin:4px 0 0">${e(state?.fan?.status||'Unsupported on this device')}</h2>
         </div>
         <div>
-          ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
+          ${state?.platform === 'windows' ? button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"') : ''}
         </div>
       </div>
       <p>Windows: explicitly import a HWiNFO sensor CSV on History; no HWiNFO driver/shared-memory reader is silently installed. Android/iOS: no public fan sensor/control exposed. Live Mac RPM is queried by the native Mac build from an already-present standard SMC provider, then may be shared via an authenticated laptop session.</p>
-      <p>Click <b>Run Fan Diagnostics &amp; Auto-Sync</b> to authenticate with your security password, inspect hardware EC/SMC/WMI fan sensors, and automatically upload diagnostic telemetry into your private Drive folder <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>).</p>
+      <p>Run read-only fan diagnostics using sensor values actually returned by the native provider. The report can be exported locally; private Google Drive upload is not configured.</p>
+      <section class="panel" style="margin-top:14px;border:1px solid var(--border,#334155)">
+        <h3>Manual fan speed control</h3>
+        <p><strong>Unavailable — hardware write interface not verified.</strong> This K513EA build currently has no validated Windows ASUS EC/WMI fan-write provider. A speed slider would not change the physical fan, so controls remain disabled rather than showing a fake percentage.</p>
+        <div class="metrics"><div class="metric"><span>Requested fan speed</span><strong>—</strong><small>Not applied</small></div><div class="metric"><span>Hardware write provider</span><strong>Not detected</strong><small>Read-only diagnostics only</small></div></div>
+        <button class="btn-secondary" type="button" disabled aria-disabled="true">Manual control unavailable on this device</button>
+      </section>
       <p>No fan curves, manual target RPM, EC writes, ASUS firmware mode, charge cap or invented zero-RPM fallback.</p>
     </section>`;
   }
@@ -909,7 +868,7 @@
           <button data-action="close-fan-diag-modal" class="btn-secondary" style="padding:4px 10px;font-size:12px">✕</button>
         </div>
         <p style="font-size:12px;color:#8ab4be;margin:10px 0 14px;line-height:1.5">
-          Enter security password to execute fan hardware diagnostics and auto-send telemetry to private Drive folder <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>).
+          Enter the local diagnostic password to prepare a read-only fan report. The report is not uploaded to Google Drive.
         </p>
         <div style="margin-bottom:14px">
           <label style="font-size:11px;color:#67e8f9;display:block;margin-bottom:6px;font-weight:600">SECURITY PASSWORD</label>
@@ -1023,9 +982,19 @@
   async function act(method, p = {}){
     if (busy) return;
     busy = true;
-    render();
+    const busyBadge = document.getElementById('header-badge');
+    if (busyBadge) busyBadge.textContent = 'WORKING…';
     try {
       const res = await request(method, p);
+      if (method === 'pairLaptop') {
+        pairingTarget = { host: p.host, name: 'Desktop companion' };
+      } else if (method === 'finishPairing') {
+        const pairingStatus = typeof res === 'string' ? res : res?.status;
+        if (typeof pairingStatus === 'string' && /^Paired\./i.test(pairingStatus)) {
+          pairedDevice = { id: 'paired-desktop', name: pairingTarget?.name || 'Desktop companion', host: pairingTarget?.host || document.getElementById('direct-host')?.value || document.getElementById('host')?.value || '' };
+          addLog('NET', 'ok', 'Desktop companion pairing completed with the native TLS session.');
+        }
+      }
       if (method === 'state' && res) {
         state = res;
         receivedAt = now();
@@ -1051,15 +1020,15 @@
     polling = true;
     try {
       const value = await request('state');
-      if (!value || !['windows','android','ios'].includes(value.platform)) throw Error();
+      if (!value || !['windows','android','ios','macos'].includes(value.platform)) throw Error();
       if (!force && document.querySelector('input:focus')) return;
       state = value;
       receivedAt = now();
-      render();
+      if (force) render();
     } catch {
       receivedAt = -Infinity;
       toast('Native state unavailable. No substitute readings.');
-      render();
+      if (force) render();
     } finally {
       polling = false;
     }
@@ -1070,15 +1039,17 @@
     transferActive = true;
     transferFileName = fileName;
     transferProgress = 5;
-    transferSpeed = '45.2 MB/s';
+    transferSpeed = '—';
     addLog('TRANSFER', 'info', `Initiating transfer for "${fileName}" (${(fileSize / 1024).toFixed(1)} KB)...`);
     render();
 
     if (native) {
+      if (!uri) { transferActive = false; toast('Native file URI missing. No file was sent.'); addLog('TRANSFER','error','Native file URI missing; transfer stopped.'); render(); return; }
       if (pairedDevice?.host && pairedDevice.host.includes(':8766')) {
         try {
           addLog('TRANSFER', 'info', `Streaming "${fileName}" over TLS directly to ${pairedDevice.name}...`);
           const res = await request('streamFileToPeer', { uri });
+          if (!res || !['complete','completed'].includes(String(res.status || '').toLowerCase())) throw new Error('Peer did not confirm a completed transfer.');
           transferProgress = 100;
           transferActive = false;
           const rec = {
@@ -1096,15 +1067,15 @@
           render();
           return;
         } catch(err) {
-          addLog('TRANSFER', 'warn', `Direct companion stream: ${err.message}. Opening system Quick Share...`);
+          addLog('TRANSFER', 'warn', `Direct companion stream failed: ${err.message}. A system share sheet is only a handoff, not proof of delivery.`);
         }
       }
       try {
         await request('shareViaSystem', { uri });
         transferActive = false;
         transferProgress = 0;
-        addLog('TRANSFER', 'ok', `✓ Opened system Quick Share / Bluetooth for "${fileName}".`);
-        toast(`✓ System Quick Share dialog opened for "${fileName}".`);
+        addLog('TRANSFER', 'info', `System share sheet opened for "${fileName}". Delivery has not been confirmed by KL-06.`);
+        toast(`System share sheet opened for "${fileName}". Confirm delivery in the receiving app.`);
         render();
         return;
       } catch(err) {
@@ -1112,20 +1083,10 @@
       }
     }
 
-    transferProgress = 100;
+    transferProgress = 0;
     transferActive = false;
-    const rec = {
-      id: 'tf-' + Date.now(),
-      name: fileName,
-      size: (fileSize / 1024).toFixed(1) + ' KB',
-      time: new Date().toLocaleTimeString(),
-      peer: pairedDevice?.name || 'Local Device',
-      status: 'Staged (SHA-256 computed)'
-    };
-    recentTransfers.unshift(rec);
-    if (recentTransfers.length > 8) recentTransfers.pop();
-    addLog('TRANSFER', 'ok', `✓ Prepared "${fileName}" for transfer.`);
-    toast(`✓ File "${fileName}" ready for transfer.`);
+    addLog('TRANSFER', 'error', `No transfer transport is available for "${fileName}". No file was sent or staged.`);
+    toast('No compatible native transfer transport is available. No file was sent.');
     render();
   }
 
@@ -1160,7 +1121,7 @@
     const nowIso = new Date().toISOString();
     
     const reportText = `================================================================================
-KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (INBUILT AUTO-SYNC)
+KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (LOCAL EXPORT)
 ================================================================================
 Timestamp: ${nowIso}
 Application: KL-06 Control Center & Ecosystem Manager
@@ -1171,24 +1132,23 @@ Device Host: ${hostInfo} (${plat})
 Platform Architecture: ${plat} / ${navigator.userAgent || 'Native WebView'}
 
 [FAN & THERMAL HARDWARE TELEMETRY]
-- Fan Sensor Provider: ${state?.fan?.source || 'AppleSMC / VirtualSMC / SMCSuperIO / AsusSMC & ACPI EC'}
-- Sensor State: ${state?.fan?.status || 'Active / Verified'}
-- Detected Fan Tachometers: ${rows.length ? rows.length : '0 (Direct WMI EC Tachometer in EFI)'}
+- Fan Sensor Provider: ${state?.fan?.source || 'Not reported by native bridge'}
+- Sensor State: ${state?.fan?.status || 'not-sampled'}
+- Detected Fan Tachometers: ${rows.length ? rows.length : '0 (no valid tachometer reading)'}
 ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).join('\n') : '- Fan 0 RPM Key (F0Ac): Unavailable-or-stale (Preserving firmware safety baseline)\n- Fan 1 RPM Key (F1Ac): Unavailable-or-stale (Preserving firmware safety baseline)'}
 - Fan RPM Safety Invariant: Strict Honest Reporting (Zero fake sliders, no fabricated curves)
-- Thermal Governor Mode: Standard Cooling Profile (Firmware Auto-Cooling Active)
-- Power Profile Governor: ${state?.powerProfile || 'Balanced'} (macOS XCPM / Windows ACPI Governor Active)
+- Thermal Governor Mode: Not measured by this diagnostic
+- Power Profile Governor: ${state?.powerProfile || 'Not reported by native bridge'}
 - Embedded Controller (EC) I/O State: Protected (Zero unsafe port 0x62/0x66 writes)
-- Diagnostic Status: Passed 100% integrity validation
+- Diagnostic Status: Report generated; hardware values depend on current native sensor responses
 
 [ECOSYSTEM & PRIVATE DRIVE SYNC]
-- Auto-Sync Destination: Google Drive Private Folder KL-06-Private-Logs
+- Google Drive Destination: Not configured; no authenticated upload was attempted
 - Target Folder ID: 1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n
-- Local Android Backup: Download/KL-06/logs/kl06-fan-diagnostic.log (MediaStore Scoped Storage)
-- Local Mac/PC Backup: ~/Library/Application Support/KL-06/logs/fan-diagnostic.log
-- Sync Channel: Direct Inbuilt Upload & Background TLS Handshake
-- Transfer Protocol: KL06_COMPANION_V1 (Port 8766 UDP/TLS Discovery & Pinned Cert)
-- Status: Auto-sent to private Drive folder successfully.
+- Local Export: Platform-selected local save/share destination
+- Sync Channel: Not configured; no Google Drive OAuth token is available
+- Transfer Protocol: Private-LAN TLS pairing (port 8766); not a Drive upload channel
+- Status: Not uploaded. Google Drive OAuth and folder authorization are not configured in this build.
 ================================================================================`;
 
     try {
@@ -1197,9 +1157,9 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       try { await request('exportLogs', { logs: diagnosticLogs }); } catch(ignored){}
     }
     
-    addLog('FAN', 'ok', 'Fan diagnostics complete. Telemetry auto-sent to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n).');
+    addLog('FAN', 'info', 'Fan diagnostic report prepared locally. Private Google Drive upload is not configured in this build.');
     activeLogModal = { open: true, text: reportText };
-    toast('✓ Fan diagnostics complete! Inbuilt auto-sync to private Drive folder KL-06-Private-Logs successful!');
+    toast('Fan report prepared. It has not been uploaded to Google Drive.');
     render();
   }
 
@@ -1281,21 +1241,16 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'ping-hardware':
-        toast('🟢 Hardware link active: Wi-Fi, Bluetooth & Mobile Data synched.');
-        addLog('LINK', 'ok', 'Hardware link ping: telemetry and companion socket active.');
-        if (native) {
-          try { request('state').catch(()=>{}); } catch(e){}
-        }
+        toast('No KL-06 peer is connected. Pair with a desktop companion over the private LAN first.');
+        addLog('LINK', 'warn', 'Connection status checked: no paired peer session is active.');
         return;
 
       case'request-permissions':
         if (native) {
           try { request('requestPermissions').catch(()=>{}); } catch(ignored){}
         }
-        toast('✓ Requesting OS hardware, network & storage permissions…');
-        hardwareConnected = true;
-        try { localStorage.setItem('kl06_hardware_permission_granted', 'true'); } catch(e){}
-        startHardwareKeepAlive();
+        toast('Requesting OS permissions. This does not connect another device.');
+        hardwareConnected = false;
         activePermissionModal = false;
         render();
         return;
@@ -1315,8 +1270,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'hotspot-mode':
-        toast('📲 Personal Hotspot mode: connect peer device to this phone\'s hotspot, then stream files directly!');
-        addLog('RADAR', 'info', 'Personal Hotspot direct link ready. Subnet IP 192.168.43.1 / 192.168.x.x active.');
+        toast('Hotspot routing is only supported when both devices share a private LAN subnet; KL-06 has no cellular relay.');
         return;
 
       case'check-app-update': {
@@ -1348,86 +1302,30 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'kl06-fix-device':
-        fixStatus.device = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ Device Connection & AirDrop AWDL coexistence fix applied (-btleadv, -itlawdlcoex...).');
-        toast('✓ Device connection & AirDrop fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-hdr':
-        fixStatus.hdr = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ HDR/EDR display flicker fix applied (-wex-hdrleaf2, -wex-hdradapt, Target EDR: 3.08-4.0).');
-        toast('✓ HDR / EDR display fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-sleep':
-        fixStatus.sleep = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ Sleep/wake black screen fix applied (-wex-tgl-hold-render-wake, darkwake=0).');
-        toast('✓ Sleep/wake fix applied! Reboot with EFI pendrive to take effect.');
-        render();
-        return;
-
       case'kl06-fix-gpu':
-        fixStatus.gpu = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ GPU stability fix applied (-disablegfxfirmware, -wex-tgl-dpcd-bl).');
-        toast('✓ GPU stability fix applied! WindowServer panics mitigated.');
-        render();
-        return;
-
       case'kl06-fix-fan':
-        fixStatus.fan = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '✓ AppleSMC Fan RPM sensor reading validated and restored.');
-        toast('✓ Fan RPM fix applied! Tachometer reading restored.');
-        render();
-        return;
-
       case'kl06-fix-all':
-        fixStatus.device = true;
-        fixStatus.hdr = true;
-        fixStatus.sleep = true;
-        fixStatus.gpu = true;
-        fixStatus.fan = true;
-        fixStatus.all = true;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'ok', '🚀 ALL HARDWARE FIXES APPLIED (Device, HDR, Sleep, GPU, Fan).');
-        toast('🚀 All fixes applied successfully! Reboot with your 1401 EFI pendrive for full effect.');
-        render();
-        return;
-
       case'kl06-rollback-all':
-        fixStatus.device = false;
-        fixStatus.hdr = false;
-        fixStatus.sleep = false;
-        fixStatus.gpu = false;
-        fixStatus.fan = false;
-        fixStatus.all = false;
-        try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-        addLog('TGL', 'info', '🔄 Rollback initiated: restore config.plist from backup.');
-        toast('Rollback initiated. Restore from EFI backup config.');
-        render();
+        addLog('TGL', 'warn', 'Requested hardware fix is not implemented in this build. No EFI, driver, Wi-Fi, Bluetooth, fan or firmware setting was changed.');
+        toast('This build has diagnostics only. No system fix was applied.');
         return;
 
       case'kl06-download-fix-script':
-        window.open('https://github.com/Kaushal-snap/KL-06-Manager/blob/main/macos/KL-06-Fix-All.sh', '_blank');
-        toast('Opening KL-06-Fix-All.sh in GitHub…');
+        toast('No validated one-click hardware repair script is available. No file was downloaded or executed.');
         return;
 
       case'toggle-online-logs':
         onlineLogging = !onlineLogging;
         try { safeStorage.setItem('kl06_online_logging', onlineLogging ? '1' : '0'); } catch(ignored){}
         if (onlineLogging) {
-          addLog('ONLINE', 'ok', 'Online log collection ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
-          toast('✓ Online Log Collection ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
+          addLog('ONLINE', 'ok', 'Local diagnostic buffer ENABLED: Diagnostic telemetry recorded in user log folder Download/KL-06/logs/ for troubleshooting and improvements.');
+          toast('✓ Local Diagnostic Buffer ENABLED: Logging into Download/KL-06/logs/ for troubleshooting & improvements.');
           try { request('exportLogs', { logs: diagnosticLogs }).catch(()=>{}); } catch(ignored){}
         } else {
-          addLog('ONLINE', 'info', 'Online log collection DISABLED by user.');
-          toast('Online Log Collection paused.');
+          addLog('ONLINE', 'info', 'Local diagnostic buffer disabled by user.');
+          toast('Local diagnostic buffer paused.');
         }
         render();
         return;
@@ -1449,7 +1347,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         const input = document.getElementById('fan-diag-password-input');
         const pass = (input?.value || '').trim().toLowerCase();
         const cleanPin = currentPin.replace('-', '').toLowerCase();
-        const validPasswords = ['5301', 'kaushal@2026', 'kaushal2026', 'kl06admin', 'labanayt5301', cleanPin, currentPin.toLowerCase()];
+        const validPasswords = [cleanPin, currentPin.toLowerCase()];
         if (!pass || !validPasswords.includes(pass)) {
           if (activeFanDiagModal) activeFanDiagModal.error = 'Incorrect security password. Please try again.';
           toast('❌ Incorrect security password. Access denied.');
@@ -1469,10 +1367,10 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           build: 12,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
-          network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'active (dual-mode)' },
-          permissions: { wifi: 'granted', bluetooth: 'granted', storage: 'granted', network: 'granted', internet: 'granted' },
-          storagePath: 'Download/KL-06/logs/kl06-diagnostic.log',
-          driveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
+          network: { wifi: state?.network?.wifi ? 'connected' : 'not-confirmed', cellular: state?.network?.cellular ? 'connected' : 'not-confirmed', port: 8766 },
+          permissions: { status: 'not-inferred-from-app-launch' },
+          storagePath: 'Local app storage only; platform export required',
+          driveSync: 'not-configured',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
@@ -1487,8 +1385,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('LOG', 'ok', `Exported diagnostic log (${diagnosticLogs.length} events) to Download/KL-06/logs/kl06-diagnostic.log.`);
-        toast('✓ Diagnostic logs exported to Download/KL-06/logs/ & ready for Private Drive folder!');
+        addLog('LOG', 'info', `Diagnostic report prepared with ${diagnosticLogs.length} events. Native export/share action may save a local copy; no Drive upload occurred.`);
+        toast('Diagnostic report prepared. Use the platform export/share action; Drive sync is not configured.');
         render();
         return;
       }
@@ -1504,11 +1402,11 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
           network: {
             wifi: state?.network?.wifi ? 'connected' : 'standby',
             mobileData: state?.network?.cellular ? 'active' : 'standby',
-            internet: state?.network?.internet !== false ? 'active (dual Mobile Data & Wi-Fi)' : 'restricted',
+            internet: state?.network?.internet === true ? 'connected' : 'not-confirmed',
             port: 8766
           },
           userLogFolder: 'Download/KL-06/logs/',
-          targetDriveFolder: 'KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)',
+          driveSync: 'not-configured',
           logs: diagnosticLogs
         };
         const reportStr = JSON.stringify(report, null, 2);
@@ -1523,8 +1421,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         }
         try { navigator.clipboard?.writeText(reportStr); } catch(ignored){}
         activeLogModal = { open: true, text: reportStr };
-        addLog('REPORT', 'ok', 'Diagnostic logs auto-shared to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) and saved to Download/KL-06/logs/.');
-        toast('✓ Diagnostic logs auto-shared to Private Drive folder & saved to Download/KL-06/logs/!');
+        addLog('REPORT', 'info', 'Diagnostic report opened for local share/export. No automatic Google Drive upload is configured.');
+        toast('Report prepared for local sharing. It was not uploaded to Google Drive.');
         render();
         return;
       }
@@ -1561,23 +1459,15 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         render();
         return;
 
-      case'pair-by-pin': {
-        const input=document.getElementById('peer-pin-input');
-        const pinVal=(input?.value||'').trim();
-        if(!pinVal||pinVal.length<6){toast('Enter a valid 6-digit PIN (e.g. 742-910)');return;}
-        toast(`Authenticating PIN ${pinVal} over local Wi-Fi / Bluetooth…`);
-        setTimeout(()=>{
-          pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          toast('✓ Successfully paired with ASUS VivoBook K15 via 6-digit PIN!');
-          render();
-        }, 600);
+      case'pair-by-pin':
+        addLog('NET', 'warn', 'PIN-only pairing is not implemented. KL-06 requires the desktop HTTPS URL, full certificate SHA-256 fingerprint and 32-character session code.');
+        toast('6-digit PIN pairing is not supported yet. Use Direct TLS Pairing details from the desktop.');
         return;
-      }
 
       case'scan-peers': {
         isScanning = true;
         addLog('RADAR', 'info', 'Scanning local Wi-Fi & Hotspot for active KL-06 companions on port 8766...');
-        toast('Scanning local Wi-Fi, Bluetooth & Hotspot for active companions…');
+        toast('Scanning for KL-06 LAN companions. Bluetooth and cellular discovery are not implemented.');
         render();
         try {
           if (native) {
@@ -1609,40 +1499,17 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'nfc-tap':
-        toast('📲 Scanning for NFC tap or beam…');
-        addLog('NFC', 'info', 'Hardware NFC scan initialized. Tap device against another phone or NFC tag.');
-        if (native) {
-          try {
-            act('startNfcBeam', { payload: { type: 'kl06-pair', name: 'KL-06 Mobile Device', host: 'https://192.168.1.100:8766', pin: currentPin } }).catch(()=>{});
-            act('startNfcScan', {}).catch(()=>{});
-          } catch(e) {}
-        }
-        if ('NDEFReader' in window) {
-          try {
-            const ndef = new window.NDEFReader();
-            ndef.scan().then(() => {
-              ndef.onreading = event => {
-                addLog('NFC', 'ok', `✓ Hardware NFC tag detected: serial ${event.serialNumber || 'NFC-Tag'}`);
-                incomingPair = { name: 'Hardware NFC Peer', type: 'Instant NFC Contact', pin: currentPin, host: 'https://192.168.1.42:8766' };
-                toast('✓ Hardware NFC connection detected!');
-                render();
-              };
-            }).catch(() => {});
-          } catch(e) {}
-        }
-        render();
+        toast('KL-06 NFC pairing is not implemented in this build. Use Direct TLS Pairing.');
         return;
 
       case'connect-peer': {
-        const pId = b.dataset.peerId;
-        const pName = b.dataset.peerName || 'Nearby Device';
-        const pType = b.dataset.peerType || 'Ecosystem Peer';
-        const peer = discoveredPeers.find(x => x.id === pId) || { id: pId, name: pName, type: pType, host: b.dataset.peerHost || 'https://192.168.1.42:8766', pin: b.dataset.peerPin || '' };
-        pairedDevice = { ...peer };
-        incomingPair = null;
-        addLog('RADAR', 'ok', `✓ Paired with ${peer.name} (${peer.type}) via AirDrop / Quick Share.`);
-        toast(`✓ Connected to ${peer.name}! Ready for file drop.`);
-        render();
+        const peer = discoveredPeers.find(x => x.id === b.dataset.peerId);
+        if (!peer) { toast('Peer is no longer available. Scan again.'); return; }
+        const host = document.getElementById('direct-host');
+        const pin = document.getElementById('direct-pin');
+        if (host) host.value = peer.host || (peer.ip ? 'https://' + peer.ip + ':8766' : '');
+        if (pin) pin.value = peer.pin || '';
+        toast('Peer address and certificate fingerprint filled. Enter the session code shown on the desktop, then start TLS pairing.');
         return;
       }
 
@@ -1660,10 +1527,9 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       }
 
       case'accept-auto-pair':
-        pairedDevice = incomingPair ? { ...incomingPair } : { name: 'ASUS VivoBook K15', type: 'Laptop' };
         incomingPair = null;
-        addLog('NET', 'ok', `✓ Paired with ${pairedDevice.name} via TLS handshake.`);
-        toast(`✓ Connected to ${pairedDevice.name}! Instant AirDrop & Hardware Link active.`);
+        addLog('NET', 'warn', 'Automatic pairing is not implemented by the current TLS protocol.');
+        toast('Use Direct TLS Pairing. No device was connected.');
         render();
         return;
 
@@ -1684,19 +1550,22 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'pick-share-file': {
         if (transferActive || busy) return;
         if (!pairedDevice) {
-          pairedDevice = discoveredPeers[0] || { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-          addLog('RADAR', 'ok', `✓ Auto-connected to ${pairedDevice.name} for file sharing.`);
-          toast(`✓ Connected to ${pairedDevice.name}! Choose file to send.`);
+          toast('Connect to a desktop companion first. No automatic or placeholder peer is selected.');
+          return;
         }
         if (native) {
           try {
             const res = await request('pickShareFile');
-            if (res && res.fileName) {
-              await executeFileTransfer(res.fileName, res.fileSize || 1024 * 350, res.mimeType, res.uri || '');
+            if (res && res.fileName && res.uri) {
+              await executeFileTransfer(res.fileName, res.fileSize, res.mimeType, res.uri);
               return;
             }
+            toast('Native file picker returned no usable URI. No transfer was started.');
+            return;
           } catch(err) {
-            addLog('TRANSFER', 'warn', 'Native picker: ' + (err?.message || 'fallback to input'));
+            addLog('TRANSFER', 'error', 'Native picker failed: ' + (err?.message || 'unknown error'));
+            toast('Native file picker failed. No browser fallback was used.');
+            return;
           }
         }
         let fileInput = document.getElementById('real-file-picker');
@@ -1738,20 +1607,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
     if (event.target.id === 'brightness') act('setBrightness', { value: Number(event.target.value) });
   });
 
-  state = {
-    platform: 'android',
-    version: '0.4.7-beta',
-    sampledAt: 'Live phone telemetry',
-    battery: { chargePercent: 82, onAC: false },
-    memory: { usedGB: 4.1, totalGB: 8.0, source: 'Android system RAM' },
-    storage: { freeGB: 68, totalGB: 128 },
-    volume: 70,
-    brightness: 60,
-    awake: false,
-    capabilities: { volume: true, brightness: true, awake: true, brightnessScope: 'Temporary app-window brightness only' },
-    tweaks: []
-  };
-  receivedAt = now();
+  state = null;
+  receivedAt = -Infinity;
 
   function init(){
     render();
@@ -1787,32 +1644,25 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   }, 1000);
 
   window.KLNfcHandler = function(payload) {
-    try {
-      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
-      addLog('NFC', 'ok', `✓ Hardware NFC beam received: ${data.name || 'Nearby NFC Device'}`);
-      incomingPair = {
-        name: data.name || 'NFC Peer Device',
-        type: data.type || 'Ecosystem NFC Peer',
-        host: data.host || 'https://192.168.1.42:8766',
-        pin: data.pin || currentPin
-      };
-      toast('✓ NFC Contact detected! Ready to connect.');
-      render();
-    } catch(e) {
-      addLog('NFC', 'warn', `NFC beam payload: ${payload}`);
-    }
+    addLog('NFC', 'info', 'An NFC payload was received. KL-06 NFC pairing is not implemented; no connection was created.');
+    toast('NFC payload detected; use Direct TLS Pairing to connect.');
+  };
+
+  window.KLTransferProgress = value => {
+    const pct = Number(value);
+    if (!Number.isFinite(pct)) return;
+    transferProgress = Math.max(0, Math.min(100, Math.round(pct)));
+    const label = document.getElementById('transfer-progress-percent');
+    const fill = document.getElementById('transfer-progress-fill');
+    if (label) label.textContent = transferProgress + '%';
+    if (fill) fill.style.width = transferProgress + '%';
   };
 
   window.KLPermissionGranted = function() {
     activePermissionModal = false;
-    hardwareConnected = true;
-    try { localStorage.setItem('kl06_hardware_permission_granted', 'true'); } catch(e){}
-    addLog('PERM', 'ok', '✓ Hardware permissions granted: Wi-Fi, Bluetooth & Mobile Data active.');
-    addLog('LINK', 'ok', '✓ Hardware link connected continuously across Wi-Fi, Bluetooth & Mobile Data.');
-    toast('✓ Permissions granted! Hardware & companion connected.');
-    if (!pairedDevice) {
-      pairedDevice = { id: 'peer-vivobook', name: 'ASUS VivoBook K15', type: 'Laptop · Windows 11', host: 'https://192.168.1.42:8766' };
-    }
+    hardwareConnected = false;
+    addLog('PERM', 'info', 'OS permissions granted. No peer connection, Bluetooth transport or cellular relay is implied.');
+    toast('Permissions granted. Connect to a real desktop companion separately.');
     startHardwareKeepAlive();
     render();
   };
@@ -1903,102 +1753,32 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   }
 
   function kl06ApplyHDRFix() {
-    fixStatus.hdr = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 HDR/EDR display fix applied: -wex-hdrleaf2 -wex-hdradapt (Target EDR: 3.08-4.0).');
-    return {
-      success: true,
-      message: 'HDR fix applied. Reboot required.',
-      edr: '3.08-4.0',
-      flags: ['-wex-hdrleaf2', '-wex-hdradapt']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no macOS boot-argument or display-driver changes were made.' };
   }
 
   function kl06ApplySleepFix() {
-    fixStatus.sleep = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 Sleep/wake fix applied: darkwake=0 -wex-tgl-hold-render-wake.');
-    return {
-      success: true,
-      message: 'Sleep/wake fix applied. Reboot required.',
-      flags: ['darkwake=0', '-wex-tgl-hold-render-wake', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no sleep/wake or EFI settings were changed.' };
   }
 
   function kl06ApplyGPUFix() {
-    fixStatus.gpu = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 GPU stability fix applied: -disablegfxfirmware -wex-tgl-dpcd-bl.');
-    return {
-      success: true,
-      message: 'GPU stability fix applied. Watchdog panics reduced.',
-      flags: ['-disablegfxfirmware', '-wex-tgl-edp-keep', '-wex-tgl-edp-softsleep', '-wex-tgl-dpcd-bl']
-    };
+    return { success: false, applied: false, message: 'Not implemented: no GPU driver, firmware or boot configuration was changed.' };
   }
 
   function kl06CheckFanRPM() {
-    fixStatus.fan = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🌀 AppleSMC Fan RPM sensor reader validated (read-only tachometer).');
-    return {
-      success: true,
-      message: 'Fan RPM reader active (read-only)',
-      status: 'provider-reported-not-calibrated',
-      manualControl: false,
-      note: 'Run: /Volumes/1401 or macos/KL-06-Fix-All.sh'
-    };
+    const fans = M.fanValues(state);
+    return { success: fans.length > 0, status: fans.length > 0 ? 'provider-reported-not-calibrated' : 'unavailable', fans, manualControl: false, message: fans.length > 0 ? 'Live native provider readings returned.' : 'No valid fan tachometer reading is available from the native provider.' };
   }
 
   function kl06FixDeviceConnection() {
-    fixStatus.device = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🔧 Device connection & AirDrop AWDL fix applied (-btleadv, -itlawdlcoex...).');
-    return {
-      success: true,
-      message: 'Device connection fix applied. Reboot required.',
-      flags: [
-        '-btleadv', '-itlawdliface', '-itlawdlnativeup',
-        'itlawdlintcoal=4', 'itlawdltxqueue=4096',
-        '-itlawdlcoexprobe', '-itlawdlcoexrx', '-itlawdlcoextx',
-        '-itlawdlcoexmulti', '-itlawdlcoexdata',
-        '-itlawdlcoexbatx', '-itlawdlcoexpeerpause', '-itlawdlcoexbatrace',
-        '-itlawdlmitx', '-itlawdlelicit', '-itlawdlcaps',
-        '-itlawdlsvcmerge', '-itlawdlawsync'
-      ]
-    };
+    return { success: false, applied: false, message: 'Not implemented: this function does not repair Wi-Fi, Bluetooth, AirDrop, mobile data or network drivers.' };
   }
 
   async function kl06FixAll() {
-    const results = {
-      device: kl06FixDeviceConnection(),
-      hdr: kl06ApplyHDRFix(),
-      sleep: kl06ApplySleepFix(),
-      gpu: kl06ApplyGPUFix(),
-      fan: kl06CheckFanRPM()
-    };
-    fixStatus.all = true;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'ok', '🚀 ALL HARDWARE FIXES APPLIED SUCCESSFULLY!');
-    return {
-      success: true,
-      message: 'All fixes applied. Reboot required.',
-      results: results
-    };
+    return { success: false, applied: false, message: 'No system fixes were applied. The available functions are diagnostics only; platform-specific repairs require separate tested implementations.' };
   }
 
   function kl06RollbackAll() {
-    fixStatus.device = false;
-    fixStatus.hdr = false;
-    fixStatus.sleep = false;
-    fixStatus.gpu = false;
-    fixStatus.fan = false;
-    fixStatus.all = false;
-    try { safeStorage.setItem('kl06_fix_status', JSON.stringify(fixStatus)); } catch(e){}
-    addLog('TGL', 'info', '🔄 Rollback initiated. Restore from backup config.plist.');
-    return {
-      success: true,
-      message: 'Rollback initiated. Restore from backup file.'
-    };
+    return { success: false, rolledBack: false, message: 'No changes were made by the placeholder fix functions, so there is nothing to roll back.' };
   }
 
   async function kl06CheckInternet() {

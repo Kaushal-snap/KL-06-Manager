@@ -272,7 +272,7 @@ final class HardwareMonitor {
         #else
         let architecture = "other"
         #endif
-        let snapshot: [String: Any] = ["mode": "native", "platform": "macos", "version": "0.3.0-beta.2", "build": 5,
+        let snapshot: [String: Any] = ["mode": "native", "platform": "macos", "version": "0.4.7-beta", "build": 12,
                 "sampledAtUnix": Date().timeIntervalSince1970, "sampledUptimeSeconds": ProcessInfo.processInfo.systemUptime,
                 "sampledAt": ISO8601DateFormatter().string(from: Date()), "architecture": architecture, "os": ProcessInfo.processInfo.operatingSystemVersionString,
                 "smbiosModel": sysctlText("hw.model"), "cpu": cpu, "memory": memory(), "gpu": gpu,

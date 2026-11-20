@@ -5,5 +5,40 @@
   "macBundleID": "app.klasus.controlcenter",
   "baseSourceZipSha256": "cce814de5a752fb87d0dcfffdf052aeb8e4b5fe5f13e774cfa15bef674a61f06",
   "nativeBuildsVerified": false,
-  "releaseApproved": false
+  "releaseApproved": false,
+  "platformStatus": {
+    "macos": {
+      "version": "0.4.7-beta",
+      "build": 12,
+      "nativeCompileVerified": false,
+      "fanRPMVerified": false,
+      "fileTransferVerified": false
+    },
+    "android": {
+      "version": "0.4.7-beta",
+      "build": 12,
+      "nativeCompileVerified": false,
+      "lanSenderImplemented": true,
+      "endToEndTransferVerified": false
+    },
+    "ios": {
+      "version": "0.4.7-beta",
+      "build": 12,
+      "nativeCompileVerified": false,
+      "fileTransferSenderImplemented": true,
+      "endToEndTransferVerified": false
+    },
+    "windows": {
+      "version": "0.4.7-beta",
+      "build": 12,
+      "nativeCompileVerified": false,
+      "fileTransferVerified": false
+    }
+  },
+  "transportStatus": {
+    "privateLanTLS": "implemented-in-source; end-to-end verification pending",
+    "bluetooth": "not-implemented",
+    "cellularRelay": "not-implemented",
+    "googleDriveRuntimeLogs": "not-configured"
+  }
 }

@@ -5,7 +5,7 @@ import Darwin
 enum NativeBridgePolicy {
     static let settingIDs = Set(["display", "audio", "keyboard", "trackpad", "battery", "accessibility", "login", "wifi", "bluetooth", "storage", "notifications"])
     static func allowed(_ operation: String, _ params: [String: Any]) -> Bool {
-        if ["state", "startCompanion", "stopCompanion", "companionDetails", "pickHistoryCSV", "powerSample", "exportReport", "purgeMemory", "cleanCaches", "checkUpdates", "scanPeers"].contains(operation) { return params.isEmpty }
+        if ["state", "startCompanion", "stopCompanion", "companionDetails", "pickHistoryCSV", "powerSample", "exportReport", "diagnoseAndExport", "connectGoogleDrive", "purgeMemory", "cleanCaches", "checkUpdates", "scanPeers"].contains(operation) { return params.isEmpty }
         if operation == "restartUI" { return Set(params.keys) == ["app"] && ["Dock", "Finder"].contains(params["app"] as? String ?? "") }
         if operation == "openSetting" { return Set(params.keys) == ["id"] && settingIDs.contains(params["id"] as? String ?? "") }
         if operation == "setPowerProfile" { return Set(params.keys) == ["profile"] && ["High Performance", "Balanced", "Battery Saver"].contains(params["profile"] as? String ?? "") }

@@ -404,7 +404,7 @@ class Broker:
                     session = self.transfer_engine.initiate_transfer(
                         sender_token=token,
                         sender_platform=body["senderPlatform"],
-                        receiver_platform=sys.platform,
+                        receiver_platform={"darwin": "macos", "win32": "windows"}.get(sys.platform, sys.platform),
                         file_name=body["fileName"],
                         file_size=body["fileSize"],
                         expected_sha256=body["expectedSha256"]

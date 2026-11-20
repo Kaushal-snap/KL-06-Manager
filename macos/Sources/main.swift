@@ -1,6 +1,7 @@
 import AppKit
 import WebKit
 import UniformTypeIdentifiers
+import LocalAuthentication
 
 final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNavigationDelegate, NSWindowDelegate {
     private var window: NSWindow!
@@ -114,7 +115,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         }
     }
     @objc private func showAbout() {
-        let alert = NSAlert(); alert.messageText = "KL-06 Manager 0.3.0-beta.2 · build 5"
+        let alert = NSAlert(); alert.messageText = "KL-06 Manager 0.4.7-beta · build 12"
         alert.informativeText = "\(shortcutStatus)\n\nAn independent capability-aware macOS companion. Not an ASUS product. Reported hardware and missing counters are not a compatibility certificate. No firmware fan/charge-limit driver is included."
         alert.runModal()
     }
@@ -138,8 +139,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["version"] = "0.4.7-beta"
         value["build"] = 12
         value["powerProfile"] = powerProfile
-        value["batteryLimit"] = batteryLimit
-        value["fanMode"] = fanMode
+        value.removeValue(forKey: "batteryLimit")
+        value.removeValue(forKey: "fanMode")
         return value
     }
     private func reply(_ id: String, _ result: Any? = nil, error: String? = nil) {
@@ -261,30 +262,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 }
                 reply(id, "Power profile switched to \(profile).")
             case "setBatteryLimit":
-                guard let limit = (params["limit"] as? NSNumber)?.intValue, [60, 80, 100].contains(limit) else { throw ControlError(message: "Invalid battery limit.") }
-                self.batteryLimit = limit
-                UserDefaults.standard.set(limit, forKey: "KL06_BatteryLimit")
-                reply(id, "Battery charging threshold configured to \(limit)%.")
+                throw ControlError(message: "Battery charge limiting is not implemented on this Mac. No charging threshold was changed.")
             case "setFanMode":
-                guard let mode = params["mode"] as? String else { throw ControlError(message: "Invalid fan mode.") }
-                self.fanMode = mode
-                UserDefaults.standard.set(mode, forKey: "KL06_FanMode")
-                reply(id, "ASUS cooling fan profile set to \(mode).")
+                throw ControlError(message: "Manual fan control is not implemented. KL-06 only reads supported AppleSMC tachometer keys; no fan profile or firmware setting was changed.")
             case "scanPeers":
-                reply(id, [
-                    ["id": "peer-iphone", "name": "Kaushal’s iPhone", "platform": "ios", "model": "iPhone 14 Pro Max", "status": "Available on LAN", "ip": "192.168.1.105"],
-                    ["id": "peer-android", "name": "Android Device", "platform": "android", "model": "Quick Share Ready", "status": "Available on LAN", "ip": "192.168.1.112"],
-                    ["id": "peer-mac", "name": "mac’s MacBook Pro", "platform": "macos", "model": "ASUS KL-06 Host", "status": "Current Host", "ip": "192.168.1.101"],
-                    ["id": "peer-win", "name": "Windows Laptop", "platform": "windows", "model": "WinForms Client", "status": "Companion Active", "ip": "192.168.1.120"]
-                ])
+                // No discovery implementation exists in this macOS candidate. Never return synthetic peers.
+                reply(id, [])
             case "sendPeerFile":
-                guard let peerId = params["peerId"] as? String else { throw ControlError(message: "Peer not selected.") }
-                let panel = NSOpenPanel()
-                panel.allowsMultipleSelection = false
-                panel.canChooseDirectories = false
-                panel.message = "Choose a file to transfer via AirDrop / Quick Share"
-                guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "File selection cancelled.") }
-                reply(id, "File \(url.lastPathComponent) staged and sending to \(peerId) via TLS LAN stream.")
+                throw ControlError(message: "File sending is not implemented in this macOS candidate. No file was selected, staged or sent.")
             case "keepAwake":
                 if awakeTask?.isRunning == true { awakeTask?.terminate(); awakeTask = nil; reply(id, "Temporary idle-sleep assertion stopped."); return }
                 guard confirm("Keep awake for up to 15 minutes?", "This temporarily prevents idle SYSTEM sleep while KL-06 is running. It may increase battery drain. Lid/forced sleep is not overridden. No pmset preference is changed. Stop here or quit the app to release it.") else { throw ControlError(message: "Cancelled.") }
@@ -303,6 +288,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                         else { self.reply(id, "Sample complete. Latest supported field values are available in Performance; no raw process data was saved.") }
                     }
                 }
+            case "connectGoogleDrive":
+                beginGoogleDriveConnection(id: id)
+            case "diagnoseAndExport":
+                beginAuthenticatedDiagnostics(id: id)
             case "exportReport":
                 let panel = NSSavePanel(); panel.allowedContentTypes = [.json]; panel.nameFieldStringValue = "KL-06-report.json"
                 guard panel.runModal() == .OK, let url = panel.url else { throw ControlError(message: "Export cancelled.") }
@@ -315,6 +304,76 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             }
         } catch { reply(id, error: (error as? ControlError)?.message ?? "The action could not be completed. No automatic retry or repair was attempted.") }
     }
+    private func beginGoogleDriveConnection(id: String) {
+        let alert = NSAlert()
+        alert.messageText = "Connect your private Google Drive"
+        alert.informativeText = "Create a Google OAuth client with application type Desktop app in Google Cloud Console. Enable the Google Drive API and add your Google account as a test user if the consent screen is in Testing. Paste only the Client ID below; never paste a client secret or Google password. KL-06 requests the narrow drive.file scope and creates its own private KL-06 Diagnostics folder."
+        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 420, height: 26))
+        field.placeholderString = "1234567890-xxxx.apps.googleusercontent.com"
+        field.stringValue = GoogleDriveUploader.shared.configuredClientID ?? ""
+        alert.accessoryView = field
+        alert.addButton(withTitle: "Continue to Google")
+        alert.addButton(withTitle: "Cancel")
+        guard alert.runModal() == .alertFirstButtonReturn else { reply(id, error: "Google Drive connection cancelled."); return }
+        let clientID = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        GoogleDriveUploader.shared.connect(clientID: clientID) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success: self?.reply(id, "Google Drive connected. KL-06 stores the refresh token in macOS Keychain; diagnostic reports will upload to your private My Drive / KL-06 Diagnostics folder.")
+                case .failure(let error): self?.reply(id, error: error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    private func beginAuthenticatedDiagnostics(id: String) {
+        let context = LAContext()
+        context.localizedCancelTitle = "Cancel"
+        var authError: NSError?
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else {
+            reply(id, error: "macOS local authentication is unavailable: \(authError?.localizedDescription ?? "not supported"). No report was created.")
+            return
+        }
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authorize a private KL-06 hardware and connectivity diagnostic report.") { [weak self] success, _ in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                guard success else { self.reply(id, error: "Authentication cancelled or failed. No report was created."); return }
+                guard GoogleDriveUploader.shared.isConnected else {
+                    self.reply(id, error: "Google Drive is not connected. Choose Connect Google Drive once, then run Secure Diagnostics again.")
+                    return
+                }
+                do {
+                    let snapshot = self.state()
+                    let fan = snapshot["fan"] as? [String: Any] ?? [:]
+                    let diagnostics: [String: Any] = [
+                        "fanRPM": ["status": fan["status"] ?? "unknown", "readings": fan["fans"] ?? [], "note": "Provider-reported SMC tachometer values only; no ASUS EC/WMI driver is installed."],
+                        "wifiBluetooth": ["status": "not-probed", "note": "Network and Bluetooth interface probing is not yet implemented in this build."],
+                        "deviceTransfer": ["status": "not-end-to-end-verified", "note": "Physical device transfer success is not asserted."],
+                        "limitations": ["No firmware/EFI changes", "No fan-control writes", "No raw IORegistry dump", "No account identifiers, Wi-Fi names, MAC/IP addresses or secrets"]
+                    ]
+                    let report: [String: Any] = [
+                        "schema": "KL06_DIAGNOSTICS_V1",
+                        "createdAt": ISO8601DateFormatter().string(from: Date()),
+                        "platform": "macOS",
+                        "system": snapshot,
+                        "diagnostics": diagnostics
+                    ]
+                    let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+                    GoogleDriveUploader.shared.upload(data) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let message): self.reply(id, "Diagnostic scan complete. " + message)
+                            case .failure(let error): self.reply(id, error: "Diagnostic report was generated but Drive upload failed: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                } catch {
+                    self.reply(id, error: "Could not create diagnostic JSON: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
     private func remoteAction(_ operation: String, _ params: [String: Any], _ expires: TimeInterval, _ uptimeDeadline: TimeInterval) -> (Bool, String) {
         guard !sampleBusy, CompanionPolicy.allowed(operation, params), Date().timeIntervalSince1970 < expires, DesktopCompanion.uptime < uptimeDeadline else { return (false, "Unsupported, busy or expired.") }
         showWindow()

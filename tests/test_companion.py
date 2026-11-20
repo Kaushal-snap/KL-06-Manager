@@ -1,4 +1,5 @@
 """Synthetic broker/privacy tests + loopback TLS protocol tests; no device controls."""
+import base64
 import hashlib
 import http.client
 import importlib.util
@@ -86,6 +87,31 @@ class BrokerTests(unittest.TestCase):
         a=self.pair();_,r=self.b.handle('/v1/command',{'operation':'keepAwake','params':{}},a);path=self.root/'requests'/(r['id']+'.json');self.assertTrue(path.exists())
         self.b.handle('/v1/disconnect',{},a);self.assertFalse(path.exists());self.assertEqual(len(self.b.tokens),0)
         with self.assertRaises(S.Rejected):self.b.handle('/v1/state',{},a)
+    def test_authenticated_transfer_completes_only_after_sha256_verification(self):
+        auth=self.pair('ios')
+        payload=(b'KL06-transfer-fixture-'*600)
+        expected=hashlib.sha256(payload).hexdigest()
+        status,created=self.b.handle('/v1/transfer/init',{'fileName':'ios-fixture.bin','fileSize':len(payload),'expectedSha256':expected,'senderPlatform':'ios'},auth)
+        self.assertEqual(status,200)
+        self.assertEqual(created['status'],'approved')
+        transfer_id=created['transferId']
+        offset=0
+        for start in range(0,len(payload),8192):
+            chunk=payload[start:start+8192]
+            body={'transferId':transfer_id,'chunkOffset':offset,'chunkBase64':base64.b64encode(chunk).decode('ascii')}
+            self.assertLess(len(json.dumps(body,separators=(',',':')).encode()),16384)
+            status,progress=self.b.handle('/v1/transfer/chunk',body,auth)
+            self.assertEqual(status,200)
+            offset+=len(chunk)
+        status,final=self.b.handle('/v1/transfer/status',{'transferId':transfer_id},auth)
+        self.assertEqual(status,200)
+        self.assertEqual(final['state'],'complete')
+        self.assertEqual(final['bytesTransferred'],len(payload))
+        self.assertEqual(final['destinationName'],'ios-fixture.bin')
+        destination=self.b.transfer_engine.get_transfer(transfer_id).destination_path
+        self.assertEqual(hashlib.sha256(destination.read_bytes()).hexdigest(),expected)
+        self.assertNotIn('finalPath',final)
+
     def test_no_snapshot_does_not_invent_readings(self):
         _,r=self.b.handle('/v1/state',{},self.pair());self.assertEqual(r['status'],'not-sampled');self.assertIsNone(r['state'])
     def fixture(self):return {'schema':'KL06_DESKTOP_SNAPSHOT_V1','writtenAt':self.clock.wall,'state':{'platform':'macos','version':'0.3.0-beta.2','volume':42,'serial':'SYNTHETIC-PRIVATE-CANARY','rawReport':'SYNTHETIC-PRIVATE-CANARY','battery':{'chargePercent':60,'SerialNumber':'SYNTHETIC-PRIVATE-CANARY'},'fan':{'status':'ok','ageSeconds':2,'source':'AppleSMC / existing provider','fans':[{'index':0,'status':'ok','rpm':3366,'private':'SYNTHETIC-PRIVATE-CANARY'}]},'tweaks':[{'id':'dock-autohide','saved':True,'original':'SYNTHETIC-PRIVATE-CANARY'}]}}
