@@ -17,7 +17,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private var globalHotKey: F13HotKey?
     private var shortcutStatus = "F13 has not been registered."
     private var powerProfile: String = "Balanced"
-    private var batteryLimit: Int = 100
     private let settings: [String: String] = [
         "display": "com.apple.Displays-Settings.extension", "audio": "com.apple.Sound-Settings.extension",
         "keyboard": "com.apple.Keyboard-Settings.extension", "trackpad": "com.apple.Trackpad-Settings.extension",
@@ -139,10 +138,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["powerSampleInfo"] = ["source": "Fixed five-sample powermetrics read", "sampledAt": latestPowerAt.map { $0 as Any } ?? NSNull(), "mode": "point-in-time-not-live"] as [String: Any]
         value["hotkey"] = ["keyCode": F13HotKey.keyCode, "modifiers": F13HotKey.modifiers, "registered": globalHotKey?.isRegistered == true] as [String: Any]
         value["companion"] = ["running": companion.isRunning, "requiresLocalConfirmation": true]
-        value["version"] = "0.4.7-beta"
+        value["version"] = "0.5.0-beta.1"
         value["build"] = 12
         value["powerProfile"] = powerProfile
-        value["batteryLimit"] = batteryLimit
         return value
     }
     private func reply(_ id: String, _ result: Any? = nil, error: String? = nil) {
@@ -263,11 +261,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                     _ = try? Process.run(URL(fileURLWithPath: "/usr/bin/pmset"), arguments: ["-a", "lowpowermode", "0"])
                 }
                 reply(id, "Power profile switched to \(profile).")
-            case "setBatteryLimit":
-                guard let limit = (params["limit"] as? NSNumber)?.intValue, [60, 80, 100].contains(limit) else { throw ControlError(message: "Invalid battery limit.") }
-                self.batteryLimit = limit
-                UserDefaults.standard.set(limit, forKey: "KL06_BatteryLimit")
-                reply(id, "Battery charging threshold configured to \(limit)%.")
             case "scanPeers":
                 // Truthful: only phones that really paired with this Mac in the running session. No placeholder devices.
                 guard companion.isRunning else { reply(id, ["running": false, "peers": [] as [Any], "outbox": [] as [Any]] as [String: Any]); return }

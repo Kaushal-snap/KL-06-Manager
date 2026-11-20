@@ -9,7 +9,6 @@ enum NativeBridgePolicy {
         if operation == "restartUI" { return Set(params.keys) == ["app"] && ["Dock", "Finder"].contains(params["app"] as? String ?? "") }
         if operation == "openSetting" { return Set(params.keys) == ["id"] && settingIDs.contains(params["id"] as? String ?? "") }
         if operation == "setPowerProfile" { return Set(params.keys) == ["profile"] && ["High Performance", "Balanced", "Battery Saver"].contains(params["profile"] as? String ?? "") }
-        if operation == "setBatteryLimit" { return Set(params.keys) == ["limit"] && [60, 80, 100].contains((params["limit"] as? NSNumber)?.intValue ?? -1) }
         if operation == "sendPeerFile" { return Set(params.keys) == ["peerId"] && (params["peerId"] as? String)?.isEmpty == false }
         return CompanionPolicy.allowed(operation, params)
     }

@@ -135,16 +135,6 @@
     const batLimit = state.batteryLimit || 100;
     return title('Power & Battery Health','Current charge, health analysis, and ASUS battery health charging limiter.')+
       `<div class="detail-grid"><section class="detail-card">${icon('battery')}<h3>Current charge</h3><div class="large-value">${num(b.chargePercent)}<small> %</small></div><p>${b.onAC===true?'Connected to AC power':b.onAC===false?'Running on battery':'Power source unavailable'} · ${b.charging?'charging':'not charging / unknown'}</p>${setting('battery','Open Battery settings','ghost')}</section><section class="detail-card">${icon('activity')}<h3>Reported capacity health</h3><div class="large-value" style="color:var(--amber)">${num(health,1)}<small> %</small></div><p>Full charge ${num(b.AppleRawMaxCapacity??b.MaxCapacity)} / design ${num(b.DesignCapacity)} capacity units.</p>${pill(health===null?'Capacity unavailable':health<80?'Capacity check recommended':'Reported ratio only',health!==null&&health<80?'warning':'neutral')}</section><section class="detail-card">${icon('restore')}<h3>Cycle count</h3><div class="large-value">${num(b.CycleCount)}</div><p>Threshold limit: <strong>${batLimit}%</strong></p>${pill(batLimit<100?'Lifespan Protection Active':'Full Capacity Mode','info')}</section></div>
-      <section class="panel panel-padding">
-        <h2>🛡️ Battery Health Charging Threshold (Lifespan Protection)</h2>
-        <p class="body-copy">Protect your ASUS OLED laptop battery cells from high-voltage degradation during extended AC charging. Limiting to 80% or 60% substantially extends lithium-ion chemistry longevity.</p>
-        <div class="inline-actions" style="margin:14px 0">
-          ${button('Full Capacity (100%)','set-bat-limit','data-limit="100"',batLimit===100?'secondary':'ghost')}
-          ${button('Balanced Mode (80%)','set-bat-limit','data-limit="80"',batLimit===80?'secondary':'ghost')}
-          ${button('Maximum Lifespan (60%)','set-bat-limit','data-limit="60"',batLimit===60?'secondary':'ghost')}
-        </div>
-        <p class="footnote"><span>Active threshold: <strong>${batLimit}%</strong> (Configures ASUS BCLM threshold key / health charging profile).</span></p>
-      </section>
       <section class="panel"><div class="setting-row"><span class="quick-icon">${icon('timer')}</span><div class="row-body"><h3>Stay awake, temporarily</h3><p>Prevent idle system sleep for up to 15 minutes. Not a sleep fix; may increase battery consumption. Stops when you quit the app.</p><small>${state.awake?'Temporary assertion is active.':'No persistent pmset changes.'}</small></div><div class="row-control">${button(state.awake?'Stop keep-awake':'Keep awake 15 min','awake')}</div></div></section>`+footer();
   }
   function unsupported(ic,heading,text){return `<section class="detail-card unavailable">${icon(ic)}<h3>${e(heading)}</h3><p>${e(text)}</p>${pill('Not available · hardware interface required','neutral')}</section>`;}
@@ -321,7 +311,6 @@
       if(method==='pickHistoryCSV'){importedHistory=window.KLHistory.parse(result.csvText);historyChannel=0;page='history';toast('Historical Windows numeric channels imported locally. No upload or hardware change.');}
       else if(method==='checkUpdates'){state.updateInfo=result;render();toast(result.notice||'Update check complete.');}
       else if(method==='setPowerProfile'){state.powerProfile=params.profile;render();toast(typeof result==='string'?result:'Power profile updated.');}
-      else if(method==='setBatteryLimit'){state.batteryLimit=params.limit;render();toast(typeof result==='string'?result:'Battery threshold updated.');}
       else if(method==='scanPeers'){state.peerScan=result||{};const n=(state.peerScan.peers||[]).length;toast(state.peerScan.running===false?'Companion is off. Start it first.':(n?`${n} paired phone${n>1?'s':''} found.`:'No paired phone yet.'));render();}
       else if(method==='sendPeerFile'){toast(typeof result==='string'?result:'File offered to the phone.');act('scanPeers');}
       else toast(typeof result==='string'?result:'Done.');
@@ -355,7 +344,6 @@
       case 'clean-caches':act('cleanCaches');return;
       case 'check-updates':act('checkUpdates');return;
       case 'set-profile':act('setPowerProfile',{profile:el.dataset.profile});return;
-      case 'set-bat-limit':act('setBatteryLimit',{limit:Number(el.dataset.limit)});return;
       case 'scan-peers':act('scanPeers');return;
       case 'send-peer':act('sendPeerFile',{peerId:el.dataset.peer});return;
     }

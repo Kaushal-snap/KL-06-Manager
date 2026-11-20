@@ -185,7 +185,7 @@ public final class MainActivity extends Activity {
     private double number(JSONObject p)throws Exception {Object v=p.opt("value");if(p.length()!=1||!(v instanceof Number))throw new IllegalArgumentException();double n=((Number)v).doubleValue();if(!Double.isFinite(n)||n<0||n>100)throw new IllegalArgumentException();return n;}
     private float brightness(){float v=getWindow().getAttributes().screenBrightness;if(v>=0)return v;try{return Settings.System.getInt(getContentResolver(),Settings.System.SCREEN_BRIGHTNESS)/255f;}catch(Exception e){return Float.NaN;}}
     private JSONObject snapshot()throws Exception {
-        JSONObject s=new JSONObject().put("platform","android").put("version","0.4.7-beta").put("build",12).put("sampledAt",Instant.now().toString());
+        JSONObject s=new JSONObject().put("platform","android").put("version","0.5.0-beta.1").put("build",12).put("sampledAt",Instant.now().toString());
         Intent battery=registerReceiver(null,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));JSONObject b=new JSONObject();if(battery!=null){int level=battery.getIntExtra(BatteryManager.EXTRA_LEVEL,-1),scale=battery.getIntExtra(BatteryManager.EXTRA_SCALE,-1),plug=battery.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);if(level>=0&&scale>0)b.put("chargePercent",100.0*level/scale);if(plug>=0)b.put("onAC",plug!=0);}s.put("battery",b);
         ActivityManager.MemoryInfo info=new ActivityManager.MemoryInfo();((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getMemoryInfo(info);s.put("memory",new JSONObject().put("totalGB",info.totalMem/1073741824.0).put("usedGB",(info.totalMem-info.availMem)/1073741824.0).put("source","Android total minus available RAM; not a pressure test"));
         StatFs fs=new StatFs(getFilesDir().getAbsolutePath());s.put("storage",new JSONObject().put("freeGB",fs.getAvailableBytes()/1073741824.0).put("totalGB",fs.getTotalBytes()/1073741824.0));
@@ -410,11 +410,11 @@ public final class MainActivity extends Activity {
         case "checkUpdate":{
             writeLog("OTA","Checked for in-app software updates from native bridge");
             JSONObject res=new JSONObject()
-                .put("currentVersion","0.4.7-beta")
+                .put("currentVersion","0.5.0-beta.1")
                 .put("currentBuild",12)
-                .put("latestVersion","0.4.7-beta")
+                .put("latestVersion","0.5.0-beta.1")
                 .put("latestBuild",12)
-                .put("upToDate",true)
+                .put("upToDate",false).put("checked",false)
                 .put("channel","beta")
                 .put("releaseNotes","Tiger Lake hardware optimization suite (HDR, Sleep/Wake, AirDrop AWDL, GPU stability, Fan RPM), OTA engine, and v0.4.7 beta ecosystem update.")
                 .put("downloadUrl","https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download");

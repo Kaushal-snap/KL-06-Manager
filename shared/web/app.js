@@ -1176,8 +1176,7 @@ KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (INBUILT AUTO-SYNC)
 ================================================================================
 Timestamp: ${nowIso}
 Application: KL-06 Control Center & Ecosystem Manager
-Version: 0.4.7-beta (Build 12)
-Security Auth: VERIFIED (Owner Security Password Validated)
+Version: 0.5.0-beta.1
 Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)
 Device Host: ${hostInfo} (${plat})
 Platform Architecture: ${plat} / ${navigator.userAgent || 'Native WebView'}
