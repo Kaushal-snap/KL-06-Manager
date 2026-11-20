@@ -756,6 +756,12 @@
       </div>
       <p>Windows: explicitly import a HWiNFO sensor CSV on History; no HWiNFO driver/shared-memory reader is silently installed. Android/iOS: no public fan sensor/control exposed. Live Mac RPM is queried by the native Mac build from an already-present standard SMC provider, then may be shared via an authenticated laptop session.</p>
       <p>Run read-only fan diagnostics using sensor values actually returned by the native provider. The report can be exported locally; private Google Drive upload is not configured.</p>
+      <section class="panel" style="margin-top:14px;border:1px solid var(--border,#334155)">
+        <h3>Manual fan speed control</h3>
+        <p><strong>Unavailable — hardware write interface not verified.</strong> This K513EA build currently has no validated Windows ASUS EC/WMI fan-write provider. A speed slider would not change the physical fan, so controls remain disabled rather than showing a fake percentage.</p>
+        <div class="metrics"><div class="metric"><span>Requested fan speed</span><strong>—</strong><small>Not applied</small></div><div class="metric"><span>Hardware write provider</span><strong>Not detected</strong><small>Read-only diagnostics only</small></div></div>
+        <button class="btn-secondary" type="button" disabled aria-disabled="true">Manual control unavailable on this device</button>
+      </section>
       <p>No fan curves, manual target RPM, EC writes, ASUS firmware mode, charge cap or invented zero-RPM fallback.</p>
     </section>`;
   }
