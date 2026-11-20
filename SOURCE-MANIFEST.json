@@ -248,6 +248,12 @@
       "sha256": "b713fa17fcdafe7b370e6e82d8a707d0fa85476df0dbf71034a847970ce66cbe"
     },
     {
+      "bytes": 3459,
+      "executable": false,
+      "path": "docs/FAN-CONTROL-ROADMAP.md",
+      "sha256": "ec2af05fde03f6ad75e53ffe13e2524c5c60416d2a3cf09dce55724ac620ee2c"
+    },
+    {
       "bytes": 20278,
       "executable": false,
       "path": "docs/KL-06-Complete-Guide.md",
