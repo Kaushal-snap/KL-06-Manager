@@ -47,6 +47,27 @@ public final class CameraManager: NSObject, ObservableObject {
     }
     
     public func configureSession() {
+        // Do not configure capture inputs or outputs until iOS grants camera access.
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            configureAuthorizedSession()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                guard let self = self else { return }
+                if granted {
+                    self.configureAuthorizedSession()
+                } else {
+                    print("[CameraManager] Camera permission denied. Enable it in Settings > Privacy & Security > Camera.")
+                }
+            }
+        case .denied, .restricted:
+            print("[CameraManager] Camera permission is denied or restricted. Enable it in Settings > Privacy & Security > Camera.")
+        @unknown default:
+            print("[CameraManager] Unknown camera authorization state.")
+        }
+    }
+
+    private func configureAuthorizedSession() {
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
             self.captureSession.beginConfiguration()
@@ -81,24 +102,27 @@ public final class CameraManager: NSObject, ObservableObject {
                 self.captureSession.addInput(audioInput)
             }
             
-            // Configure 10-bit uncompressed pipeline bypass output
+            // Add the output, then choose the camera format before querying
+            // the output's dynamic list of supported pixel formats.
             self.videoDataOutput.alwaysDiscardsLateVideoFrames = false
-            self.videoDataOutput.videoSettings = [
-                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
-            ]
             self.videoDataOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
-            
+
             if self.captureSession.canAddOutput(self.videoDataOutput) {
                 self.captureSession.addOutput(self.videoDataOutput)
+            } else {
+                print("[CameraManager] Cannot add video data output.")
+                self.captureSession.commitConfiguration()
+                return
             }
-            
+
+            self.applyBest10BitFormat(for: device, targetFPS: self.currentFrameRate.rawValue)
+            self.configureSupportedVideoOutputPixelFormat()
+
             self.audioDataOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
             if self.captureSession.canAddOutput(self.audioDataOutput) {
                 self.captureSession.addOutput(self.audioDataOutput)
             }
             
-            // Apply 4K 10-bit format and bypass Apple's dynamic tone-mapping
-            self.applyBest10BitFormat(for: device, targetFPS: self.currentFrameRate.rawValue)
             self.lockCinemaManualControls()
             
             self.captureSession.commitConfiguration()
@@ -110,6 +134,29 @@ public final class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    // Select only a format reported by AVCaptureVideoDataOutput as supported.
+    // This avoids an NSInvalidArgumentException from setVideoSettings on devices
+    // whose current active camera format doesn't expose the requested 10-bit type.
+    private func configureSupportedVideoOutputPixelFormat() {
+        let available = videoDataOutput.availableVideoPixelFormatTypes
+        let preferred: [OSType] = [
+            kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange,
+            kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+            kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+        ]
+
+        if let selected = preferred.first(where: { available.contains($0) }) {
+            videoDataOutput.videoSettings = [
+                kCVPixelBufferPixelFormatTypeKey as String: selected
+            ]
+            print("[CameraManager] Selected output pixel format: \\(String(selected, radix: 16))")
+        } else {
+            // Empty settings request device-native pixel buffers.
+            videoDataOutput.videoSettings = [:]
+            print("[CameraManager] No preferred YUV format available; using device-native buffers.")
+        }
+    }
+
     // MARK: - Format Selection & Pipeline Bypass Configuration
     private func applyBest10BitFormat(for device: AVCaptureDevice, targetFPS: Int) {
         do {
