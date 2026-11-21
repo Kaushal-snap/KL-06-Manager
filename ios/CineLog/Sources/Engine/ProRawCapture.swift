@@ -33,7 +33,8 @@ public final class ProRawCapture: NSObject, ObservableObject, AVCapturePhotoCapt
     }
     public func stopSequence() {
         sequenceActive = false
-        message = "RAW sequence stopped: \(sequenceFrames) frames in \(folder?.lastPathComponent ?? \"\")"
+        let name = folder?.lastPathComponent ?? ""
+        message = "RAW sequence stopped: \(sequenceFrames) frames in \(name)"
     }
     private var seqFormat: OSType = 0
     private func pump() {
