@@ -233,6 +233,16 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - Implemented 9 reversible desktop preferences with atomic restore journaling.
 - Real read-only CPU/memory usage counters.
 
+## 0.5.2-beta.1 - build workflow
+- Windows: `--fan-admin` argument allows an elevated start only to read the ASUS fan; phone pairing/transfer are disabled in that mode (the app otherwise refuses to run as administrator).
+- Version 0.5.2-beta.1 (build 15). New `build-release.yml` builds unsigned Windows/Android/macOS/iOS test builds on GitHub runners (artifacts). None of these were built or tested by the author of this change.
+
+## 0.5.1-beta.1 - Windows receives phone transfers
+- Windows companion now asks the owner before accepting a phone->PC transfer (the 0.5.0 broker waited for an approval that Windows never showed). C# change is uncompiled/untested here.
+- Removed the Fan Diagnostics password gate (hardcoded passwords in the client) and the false "auto-sent to private Drive" claims; the diagnostic is now local and read-only.
+- Fake OTA "package verified" removed; all UI version strings now 0.5.1-beta.1.
+- Windows: read-only ASUS fan RPM via ATK WMI (admin-only; start KL-06 as administrator). C# is uncompiled here.
+
 ## 0.5.0-beta.1 - real transfer, truthful UI
 - Fix: file transfer failed because the broker capped every body at 16 KiB; chunk endpoint now allows 1.5 MB and a higher rate limit (tested).
 - Transfers now need laptop-owner approval; sender waits for it; laptop verifies SHA-256. Added laptop->phone outbox (Android receive, SHA-256 verified).

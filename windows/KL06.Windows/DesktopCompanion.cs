@@ -12,6 +12,7 @@ internal sealed class DesktopCompanion:IDisposable {
     internal Func<Dictionary<string,object?>>? Snapshot;
     internal Func<bool>? ReadyToPrompt;
     internal Func<string,bool>? ApprovePair;
+    internal Func<string,string,long,bool>? ApproveTransfer;
     internal Func<string,JsonElement,double,double,(bool,string)>? Perform;
     internal bool Running{get{try{return process is not null&&!process.HasExited;}catch{return false;}}}
     private static string? Python(){
@@ -59,6 +60,10 @@ internal sealed class DesktopCompanion:IDisposable {
                     bool ok=false,approved=false;string message="Denied, expired or unsupported.";
                     if(r.GetProperty("kind").GetString()=="pair"){
                         var platform=r.GetProperty("platform").GetString();if(platform is "android" or "ios")approved=ApprovePair?.Invoke(platform)==true&&DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()/1000.0<expires&&uptimeDeadline>Uptime&&Running;
+                    }else if(r.GetProperty("kind").GetString()=="transfer"){
+                        var platform=r.GetProperty("platform").GetString();var fileName=r.GetProperty("fileName").GetString();long fileSize=r.GetProperty("fileSize").GetInt64();
+                        bool valid=platform is "android" or "ios"&&fileName is not null&&fileName.Length is >0 and <=255&&fileName.IndexOfAny(new[]{'/','\\','\0'})<0&&fileSize>=0&&fileSize<=2147483648L;
+                        if(valid){approved=ApproveTransfer?.Invoke(platform!,fileName!,fileSize)==true&&DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()/1000.0<expires&&uptimeDeadline>Uptime&&Running;ok=approved;message=approved?"approved":"Declined on the laptop.";}
                     }else if(r.GetProperty("kind").GetString()=="command"){
                         var operation=r.GetProperty("operation").GetString();var p=r.GetProperty("params");if(operation is not null&&ControlPolicy.Allowed(operation,p)&&Perform is not null){activeRequest=path;try{(ok,message)=Perform(operation,p,expires,uptimeDeadline);}finally{activeRequest=null;}}
                     }

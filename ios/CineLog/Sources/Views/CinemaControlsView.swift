@@ -23,7 +23,14 @@ public struct CinemaControlsView: View {
             
             // Bottom Cinema Parameter Bar
             HStack(spacing: 12) {
-                paramButton(title: "FPS", value: "\(cameraManager.currentFrameRate.rawValue) fps", isSelected: false)
+                paramButton(title: "RES", value: cameraManager.currentResolution == .uhd4K ? "4K" : "1080p", isSelected: false) {
+                    cameraManager.setResolution(cameraManager.currentResolution == .uhd4K ? .fhd1080p : .uhd4K)
+                }
+                paramButton(title: "FPS", value: "\(cameraManager.currentFrameRate.rawValue) fps", isSelected: false) {
+                    let list = cameraManager.supportedFrameRates.isEmpty ? FrameRate.allCases : cameraManager.supportedFrameRates
+                    let i = list.firstIndex(of: cameraManager.currentFrameRate) ?? -1
+                    cameraManager.setFrameRate(list[(i + 1) % list.count])
+                }
                 
                 paramButton(
                     title: "SHUTTER",

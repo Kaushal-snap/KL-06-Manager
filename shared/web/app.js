@@ -229,12 +229,12 @@
     if (savedFixes) Object.assign(fixStatus, JSON.parse(savedFixes));
   } catch(ignored){}
   const diagnosticLogs = [
-    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.4.7-beta (Build 12) initialized.' },
+    { ts: new Date().toLocaleTimeString(), tag: 'SYS', level: 'ok', msg: 'KL-06 Manager v0.5.2-beta.1 (Build 15) initialized.' },
     { ts: new Date().toLocaleTimeString(), tag: 'NET', level: 'ok', msg: 'Network active: Mobile Data & Wi-Fi internet access enabled. Companion listener at port 8766.' },
     { ts: new Date().toLocaleTimeString(), tag: 'DRIVE', level: 'ok', msg: 'Private Drive Sync: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n) connected.' },
     { ts: new Date().toLocaleTimeString(), tag: 'PERM', level: 'ok', msg: 'Permissions active: Wi-Fi, Bluetooth LE, Storage Access Framework & Scoped MediaStore.' },
     { ts: new Date().toLocaleTimeString(), tag: 'RADAR', level: 'info', msg: 'AirDrop / Quick Share beacon active across local subnets and cellular hotspot.' },
-    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 12).' },
+    { ts: new Date().toLocaleTimeString(), tag: 'OTA', level: 'info', msg: 'Inbuilt OTA engine ready. Update channel: Beta (Build 15).' },
     { ts: new Date().toLocaleTimeString(), tag: 'LOG', level: 'ok', msg: 'Online diagnostics active. Auto-saved to Download/KL-06/logs/kl06-diagnostic.log and private Drive.' }
   ];
 
@@ -254,9 +254,9 @@
   let otaStatus = 'up-to-date';
   let otaProgress = 0;
   let otaVersionInfo = {
-    currentVersion: '0.4.7-beta',
+    currentVersion: '0.5.2-beta.1',
     currentBuild: 12,
-    latestVersion: '0.4.7-beta',
+    latestVersion: '0.5.2-beta.1',
     latestBuild: 12,
     releaseNotes: 'Tiger Lake hardware optimization suite (HDR, Sleep/Wake, AirDrop AWDL, GPU stability, Fan RPM), OTA engine, and v0.4.5 beta ecosystem update.',
     downloadUrl: 'https://drive.google.com/uc?id=1jsRXzy98NW40y2r3Nh6q3i0ncAXT6qHz&export=download'
@@ -353,7 +353,7 @@
 
     <div style="background:#0e1e28;border:1px solid #1e4555;border-radius:10px;padding:12px 14px;margin:0 0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
       <div>
-        <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.4.7-beta)</strong>
+        <strong style="color:#d8f4ee;font-size:13px">⚡ Hardware Link &amp; OTA Updates (v0.5.2-beta.1)</strong>
         <div style="color:#8ab4be;font-size:11px;margin-top:2px">
           ${hardwareConnected ? '<span style="color:var(--mint);font-weight:600">🟢 Hardware Link Active (Wi-Fi, Bluetooth &amp; Mobile Data Connected)</span>' : 'Mobile Data &amp; Wi-Fi Active • Auto-Send Private Drive Sync Ready'}
         </div>
@@ -562,7 +562,7 @@
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 12px">
         ${button('☁️ Auto-Share Logs to Private Drive', 'send-error-report', 'class="btn-primary"')}
-        ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
+        ${button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"')}
         ${button('📥 Export Logs to User Log Folder', 'export-logs')}
         <a href="https://drive.google.com/drive/folders/1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
           <button type="button" class="btn-primary" style="background:#173d32;border-color:#34d399">☁️ Open Private Logs on Drive</button>
@@ -797,11 +797,11 @@
           <h2 style="margin:4px 0 0">${e(state?.fan?.status||'Unsupported on this device')}</h2>
         </div>
         <div>
-          ${button('🩺 Run Fan Diagnostics & Auto-Sync', 'open-fan-diag-modal', 'class="btn-primary"')}
+          ${button('🩺 Run Fan Diagnostics', 'open-fan-diag-modal', 'class="btn-primary"')}
         </div>
       </div>
       <p>Windows: explicitly import a HWiNFO sensor CSV on History; no HWiNFO driver/shared-memory reader is silently installed. Android/iOS: no public fan sensor/control exposed. Live Mac RPM is queried by the native Mac build from an already-present standard SMC provider, then may be shared via an authenticated laptop session.</p>
-      <p>Click <b>Run Fan Diagnostics &amp; Auto-Sync</b> to authenticate with your security password, inspect hardware EC/SMC/WMI fan sensors, and automatically upload diagnostic telemetry into your private Drive folder <code>KL-06-Private-Logs</code> (<code>1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n</code>).</p>
+      <p>Click <b>Run Fan Diagnostics</b> to read the fan sensors that this device exposes. It is read-only and nothing is uploaded.</p>
       <p>No fan curves, manual target RPM, EC writes, ASUS firmware mode, charge cap or invented zero-RPM fallback.</p>
     </section>`;
   }
@@ -937,7 +937,7 @@
       ).join('');
 
       if (!shellRendered || !app.querySelector('.shell')) {
-        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.4.7-BETA</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.4.7-beta · build 12<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><div style="display:flex;align-items:center;gap:8px"><button data-page="updates" class="btn-primary" style="padding:4px 8px;font-size:11px">🚀 OTA Updates</button><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></div></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}${permissionModal()}${fanDiagPasswordModal()}`;
+        app.innerHTML=`<div class="shell"><aside><div class="brand"><img src="icon.svg" alt=""><strong>KL-06<small>MANAGER · v0.5.2-BETA.1</small></strong></div><nav id="app-nav">${pages.map(([id,label])=>`<button data-page="${id}" class="${page===id?'selected':''}" ${page===id?'aria-current="page"':''}>${e(label)}</button>`).join('')}${auxButtons}</nav><p class="aside-note">0.5.2-beta.1 · build 12<br>No firmware writes.</p></aside><main><header><span id="header-platform">My workspace / ${e(platform)}</span><div style="display:flex;align-items:center;gap:8px"><button data-page="updates" class="btn-primary" style="padding:4px 8px;font-size:11px">🚀 OTA Updates</button><b id="header-badge">${native?'NATIVE · CAPABILITY-GATED':'DEMO · NOT LIVE'}</b></div></header><div class="content" id="app-content">${pageHtml}</div></main></div>${autoPairModal()}${logViewerModal()}${permissionModal()}${fanDiagPasswordModal()}`;
         shellRendered = true;
       } else {
         app.querySelectorAll('#app-nav button').forEach(btn => {
@@ -1163,54 +1163,28 @@
   }
 
   async function executeFanDiagnostic(){
-    toast('🩺 Running hardware fan diagnostics & sensor inspection…');
-    addLog('FAN', 'info', 'Initiating hardware fan diagnostics with owner security authentication.');
-    
+    toast('Reading fan sensors...');
+    addLog('FAN', 'info', 'Fan diagnostic (local only, read-only).');
     const rows = M.fanValues(state);
-    const hostInfo = (typeof location !== 'undefined' ? location.hostname : 'localhost') || 'local-device';
-    const plat = state?.platform || 'android';
-    const nowIso = new Date().toISOString();
-    
-    const reportText = `================================================================================
-KL-06 HARDWARE FAN DIAGNOSTIC & TELEMETRY REPORT (INBUILT AUTO-SYNC)
-================================================================================
-Timestamp: ${nowIso}
-Application: KL-06 Control Center & Ecosystem Manager
-Version: 0.5.0-beta.1
-Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)
-Device Host: ${hostInfo} (${plat})
-Platform Architecture: ${plat} / ${navigator.userAgent || 'Native WebView'}
-
-[FAN & THERMAL HARDWARE TELEMETRY]
-- Fan Sensor Provider: ${state?.fan?.source || 'AppleSMC / VirtualSMC / SMCSuperIO / AsusSMC & ACPI EC'}
-- Sensor State: ${state?.fan?.status || 'Active / Verified'}
-- Detected Fan Tachometers: ${rows.length ? rows.length : '0 (Direct WMI EC Tachometer in EFI)'}
-${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).join('\n') : '- Fan 0 RPM Key (F0Ac): Unavailable-or-stale (Preserving firmware safety baseline)\n- Fan 1 RPM Key (F1Ac): Unavailable-or-stale (Preserving firmware safety baseline)'}
-- Fan RPM Safety Invariant: Strict Honest Reporting (Zero fake sliders, no fabricated curves)
-- Thermal Governor Mode: Standard Cooling Profile (Firmware Auto-Cooling Active)
-- Power Profile Governor: ${state?.powerProfile || 'Balanced'} (macOS XCPM / Windows ACPI Governor Active)
-- Embedded Controller (EC) I/O State: Protected (Zero unsafe port 0x62/0x66 writes)
-- Diagnostic Status: Passed 100% integrity validation
-
-[ECOSYSTEM & PRIVATE DRIVE SYNC]
-- Auto-Sync Destination: Google Drive Private Folder KL-06-Private-Logs
-- Target Folder ID: 1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n
-- Local Android Backup: Download/KL-06/logs/kl06-fan-diagnostic.log (MediaStore Scoped Storage)
-- Local Mac/PC Backup: ~/Library/Application Support/KL-06/logs/fan-diagnostic.log
-- Sync Channel: Direct Inbuilt Upload & Background TLS Handshake
-- Transfer Protocol: KL06_COMPANION_V1 (Port 8766 UDP/TLS Discovery & Pinned Cert)
-- Status: Auto-sent to private Drive folder successfully.
-================================================================================`;
-
+    const plat = state?.platform || 'unknown';
+    const reportText = `KL-06 FAN DIAGNOSTIC (local, read-only)
+Timestamp: ${new Date().toISOString()}
+App version: 0.5.2-beta.1 (build 15)
+Platform: ${plat}
+Fan sensor source: ${state?.fan?.source || 'none reported'}
+Sensor state: ${state?.fan?.status || 'unavailable'}
+Fans detected: ${rows.length}
+${rows.length ? rows.map(r => `- Fan ${r.index}: ${r.rpm} RPM`).join('\n') : '- No fan RPM reported. On a Hackintosh this needs a VirtualSMC fan plugin (see etc/fan-kext, experimental); on Windows import a HWiNFO CSV.'}
+Nothing was uploaded or sent anywhere. Copy this text yourself if you want to share it.`;
     try {
       await request('saveFanDiagnosticReport', { reportText });
     } catch(e) {
       try { await request('exportLogs', { logs: diagnosticLogs }); } catch(ignored){}
     }
     
-    addLog('FAN', 'ok', 'Fan diagnostics complete. Telemetry auto-sent to private Drive folder KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n).');
+    addLog('FAN', 'ok', 'Fan diagnostic finished (nothing uploaded).');
     activeLogModal = { open: true, text: reportText };
-    toast('✓ Fan diagnostics complete! Inbuilt auto-sync to private Drive folder KL-06-Private-Logs successful!');
+    toast('Fan diagnostic ready (local only).');
     render();
   }
 
@@ -1331,23 +1305,14 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'check-app-update': {
-        otaChecking = true;
-        render();
-        toast('Checking signed update catalog for v0.4.7-beta…');
-        addLog('OTA', 'info', 'Querying release catalog for updates...');
-        setTimeout(() => {
-          otaChecking = false;
-          otaStatus = 'ready';
-          addLog('OTA', 'ok', '✓ Validated v0.4.7-beta package against SHA-256 catalog. Ready to install.');
-          toast('✓ Package verified! Ready to install.');
-          render();
-        }, 1200);
+        addLog('OTA', 'info', 'No update server is queried by this build. Download new versions from the GitHub releases page.');
+        toast('Update check is manual: see the GitHub releases page.');
         return;
       }
 
       case'install-app-update': {
         addLog('OTA', 'info', 'Launching Android PackageInstaller for in-app update...');
-        toast('Launching system installer for v0.4.7-beta…');
+        toast('Launching system installer for v0.5.2-beta.1…');
         if (native) {
           try {
             act('installUpdate', { downloadUrl: otaVersionInfo.downloadUrl });
@@ -1444,11 +1409,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         return;
 
       case'open-fan-diag-modal':
-        activeFanDiagModal = { open: true, error: '' };
-        render();
-        setTimeout(() => {
-          document.getElementById('fan-diag-password-input')?.focus();
-        }, 50);
+        await executeFanDiagnostic();
         return;
 
       case'close-fan-diag-modal':
@@ -1456,28 +1417,16 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         render();
         return;
 
-      case'submit-fan-diag-password': {
-        const input = document.getElementById('fan-diag-password-input');
-        const pass = (input?.value || '').trim().toLowerCase();
-        const cleanPin = currentPin.replace('-', '').toLowerCase();
-        const validPasswords = ['5301', 'kaushal@2026', 'kaushal2026', 'kl06admin', 'labanayt5301', cleanPin, currentPin.toLowerCase()];
-        if (!pass || !validPasswords.includes(pass)) {
-          if (activeFanDiagModal) activeFanDiagModal.error = 'Incorrect security password. Please try again.';
-          toast('❌ Incorrect security password. Access denied.');
-          render();
-          return;
-        }
+      case'submit-fan-diag-password':
         activeFanDiagModal = null;
-        render();
         await executeFanDiagnostic();
         return;
-      }
 
       case'export-logs': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.7-beta',
-          build: 12,
+          version: '0.5.2-beta.1',
+          build: 15,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
           network: { wifi: 'connected', localIP: '192.168.x.x', port: 8766, mobileData: 'active (dual-mode)' },
@@ -1491,7 +1440,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 v0.4.7-beta Diagnostic Report',
+              title: 'KL-06 v0.5.2-beta.1 Diagnostic Report',
               text: reportStr
             }).catch(()=>{});
           } catch(ignored){}
@@ -1507,8 +1456,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
       case'send-error-report': {
         const report = {
           app: 'KL-06 Manager',
-          version: '0.4.7-beta',
-          build: 12,
+          version: '0.5.2-beta.1',
+          build: 15,
           exportedAt: new Date().toISOString(),
           onlineMode: onlineLogging,
           platform: state?.platform || 'android',
@@ -1527,7 +1476,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
         if (navigator.share) {
           try {
             navigator.share({
-              title: 'KL-06 Diagnostic Log (v0.4.7-beta)',
+              title: 'KL-06 Diagnostic Log (v0.5.2-beta.1)',
               text: reportStr
             }).catch(()=>{});
           } catch(ignored){}
@@ -1738,7 +1687,7 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
 
   state = {
     platform: 'android',
-    version: '0.4.7-beta',
+    version: '0.5.2-beta.1',
     sampledAt: 'Live phone telemetry',
     battery: { chargePercent: 82, onAC: false },
     memory: { usedGB: 4.1, totalGB: 8.0, source: 'Android system RAM' },
@@ -1834,8 +1783,8 @@ ${rows.length ? rows.map(r => `- Fan ${r.index} Measured RPM: ${r.rpm} RPM`).joi
   // ============================================================================
   const KL06_CONFIG = {
     repo: 'Kaushal-snap/KL-06-Manager',
-    currentVersion: '0.4.7-beta',
-    build: 12,
+    currentVersion: '0.5.2-beta.1',
+    build: 15,
     platform: null
   };
 
