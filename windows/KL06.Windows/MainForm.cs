@@ -13,6 +13,7 @@ internal sealed class MainForm:Form {
         preferences=new(new RegistryPreferences(),new WindowsJournalStorage(Path.Combine(privateRoot,"Preferences")));
         companion.Snapshot=State;companion.ReadyToPrompt=()=>modalDepth==0;
         companion.ApprovePair=platform=>Confirm("Pair this "+platform+" companion?","Only approve the phone you just paired using this laptop's full certificate fingerprint and random code. It can see minimized counters and request allowlisted changes; every write still needs confirmation here. Maximum 30-minute session; stop/quit revokes every device.");
+        companion.ApproveTransfer=(platform,name,size)=>Confirm("Receive a file from the paired "+platform+" phone?","File: "+name+" ("+(size/1024.0/1024.0).ToString("0.0")+" MB). It is saved in this PC's KL-06 downloads folder only after the SHA-256 check passes. Decline if you did not just start this transfer.");
         companion.Perform=RemoteAction;
         timer.Tick+=(_,_)=>{try{device.Tick();companion.Tick();}catch{companion.Stop();}};timer.Start();
         Shown+=async(_,_)=>await Initialize(privateRoot);FormClosed+=(_,_)=>{disposed=true;timer.Stop();companion.Dispose();device.Dispose();web.Dispose();};

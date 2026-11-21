@@ -138,7 +138,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         value["powerSampleInfo"] = ["source": "Fixed five-sample powermetrics read", "sampledAt": latestPowerAt.map { $0 as Any } ?? NSNull(), "mode": "point-in-time-not-live"] as [String: Any]
         value["hotkey"] = ["keyCode": F13HotKey.keyCode, "modifiers": F13HotKey.modifiers, "registered": globalHotKey?.isRegistered == true] as [String: Any]
         value["companion"] = ["running": companion.isRunning, "requiresLocalConfirmation": true]
-        value["version"] = "0.5.0-beta.1"
+        value["version"] = "0.5.1-beta.1"
         value["build"] = 12
         value["powerProfile"] = powerProfile
         return value
