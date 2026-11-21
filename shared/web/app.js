@@ -1169,7 +1169,7 @@
     const plat = state?.platform || 'unknown';
     const reportText = `KL-06 FAN DIAGNOSTIC (local, read-only)
 Timestamp: ${new Date().toISOString()}
-App version: 0.5.2-beta.1 (build 14)
+App version: 0.5.2-beta.1 (build 15)
 Platform: ${plat}
 Fan sensor source: ${state?.fan?.source || 'none reported'}
 Sensor state: ${state?.fan?.status || 'unavailable'}

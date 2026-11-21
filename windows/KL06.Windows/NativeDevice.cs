@@ -53,7 +53,7 @@ internal static class AsusFan {
         if(!busy&&(DateTime.UtcNow-at).TotalSeconds>=4){busy=true;System.Threading.Tasks.Task.Run(Refresh);}
         var age=(DateTime.UtcNow-at).TotalSeconds;
         if(rpm.HasValue&&age<=10)return new{status="ok",source="ASUS ATK WMI DSTS 0x00110013 (read-only, value x100)",ageSeconds=(double?)age,manualControl=false,fans=new object[]{new{index=0,status="ok",rpm=rpm.Value}}};
-        var why=state=="needs-admin"?"Start KL-06 as administrator to read the ASUS fan (WMI is admin-only)":state=="no-fan"?"ASUS WMI reports no fan on this device":"ASUS fan RPM unavailable ("+state+"). Or import a HWiNFO CSV on History";
+        var why=state=="needs-admin"?"ASUS fan needs admin: run  Start-Process 'KL-06 Manager.exe' -ArgumentList --fan-admin -Verb RunAs  (phone transfer is disabled in that mode)":state=="no-fan"?"ASUS WMI reports no fan on this device":"ASUS fan RPM unavailable ("+state+"). Or import a HWiNFO CSV on History";
         return new{status="unsupported",source=why,ageSeconds=(double?)null,manualControl=false,fans=Array.Empty<object>()};
     }
     private static void Refresh(){

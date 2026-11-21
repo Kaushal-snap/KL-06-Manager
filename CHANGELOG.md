@@ -234,6 +234,7 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - Real read-only CPU/memory usage counters.
 
 ## 0.5.2-beta.1 - build workflow
+- Windows: `--fan-admin` argument allows an elevated start only to read the ASUS fan; phone pairing/transfer are disabled in that mode (the app otherwise refuses to run as administrator).
 - Version 0.5.2-beta.1 (build 15). New `build-release.yml` builds unsigned Windows/Android/macOS/iOS test builds on GitHub runners (artifacts). None of these were built or tested by the author of this change.
 
 ## 0.5.1-beta.1 - Windows receives phone transfers
