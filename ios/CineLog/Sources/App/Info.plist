@@ -32,6 +32,8 @@
     <true/>
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>CineLog saves your clips and ProRAW photos to Photos.</string>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
         <string>arm64</string>

@@ -1,111 +1,100 @@
 #include <metal_stdlib>
 using namespace metal;
 
-// MARK: - Color Math Constants for Apple Log and HLG
-constant float kAppleLogC = 0.1856326002f;
-constant float kAppleLogD = 0.6133036136f;
-constant float kAppleLogE = 0.0384214013f;
-constant float kAppleLogF = 4.2000000000f;
-constant float kAppleLogCutoff = 0.0100000000f;
+// Apple Log encoding (parameters from Apple's Apple Log Profile white paper - verify against the PDF).
+// NOTE: on iPhone 13/14 Pro this is an APPROXIMATION computed from Apple's HLG stream,
+// not true sensor Log (that needs A17 Pro hardware).
+constant float kAL_R0 = -0.05641088f;
+constant float kAL_Rt = 0.01f;
+constant float kAL_c  = 47.28711236f;
+constant float kAL_b  = 0.00964052f;
+constant float kAL_g  = 0.08550479f;
+constant float kAL_d  = 0.69336945f;
 
 constant float kHlgA = 0.17883277f;
 constant float kHlgB = 0.28466892f;
 constant float kHlgC = 0.55991073f;
+// HLG scene-linear value of 100% diffuse white (75% signal) = 0.265 -> scale so white = 1.0 reflectance
+constant float kHlgWhiteScale = 1.0f / 0.265f;
 
-// Rec.2020 YUV to RGB Conversion Matrix
+inline float appleLogEncode(float r) {
+    if (r >= kAL_Rt) return kAL_g * log2(r + kAL_b) + kAL_d;
+    if (r >= kAL_R0) return kAL_c * (r - kAL_R0) * (r - kAL_R0);
+    return 0.0f;
+}
+inline float appleLogDecode(float p) {
+    float pt = kAL_c * (kAL_Rt - kAL_R0) * (kAL_Rt - kAL_R0);
+    if (p >= pt) return exp2((p - kAL_d) / kAL_g) - kAL_b;
+    return sqrt(max(p, 0.0f) / kAL_c) + kAL_R0;
+}
+
+// BT.2020 YCbCr (full-range normalised) -> RGB
 constant float3x3 kYUV2RGB_BT2020 = float3x3(
     float3(1.0f,  0.0f,      1.4746f),
     float3(1.0f, -0.16455f, -0.57135f),
     float3(1.0f,  1.8814f,   0.0f)
 );
 
-// MARK: - Pipeline Bypass Kernel: 10-Bit Sensor Stream to Pure Apple Log
+// 10-bit biplanar video-range (P010 style) camera frame -> Apple-Log-style RGB (rgba16Float)
 kernel void sensorToAppleLogKernel(
     texture2d<float, access::read>  inY      [[texture(0)]],
     texture2d<float, access::read>  inUV     [[texture(1)]],
     texture2d<float, access::write> outColor [[texture(2)]],
     uint2 gid [[thread_position_in_grid]]
 ) {
-    if (gid.x >= outColor.get_width() || gid.y >= outColor.get_height()) {
-        return;
-    }
-    
-    // Sample Y (Full 10-bit range) and UV (bi-planar subsampled)
-    float y = inY.read(gid).r;
-    float2 uv = inUV.read(gid / 2).rg - float2(0.5f, 0.5f);
-    
-    // Convert YUV to normalized linear RGB
-    float3 yuv = float3(y, uv.x, uv.y);
-    float3 rgbSensor = max(float3(0.0f), kYUV2RGB_BT2020 * yuv);
-    
-    // 1. Invert HLG Opto-Electronic Transfer Function to get True Scene Linear Light
-    float3 linearLight;
+    if (gid.x >= outColor.get_width() || gid.y >= outColor.get_height()) return;
+    // P010 keeps the 10 code bits in the top of 16: unorm * 65535 / 64 = 10-bit code
+    float yCode  = inY.read(gid).r * (65535.0f / 64.0f);
+    float2 uvCode = inUV.read(gid / 2).rg * (65535.0f / 64.0f);
+    float yn = clamp((yCode - 64.0f) / 876.0f, 0.0f, 1.0f);            // video range removal
+    float2 cn = (uvCode - 512.0f) / 896.0f;
+    float3 rgb = max(float3(0.0f), kYUV2RGB_BT2020 * float3(yn, cn.x, cn.y));  // HLG-encoded RGB
+
+    float3 logRGB;
     for (int i = 0; i < 3; ++i) {
-        float v = rgbSensor[i];
-        if (v <= 0.5f) {
-            linearLight[i] = (v * v) / 3.0f;
-        } else {
-            linearLight[i] = (exp((v - kHlgC) / kHlgA) + kHlgB) / 12.0f;
-        }
+        float v = rgb[i];
+        float e = (v <= 0.5f) ? (v * v) / 3.0f : (exp((v - kHlgC) / kHlgA) + kHlgB) / 12.0f;
+        logRGB[i] = clamp(appleLogEncode(e * kHlgWhiteScale), 0.0f, 1.0f);
     }
-    
-    // 2. Apply Official Apple Log Transfer Function
-    float3 appleLogRGB;
-    for (int i = 0; i < 3; ++i) {
-        float r = linearLight[i];
-        if (r < kAppleLogCutoff) {
-            appleLogRGB[i] = max(0.0f, kAppleLogF * r);
-        } else {
-            appleLogRGB[i] = kAppleLogC * log(r + kAppleLogE) + kAppleLogD;
-        }
-    }
-    
-    outColor.write(float4(appleLogRGB, 1.0f), gid);
+    outColor.write(float4(logRGB, 1.0f), gid);
 }
 
-// MARK: - Monitoring LUT Kernel: Real-time Apple Log to Rec.709 Preview
+// Log RGB (rgba16Float) -> 10-bit BT.2020 video-range biplanar buffer for the recorder.
+kernel void logToP010Kernel(
+    texture2d<float, access::read>  inLog  [[texture(0)]],
+    texture2d<float, access::write> outY   [[texture(1)]],
+    texture2d<float, access::write> outUV  [[texture(2)]],
+    uint2 gid [[thread_position_in_grid]]
+) {
+    if (gid.x >= outY.get_width() || gid.y >= outY.get_height()) return;
+    float3 c = inLog.read(gid).rgb;
+    float y = 0.2627f * c.r + 0.6780f * c.g + 0.0593f * c.b;
+    outY.write(float4((64.0f + 876.0f * y) * (64.0f / 65535.0f), 0, 0, 1), gid);
+    if ((gid.x & 1) == 0 && (gid.y & 1) == 0) {
+        float3 s = c + inLog.read(gid + uint2(1, 0)).rgb + inLog.read(gid + uint2(0, 1)).rgb + inLog.read(gid + uint2(1, 1)).rgb;
+        s *= 0.25f;
+        float ys = 0.2627f * s.r + 0.6780f * s.g + 0.0593f * s.b;
+        float cb = (s.b - ys) / 1.8814f;
+        float cr = (s.r - ys) / 1.4746f;
+        outUV.write(float4((512.0f + 896.0f * cb) * (64.0f / 65535.0f), (512.0f + 896.0f * cr) * (64.0f / 65535.0f), 0, 1), gid / 2);
+    }
+}
+
+// Monitoring: Log -> Rec.709-ish preview
 kernel void monitoringLUTKernel(
     texture2d<float, access::read>  inLogTexture  [[texture(0)]],
     texture2d<float, access::write> outPreview    [[texture(1)]],
-    constant int &monitoringMode                 [[buffer(0)]], // 0: Raw Log, 1: Rec.709 LUT
+    constant int &monitoringMode                 [[buffer(0)]],
     uint2 gid [[thread_position_in_grid]]
 ) {
-    if (gid.x >= outPreview.get_width() || gid.y >= outPreview.get_height()) {
-        return;
-    }
-    
+    if (gid.x >= outPreview.get_width() || gid.y >= outPreview.get_height()) return;
     float4 logColor = inLogTexture.read(gid);
-    
-    if (monitoringMode == 0) {
-        // Flat Log display
-        outPreview.write(logColor, gid);
-        return;
-    }
-    
-    // Convert Apple Log back to linear for LUT display transform
-    float3 linearLight;
-    float cutLog = kAppleLogF * kAppleLogCutoff;
-    for (int i = 0; i < 3; ++i) {
-        float l = logColor[i];
-        if (l < cutLog) {
-            linearLight[i] = max(0.0f, l / kAppleLogF);
-        } else {
-            linearLight[i] = exp((l - kAppleLogD) / kAppleLogC) - kAppleLogE;
-        }
-    }
-    
-    // ACES-style filmic tone curve for rich cinematic Rec.709 monitoring
-    float a = 2.51f;
-    float b = 0.03f;
-    float c = 2.43f;
-    float d = 0.59f;
-    float e = 0.14f;
-    float3 rec709 = clamp((linearLight * (a * linearLight + b)) / (linearLight * (c * linearLight + d) + e), 0.0f, 1.0f);
-    
-    // Rec.709 gamma (2.2)
-    rec709 = pow(rec709, float3(1.0f / 2.2f));
-    
-    outPreview.write(float4(rec709, 1.0f), gid);
+    if (monitoringMode == 0) { outPreview.write(logColor, gid); return; }
+    float3 lin;
+    for (int i = 0; i < 3; ++i) lin[i] = max(0.0f, appleLogDecode(logColor[i]));
+    float a = 2.51f, b = 0.03f, c = 2.43f, d = 0.59f, e = 0.14f;
+    float3 rec709 = clamp((lin * (a * lin + b)) / (lin * (c * lin + d) + e), 0.0f, 1.0f);
+    outPreview.write(float4(pow(rec709, float3(1.0f / 2.2f)), 1.0f), gid);
 }
 
 // MARK: - Exposure Assist: False Color (IRE Scale)

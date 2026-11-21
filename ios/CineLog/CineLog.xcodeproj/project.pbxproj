@@ -12,7 +12,7 @@
 		C0010003 /* MetalLogPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020003 /* MetalLogPipeline.swift */; };
 		C0010004 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C0020004 /* Shaders.metal */; };
 		C0010005 /* VideoWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020005 /* VideoWriter.swift */; };
-		C0010006 /* CinemaDNGWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020006 /* CinemaDNGWriter.swift */; };
+		C0010006 /* ProRawCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020006 /* ProRawCapture.swift */; };
 		C0010007 /* ColorMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020007 /* ColorMath.swift */; };
 		C0010008 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020008 /* CameraPreviewView.swift */; };
 		C0010009 /* CinemaControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0020009 /* CinemaControlsView.swift */; };
@@ -26,7 +26,7 @@
 		C0020003 /* MetalLogPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/MetalLogPipeline.swift; sourceTree = SOURCE_ROOT; };
 		C0020004 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Sources/Engine/Shaders.metal; sourceTree = SOURCE_ROOT; };
 		C0020005 /* VideoWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/VideoWriter.swift; sourceTree = SOURCE_ROOT; };
-		C0020006 /* CinemaDNGWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/CinemaDNGWriter.swift; sourceTree = SOURCE_ROOT; };
+		C0020006 /* ProRawCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/ProRawCapture.swift; sourceTree = SOURCE_ROOT; };
 		C0020007 /* ColorMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/ColorMath.swift; sourceTree = SOURCE_ROOT; };
 		C0020008 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/CameraPreviewView.swift; sourceTree = SOURCE_ROOT; };
 		C0020009 /* CinemaControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/CinemaControlsView.swift; sourceTree = SOURCE_ROOT; };
@@ -64,7 +64,7 @@
 				C0020003 /* MetalLogPipeline.swift */,
 				C0020004 /* Shaders.metal */,
 				C0020005 /* VideoWriter.swift */,
-				C0020006 /* CinemaDNGWriter.swift */,
+				C0020006 /* ProRawCapture.swift */,
 				C0020007 /* ColorMath.swift */,
 				C0020008 /* CameraPreviewView.swift */,
 				C0020009 /* CinemaControlsView.swift */,
@@ -155,7 +155,7 @@
 				C0010003 /* MetalLogPipeline.swift in Sources */,
 				C0010004 /* Shaders.metal in Sources */,
 				C0010005 /* VideoWriter.swift in Sources */,
-				C0010006 /* CinemaDNGWriter.swift in Sources */,
+				C0010006 /* ProRawCapture.swift in Sources */,
 				C0010007 /* ColorMath.swift in Sources */,
 				C0010008 /* CameraPreviewView.swift in Sources */,
 				C0010009 /* CinemaControlsView.swift in Sources */,
