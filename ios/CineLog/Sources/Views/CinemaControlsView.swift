@@ -63,7 +63,6 @@ public struct CinemaControlsView: View {
                 }
                 .padding(.horizontal, 2)
             }
-            .contentMargins(.horizontal, 2, for: .scrollContent)
             .padding(.horizontal, 8)
             .padding(.vertical, 9)
             .background(Color.black.opacity(0.88))
