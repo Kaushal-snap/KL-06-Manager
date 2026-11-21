@@ -3,6 +3,7 @@ import AVFoundation
 import CoreMedia
 import CoreVideo
 import Photos
+import VideoToolbox
 
 public enum RecordingCodec: String, CaseIterable {
     case proRes422HQ = "Apple ProRes 422 HQ (10-bit)"
@@ -60,7 +61,7 @@ public final class VideoWriter: ObservableObject {
                     AVVideoHeightKey: height,
                     AVVideoColorPropertiesKey: [
                         AVVideoColorPrimariesKey: AVVideoColorPrimaries_ITU_R_2020,
-                        AVVideoTransferFunctionKey: AVVideoTransferFunction_ITU_R_2020,
+                        AVVideoTransferFunctionKey: "ITU_R_2020",
                         AVVideoYCbCrMatrixKey: AVVideoYCbCrMatrix_ITU_R_2020
                     ]
                 ]
