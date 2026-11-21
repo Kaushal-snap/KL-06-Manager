@@ -6,7 +6,7 @@ struct CineLogApp: App {
         WindowGroup {
             ContentView()
                 .statusBar(hidden: true)
-                .persistentSystemOverlays(.hidden)
+                .preferredColorScheme(.dark)
         }
     }
 }
