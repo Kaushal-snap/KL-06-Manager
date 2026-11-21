@@ -4,7 +4,7 @@ ROOT=pathlib.Path(__file__).resolve().parents[1]
 class Contracts(unittest.TestCase):
  def text(self,p): return (ROOT/p).read_text()
  def test_version_identity(self):
-  p=plistlib.loads((ROOT/'Info.plist').read_bytes());self.assertEqual(p['CFBundleIdentifier'],'app.klasus.controlcenter');self.assertIn(p['CFBundleVersion'],('5','6','7','8','9','10','11','12','13','14'));self.assertIn(p['CFBundleShortVersionString'],('0.3.0','0.4.0','0.4.1','0.4.2','0.4.3','0.4.5','0.4.7','0.5.0','0.5.1'))
+  p=plistlib.loads((ROOT/'Info.plist').read_bytes());self.assertEqual(p['CFBundleIdentifier'],'app.klasus.controlcenter');self.assertIn(p['CFBundleVersion'],('5','6','7','8','9','10','11','12','13','14','15'));self.assertIn(p['CFBundleShortVersionString'],('0.3.0','0.4.0','0.4.1','0.4.2','0.4.3','0.4.5','0.4.7','0.5.0','0.5.1','0.5.2'))
  def test_assets_present_and_local(self):
   s=self.text('Resources/index.html');self.assertIn("connect-src 'none'",s)
   for item in re.findall(r'(?:src|href)="([^\"]+)"',s):self.assertTrue((ROOT/'Resources'/item).is_file(),item);self.assertNotIn('://',item)

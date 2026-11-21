@@ -233,6 +233,9 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 - Implemented 9 reversible desktop preferences with atomic restore journaling.
 - Real read-only CPU/memory usage counters.
 
+## 0.5.2-beta.1 - build workflow
+- Version 0.5.2-beta.1 (build 15). New `build-release.yml` builds unsigned Windows/Android/macOS/iOS test builds on GitHub runners (artifacts). None of these were built or tested by the author of this change.
+
 ## 0.5.1-beta.1 - Windows receives phone transfers
 - Windows companion now asks the owner before accepting a phone->PC transfer (the 0.5.0 broker waited for an approval that Windows never showed). C# change is uncompiled/untested here.
 - Removed the Fan Diagnostics password gate (hardcoded passwords in the client) and the false "auto-sent to private Drive" claims; the diagnostic is now local and read-only.
