@@ -13,6 +13,7 @@ CineLog turns an older iPhone (13 Pro / 14 Pro Max) into a more capable video ca
 | :-- | :-- |
 | Apple Log / Log 2 | **Approximation**: 10-bit HLG from the camera -> Apple Log curve in Metal (parameters from Apple's Apple Log white paper; verify). Not true sensor Log; Apple's HLG tone mapping is still underneath. Grade with a Log-to-Rec.709 transform as a starting point. |
 | ProRes video | Internal ProRes if the phone/storage supports it (falls back to HEVC 10-bit automatically). |
+| RAW video (MotionCam / Raw Cam style) | **RAW SEQ (experimental)**: back-to-back **Bayer RAW** photos via AVCapturePhotoOutput saved as numbered DNGs (Files app > CineLog). Real Bayer data (no ProRAW fusion), but the fps is limited by the phone's photo pipeline (shown live) - not a smooth 24 fps video yet. Audio is not recorded. |
 | ProRAW | **ProRAW stills** (real DNG) when the current format allows it. **No RAW video** (not possible on these phones). |
 | Manual controls | ISO, shutter, white balance, focus: yes. Histogram/false colour/peaking: monitoring tools included. |
 | 4K120, variable aperture, genlock, ProRes RAW video, external recording | **Not possible** (hardware). |

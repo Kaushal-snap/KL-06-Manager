@@ -114,6 +114,22 @@ public final class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    // MARK: - RAW sequence mode (Bayer RAW through AVCapturePhotoOutput)
+    /// Switches to the photo preset so the photo output can offer Bayer RAW, then reports whether it does.
+    public func enterRawMode(completion: @escaping (Bool) -> Void) {
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+            self.captureSession.beginConfiguration()
+            self.captureSession.sessionPreset = .photo
+            if self.photoOutput.isAppleProRAWSupported { self.photoOutput.isAppleProRAWEnabled = false } // list Bayer formats only
+            self.photoOutput.maxPhotoQualityPrioritization = .speed
+            self.captureSession.commitConfiguration()
+            let ok = self.photoOutput.availableRawPhotoPixelFormatTypes.contains { AVCapturePhotoOutput.isBayerRAWPixelFormat($0) }
+            DispatchQueue.main.async { completion(ok) }
+        }
+    }
+    public func exitRawMode() { reconfigureFormat() }
+
     // MARK: - Format selection: 10-bit HLG (Dolby Vision-capable) format, resolution/fps from the UI
     private func applyBest10BitFormat(for device: AVCaptureDevice, targetFPS: Int) {
         let wantW: Int32 = currentResolution == .uhd4K ? 3840 : 1920

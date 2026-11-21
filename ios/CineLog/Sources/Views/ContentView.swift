@@ -44,6 +44,7 @@ public struct ContentView: View {
                     
                     // ProRAW still + storage/proxy menu
                     rawModeToggleButton
+                    rawSequenceButton
                     storageMenu
                     
                     Spacer()
@@ -202,6 +203,29 @@ public struct ContentView: View {
                     .font(.system(size: 7, weight: .black))
             }
             .foregroundColor(.orange)
+            .frame(width: 50, height: 50)
+            .background(Color.black.opacity(0.7))
+            .clipShape(Circle())
+        }
+    }
+
+    private var rawSequenceButton: some View {
+        Button(action: {
+            if rawCapture.sequenceActive {
+                rawCapture.stopSequence(); cameraManager.exitRawMode()
+            } else {
+                cameraManager.enterRawMode { ok in
+                    if ok { rawCapture.startSequence(using: cameraManager.photoOutput) }
+                    else { rawCapture.message = "Bayer RAW not available on this camera. Try the main (wide) camera."; cameraManager.exitRawMode() }
+                }
+            }
+        }) {
+            VStack(spacing: 2) {
+                Image(systemName: "film.stack").font(.system(size: 16))
+                Text(rawCapture.sequenceActive ? String(format: "%.1f fps", rawCapture.sequenceFPS) : "RAW SEQ")
+                    .font(.system(size: 7, weight: .black))
+            }
+            .foregroundColor(rawCapture.sequenceActive ? .red : .orange)
             .frame(width: 50, height: 50)
             .background(Color.black.opacity(0.7))
             .clipShape(Circle())
