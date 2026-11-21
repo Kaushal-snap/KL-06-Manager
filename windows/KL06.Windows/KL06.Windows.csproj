@@ -13,7 +13,7 @@
   <ItemGroup><PackageReference Include="Microsoft.Web.WebView2" Version="[1.0.4314.35]" /></ItemGroup>
   <ItemGroup>
     <Content Include="../../shared/web/**/*" Link="web/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
-    <Content Include="../../LICENSE" Link="LICENSE-KL06.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="../../macos/LICENSE" Link="LICENSE-KL06.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
     <Content Include="../../docs/third-party/DotNET-AppHost-*.txt" Link="licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
     <Content Include="../../docs/third-party/WebView2-*.txt" Link="licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
     <Content Include="../../companion/server.py" Link="companion/server.py" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
