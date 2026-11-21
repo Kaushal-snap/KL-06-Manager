@@ -443,7 +443,7 @@ public final class MainActivity extends Activity {
             StringBuilder sb=new StringBuilder();
             sb.append("=== KL-06 DIAGNOSTIC LOG REPORT ===\n");
             sb.append("App: KL-06 Manager\n");
-            sb.append("Version: 0.4.7-beta (Build 12)\n");
+            sb.append("Version: 0.5.1-beta.1 (Build 14)\n");
             sb.append("Generated At: ").append(Instant.now().toString()).append("\n");
             sb.append("Device: ").append(Build.MANUFACTURER).append(" ").append(Build.MODEL).append(" (Android ").append(Build.VERSION.RELEASE).append(")\n");
             sb.append("Target Private Folder: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n\n");
@@ -466,7 +466,7 @@ public final class MainActivity extends Activity {
                 try{
                     Intent sendIntent=new Intent(Intent.ACTION_SEND);
                     sendIntent.setType("text/plain");
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.4.7-beta Build 12)");
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Diagnostic Log (v0.5.1-beta.1 Build 14)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,reportText);
                     Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Log to Private Drive / Share");
                     startActivity(chooser);
@@ -481,7 +481,7 @@ public final class MainActivity extends Activity {
         case "saveFanDiagnosticReport":{
             String reportText=p.optString("reportText","");
             if(reportText.isEmpty()){
-                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.4.7-beta (Build 12)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
+                reportText="=== KL-06 HARDWARE FAN DIAGNOSTIC REPORT ===\nVersion: 0.5.1-beta.1 (Build 14)\nTimestamp: "+Instant.now().toString()+"\nTarget: KL-06-Private-Logs (1NV-Hqwwffh5GKslvGqPRqvs8JT7cJh-n)\n";
             }
             writeLog("FAN_DIAG","Fan diagnostic report generated with security password validation.");
             String savedPath="Download/KL-06/logs/kl06-fan-diagnostic.log";
@@ -491,7 +491,7 @@ public final class MainActivity extends Activity {
                 try{
                     Intent sendIntent=new Intent(Intent.ACTION_SEND);
                     sendIntent.setType("text/plain");
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.4.7-beta Build 12)");
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"KL-06 Fan Diagnostic Report (v0.5.1-beta.1 Build 14)");
                     sendIntent.putExtra(Intent.EXTRA_TEXT,finalReport);
                     Intent chooser=Intent.createChooser(sendIntent,"Auto-Send Fan Diagnostic to Private Drive / Share");
                     startActivity(chooser);
@@ -512,7 +512,7 @@ public final class MainActivity extends Activity {
                     udpSock=new DatagramSocket();
                     udpSock.setBroadcast(true);
                     udpSock.setSoTimeout(1200);
-                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.4.7-beta\"}".getBytes(StandardCharsets.UTF_8);
+                    byte[] ping="{\"cmd\":\"KL06_DISCOVER\",\"client\":\"android\",\"version\":\"0.5.1-beta.1\"}".getBytes(StandardCharsets.UTF_8);
                     DatagramPacket packet=new DatagramPacket(ping,ping.length,InetAddress.getByName("255.255.255.255"),8766);
                     try{udpSock.send(packet);}catch(Exception ignored){}
                     try{

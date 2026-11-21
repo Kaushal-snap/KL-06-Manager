@@ -94,7 +94,7 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
             let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item, .content, .data], asCopy: false); picker.allowsMultipleSelection = false; picker.delegate = self; present(picker, animated: true)
         case "exportLogs", "saveErrorReport", "shareLogs", "saveFanDiagnosticReport":
             let logs = p["logs"] as? [[String: Any]] ?? []
-            var text = p["reportText"] as? String ?? "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.4.7-beta (Build 12)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
+            var text = p["reportText"] as? String ?? "=== KL-06 DIAGNOSTIC LOG REPORT ===\nApp: KL-06 Manager iOS\nVersion: 0.5.1-beta.1 (Build 14)\nTimestamp: \(ISO8601DateFormatter().string(from: Date()))\nDevice: \(UIDevice.current.name) (\(UIDevice.current.systemName) \(UIDevice.current.systemVersion))\n\n"
             for log in logs {
                 text += "[\(log["ts"] as? String ?? "")] [\(log["tag"] as? String ?? "LOG")] \(log["msg"] as? String ?? "")\n"
             }
@@ -103,9 +103,9 @@ final class MobileController: UIViewController, WKNavigationDelegate, UIDocument
             reply(id, result: ["status": "saved", "message": "Diagnostic report opened in iOS Share Sheet."])
         case "checkUpdate":
             reply(id, result: [
-                "currentVersion": "0.4.7-beta",
+                "currentVersion": "0.5.1-beta.1",
                 "currentBuild": 12,
-                "latestVersion": "0.4.7-beta",
+                "latestVersion": "0.5.1-beta.1",
                 "latestBuild": 12,
                 "upToDate": true,
                 "channel": "beta",

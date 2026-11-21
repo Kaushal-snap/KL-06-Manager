@@ -235,6 +235,8 @@ All notable changes, verified runs, and milestone releases for **KL-06 Manager**
 
 ## 0.5.1-beta.1 - Windows receives phone transfers
 - Windows companion now asks the owner before accepting a phone->PC transfer (the 0.5.0 broker waited for an approval that Windows never showed). C# change is uncompiled/untested here.
+- Removed the Fan Diagnostics password gate (hardcoded passwords in the client) and the false "auto-sent to private Drive" claims; the diagnostic is now local and read-only.
+- Fake OTA "package verified" removed; all UI version strings now 0.5.1-beta.1.
 
 ## 0.5.0-beta.1 - real transfer, truthful UI
 - Fix: file transfer failed because the broker capped every body at 16 KiB; chunk endpoint now allows 1.5 MB and a higher rate limit (tested).
