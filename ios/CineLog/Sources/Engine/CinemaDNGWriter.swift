@@ -90,7 +90,7 @@ public final class CinemaDNGWriter: ObservableObject {
         
         // Append raw uncompressed 10-bit raster payload
         let rawBuffer = UnsafeRawBufferPointer(start: rawBytes, count: length)
-        data.append(rawBuffer)
+        data.append(contentsOf: rawBuffer)
         return data
     }
 }
